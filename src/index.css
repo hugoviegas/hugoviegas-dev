@@ -2,41 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Hugo Viegas Portfolio Design System - Dark Theme with Neon Accents
 All colors MUST be HSL.
 */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark Theme Base Colors */
+    --background: 220 27% 8%;           /* Rich dark blue-gray */
+    --foreground: 210 40% 98%;          /* Almost white */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 27% 10%;                /* Slightly lighter than bg */
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 27% 12%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Neon Accent Colors */
+    --primary: 174 100% 42%;            /* Neon Cyan #00D4AA */
+    --primary-foreground: 220 27% 8%;
+    
+    --secondary: 262 83% 67%;           /* Neon Purple #8B5CF6 */
+    --secondary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 120 100% 60%;             /* Neon Green #39FF14 */
+    --accent-foreground: 220 27% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 27% 15%;
+    --muted-foreground: 215 16% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 27% 20%;
+    --input: 220 27% 15%;
+    --ring: 174 100% 42%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom Design Tokens */
+    --glass-bg: 220 27% 12% / 0.8;      /* Glassmorphism background */
+    --glass-border: 210 40% 98% / 0.1;  /* Subtle glass border */
+    --neon-glow: 174 100% 42% / 0.5;    /* Neon glow effect */
+    --gradient-primary: linear-gradient(135deg, hsl(174 100% 42%), hsl(262 83% 67%));
+    --gradient-accent: linear-gradient(135deg, hsl(120 100% 60%), hsl(174 100% 42%));
+    --shadow-glow: 0 0 40px hsl(var(--neon-glow));
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+    
+    /* Animation Variables */
+    --animation-speed: 0.3s;
+    --transition-smooth: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -55,43 +72,6 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
 }
 
 @layer base {
@@ -100,6 +80,80 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Components */
+  .glass {
+    @apply bg-card/80 backdrop-blur-md border border-white/10;
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .glass-strong {
+    @apply bg-card/90 backdrop-blur-lg border border-white/20;
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* Neon Glow Effects */
+  .neon-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)), 0 0 30px hsl(var(--primary));
+  }
+
+  /* Button Variants */
+  .btn-hero {
+    @apply bg-gradient-to-r from-primary to-secondary text-background font-semibold px-8 py-4 rounded-xl;
+    @apply hover:scale-105 hover:shadow-2xl hover:shadow-primary/50;
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .btn-ghost {
+    @apply border border-primary/50 text-primary hover:bg-primary/10 hover:border-primary;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  /* Card Variants */
+  .card-project {
+    @apply glass hover:glass-strong hover:scale-105 hover:shadow-2xl hover:shadow-primary/20;
+    @apply transition-all duration-500 ease-out cursor-pointer;
+  }
+  
+  .card-skill {
+    @apply glass p-6 text-center hover:bg-primary/5 hover:border-primary/30;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  /* Typography */
+  .heading-hero {
+    @apply font-bold text-5xl md:text-7xl lg:text-8xl leading-tight;
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .heading-section {
+    @apply font-bold text-3xl md:text-4xl lg:text-5xl text-foreground;
+  }
+  
+  .text-gradient {
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Animations */
+  .fade-in {
+    @apply animate-fade-in;
+  }
+  
+  .slide-up {
+    @apply animate-slide-up;
   }
 }
