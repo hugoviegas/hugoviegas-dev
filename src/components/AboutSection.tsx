@@ -1,30 +1,43 @@
-import { Code, Globe, Users, Zap } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import SkillsSection from '@/components/SkillsSection';
-import StatsSection from '@/components/StatsSection';
+import { Code, Globe, Users, Zap, BookOpen } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useLanguage } from "@/hooks/useLanguage";
+import StatsSection from "@/components/StatsSection";
+import SkillsSection from "@/components/SkillsSection";
 
 const AboutSection = () => {
+  const { t } = useLanguage();
   const highlights = [
     {
       icon: Zap,
-      title: 'Process Optimization',
-      description: 'Developed custom JavaScript system that reduced process times by 90%'
+      title: "90% Process Reduction",
+      description: "JavaScript + Google Workspace automation solution",
     },
     {
       icon: Globe,
-      title: 'International Experience',
-      description: 'Working in Dublin while maintaining Brazilian roots and perspectives'
+      title: "International Experience",
+      description:
+        "Working in Dublin while maintaining Brazilian roots and perspectives",
     },
     {
       icon: Users,
-      title: 'Cross-functional Skills',
-      description: 'Bridging IT Support expertise with modern web development practices'
+      title: "Structured Training",
+      description:
+        "Improved first-contact resolution through clear documentation",
     },
     {
       icon: Code,
-      title: 'Continuous Learning',
-      description: 'Currently pursuing Computer Science degree at CCT College Dublin'
-    }
+      title: "Continuous Learning",
+      description:
+        "Currently pursuing Computer Science degree at CCT College Dublin",
+    },
   ];
 
   return (
@@ -33,9 +46,14 @@ const AboutSection = () => {
         <div className="text-center mb-16 fade-in">
           <h2 className="heading-section mb-6">About Me</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            From troubleshooting complex IT issues to crafting elegant web solutions, 
-            I bring a unique perspective that combines technical support excellence with 
-            modern development practices.
+            Brazilian in Dublin with a path that started in design and social
+            media, deepened in technical support, and is evolving into
+            full‑stack development. The blend of product mindset, routine
+            automation, and clear documentation helps teams work better and
+            faster. When not coding in JavaScript or mapping workflows in Google
+            Workspace, I'm studying Computer Science at CCT College and
+            exploring new ways to simplify processes and improve digital
+            experiences.
           </p>
         </div>
 
@@ -50,15 +68,36 @@ const AboutSection = () => {
             <div className="space-y-6">
               <h3 className="text-3xl font-bold text-gradient">My Journey</h3>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Starting as an IT Support Specialist in Brazil, I've spent over 4 years mastering the art of 
-                problem-solving and system optimization. My move to Dublin opened new opportunities to blend 
-                this expertise with cutting-edge web development.
+                {t("journeySummary1")}
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                The breakthrough moment came when I developed a custom JavaScript automation system that 
-                integrated with Google Sheets and AppSheet, reducing critical business processes by 90%. 
-                This achievement sparked my passion for creating efficient, scalable solutions through code.
+                {t("journeySummary2")}
               </p>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="mt-4">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    {t("readFullStory")}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold text-gradient">
+                      {t("fullStoryTitle")}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
+                    {t("fullStory")
+                      .split("\n\n")
+                      .map((paragraph, index) => (
+                        <p key={index} className="text-base">
+                          {paragraph}
+                        </p>
+                      ))}
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Highlights */}
@@ -66,8 +105,12 @@ const AboutSection = () => {
               {highlights.map((highlight, index) => (
                 <div key={index} className="card-skill">
                   <highlight.icon className="w-8 h-8 text-primary mb-4 mx-auto" />
-                  <h4 className="font-semibold text-lg mb-2">{highlight.title}</h4>
-                  <p className="text-sm text-muted-foreground">{highlight.description}</p>
+                  <h4 className="font-semibold text-lg mb-2">
+                    {highlight.title}
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    {highlight.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -75,13 +118,17 @@ const AboutSection = () => {
 
           {/* Skills Column */}
           <div className="space-y-8 slide-up delay-300">
-            <h3 className="text-3xl font-bold text-gradient">Technical Skills</h3>
-            
+            <h3 className="text-3xl font-bold text-gradient">
+              Technical Skills
+            </h3>
+
             <SkillsSection />
 
             {/* Languages */}
             <div className="glass p-6 rounded-xl">
-              <h4 className="text-xl font-semibold text-primary mb-4">Languages</h4>
+              <h4 className="text-xl font-semibold text-primary mb-4">
+                Languages
+              </h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span>Portuguese</span>

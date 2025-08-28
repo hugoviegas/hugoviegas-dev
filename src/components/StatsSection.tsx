@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface StatItemProps {
   value: number;
@@ -8,7 +8,13 @@ interface StatItemProps {
   duration?: number;
 }
 
-const StatItem = ({ value, label, suffix = '', icon = '', duration = 2000 }: StatItemProps) => {
+const StatItem = ({
+  value,
+  label,
+  suffix = "",
+  icon = "",
+  duration = 2000,
+}: StatItemProps) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -31,7 +37,8 @@ const StatItem = ({ value, label, suffix = '', icon = '', duration = 2000 }: Sta
     <div className="text-center p-6 glass rounded-xl hover:glass-strong transition-all duration-300">
       {icon && <div className="text-3xl mb-2">{icon}</div>}
       <div className="text-4xl font-bold text-primary mb-2">
-        {count}{suffix}
+        {count}
+        {suffix}
       </div>
       <div className="text-muted-foreground">{label}</div>
     </div>
@@ -40,10 +47,10 @@ const StatItem = ({ value, label, suffix = '', icon = '', duration = 2000 }: Sta
 
 const StatsSection = () => {
   const stats = [
-    { value: 4, label: 'Years Experience', suffix: '+', icon: '💼' },
-    { value: 90, label: 'Process Efficiency', suffix: '%', icon: '⚡' },
-    { value: 15, label: 'Projects Completed', suffix: '+', icon: '🚀' },
-    { value: 100, label: 'Client Satisfaction', suffix: '%', icon: '⭐' }
+    { value: 90, label: "Process Time Reduction", suffix: "%", icon: "⚡" },
+    { value: 20, label: "Views Growth", suffix: "%", icon: "📈" },
+    { value: 4, label: "Years Experience", suffix: "+", icon: "�" },
+    { value: 2, label: "Countries Worked", suffix: "", icon: "🌍" },
   ];
 
   return (
