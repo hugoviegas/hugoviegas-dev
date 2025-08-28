@@ -1,18 +1,9 @@
 import { Code, Globe, Users, Zap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import SkillsSection from '@/components/SkillsSection';
+import StatsSection from '@/components/StatsSection';
 
 const AboutSection = () => {
-  const skills = [
-    { name: 'JavaScript', level: 90, category: 'Frontend' },
-    { name: 'Node.js', level: 85, category: 'Backend' },
-    { name: 'Python', level: 80, category: 'Backend' },
-    { name: 'React', level: 85, category: 'Frontend' },
-    { name: 'HTML/CSS', level: 95, category: 'Frontend' },
-    { name: 'System Admin', level: 90, category: 'IT Support' },
-    { name: 'Troubleshooting', level: 95, category: 'IT Support' },
-    { name: 'Google Workspace', level: 90, category: 'IT Support' },
-  ];
-
   const highlights = [
     {
       icon: Zap,
@@ -48,6 +39,11 @@ const AboutSection = () => {
           </p>
         </div>
 
+        {/* Stats Section */}
+        <div className="mb-20">
+          <StatsSection />
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Story Column */}
           <div className="space-y-8 slide-up">
@@ -81,31 +77,7 @@ const AboutSection = () => {
           <div className="space-y-8 slide-up delay-300">
             <h3 className="text-3xl font-bold text-gradient">Technical Skills</h3>
             
-            <div className="space-y-6">
-              {['Frontend', 'Backend', 'IT Support'].map((category) => (
-                <div key={category} className="space-y-4">
-                  <h4 className="text-xl font-semibold text-primary">{category}</h4>
-                  <div className="space-y-3">
-                    {skills.filter(skill => skill.category === category).map((skill, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">{skill.name}</span>
-                          <Badge variant="outline" className="text-primary border-primary/50">
-                            {skill.level}%
-                          </Badge>
-                        </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-1000 ease-out"
-                            style={{ width: `${skill.level}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <SkillsSection />
 
             {/* Languages */}
             <div className="glass p-6 rounded-xl">

@@ -72,6 +72,49 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  .light {
+    /* Light Theme Base Colors */
+    --background: 0 0% 100%;           /* Pure white */
+    --foreground: 240 10% 3.9%;        /* Dark gray */
+
+    --card: 0 0% 100%;                 /* White */
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    /* Light Theme Accent Colors */
+    --primary: 174 100% 32%;           /* Slightly darker cyan */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 262 83% 57%;          /* Slightly darker purple */
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 120 100% 40%;            /* Slightly darker green */
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 174 100% 32%;
+
+    --radius: 0.75rem;
+
+    /* Light Theme Custom Tokens */
+    --glass-bg: 0 0% 100% / 0.8;
+    --glass-border: 240 5.9% 90% / 0.5;
+    --neon-glow: 174 100% 32% / 0.3;
+    --gradient-primary: linear-gradient(135deg, hsl(174 100% 32%), hsl(262 83% 57%));
+    --gradient-accent: linear-gradient(135deg, hsl(120 100% 40%), hsl(174 100% 32%));
+    --shadow-glow: 0 0 20px hsl(var(--neon-glow));
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
 }
 
 @layer base {

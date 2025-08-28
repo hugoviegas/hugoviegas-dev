@@ -85,13 +85,21 @@ const ProjectsSection = () => {
               key={category}
               variant={selectedFilter === category ? "default" : "outline"}
               onClick={() => setSelectedFilter(category)}
-              className={`${selectedFilter === category 
-                ? 'bg-primary text-background' 
-                : 'btn-ghost'
-              } transition-all duration-300`}
+              className={`${
+                selectedFilter === category
+                  ? 'bg-primary text-background shadow-lg scale-105'
+                  : 'btn-ghost hover:scale-105'
+              } transition-all duration-300 hover:shadow-md`}
             >
-              <Filter className="w-4 h-4 mr-2" />
+              <Filter className={`w-4 h-4 mr-2 transition-transform duration-300 ${
+                selectedFilter === category ? 'rotate-180' : ''
+              }`} />
               {category}
+              {selectedFilter === category && (
+                <span className="ml-2 text-xs bg-background/20 px-2 py-1 rounded-full">
+                  {filteredProjects.length}
+                </span>
+              )}
             </Button>
           ))}
         </div>

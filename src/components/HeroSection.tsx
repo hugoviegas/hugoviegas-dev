@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { LazyImage } from '@/components/LazyImage';
 import heroImage from '@/assets/hugo-hero.jpg';
 
 const HeroSection = () => {
@@ -28,6 +30,11 @@ const HeroSection = () => {
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Theme Toggle */}
+      <div className="absolute top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
+      
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-20 w-32 h-32 bg-primary rounded-full blur-3xl animate-pulse"></div>
@@ -108,10 +115,11 @@ const HeroSection = () => {
               {/* Glassmorphism Frame */}
               <div className="glass-strong rounded-3xl p-8 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl"></div>
-                <img 
+                <LazyImage 
                   src={heroImage} 
                   alt="Hugo Viegas - IT Support Specialist transitioning to Full-Stack Developer"
                   className="relative z-10 w-80 h-80 object-cover rounded-2xl shadow-2xl"
+                  placeholder="Loading profile..."
                 />
               </div>
               
