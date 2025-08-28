@@ -1,7 +1,9 @@
+import React from "react";
 import { MapPin, Calendar, BookOpen, Award } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "../hooks/useLanguage";
 
-const ExperienceSection = () => {
+export function ExperienceSection(props) {
   const experiences = [
     {
       period: "Sep 2024 – Present",
@@ -86,14 +88,15 @@ const ExperienceSection = () => {
     "Access Governance & Security",
   ];
 
+  const { t } = useLanguage(); // previously caused ReferenceError: useLanguage is not defined
+
   return (
     <section id="experience" className="py-20 bg-muted/5">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">Experience & Education</h2>
+          <h2 className="heading-section mb-6">{t("experienceTitle")}</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            A journey of continuous learning and innovation, from IT support
-            excellence to full-stack development mastery.
+            {t("experienceIntro")}
           </p>
         </div>
 
@@ -101,7 +104,7 @@ const ExperienceSection = () => {
           {/* Timeline Column */}
           <div className="space-y-8 slide-up">
             <h3 className="text-3xl font-bold text-gradient mb-8">
-              Professional Timeline
+              {t("timelineTitle")}
             </h3>
 
             <div className="relative">
@@ -164,15 +167,12 @@ const ExperienceSection = () => {
               <div className="flex items-center gap-3 mb-4">
                 <BookOpen className="w-6 h-6 text-primary" />
                 <h3 className="text-2xl font-bold text-gradient">
-                  Current Focus
+                  {t("currentFocusLabel")}
                 </h3>
               </div>
               <p className="text-muted-foreground mb-4 leading-relaxed">
-                Currently transitioning from IT Support to Full-Stack
-                Development while studying Computer Science at CCT College
-                Dublin. Combining technical support expertise with modern
-                development practices to create secure, scalable, and
-                user-friendly solutions.
+                {t("currentFocusText") ||
+                  "Currently transitioning from IT Support to Full-Stack Development while studying Computer Science at CCT College Dublin."}
               </p>
               <div className="flex flex-wrap gap-2">
                 {[
@@ -198,7 +198,7 @@ const ExperienceSection = () => {
               <div className="flex items-center gap-3 mb-4">
                 <Award className="w-6 h-6 text-secondary" />
                 <h3 className="text-2xl font-bold text-gradient">
-                  Skills & Certifications
+                  {t("certificationsTitle")}
                 </h3>
               </div>
               <div className="grid grid-cols-1 gap-3">
@@ -246,6 +246,6 @@ const ExperienceSection = () => {
       </div>
     </section>
   );
-};
+}
 
 export default ExperienceSection;

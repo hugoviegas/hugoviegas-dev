@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -57,6 +58,7 @@ const SkillsSection = () => {
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
+  {/* Heading could be translated where used */}
       {mainSkills.map((skill) => (
         <div
           key={skill.name}

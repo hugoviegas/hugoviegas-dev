@@ -1,7 +1,9 @@
 import { Github, Linkedin, Mail, Heart } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   const socialLinks = [
     {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface NavbarProps {
   show: boolean;
@@ -19,12 +20,14 @@ const Navbar = ({ show }: NavbarProps) => {
     setIsMobileMenuOpen(false);
   };
 
-  const navItems = [
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'contact', label: 'Contact' }
-  ];
+    const { t } = useLanguage();
+
+    const navItems = [
+      { id: 'about', label: t('about') },
+      { id: 'projects', label: t('projects') },
+      { id: 'experience', label: t('experience') },
+      { id: 'contact', label: t('contact') },
+    ];
 
   if (!show) return null;
 

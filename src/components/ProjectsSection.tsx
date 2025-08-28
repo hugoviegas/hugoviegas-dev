@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Github, Filter } from 'lucide-react';
@@ -9,6 +10,7 @@ import darcyMcgeesProject from '@/assets/project-darcy-mcgees.jpg';
 
 const ProjectsSection = () => {
   const [selectedFilter, setSelectedFilter] = useState('All');
+  const { t } = useLanguage();
 
   const projects = [
     {
@@ -61,7 +63,12 @@ const ProjectsSection = () => {
     }
   ];
 
-  const categories = ['All', 'Automation', 'Web Development', 'Mobile'];
+  const categories = [
+    t('category.All'),
+    t('category.Automation'),
+    t('category.Web Development'),
+    t('category.Mobile'),
+  ];
   
   const filteredProjects = selectedFilter === 'All' 
     ? projects 
@@ -71,10 +78,9 @@ const ProjectsSection = () => {
     <section id="projects" className="py-20">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">Featured Projects</h2>
+          <h2 className="heading-section mb-6">{t('projectsTitle')}</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            A showcase of innovative solutions that demonstrate my journey from IT Support to 
-            Full-Stack Development, with measurable impact and cutting-edge technologies.
+            {t('projectsIntro')}
           </p>
         </div>
 
@@ -124,13 +130,13 @@ const ProjectsSection = () => {
                 {project.featured && (
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-accent text-background font-semibold">
-                      Featured Project
+                      {t('badge.featuredProject')}
                     </Badge>
                   </div>
                 )}
                 <div className="absolute top-4 right-4">
                   <Badge variant="secondary" className="glass-strong">
-                    {project.metrics}
+                    {t(`project.${project.id}.metrics`) || project.metrics}
                   </Badge>
                 </div>
               </div>
@@ -138,11 +144,11 @@ const ProjectsSection = () => {
               {/* Project Content */}
               <div className="p-6 space-y-4">
                 <div>
-                  <h3 className="text-xl font-bold mb-2 text-gradient">
-                    {project.title}
+                    <h3 className="text-xl font-bold mb-2 text-gradient">
+                    {t(`project.${project.id}.title`) || project.title}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    {project.description}
+                    {t(`project.${project.id}.description`) || project.description}
                   </p>
                 </div>
 
@@ -164,7 +170,7 @@ const ProjectsSection = () => {
                     onClick={() => window.open(project.liveUrl, '_blank')}
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
-                    Live Demo
+                    {t('liveDemo')}
                   </Button>
                   <Button
                     variant="outline"
@@ -173,7 +179,7 @@ const ProjectsSection = () => {
                     onClick={() => window.open(project.githubUrl, '_blank')}
                   >
                     <Github className="w-4 h-4 mr-2" />
-                    Code
+                    {t('code')}
                   </Button>
                 </div>
               </div>
@@ -183,14 +189,12 @@ const ProjectsSection = () => {
 
         {/* Call to Action */}
         <div className="text-center mt-12 fade-in">
-          <p className="text-lg text-muted-foreground mb-6">
-            Want to see more of my work or discuss a project?
-          </p>
+          <p className="text-lg text-muted-foreground mb-6">{t('projectsCTA')}</p>
           <Button 
             className="btn-hero"
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Let's Work Together
+            {t('projectsCTABtn')}
           </Button>
         </div>
       </div>

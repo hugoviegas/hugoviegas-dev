@@ -74,6 +74,122 @@ export const translations: Translations = {
     PT: "Construído com paixão usando React, TypeScript e Tailwind CSS.",
   },
 
+  // Additional UI strings
+  aboutTitle: { EN: "About Me", PT: "Sobre Mim" },
+  aboutSummary: {
+    EN:
+      "Brazilian in Dublin with a path that started in design and social media, deepened in technical support, and is evolving into full-stack development. The blend of product mindset, routine automation, and clear documentation helps teams work better and faster.",
+    PT:
+      "Brasileiro em Dublin com um caminho que começou em design e social media, aprofundou-se em suporte técnico e está evoluindo para desenvolvimento full-stack. A combinação de visão de produto, automação de rotinas e documentação clara ajuda times a trabalhar melhor e mais rápido.",
+  },
+  myJourney: { EN: "My Journey", PT: "Minha Jornada" },
+
+  // Highlights
+  highlight1Title: { EN: "90% Process Reduction", PT: "Redução de 90% nos Processos" },
+  highlight1Desc: {
+    EN: "JavaScript + Google Workspace automation solution",
+    PT: "Solução de automação com JavaScript e Google Workspace",
+  },
+  highlight2Title: { EN: "International Experience", PT: "Experiência Internacional" },
+  highlight2Desc: {
+    EN: "Working in Dublin while maintaining Brazilian roots and perspectives",
+    PT: "Trabalhando em Dublin mantendo raízes e perspectivas brasileiras",
+  },
+  highlight3Title: { EN: "Structured Training", PT: "Formação Estruturada" },
+  highlight3Desc: {
+    EN: "Improved first-contact resolution through clear documentation",
+    PT: "Melhoria no atendimento de primeiro contato através de documentação clara",
+  },
+  highlight4Title: { EN: "Continuous Learning", PT: "Aprendizado Contínuo" },
+  highlight4Desc: {
+    EN: "Currently pursuing Computer Science degree at CCT College Dublin",
+    PT: "Atualmente cursando Ciência da Computação no CCT College Dublin",
+  },
+
+  technicalSkills: { EN: "Technical Skills", PT: "Habilidades Técnicas" },
+  languagesTitle: { EN: "Languages", PT: "Idiomas" },
+  native: { EN: "Native", PT: "Nativo" },
+  c1Proficiency: { EN: "C1 Proficiency", PT: "Proficiência C1" },
+
+  // Projects
+  projectsIntro: {
+    EN: "A showcase of innovative solutions that demonstrate my journey from IT Support to Full-Stack Development, with measurable impact and cutting-edge technologies.",
+    PT: "Uma seleção de soluções que mostram minha evolução de Suporte de TI a Desenvolvedor Full-Stack, com impacto mensurável e tecnologias modernas.",
+  },
+  "category.All": { EN: "All", PT: "Todos" },
+  "category.Automation": { EN: "Automation", PT: "Automação" },
+  "category.Web Development": { EN: "Web Development", PT: "Desenvolvimento Web" },
+  "category.Mobile": { EN: "Mobile", PT: "Mobile" },
+
+  // Individual projects (titles, descriptions, metrics)
+  "project.1.title": { EN: "D'Arcy McGee's Irish Pub Website", PT: "Site do D'Arcy McGee's Irish Pub" },
+  "project.1.description": {
+    EN: "Professional restaurant website featuring modern responsive design, interactive menu system, event listings, and seamless user experience.",
+    PT: "Site profissional para restaurante com design responsivo, sistema de menu interativo, lista de eventos e experiência de usuário fluida.",
+  },
+  "project.1.metrics": { EN: "Live Client Website", PT: "Site do Cliente" },
+
+  "project.2.title": { EN: "Business Process Automation System", PT: "Sistema de Automação de Processos" },
+  "project.2.description": {
+    EN: "Custom JavaScript solution integrated with Google Sheets and AppSheet that reduced critical business processes by 90%.",
+    PT: "Solução personalizada em JavaScript integrada ao Google Sheets e AppSheet que reduziu processos críticos em 90%.",
+  },
+  "project.2.metrics": { EN: "90% time reduction", PT: "Redução de 90% no tempo" },
+
+  "project.3.title": { EN: "Modern E-Commerce Platform", PT: "Plataforma de E-Commerce Moderna" },
+  "project.3.description": {
+    EN: "Full-stack e-commerce solution with authentication, payment processing and admin dashboard.",
+    PT: "Solução full-stack de e-commerce com autenticação, processamento de pagamentos e painel administrativo.",
+  },
+  "project.3.metrics": { EN: "Full-stack solution", PT: "Solução full-stack" },
+
+  "project.4.title": { EN: "Project Management Dashboard", PT: "Dashboard de Gestão de Projetos" },
+  "project.4.description": {
+    EN: "Collaborative task management app with real-time updates and project analytics.",
+    PT: "Aplicativo de gestão de tarefas colaborativo com atualizações em tempo real e análises de projetos.",
+  },
+  "project.4.metrics": { EN: "Team collaboration", PT: "Colaboração de equipe" },
+
+  "badge.featuredProject": { EN: "Featured Project", PT: "Projeto em Destaque" },
+  liveDemo: { EN: "Live Demo", PT: "Ver Demo" },
+  code: { EN: "Code", PT: "Código" },
+  projectsCTA: { EN: "Want to see more of my work or discuss a project?", PT: "Quer ver mais do meu trabalho ou discutir um projeto?" },
+  projectsCTABtn: { EN: "Let's Work Together", PT: "Vamos Trabalhar Juntos" },
+
+  // Contact
+  sendMessageTitle: { EN: "Send a Message", PT: "Enviar uma Mensagem" },
+  contactPrompt: { EN: "Have a project in mind? I'd love to hear about it.", PT: "Tem um projeto em mente? Adoraria saber sobre ele." },
+  "placeholder.name": { EN: "Your Name", PT: "Seu Nome" },
+  "placeholder.email": { EN: "Your Email", PT: "Seu Email" },
+  "placeholder.subject": { EN: "Subject", PT: "Assunto" },
+  "placeholder.project": { EN: "Tell me about your project...", PT: "Me conte sobre seu projeto..." },
+  "toast.messageSentTitle": { EN: "Message Sent!", PT: "Mensagem Enviada!" },
+  "toast.messageSentDesc": { EN: "Thank you for reaching out. I'll get back to you within 24 hours.", PT: "Obrigado pelo contato. Responderei em até 24 horas." },
+  "send.sending": { EN: "Sending...", PT: "Enviando..." },
+  "send.sendMessage": { EN: "Send Message", PT: "Enviar Mensagem" },
+  connectWithMe: { EN: "Connect With Me", PT: "Conecte-se Comigo" },
+  availableForWork: { EN: "Available for Work", PT: "Disponível para Trabalho" },
+  availabilityText: { EN: "Currently accepting new projects and opportunities.", PT: "Atualmente aceitando novos projetos e oportunidades." },
+  currentTimeInDublin: { EN: "Current time in Dublin", PT: "Hora atual em Dublin" },
+
+  // Footer
+  "footer.copyright": { EN: "© {year} Hugo Viegas. All rights reserved.", PT: "© {year} Hugo Viegas. Todos os direitos reservados." },
+  "footer.madeWith": { EN: "Made with", PT: "Feito com" },
+  "footer.inLocation": { EN: "in Dublin, Ireland", PT: "em Dublin, Irlanda" },
+  "footer.additionalInfo": { EN: "Available for freelance work and full-time opportunities • Fluent in Portuguese & English • Open to remote and hybrid arrangements", PT: "Disponível para trabalho freelance e oportunidades em tempo integral • Fluente em Português e Inglês • Aberto a arranjos remotos e híbridos" },
+
+  // Stats
+  "stats.processReduction": { EN: "Process Time Reduction", PT: "Redução do Tempo de Processo" },
+  "stats.viewsGrowth": { EN: "Views Growth", PT: "Crescimento de Visualizações" },
+  "stats.yearsExperience": { EN: "Years Experience", PT: "Anos de Experiência" },
+  "stats.countriesWorked": { EN: "Countries Worked", PT: "Países Trabalhados" },
+
+  // Experience
+  experienceIntro: { EN: "A journey of continuous learning and innovation, from IT support excellence to full-stack development mastery.", PT: "Uma jornada de aprendizado contínuo e inovação, da excelência em suporte de TI à maestria em desenvolvimento full-stack." },
+  timelineTitle: { EN: "Professional Timeline", PT: "Linha do Tempo Profissional" },
+  currentFocusLabel: { EN: "Current Focus", PT: "Foco Atual" },
+  certificationsTitle: { EN: "Skills & Certifications", PT: "Habilidades & Certificações" },
+
   fullStory: {
     EN: `The first spark came early. At eight, a first phone opened a door to a world of tinkering—downloading .jar games, changing settings, and personalizing everything became a playground for curiosity. At eleven, that curiosity met purpose: a Lego robotics championship at school. Building and programming a robot with a drag‑and‑drop language, the team won regionals and reached nationals. Resources were limited, but the lesson was profound: technology wasn't just interesting—it was a path worth pursuing and mastering.
 

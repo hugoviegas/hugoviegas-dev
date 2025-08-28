@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,6 +14,7 @@ const ContactSection = () => {
     subject: '',
     message: ''
   });
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -85,10 +87,9 @@ const ContactSection = () => {
     <section id="contact" className="py-20">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">Let's Work Together</h2>
+          <h2 className="heading-section mb-6">{t('contactTitle')}</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Ready to bring your project to life? Whether you need IT support expertise 
-            or modern web development solutions, I'm here to help turn your ideas into reality.
+            {t('contactDescription')}
           </p>
         </div>
 
@@ -96,11 +97,8 @@ const ContactSection = () => {
           {/* Contact Form */}
           <div className="space-y-8 slide-up">
             <div>
-              <h3 className="text-3xl font-bold text-gradient mb-4">Send a Message</h3>
-              <p className="text-muted-foreground">
-                Have a project in mind? I'd love to hear about it. Send me a message and 
-                let's discuss how we can work together.
-              </p>
+              <h3 className="text-3xl font-bold text-gradient mb-4">{t('sendMessageTitle')}</h3>
+              <p className="text-muted-foreground">{t('contactPrompt')}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -108,7 +106,7 @@ const ContactSection = () => {
                 <div>
                   <Input
                     name="name"
-                    placeholder="Your Name"
+                      placeholder={t('placeholder.name')}
                     value={formData.name}
                     onChange={handleChange}
                     required
@@ -119,7 +117,7 @@ const ContactSection = () => {
                   <Input
                     name="email"
                     type="email"
-                    placeholder="Your Email"
+                    placeholder={t('placeholder.email')}
                     value={formData.email}
                     onChange={handleChange}
                     required
@@ -130,7 +128,7 @@ const ContactSection = () => {
               
               <Input
                 name="subject"
-                placeholder="Subject"
+                placeholder={t('placeholder.subject')}
                 value={formData.subject}
                 onChange={handleChange}
                 required
@@ -139,7 +137,7 @@ const ContactSection = () => {
               
               <Textarea
                 name="message"
-                placeholder="Tell me about your project..."
+                placeholder={t('placeholder.project')}
                 value={formData.message}
                 onChange={handleChange}
                 required
@@ -153,11 +151,11 @@ const ContactSection = () => {
                 className="btn-hero w-full text-lg py-6"
               >
                 {isSubmitting ? (
-                  'Sending...'
+                  t('send.sending')
                 ) : (
                   <>
                     <Send className="w-5 h-5 mr-2" />
-                    Send Message
+                    {t('send.sendMessage')}
                   </>
                 )}
               </Button>
@@ -167,10 +165,8 @@ const ContactSection = () => {
           {/* Contact Info */}
           <div className="space-y-8 slide-up delay-300">
             <div>
-              <h3 className="text-3xl font-bold text-gradient mb-4">Get In Touch</h3>
-              <p className="text-muted-foreground">
-                Prefer to reach out directly? Here are the best ways to connect with me.
-              </p>
+              <h3 className="text-3xl font-bold text-gradient mb-4">{t('getInTouch')}</h3>
+              <p className="text-muted-foreground">{t('connectWithMe')}</p>
             </div>
 
             {/* Contact Information */}
@@ -201,7 +197,7 @@ const ContactSection = () => {
 
             {/* Social Links */}
             <div className="glass p-6 rounded-xl">
-              <h4 className="text-xl font-semibold text-gradient mb-4">Connect With Me</h4>
+              <h4 className="text-xl font-semibold text-gradient mb-4">{t('connectWithMe')}</h4>
               <div className="flex flex-wrap gap-4">
                 {socialLinks.map((social, index) => (
                   <a
@@ -225,18 +221,15 @@ const ContactSection = () => {
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-3 h-3 bg-accent rounded-full animate-pulse"></div>
                 <Badge className="bg-accent/10 text-accent border-accent/30">
-                  Available for Work
+                  {t('availableForWork')}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Currently accepting new projects and opportunities. 
-                Let's discuss how I can help bring your vision to life.
-              </p>
+              <p className="text-sm text-muted-foreground">{t('availabilityText')}</p>
             </div>
 
             {/* Current Time */}
             <div className="glass p-4 rounded-xl text-center">
-              <div className="text-sm text-muted-foreground mb-1">Current time in Dublin</div>
+              <div className="text-sm text-muted-foreground mb-1">{t('currentTimeInDublin')}</div>
               <div className="text-lg font-semibold text-primary">
                 {new Date().toLocaleTimeString('en-IE', { 
                   timeZone: 'Europe/Dublin',
