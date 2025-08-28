@@ -43,8 +43,8 @@ const ContactSection = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'hugo.viegas@example.com',
-      link: 'mailto:hugo.viegas@example.com'
+      value: 'hugoviegas3.1@gmail.com',
+      link: 'mailto:hugoviegas3.1@gmail.com'
     },
     {
       icon: MapPin,
@@ -64,19 +64,19 @@ const ContactSection = () => {
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      url: 'https://linkedin.com/in/hugovjeas',
+      url: 'https://www.linkedin.com/in/hviegas/',
       color: 'text-blue-400'
     },
     {
       icon: Github,
       label: 'GitHub',
-      url: 'https://github.com/hugovjas',
+      url: 'https://github.com/hugoviegas/',
       color: 'text-primary'
     },
     {
       icon: Mail,
       label: 'Email',
-      url: 'mailto:hugo.viegas@example.com',
+      url: 'mailto:hugoviegas3.1@gmail.com',
       color: 'text-secondary'
     }
   ];

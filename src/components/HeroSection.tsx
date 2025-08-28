@@ -78,7 +78,7 @@ const HeroSection = () => {
             {/* Social Links */}
             <div className="flex space-x-6">
               <a 
-                href="https://github.com/hugovjas" 
+                href="https://github.com/hugoviegas/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
@@ -86,7 +86,7 @@ const HeroSection = () => {
                 <Github className="w-6 h-6 text-primary" />
               </a>
               <a 
-                href="https://linkedin.com/in/hugovjeas" 
+                href="https://www.linkedin.com/in/hviegas/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
@@ -94,7 +94,7 @@ const HeroSection = () => {
                 <Linkedin className="w-6 h-6 text-primary" />
               </a>
               <a 
-                href="mailto:hugo.viegas@example.com"
+                href="mailto:hugoviegas3.1@gmail.com"
                 className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
               >
                 <Mail className="w-6 h-6 text-primary" />

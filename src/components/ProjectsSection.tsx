@@ -5,6 +5,7 @@ import { ExternalLink, Github, Filter } from 'lucide-react';
 import automationProject from '@/assets/project-automation.jpg';
 import ecommerceProject from '@/assets/project-ecommerce.jpg';
 import taskManagerProject from '@/assets/project-taskmanager.jpg';
+import darcyMcgeesProject from '@/assets/project-darcy-mcgees.jpg';
 
 const ProjectsSection = () => {
   const [selectedFilter, setSelectedFilter] = useState('All');
@@ -12,6 +13,18 @@ const ProjectsSection = () => {
   const projects = [
     {
       id: 1,
+      title: "D'Arcy McGee's Irish Pub Website",
+      description: 'Professional restaurant website for D\'Arcy McGee\'s Irish Pub featuring modern responsive design, interactive menu system, event listings, and seamless user experience. Built with focus on brand representation and customer engagement for this authentic Irish establishment in Dublin.',
+      image: darcyMcgeesProject,
+      technologies: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design'],
+      category: 'Web Development',
+      featured: true,
+      liveUrl: 'https://www.darcymcgeespub.com/',
+      githubUrl: 'https://github.com/hugoviegas/mcgees-irish-pub-online',
+      metrics: 'Live Client Website'
+    },
+    {
+      id: 2,
       title: 'Business Process Automation System',
       description: 'Custom JavaScript solution integrated with Google Sheets and AppSheet that reduced critical business processes by 90%. Features real-time data synchronization, automated workflows, and comprehensive reporting dashboard.',
       image: automationProject,
@@ -23,7 +36,7 @@ const ProjectsSection = () => {
       metrics: '90% time reduction'
     },
     {
-      id: 2,
+      id: 3,
       title: 'Modern E-Commerce Platform',
       description: 'Full-stack e-commerce solution built with React and Node.js. Features include user authentication, payment processing, inventory management, and admin dashboard.',
       image: ecommerceProject,
@@ -35,7 +48,7 @@ const ProjectsSection = () => {
       metrics: 'Full-stack solution'
     },
     {
-      id: 3,
+      id: 4,
       title: 'Project Management Dashboard',
       description: 'Collaborative task management application with real-time updates, team collaboration features, and project analytics. Built with modern web technologies.',
       image: taskManagerProject,

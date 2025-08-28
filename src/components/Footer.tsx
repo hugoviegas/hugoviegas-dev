@@ -6,17 +6,17 @@ const Footer = () => {
   const socialLinks = [
     {
       icon: Github,
-      url: 'https://github.com/hugovjas',
+      url: 'https://github.com/hugoviegas/',
       label: 'GitHub'
     },
     {
       icon: Linkedin,
-      url: 'https://linkedin.com/in/hugovjeas',
+      url: 'https://www.linkedin.com/in/hviegas/',
       label: 'LinkedIn'
     },
     {
       icon: Mail,
-      url: 'mailto:hugo.viegas@example.com',
+      url: 'mailto:hugoviegas3.1@gmail.com',
       label: 'Email'
     }
   ];
