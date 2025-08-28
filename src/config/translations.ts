@@ -217,14 +217,35 @@ export const translations: Translations = {
     EN: "Failed to send message. Please try again or contact me directly.",
     PT: "Falha ao enviar mensagem. Tente novamente ou entre em contato diretamente.",
   },
-  "validation.nameRequired": { EN: "Name is required", PT: "Nome é obrigatório" },
-  "validation.emailRequired": { EN: "Email is required", PT: "Email é obrigatório" },
-  "validation.emailInvalid": { EN: "Please enter a valid email", PT: "Por favor, insira um email válido" },
-  "validation.subjectRequired": { EN: "Subject is required", PT: "Assunto é obrigatório" },
-  "validation.messageRequired": { EN: "Message is required", PT: "Mensagem é obrigatória" },
-  "validation.messageTooShort": { EN: "Message must be at least 10 characters", PT: "Mensagem deve ter pelo menos 10 caracteres" },
+  "validation.nameRequired": {
+    EN: "Name is required",
+    PT: "Nome é obrigatório",
+  },
+  "validation.emailRequired": {
+    EN: "Email is required",
+    PT: "Email é obrigatório",
+  },
+  "validation.emailInvalid": {
+    EN: "Please enter a valid email",
+    PT: "Por favor, insira um email válido",
+  },
+  "validation.subjectRequired": {
+    EN: "Subject is required",
+    PT: "Assunto é obrigatório",
+  },
+  "validation.messageRequired": {
+    EN: "Message is required",
+    PT: "Mensagem é obrigatória",
+  },
+  "validation.messageTooShort": {
+    EN: "Message must be at least 10 characters",
+    PT: "Mensagem deve ter pelo menos 10 caracteres",
+  },
   "validation.errorTitle": { EN: "Validation Error", PT: "Erro de Validação" },
-  "validation.errorMessage": { EN: "Please fix the errors and try again.", PT: "Por favor, corrija os erros e tente novamente." },
+  "validation.errorMessage": {
+    EN: "Please fix the errors and try again.",
+    PT: "Por favor, corrija os erros e tente novamente.",
+  },
   connectWithMe: { EN: "Connect With Me", PT: "Conecte-se Comigo" },
   availableForWork: {
     EN: "Available for Work",

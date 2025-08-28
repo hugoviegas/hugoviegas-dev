@@ -14,6 +14,7 @@ import {
   Phone,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import WorldClocks from "@/components/WorldClocks";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -26,11 +27,11 @@ const ContactSection = () => {
   });
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const { toast } = useToast();
 
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {};
+    const newErrors: { [key: string]: string } = {};
 
     if (!formData.name.trim()) {
       newErrors.name = t("validation.nameRequired") || "Name is required";
@@ -39,17 +40,22 @@ const ContactSection = () => {
     if (!formData.email.trim()) {
       newErrors.email = t("validation.emailRequired") || "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = t("validation.emailInvalid") || "Please enter a valid email";
+      newErrors.email =
+        t("validation.emailInvalid") || "Please enter a valid email";
     }
 
     if (!formData.subject.trim()) {
-      newErrors.subject = t("validation.subjectRequired") || "Subject is required";
+      newErrors.subject =
+        t("validation.subjectRequired") || "Subject is required";
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = t("validation.messageRequired") || "Message is required";
+      newErrors.message =
+        t("validation.messageRequired") || "Message is required";
     } else if (formData.message.trim().length < 10) {
-      newErrors.message = t("validation.messageTooShort") || "Message must be at least 10 characters";
+      newErrors.message =
+        t("validation.messageTooShort") ||
+        "Message must be at least 10 characters";
     }
 
     setErrors(newErrors);
@@ -62,7 +68,9 @@ const ContactSection = () => {
     if (!validateForm()) {
       toast({
         title: t("validation.errorTitle") || "Validation Error",
-        description: t("validation.errorMessage") || "Please fix the errors and try again.",
+        description:
+          t("validation.errorMessage") ||
+          "Please fix the errors and try again.",
         variant: "destructive",
       });
       return;
@@ -82,15 +90,18 @@ const ContactSection = () => {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('access_key', 'c40cf7dd-eb73-4c03-9a22-30647387e501');
-      formDataToSend.append('name', formData.name.trim());
-      formDataToSend.append('email', formData.email.trim());
-      formDataToSend.append('subject', formData.subject.trim());
-      formDataToSend.append('message', formData.message.trim());
+      formDataToSend.append(
+        "access_key",
+        "c40cf7dd-eb73-4c03-9a22-30647387e501"
+      );
+      formDataToSend.append("name", formData.name.trim());
+      formDataToSend.append("email", formData.email.trim());
+      formDataToSend.append("subject", formData.subject.trim());
+      formDataToSend.append("message", formData.message.trim());
 
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formDataToSend
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formDataToSend,
       });
 
       const data = await response.json();
@@ -98,18 +109,28 @@ const ContactSection = () => {
       if (data.success) {
         toast({
           title: t("send.successTitle") || "Message Sent!",
-          description: t("send.successMessage") || "Thank you for reaching out. I'll get back to you within 24 hours.",
+          description:
+            t("send.successMessage") ||
+            "Thank you for reaching out. I'll get back to you within 24 hours.",
         });
-        setFormData({ name: "", email: "", subject: "", message: "", _honeypot: "" });
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+          _honeypot: "",
+        });
         setErrors({});
       } else {
-        throw new Error(data.message || 'Failed to send message');
+        throw new Error(data.message || "Failed to send message");
       }
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error("Form submission error:", error);
       toast({
         title: t("send.errorTitle") || "Error",
-        description: t("send.errorMessage") || "Failed to send message. Please try again or contact me directly.",
+        description:
+          t("send.errorMessage") ||
+          "Failed to send message. Please try again or contact me directly.",
         variant: "destructive",
       });
     } finally {
@@ -271,7 +292,7 @@ const ContactSection = () => {
                 name="_honeypot"
                 value={formData._honeypot}
                 onChange={handleChange}
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 tabIndex={-1}
                 autoComplete="off"
               />
@@ -373,20 +394,8 @@ const ContactSection = () => {
               </p>
             </div>
 
-            {/* Current Time */}
-            <div className="glass p-4 rounded-xl text-center">
-              <div className="text-sm text-muted-foreground mb-1">
-                {t("currentTimeInDublin")}
-              </div>
-              <div className="text-lg font-semibold text-primary">
-                {new Date().toLocaleTimeString("en-IE", {
-                  timeZone: "Europe/Dublin",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}{" "}
-                GMT
-              </div>
-            </div>
+            {/* World Clocks (rendered directly so only inner card is shown) */}
+            <WorldClocks />
           </div>
         </div>
       </div>
