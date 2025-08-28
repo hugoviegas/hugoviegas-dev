@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -11,23 +11,23 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Dark Theme Base Colors */
-    --background: 220 27% 8%;           /* Rich dark blue-gray */
-    --foreground: 210 40% 98%;          /* Almost white */
+    --background: 220 27% 8%; /* Rich dark blue-gray */
+    --foreground: 210 40% 98%; /* Almost white */
 
-    --card: 220 27% 10%;                /* Slightly lighter than bg */
+    --card: 220 27% 10%; /* Slightly lighter than bg */
     --card-foreground: 210 40% 98%;
 
     --popover: 220 27% 12%;
     --popover-foreground: 210 40% 98%;
 
     /* Neon Accent Colors */
-    --primary: 174 100% 42%;            /* Neon Cyan #00D4AA */
+    --primary: 174 100% 42%; /* Neon Cyan #00D4AA */
     --primary-foreground: 220 27% 8%;
-    
-    --secondary: 262 83% 67%;           /* Neon Purple #8B5CF6 */
+
+    --secondary: 262 83% 67%; /* Neon Purple #8B5CF6 */
     --secondary-foreground: 210 40% 98%;
 
-    --accent: 120 100% 60%;             /* Neon Green #39FF14 */
+    --accent: 120 100% 60%; /* Neon Green #39FF14 */
     --accent-foreground: 220 27% 8%;
 
     --muted: 220 27% 15%;
@@ -43,14 +43,22 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Custom Design Tokens */
-    --glass-bg: 220 27% 12% / 0.8;      /* Glassmorphism background */
-    --glass-border: 210 40% 98% / 0.1;  /* Subtle glass border */
-    --neon-glow: 174 100% 42% / 0.5;    /* Neon glow effect */
-    --gradient-primary: linear-gradient(135deg, hsl(174 100% 42%), hsl(262 83% 67%));
-    --gradient-accent: linear-gradient(135deg, hsl(120 100% 60%), hsl(174 100% 42%));
+    --glass-bg: 220 27% 12% / 0.8; /* Glassmorphism background */
+    --glass-border: 210 40% 98% / 0.1; /* Subtle glass border */
+    --neon-glow: 174 100% 42% / 0.5; /* Neon glow effect */
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(174 100% 42%),
+      hsl(262 83% 67%)
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(120 100% 60%),
+      hsl(174 100% 42%)
+    );
     --shadow-glow: 0 0 40px hsl(var(--neon-glow));
     --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
-    
+
     /* Animation Variables */
     --animation-speed: 0.3s;
     --transition-smooth: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
@@ -74,23 +82,23 @@ All colors MUST be HSL.
 
   .light {
     /* Light Theme Base Colors */
-    --background: 0 0% 100%;           /* Pure white */
-    --foreground: 240 10% 3.9%;        /* Dark gray */
+    --background: 0 0% 100%; /* Pure white */
+    --foreground: 240 10% 3.9%; /* Dark gray */
 
-    --card: 0 0% 100%;                 /* White */
+    --card: 0 0% 100%; /* White */
     --card-foreground: 240 10% 3.9%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
     /* Light Theme Accent Colors */
-    --primary: 174 100% 32%;           /* Slightly darker cyan */
+    --primary: 174 100% 32%; /* Slightly darker cyan */
     --primary-foreground: 0 0% 100%;
-    
-    --secondary: 262 83% 57%;          /* Slightly darker purple */
+
+    --secondary: 262 83% 57%; /* Slightly darker purple */
     --secondary-foreground: 0 0% 100%;
 
-    --accent: 120 100% 40%;            /* Slightly darker green */
+    --accent: 120 100% 40%; /* Slightly darker green */
     --accent-foreground: 0 0% 100%;
 
     --muted: 240 4.8% 95.9%;
@@ -109,12 +117,19 @@ All colors MUST be HSL.
     --glass-bg: 0 0% 100% / 0.8;
     --glass-border: 240 5.9% 90% / 0.5;
     --neon-glow: 174 100% 32% / 0.3;
-    --gradient-primary: linear-gradient(135deg, hsl(174 100% 32%), hsl(262 83% 57%));
-    --gradient-accent: linear-gradient(135deg, hsl(120 100% 40%), hsl(174 100% 32%));
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(174 100% 32%),
+      hsl(262 83% 57%)
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(120 100% 40%),
+      hsl(174 100% 32%)
+    );
     --shadow-glow: 0 0 20px hsl(var(--neon-glow));
     --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
-
 }
 
 @layer base {
@@ -133,7 +148,7 @@ All colors MUST be HSL.
     @apply bg-card/80 backdrop-blur-md border border-white/10;
     box-shadow: var(--shadow-glass);
   }
-  
+
   .glass-strong {
     @apply bg-card/90 backdrop-blur-lg border border-white/20;
     box-shadow: var(--shadow-glass);
@@ -143,9 +158,10 @@ All colors MUST be HSL.
   .neon-glow {
     box-shadow: var(--shadow-glow);
   }
-  
+
   .neon-text {
-    text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)), 0 0 30px hsl(var(--primary));
+    text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)),
+      0 0 30px hsl(var(--primary));
   }
 
   /* Button Variants */
@@ -154,7 +170,7 @@ All colors MUST be HSL.
     @apply hover:scale-105 hover:shadow-2xl hover:shadow-primary/50;
     @apply transition-all duration-300 ease-out;
   }
-  
+
   .btn-ghost {
     @apply border border-primary/50 text-primary hover:bg-primary/10 hover:border-primary;
     @apply transition-all duration-300 ease-out;
@@ -165,9 +181,9 @@ All colors MUST be HSL.
     @apply glass hover:glass-strong hover:scale-105 hover:shadow-2xl hover:shadow-primary/20;
     @apply transition-all duration-500 ease-out cursor-pointer;
   }
-  
+
   .card-skill {
-    @apply glass p-6 text-center hover:bg-primary/5 hover:border-primary/30;
+    @apply glass p-6 text-center hover:bg-primary/5 hover:border-primary/30 rounded-xl;
     @apply transition-all duration-300 ease-out;
   }
 
@@ -179,11 +195,11 @@ All colors MUST be HSL.
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  
+
   .heading-section {
     @apply font-bold text-3xl md:text-4xl lg:text-5xl text-foreground;
   }
-  
+
   .text-gradient {
     background: var(--gradient-primary);
     background-clip: text;
@@ -195,7 +211,7 @@ All colors MUST be HSL.
   .fade-in {
     @apply animate-fade-in;
   }
-  
+
   .slide-up {
     @apply animate-slide-up;
   }
