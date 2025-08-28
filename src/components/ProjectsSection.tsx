@@ -72,11 +72,12 @@ const ProjectsSection = () => {
     },
   ];
 
+  // Keep internal keys for filtering and provide translated labels for display
   const categories = [
-    t("category.All"),
-    t("category.Automation"),
-    t("category.Web Development"),
-    t("category.Mobile"),
+    { key: "All", label: t("category.All") },
+    { key: "Automation", label: t("category.Automation") },
+    { key: "Web Development", label: t("category.Web Development") },
+    { key: "Mobile", label: t("category.Mobile") },
   ];
 
   const filteredProjects =
@@ -98,22 +99,22 @@ const ProjectsSection = () => {
         <div className="flex flex-wrap justify-center gap-4 mb-12 slide-up">
           {categories.map((category) => (
             <Button
-              key={category}
-              variant={selectedFilter === category ? "default" : "outline"}
-              onClick={() => setSelectedFilter(category)}
+              key={category.key}
+              variant={selectedFilter === category.key ? "default" : "outline"}
+              onClick={() => setSelectedFilter(category.key)}
               className={`${
-                selectedFilter === category
+                selectedFilter === category.key
                   ? "bg-primary text-background shadow-lg scale-105"
                   : "btn-ghost hover:scale-105"
               } transition-all duration-300 hover:shadow-md`}
             >
               <Filter
                 className={`w-4 h-4 mr-2 transition-transform duration-300 ${
-                  selectedFilter === category ? "rotate-180" : ""
+                  selectedFilter === category.key ? "rotate-180" : ""
                 }`}
               />
-              {category}
-              {selectedFilter === category && (
+              {category.label}
+              {selectedFilter === category.key && (
                 <span className="ml-2 text-xs bg-background/20 px-2 py-1 rounded-full">
                   {filteredProjects.length}
                 </span>
