@@ -58,7 +58,7 @@ const SkillsSection = () => {
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
-  {/* Heading could be translated where used */}
+      {/* Heading could be translated where used */}
       {mainSkills.map((skill) => (
         <div
           key={skill.name}

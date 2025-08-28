@@ -44,9 +44,9 @@ const AboutSection = () => {
     <section id="about" className="py-20 bg-muted/5">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">{t('aboutTitle')}</h2>
+          <h2 className="heading-section mb-6">{t("aboutTitle")}</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {t('aboutSummary')}
+            {t("aboutSummary")}
           </p>
         </div>
 
@@ -59,7 +59,9 @@ const AboutSection = () => {
           {/* Story Column */}
           <div className="space-y-8 slide-up">
             <div className="space-y-6">
-              <h3 className="text-3xl font-bold text-gradient">{t('myJourney')}</h3>
+              <h3 className="text-3xl font-bold text-gradient">
+                {t("myJourney")}
+              </h3>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 {t("journeySummary1")}
               </p>
@@ -98,12 +100,12 @@ const AboutSection = () => {
               {highlights.map((highlight, index) => (
                 <div key={index} className="card-skill">
                   <highlight.icon className="w-8 h-8 text-primary mb-4 mx-auto" />
-                      <h4 className="font-semibold text-lg mb-2">
-                        {t(`highlight${index + 1}Title`) || highlight.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        {t(`highlight${index + 1}Desc`) || highlight.description}
-                      </p>
+                  <h4 className="font-semibold text-lg mb-2">
+                    {t(`highlight${index + 1}Title`) || highlight.title}
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    {t(`highlight${index + 1}Desc`) || highlight.description}
+                  </p>
                 </div>
               ))}
             </div>

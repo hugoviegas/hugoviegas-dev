@@ -1,5 +1,5 @@
-import { Github, Linkedin, Mail, Heart } from 'lucide-react';
-import { useLanguage } from '@/hooks/useLanguage';
+import { Github, Linkedin, Mail, Heart } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -8,19 +8,19 @@ const Footer = () => {
   const socialLinks = [
     {
       icon: Github,
-      url: 'https://github.com/hugoviegas/',
-      label: 'GitHub'
+      url: "https://github.com/hugoviegas/",
+      label: "GitHub",
     },
     {
       icon: Linkedin,
-      url: 'https://www.linkedin.com/in/hviegas/',
-      label: 'LinkedIn'
+      url: "https://www.linkedin.com/in/hviegas/",
+      label: "LinkedIn",
     },
     {
       icon: Mail,
-      url: 'mailto:hugoviegas3.1@gmail.com',
-      label: 'Email'
-    }
+      url: "mailto:hugoviegas3.1@gmail.com",
+      label: "Email",
+    },
   ];
 
   return (
@@ -29,7 +29,9 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           {/* Brand */}
           <div className="text-center md:text-left">
-            <h3 className="text-2xl font-bold text-gradient mb-2">Hugo Viegas</h3>
+            <h3 className="text-2xl font-bold text-gradient mb-2">
+              Hugo Viegas
+            </h3>
             <p className="text-muted-foreground">
               IT Support Specialist → Full-Stack Developer
             </p>
@@ -60,7 +62,7 @@ const Footer = () => {
           <div className="flex items-center gap-2">
             <span>© {currentYear} Hugo Viegas. All rights reserved.</span>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <span>Made with</span>
             <Heart className="w-4 h-4 text-red-500 animate-pulse" />
@@ -71,9 +73,8 @@ const Footer = () => {
         {/* Additional Info */}
         <div className="mt-6 text-center">
           <p className="text-xs text-muted-foreground">
-            Available for freelance work and full-time opportunities • 
-            Fluent in Portuguese & English • 
-            Open to remote and hybrid arrangements
+            Available for freelance work and full-time opportunities • Fluent in
+            Portuguese & English • Open to remote and hybrid arrangements
           </p>
         </div>
       </div>

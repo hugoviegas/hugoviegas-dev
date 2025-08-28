@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLanguage } from '@/hooks/useLanguage';
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface StatItemProps {
   value: number;
@@ -50,10 +50,10 @@ const StatsSection = () => {
   const { t } = useLanguage();
 
   const stats = [
-    { value: 90, label: t('stats.processReduction'), suffix: "%", icon: "⚡" },
-    { value: 20, label: t('stats.viewsGrowth'), suffix: "%", icon: "📈" },
-    { value: 4, label: t('stats.yearsExperience'), suffix: "+", icon: "�" },
-    { value: 2, label: t('stats.countriesWorked'), suffix: "", icon: "🌍" },
+    { value: 90, label: t("stats.processReduction"), suffix: "%", icon: "⚡" },
+    { value: 20, label: t("stats.viewsGrowth"), suffix: "%", icon: "📈" },
+    { value: 4, label: t("stats.yearsExperience"), suffix: "+", icon: "�" },
+    { value: 2, label: t("stats.countriesWorked"), suffix: "", icon: "🌍" },
   ];
 
   return (

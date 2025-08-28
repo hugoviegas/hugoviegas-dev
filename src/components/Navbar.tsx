@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
-import { useLanguage } from '@/hooks/useLanguage';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface NavbarProps {
   show: boolean;
@@ -16,18 +16,18 @@ const Navbar = ({ show }: NavbarProps) => {
   }, [show]);
 
   const scrollToSection = (sectionId: string) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
     setIsMobileMenuOpen(false);
   };
 
-    const { t } = useLanguage();
+  const { t } = useLanguage();
 
-    const navItems = [
-      { id: 'about', label: t('about') },
-      { id: 'projects', label: t('projects') },
-      { id: 'experience', label: t('experience') },
-      { id: 'contact', label: t('contact') },
-    ];
+  const navItems = [
+    { id: "about", label: t("about") },
+    { id: "projects", label: t("projects") },
+    { id: "experience", label: t("experience") },
+    { id: "contact", label: t("contact") },
+  ];
 
   if (!show) return null;
 
@@ -41,9 +41,13 @@ const Navbar = ({ show }: NavbarProps) => {
             size="icon"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="rounded-full"
-            aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
           >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isMobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </Button>
         </div>
       </div>
@@ -53,7 +57,7 @@ const Navbar = ({ show }: NavbarProps) => {
         <div className="fixed top-16 left-4 z-40 md:hidden">
           <div className="w-[90vw] max-w-xs glass rounded-xl p-3 shadow-lg border border-white/10">
             <div className="flex flex-col gap-2">
-              {navItems.map(item => (
+              {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
@@ -72,7 +76,7 @@ const Navbar = ({ show }: NavbarProps) => {
         <div className="pointer-events-auto glass rounded-2xl px-4 py-2 flex items-center gap-6 shadow-lg border border-white/10">
           {/* Desktop nav */}
           <div className="flex items-center gap-6">
-            {navItems.map(item => (
+            {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
