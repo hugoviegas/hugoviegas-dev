@@ -38,7 +38,7 @@ const Navbar = ({ show }: NavbarProps) => {
             <button
               key={item.id}
               onClick={() => scrollToSection(item.id)}
-              className="text-muted-foreground hover:text-primary transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors px-2 py-1"
             >
               {item.label}
             </button>
@@ -47,7 +47,7 @@ const Navbar = ({ show }: NavbarProps) => {
 
         {/* Mobile menu toggle */}
         <div className="md:hidden">
-          <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="rounded-full">
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
         </div>
@@ -62,7 +62,7 @@ const Navbar = ({ show }: NavbarProps) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="w-full text-left px-3 py-2 text-muted-foreground hover:text-primary hover:bg-accent/10 rounded-md transition-colors"
+                  className="w-full text-left px-4 py-3 text-muted-foreground hover:text-primary hover:bg-accent/10 rounded-full transition-colors"
                 >
                   {item.label}
                 </button>

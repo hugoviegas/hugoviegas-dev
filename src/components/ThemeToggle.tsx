@@ -11,11 +11,13 @@ export function ThemeToggle() {
   };
 
   return (
+    // use icon size to keep circular shape and visual parity with TopControls
     <Button
       variant="ghost"
-      size="sm"
+      size="icon"
       onClick={handleClick}
       aria-label="Toggle theme"
+      className="rounded-full hover:bg-accent/10 transition-colors"
     >
       <span className="sr-only">Toggle theme</span>
       {theme === "light" ? (

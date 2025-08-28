@@ -7,8 +7,9 @@ export default function TopControls() {
   const { language, toggleLanguage, currentLanguage } = useLanguage();
 
   return (
-    <div className="fixed top-3 left-0 right-0 z-50 flex justify-end items-center px-6 lg:px-8">
-      <div className="flex items-center gap-3 bg-card/50 glass p-2 rounded-full">
+    // make outer container non-interactive so it doesn't block underlying centered nav
+    <div className="fixed top-3 left-0 right-0 z-50 flex justify-end items-center px-6 lg:px-8 pointer-events-none">
+      <div className="pointer-events-auto flex items-center gap-3 bg-card/50 glass p-2 rounded-full">
         <ThemeToggle />
         <Button
           variant="ghost"
