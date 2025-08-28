@@ -18,6 +18,11 @@ const HeroSection = () => {
         setCurrentIndex(currentIndex + 1);
       }, 100);
       return () => clearTimeout(timeout);
+    } else {
+      const blink = document.querySelector('.type-cursor');
+      if (blink) {
+        blink.classList.add('blink-after');
+      }
     }
   }, [currentIndex, fullText]);
 
@@ -46,16 +51,16 @@ const HeroSection = () => {
               <div className="text-primary font-mono text-lg">
                 {t('hello')}
               </div>
-              <h1 className="heading-hero">
+              <h1 className="heading-hero leading-tight mb-2">
                 Hugo Viegas
               </h1>
-              <div className="h-20 flex items-center">
+              <div className="h-24 flex items-center">
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
                   {displayText}
-                  <span className="inline-block w-1 h-8 bg-primary ml-2 animate-blink"></span>
+                  <span className="type-cursor inline-block w-1 h-8 bg-primary ml-2"></span>
                 </h2>
               </div>
-              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
+              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed mt-4">
                 {t('description')}
               </p>
             </div>

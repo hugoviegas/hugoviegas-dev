@@ -24,14 +24,23 @@ const translations: Translations = {
 };
 
 export const useLanguage = () => {
-  const [language, setLanguage] = useState<LanguageCode>(() => {
-    // Tentar recuperar do localStorage
-    const saved = localStorage.getItem('language') as LanguageCode;
-    return (saved && saved in languages) ? saved : 'EN';
-  });
+  const [language, setLanguage] = useState<LanguageCode>('EN');
 
   useEffect(() => {
-    localStorage.setItem('language', language);
+    try {
+      const saved = localStorage.getItem('language') as LanguageCode;
+      if (saved && saved in languages) setLanguage(saved);
+    } catch (e) {
+      // ignore in non-browser env
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('language', language);
+    } catch (e) {
+      // ignore
+    }
   }, [language]);
 
   const toggleLanguage = () => {

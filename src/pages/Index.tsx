@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import TopControls from '@/components/TopControls';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
 import ProjectsSection from '@/components/ProjectsSection';
@@ -26,6 +27,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <TopControls />
       <Navbar show={showNavbar} />
       <section id="hero">
         <HeroSection />
