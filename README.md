@@ -229,7 +229,7 @@ in the Software without restriction...
 <div align="center">
   <img src="https://img.shields.io/badge/Hugo_Viegas-000000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
   <img src="https://img.shields.io/badge/Hugo_Viegas-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  <img src="https://img.shields.io/badge/hugo.viegas@email.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+  <img src="https://img.shields.io/badge/hugoviegas3.0@email.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
 </div>
 
 <br />
