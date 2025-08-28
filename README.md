@@ -1,73 +1,109 @@
-# Welcome to your Lovable project
+# Hugo Viegas - Portfolio
 
-## Project info
+Um portfolio moderno e responsivo desenvolvido com React, TypeScript e Tailwind CSS, apresentando minha trajetória de Especialista em Suporte de TI para Desenvolvedor Full-Stack.
 
-**URL**: https://lovable.dev/projects/6cac2253-b0f0-4083-bcfe-a50a73fe64f5
+## 🚀 Funcionalidades
 
-## How can I edit this code?
+### ✨ Design e UX
+- **Tema Dark/Light**: Toggle para alternar entre temas dark e light
+- **Design Responsivo**: Otimizado para desktop, tablet e mobile
+- **Animações Suaves**: Transições e efeitos visuais modernos
+- **Glassmorphism**: Efeitos de vidro e transparência
 
-There are several ways of editing your application.
+### 🧭 Navegação
+- **Navbar Inteligente**: Aparece automaticamente após rolar a primeira seção
+- **Navegação Suave**: Scroll automático para seções
+- **Menu Mobile**: Hamburger menu para dispositivos móveis
+- **Links Ativos**: Indicadores visuais para seção atual
 
-**Use Lovable**
+### 🌍 Internacionalização
+- **Suporte Multi-idioma**: Inglês e Português
+- **Toggle de Idioma**: Botão para alternar idiomas
+- **Persistência**: Idioma salvo no localStorage
+- **Traduções**: Sistema de traduções extensível
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6cac2253-b0f0-4083-bcfe-a50a73fe64f5) and start prompting.
+### ⚡ Performance
+- **Lazy Loading**: Imagens carregadas sob demanda
+- **Intersection Observer**: Detecção inteligente de visibilidade
+- **Otimização**: Componentes otimizados para performance
+- **SEO**: Estrutura semântica HTML
 
-Changes made via Lovable will be committed automatically to this repo.
+### 📱 Interatividade
+- **Skills Animados**: Progress bars que se preenchem ao passar o mouse
+- **Filtros de Projetos**: Sistema de filtros com contadores
+- **Estatísticas**: Contadores animados de conquistas
+- **Hover Effects**: Efeitos visuais em elementos interativos
 
-**Use your preferred IDE**
+## 🛠️ Tecnologias Utilizadas
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui
+- **Estado**: React Hooks, Context API
+- **Roteamento**: React Router
+- **Ícones**: Lucide React
+- **Tema**: next-themes
+- **Build**: Vite
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📦 Como Executar
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
+# Clone o repositório
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Entre no diretório
+cd evolution-path
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Instale as dependências
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Execute o projeto
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+O projeto estará disponível em `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🎯 Seções do Portfolio
 
-**Use GitHub Codespaces**
+1. **Hero**: Apresentação pessoal com animação de digitação
+2. **About**: Jornada profissional e habilidades técnicas
+3. **Projects**: Projetos destacados com filtros
+4. **Experience**: Experiência profissional
+5. **Contact**: Informações de contato
+6. **Footer**: Links sociais e informações adicionais
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🔧 Scripts Disponíveis
 
-## What technologies are used for this project?
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Build para produção
+- `npm run preview` - Preview do build de produção
+- `npm run lint` - Executa o linter
 
-This project is built with:
+## 📱 Responsividade
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+O portfolio é totalmente responsivo e otimizado para:
+- **Desktop**: 1200px+
+- **Tablet**: 768px - 1199px
+- **Mobile**: até 767px
 
-## How can I deploy this project?
+## 🎨 Personalização
 
-Simply open [Lovable](https://lovable.dev/projects/6cac2253-b0f0-4083-bcfe-a50a73fe64f5) and click on Share -> Publish.
+### Temas
+- **Dark**: Tema padrão com cores neon
+- **Light**: Tema claro com tons suaves
 
-## Can I connect a custom domain to my Lovable project?
+### Idiomas
+- **EN**: Inglês (padrão)
+- **PT**: Português
 
-Yes, you can!
+## 📈 Melhorias Futuras
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- [ ] Blog integrado
+- [ ] Formulário de contato funcional
+- [ ] Analytics e tracking
+- [ ] PWA (Progressive Web App)
+- [ ] Mais idiomas
+- [ ] Modo de alta contraste
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+
+**Desenvolvido por Hugo Viegas** | [LinkedIn](https://www.linkedin.com/in/hviegas/) | [GitHub](https://github.com/hugoviegas)

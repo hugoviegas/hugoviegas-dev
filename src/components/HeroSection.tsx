@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { LazyImage } from '@/components/LazyImage';
+import { useLanguage } from '@/hooks/useLanguage';
 import heroImage from '@/assets/hugo-hero.jpg';
 
 const HeroSection = () => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const fullText = 'IT Support Specialist → Full-Stack Developer';
+  const { t } = useLanguage();
+  const fullText = t('role');
 
   useEffect(() => {
     if (currentIndex < fullText.length) {
@@ -30,11 +31,6 @@ const HeroSection = () => {
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Theme Toggle */}
-      <div className="absolute top-6 right-6 z-20">
-        <ThemeToggle />
-      </div>
-      
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-20 w-32 h-32 bg-primary rounded-full blur-3xl animate-pulse"></div>
@@ -48,7 +44,7 @@ const HeroSection = () => {
           <div className="space-y-8 fade-in">
             <div className="space-y-4">
               <div className="text-primary font-mono text-lg">
-                Hello, I'm
+                {t('hello')}
               </div>
               <h1 className="heading-hero">
                 Hugo Viegas
@@ -60,8 +56,7 @@ const HeroSection = () => {
                 </h2>
               </div>
               <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
-                Transforming 4+ years of IT Support expertise into innovative web solutions. 
-                Based in Dublin, passionate about problem-solving and continuous learning.
+                {t('description')}
               </p>
             </div>
 
@@ -71,14 +66,14 @@ const HeroSection = () => {
                 onClick={scrollToProjects}
                 className="btn-hero text-lg px-8 py-6"
               >
-                View My Projects
+                {t('viewProjects')}
               </Button>
               <Button 
                 onClick={scrollToContact}
                 variant="outline" 
                 className="btn-ghost text-lg px-8 py-6"
               >
-                Get In Touch
+                {t('getInTouch')}
               </Button>
             </div>
 
