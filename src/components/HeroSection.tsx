@@ -111,24 +111,22 @@ const HeroSection = () => {
 
           {/* Image Column */}
           <div className="relative lg:justify-self-end fade-in delay-300">
-            <div className="relative">
-              {/* Glassmorphism Frame */}
-              <div className="glass-strong rounded-3xl p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl"></div>
+            <div className="relative mx-auto">
+              {/* Glassmorphism Frame - Perfect Square */}
+              <div className="glass-strong rounded-3xl p-8 relative overflow-hidden flex-shrink-0 lg:w-96 lg:h-96 md:w-80 md:h-80 sm:w-72 sm:h-72 w-64 h-64 flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl pointer-events-none"></div>
                 <LazyImage 
                   src={heroImage} 
                   alt="Hugo Viegas - IT Support Specialist transitioning to Full-Stack Developer"
-                  className="relative z-10 w-80 h-80 object-cover rounded-2xl shadow-2xl"
+                  className="relative z-10 object-cover rounded-2xl shadow-2xl lg:w-80 lg:h-80 md:w-64 md:h-64 sm:w-56 sm:h-56 w-48 h-48"
                   placeholder="Loading profile..."
                 />
               </div>
               
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-6 glass-strong rounded-2xl p-4 border border-primary/30">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">4+</div>
-                  <div className="text-sm text-muted-foreground">Years Experience</div>
-                </div>
+              <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 glass-strong rounded-xl p-4 border border-primary/30 text-center lg:w-36 md:w-32 sm:w-28 w-24">
+                <div className="text-2xl font-bold text-primary lg:text-2xl md:text-xl sm:text-lg text-base">4+</div>
+                <div className="text-sm text-muted-foreground lg:text-sm md:text-xs sm:text-[10px] text-[9px]">Years Experience</div>
               </div>
             </div>
           </div>
