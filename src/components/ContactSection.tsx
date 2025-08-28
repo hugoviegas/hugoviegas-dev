@@ -21,35 +21,118 @@ const ContactSection = () => {
     email: "",
     subject: "",
     message: "",
+    // Honeypot field for spam protection
+    _honeypot: "",
   });
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
   const { toast } = useToast();
+
+  const validateForm = () => {
+    const newErrors: {[key: string]: string} = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = t("validation.nameRequired") || "Name is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = t("validation.emailRequired") || "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = t("validation.emailInvalid") || "Please enter a valid email";
+    }
+
+    if (!formData.subject.trim()) {
+      newErrors.subject = t("validation.subjectRequired") || "Subject is required";
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = t("validation.messageRequired") || "Message is required";
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = t("validation.messageTooShort") || "Message must be at least 10 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast({
+        title: t("validation.errorTitle") || "Validation Error",
+        description: t("validation.errorMessage") || "Please fix the errors and try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check for spam (honeypot field should be empty)
+    if (formData._honeypot) {
+      toast({
+        title: t("send.errorTitle") || "Error",
+        description: "Spam detected. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('access_key', 'c40cf7dd-eb73-4c03-9a22-30647387e501');
+      formDataToSend.append('name', formData.name.trim());
+      formDataToSend.append('email', formData.email.trim());
+      formDataToSend.append('subject', formData.subject.trim());
+      formDataToSend.append('message', formData.message.trim());
 
-    toast({
-      title: "Message Sent!",
-      description:
-        "Thank you for reaching out. I'll get back to you within 24 hours.",
-    });
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formDataToSend
+      });
 
-    setFormData({ name: "", email: "", subject: "", message: "" });
-    setIsSubmitting(false);
+      const data = await response.json();
+
+      if (data.success) {
+        toast({
+          title: t("send.successTitle") || "Message Sent!",
+          description: t("send.successMessage") || "Thank you for reaching out. I'll get back to you within 24 hours.",
+        });
+        setFormData({ name: "", email: "", subject: "", message: "", _honeypot: "" });
+        setErrors({});
+      } else {
+        throw new Error(data.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: t("send.errorTitle") || "Error",
+        description: t("send.errorMessage") || "Failed to send message. Please try again or contact me directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
 
   const contactInfo = [
@@ -123,8 +206,13 @@ const ContactSection = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300"
+                    className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                      errors.name ? "border-red-500 focus:border-red-500" : ""
+                    }`}
                   />
+                  {errors.name && (
+                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                  )}
                 </div>
                 <div>
                   <Input
@@ -134,28 +222,58 @@ const ContactSection = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300"
+                    className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                      errors.email ? "border-red-500 focus:border-red-500" : ""
+                    }`}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
               </div>
 
-              <Input
-                name="subject"
-                placeholder={t("placeholder.subject")}
-                value={formData.subject}
-                onChange={handleChange}
-                required
-                className="glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300"
-              />
+              <div>
+                <Input
+                  name="subject"
+                  placeholder={t("placeholder.subject")}
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                  className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                    errors.subject ? "border-red-500 focus:border-red-500" : ""
+                  }`}
+                />
+                {errors.subject && (
+                  <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
+                )}
+              </div>
 
-              <Textarea
-                name="message"
-                placeholder={t("placeholder.project")}
-                value={formData.message}
+              <div>
+                <Textarea
+                  name="message"
+                  placeholder={t("placeholder.project")}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows={6}
+                  className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                    errors.message ? "border-red-500 focus:border-red-500" : ""
+                  }`}
+                />
+                {errors.message && (
+                  <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+                )}
+              </div>
+
+              {/* Honeypot field for spam protection */}
+              <input
+                type="text"
+                name="_honeypot"
+                value={formData._honeypot}
                 onChange={handleChange}
-                required
-                rows={6}
-                className="glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300"
+                style={{ display: 'none' }}
+                tabIndex={-1}
+                autoComplete="off"
               />
 
               <Button
