@@ -30,17 +30,19 @@ const Navbar = ({ show }: NavbarProps) => {
 
   return (
     <>
-      {/* Mobile hamburger fixed to the left with spacing */}
-      <div className="fixed top-4 left-4 z-50 md:hidden">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="rounded-full"
-          aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-        >
-          {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </Button>
+      {/* Mobile hamburger fixed to the left with the same pill style as TopControls */}
+      <div className="fixed top-3 left-4 z-50 md:hidden">
+        <div className="pointer-events-auto flex items-center gap-3 bg-card/50 glass p-2 rounded-full">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="rounded-full"
+            aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile dropdown panel (left-aligned under the hamburger) */}
