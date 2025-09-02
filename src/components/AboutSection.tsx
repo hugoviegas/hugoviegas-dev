@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Code, Globe, Users, Zap, BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import {
 import { useLanguage } from "@/hooks/useLanguage";
 import StatsSection from "@/components/StatsSection";
 import SkillsSection from "@/components/SkillsSection";
+import RuwixWidget from "@/components/RuwixWidget";
 
 const AboutSection = () => {
   const { t } = useLanguage();
@@ -40,6 +42,10 @@ const AboutSection = () => {
     },
   ];
 
+  const [startSolved, setStartSolved] = useState(false);
+
+  const widgetSrc = `https://ruwix.com/widget/3d/?flags=showalg${startSolved ? "%20startsolved" : ""}`;
+
   return (
     <section id="about" className="py-20 bg-muted/5">
       <div className="container mx-auto px-6 lg:px-8">
@@ -48,6 +54,11 @@ const AboutSection = () => {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {t("aboutSummary")}
           </p>
+        </div>
+
+        {/* Ruwix widget component */}
+        <div className="mb-10 flex justify-center">
+          <RuwixWidget initialSolved={false} />
         </div>
 
         {/* Stats Section */}
