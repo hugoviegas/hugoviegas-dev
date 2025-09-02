@@ -12,7 +12,7 @@ import {
 import { useLanguage } from "@/hooks/useLanguage";
 import StatsSection from "@/components/StatsSection";
 import SkillsSection from "@/components/SkillsSection";
-import RuwixWidget from "@/components/RuwixWidget";
+import FastCube from "@/components/FastCube";
 
 const AboutSection = () => {
   const { t } = useLanguage();
@@ -56,9 +56,9 @@ const AboutSection = () => {
           </p>
         </div>
 
-        {/* Ruwix widget component */}
+        {/* Fast iframe cube (start solved) */}
         <div className="mb-10 flex justify-center">
-          <RuwixWidget initialSolved={false} />
+          <FastCube w={250} h={250} />
         </div>
 
         {/* Stats Section */}
