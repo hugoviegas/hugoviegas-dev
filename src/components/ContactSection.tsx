@@ -11,7 +11,7 @@ import {
   Linkedin,
   Github,
   Send,
-  Phone,
+  Instagram,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import WorldClocks from "@/components/WorldClocks";
@@ -312,6 +312,77 @@ const ContactSection = () => {
                 )}
               </Button>
             </form>
+
+            {/* Large social buttons (Instagram / Telegram / WhatsApp) */}
+            <div className="mt-8">
+              <h4 className="text-lg font-semibold mb-4">Connect on social</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <Button
+                  asChild
+                  variant="default"
+                  size="lg"
+                  className="w-full justify-center"
+                >
+                  <a
+                    href="https://www.instagram.com/_hviegas"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3"
+                  >
+                    <Instagram className="w-5 h-5" />
+                    <span className="font-semibold">Instagram</span>
+                  </a>
+                </Button>
+
+                <Button
+                  asChild
+                  variant="default"
+                  size="lg"
+                  className="w-full justify-center"
+                >
+                  <a
+                    href="https://t.me/Hviegas"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3"
+                  >
+                    {/* Telegram glyph */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 240 240"
+                      className="w-5 h-5"
+                    >
+                      <path d="M120 0C53.7 0 0 53.7 0 120s53.7 120 120 120 120-53.7 120-120S186.3 0 120 0zm56.4 79.9l-17.1 80c-1.3 5.9-4.9 7.5-9.9 4.7l-27.4-20.2-13.2 12.7c-1.5 1.5-2.7 2.7-5.5 2.7l2-28.6 52.1-47.1c2.3-2 0.4-3.1-3.4-1.1L88.6 120.7 49.3 110.4c-6-1.8-6.1-6-1.1-8.8l111.5-43.3c5.1-1.9 9.6 1.2 8.7 9.6z" />
+                    </svg>
+                    <span className="font-semibold">Telegram</span>
+                  </a>
+                </Button>
+
+                <Button
+                  asChild
+                  variant="default"
+                  size="lg"
+                  className="w-full justify-center"
+                >
+                  <a
+                    href="https://api.whatsapp.com/send?phone=3530830865984"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3"
+                  >
+                    {/* WhatsApp glyph */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                      className="w-5 h-5"
+                    >
+                      <path d="M380.9 97.1C339 55.2 283.3 32 224 32 100.3 32 0 132.3 0 256c0 45 12 86.7 34.8 123.8L32 480l100.6-33.3C151.6 461.8 187.5 472 224 472c123.7 0 224-100.3 224-224 0-59.3-23.2-115-65.1-156.9zM224 408c-35.2 0-69.9-9.5-99.8-27.5l-7.2-4.1-58.9 19.3 20.2-57.6-4.4-7.3C64.8 301.6 56 279.7 56 256 56 164.6 132.6 88 224 88c35.2 0 68.6 10.6 96 30.5 27.4 19.9 46 48 54.2 81.5 8.2 33.5 6.8 68.3-4.2 100.4-11 32.1-33.8 60-65.2 81.6-24.1 17-52 26.6-82 26.6z" />
+                    </svg>
+                    <span className="font-semibold">WhatsApp</span>
+                  </a>
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Contact Info */}
