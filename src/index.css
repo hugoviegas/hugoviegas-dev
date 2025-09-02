@@ -216,3 +216,57 @@ All colors MUST be HSL.
     @apply animate-slide-up;
   }
 }
+
+/* Ambient background dots used site-wide */
+.ambient-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5; /* sit behind content z-10 */
+  mix-blend-mode: screen; /* subtle additive blend */
+}
+
+.ambient-dot {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(24px);
+  transform: translate(-50%, -50%);
+  will-change: opacity, transform;
+  opacity: 0.12;
+  animation-name: ambient-fade;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ambient-fade {
+  0% {
+    opacity: 0.06;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  50% {
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+  100% {
+    opacity: 0.06;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}
+
+/* Slightly stronger but soft pulse for hero-specific blobs */
+.subtle-pulse {
+  animation: subtle-pulse 4s ease-in-out infinite;
+  opacity: 0.14;
+}
+
+@keyframes subtle-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.12;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.2;
+  }
+}
