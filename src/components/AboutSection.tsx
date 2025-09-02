@@ -11,7 +11,6 @@ import {
 import { useLanguage } from "@/hooks/useLanguage";
 import StatsSection from "@/components/StatsSection";
 import SkillsSection from "@/components/SkillsSection";
-import SpotifyEmbed from "@/components/widgets/SpotifyEmbed";
 
 const AboutSection = () => {
   const { t } = useLanguage();
@@ -136,15 +135,6 @@ const AboutSection = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        {/* Spotify Embed (public playlist) - lazy loads when visible or on click */}
-        <div className="mt-12 flex justify-center slide-up">
-          <div className="w-full max-w-3xl">
-            <SpotifyEmbed
-              playlistId="1Xi9HL4NA9vFhDUY9wjJtB"
-              autoLoad={false}
-            />
           </div>
         </div>
       </div>
