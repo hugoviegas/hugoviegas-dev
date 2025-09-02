@@ -12,7 +12,7 @@ import {
 import { useLanguage } from "@/hooks/useLanguage";
 import StatsSection from "@/components/StatsSection";
 import SkillsSection from "@/components/SkillsSection";
-import FastCube from "@/components/FastCube";
+import FastTransparentCube from "@/components/FastTransparentCube";
 
 const AboutSection = () => {
   const { t } = useLanguage();
@@ -44,7 +44,9 @@ const AboutSection = () => {
 
   const [startSolved, setStartSolved] = useState(false);
 
-  const widgetSrc = `https://ruwix.com/widget/3d/?flags=showalg${startSolved ? "%20startsolved" : ""}`;
+  const widgetSrc = `https://ruwix.com/widget/3d/?flags=showalg${
+    startSolved ? "%20startsolved" : ""
+  }`;
 
   return (
     <section id="about" className="py-20 bg-muted/5">
@@ -56,9 +58,9 @@ const AboutSection = () => {
           </p>
         </div>
 
-        {/* Fast iframe cube (start solved) */}
+        {/* Small transparent cube (fast Three.js viewer) */}
         <div className="mb-10 flex justify-center">
-          <FastCube w={250} h={250} />
+          <FastTransparentCube width={300} height={300} />
         </div>
 
         {/* Stats Section */}
