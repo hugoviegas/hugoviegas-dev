@@ -38,6 +38,29 @@ const HeroSection = () => {
   const resumeUrl =
     "https://1drv.ms/b/c/b6aa13ae29a0a7ec/EeynoCmuE6oggLYK8QIAAAABlLWz9Me-9MWv7-vcEOTWrQ?e=2sfMMN";
 
+  // Suppress noisy console errors originating from the Spotify embed while component is mounted
+  useEffect(() => {
+    const origConsoleError = console.error as (...args: unknown[]) => void;
+    console.error = (...args: unknown[]) => {
+      try {
+        const msg = String(args[0] || "");
+        // Filter known spotify embed noisy messages
+        if (
+          msg.includes("Refused to display") ||
+          msg.includes("Blocked a frame with origin")
+        ) {
+          return;
+        }
+      } catch (e) {
+        // ignore
+      }
+      origConsoleError(...args);
+    };
+    return () => {
+      console.error = origConsoleError as Console["error"];
+    };
+  }, []);
+
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Animated Background */}
@@ -137,13 +160,36 @@ const HeroSection = () => {
                   />
                 </div>
               </div>
+              {/* Compact Spotify embed under profile image */}
+              <div className="mt-6 flex justify-center">
+                <div className="w-full max-w-[396px]">
+                  <iframe
+                    data-testid="embed-iframe"
+                    title="Spotify Playlist Compact"
+                    style={{ borderRadius: 12 }}
+                    src="https://open.spotify.com/embed/playlist/1Xi9HL4NA9vFhDUY9wjJtB?utm_source=generator&theme=0"
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allowFullScreen
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ArrowDown className="w-6 h-6 text-primary" />
+        {/* Section footer: scroll indicator placed here to avoid overlapping mobile content */}
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={scrollToProjects}
+            aria-label="Scroll to projects"
+            className="animate-bounce p-2 rounded-full glass hover:scale-110 transition-transform"
+          >
+            <ArrowDown className="w-6 h-6 text-primary" />
+          </button>
         </div>
       </div>
     </section>
