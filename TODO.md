@@ -47,9 +47,17 @@ Short, actionable ideas to improve the project. Pick one small task at a time an
 - Add a CI/CD pipeline to deploy to Vercel (or Netlify) on `main` branch.
 - Add basic error monitoring (Sentry or similar) and a lightweight analytics (Plausible or GA4) with opt-out.
 
+## New Features & Integrations
+- Integrate Spotify API to display favorite playlists in a widget (fetch tracks, create playlist component).
+- Create a "Widgets" section on the site for dynamic, customizable content (e.g., Spotify player, image gallery, personal games showcase).
+- Add API endpoints for fetching external data (Spotify, images, game data) with error handling and loading states.
+- Implement reusable widget components that can be toggled or configured via settings.
+- Add a games section to showcase personal projects (e.g., embed demos or links to deployed games).
+
 ## Notes and priorities
 - Start with quick wins to improve DX (lint, husky, small unit tests).
 - Add CI next so changes are validated automatically.
 - After CI, focus on tests (unit → E2E) and performance (images, Lighthouse).
+- For new features, begin with Spotify integration as a proof-of-concept for API usage.
 
 If you want, I can implement the first quick win (ESLint + husky pre-commit) or create the GitHub Actions CI skeleton next.

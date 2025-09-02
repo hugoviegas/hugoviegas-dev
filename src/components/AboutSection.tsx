@@ -137,6 +137,23 @@ const AboutSection = () => {
             </div>
           </div>
         </div>
+        {/* Spotify Embed (public playlist) */}
+        <div className="mt-12 flex justify-center slide-up">
+          <div className="w-full max-w-3xl">
+            <iframe
+              data-testid="embed-iframe"
+              title="Spotify Playlist"
+              style={{ borderRadius: 12 }}
+              src="https://open.spotify.com/embed/playlist/1Xi9HL4NA9vFhDUY9wjJtB?utm_source=generator&theme=0"
+              width="100%"
+              height="352"
+              frameBorder="0"
+              allowFullScreen
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
