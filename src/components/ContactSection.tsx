@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -177,7 +177,52 @@ const ContactSection = () => {
     },
   ];
 
-  const socialLinks = [
+  // Official SVG icon components (adapted from provided SVG markup)
+  const TelegramIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 60 60"
+      fill="none"
+      {...props}
+    >
+      <rect height="60" rx={10} width="60" />
+      <path
+        d="M49.281,11.425,9.305,26.417a2.01,2.01,0,0,0-.087,3.73l9.471,4.059,19.9-13.268a.5.5,0,0,1,.634.774l-14.5,14.5V46.268l6.031-6.031,9.6,8a2.01,2.01,0,0,0,3.237-1.057L51.938,13.8A2.011,2.011,0,0,0,49.281,11.425Z"
+        fill="#f1f3f4"
+      />
+      <path
+        d="M41.634,50.207a3.493,3.493,0,0,1-2.241-.816l-8.549-7.124-5.063,5.062a1.5,1.5,0,0,1-2.56-1.06V36.217a1.5,1.5,0,0,1,.439-1.061l7.382-7.382-11.521,7.68a1.5,1.5,0,0,1-1.422.131L8.628,31.526a3.51,3.51,0,0,1,.15-6.513L48.755,10.021a3.511,3.511,0,0,1,4.638,4.138L45.046,47.546a3.49,3.49,0,0,1-2.316,2.485A3.553,3.553,0,0,1,41.634,50.207ZM30.752,38.737a1.5,1.5,0,0,1,.96.348l9.6,8a.506.506,0,0,0,.486.094.5.5,0,0,0,.337-.362l8.346-33.386a.51.51,0,0,0-.673-.6h0L9.831,27.821a.511.511,0,0,0-.021.948l8.723,3.738L37.759,19.69a2,2,0,0,1,2.526,3.082L26.221,36.838v5.809l3.47-3.47A1.5,1.5,0,0,1,30.752,38.737ZM49.281,11.426h0Z"
+        fill="#8d9cf4"
+      />
+      <path
+        d="M9.305,27.917a1.5,1.5,0,0,1-.527-2.9L48.755,10.021a3.511,3.511,0,0,1,4.638,4.138,1.5,1.5,0,0,1-2.911-.726.511.511,0,0,0-.673-.6L9.831,27.821A1.476,1.476,0,0,1,9.305,27.917Z"
+        fill="#7bcdd1"
+      />
+    </svg>
+  );
+
+  const WhatsAppIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      {...props}
+    >
+      <path
+        d="M3.50002 12C3.50002 7.30558 7.3056 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C10.3278 20.5 8.77127 20.0182 7.45798 19.1861C7.21357 19.0313 6.91408 18.9899 6.63684 19.0726L3.75769 19.9319L4.84173 17.3953C4.96986 17.0955 4.94379 16.7521 4.77187 16.4751C3.9657 15.176 3.50002 13.6439 3.50002 12ZM12 1.5C6.20103 1.5 1.50002 6.20101 1.50002 12C1.50002 13.8381 1.97316 15.5683 2.80465 17.0727L1.08047 21.107C0.928048 21.4637 0.99561 21.8763 1.25382 22.1657C1.51203 22.4552 1.91432 22.5692 2.28599 22.4582L6.78541 21.1155C8.32245 21.9965 10.1037 22.5 12 22.5C17.799 22.5 22.5 17.799 22.5 12C22.5 6.20101 17.799 1.5 12 1.5ZM14.2925 14.1824L12.9783 15.1081C12.3628 14.7575 11.6823 14.2681 10.9997 13.5855C10.2901 12.8759 9.76402 12.1433 9.37612 11.4713L10.2113 10.7624C10.5697 10.4582 10.6678 9.94533 10.447 9.53028L9.38284 7.53028C9.23954 7.26097 8.98116 7.0718 8.68115 7.01654C8.38113 6.96129 8.07231 7.046 7.84247 7.24659L7.52696 7.52195C6.76823 8.18414 6.3195 9.2723 6.69141 10.3741C7.07698 11.5163 7.89983 13.314 9.58552 14.9997C11.3991 16.8133 13.2413 17.5275 14.3186 17.8049C15.1866 18.0283 16.008 17.7288 16.5868 17.2572L17.1783 16.7752C17.4313 16.5691 17.5678 16.2524 17.544 15.9269C17.5201 15.6014 17.3389 15.308 17.0585 15.1409L15.3802 14.1409C15.0412 13.939 14.6152 13.9552 14.2925 14.1824Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+
+  type IconComp = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+
+  const socialLinks: {
+    icon: IconComp | React.ComponentType<unknown>;
+    label: string;
+    url: string;
+    color: string;
+  }[] = [
     {
       icon: Linkedin,
       label: "LinkedIn",
@@ -195,6 +240,24 @@ const ContactSection = () => {
       label: "Email",
       url: "mailto:hugoviegas3.1@gmail.com",
       color: "text-secondary",
+    },
+    {
+      icon: Instagram,
+      label: "Instagram",
+      url: "https://www.instagram.com/_hviegas",
+      color: "text-pink-400",
+    },
+    {
+      icon: TelegramIcon,
+      label: "Telegram",
+      url: "https://t.me/Hviegas",
+      color: "text-cyan-400",
+    },
+    {
+      icon: WhatsAppIcon,
+      label: "WhatsApp",
+      url: "https://api.whatsapp.com/send?phone=3530830865984",
+      color: "text-green-400",
     },
   ];
 
@@ -312,77 +375,6 @@ const ContactSection = () => {
                 )}
               </Button>
             </form>
-
-            {/* Large social buttons (Instagram / Telegram / WhatsApp) */}
-            <div className="mt-8">
-              <h4 className="text-lg font-semibold mb-4">Connect on social</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Button
-                  asChild
-                  variant="default"
-                  size="lg"
-                  className="w-full justify-center"
-                >
-                  <a
-                    href="https://www.instagram.com/_hviegas"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3"
-                  >
-                    <Instagram className="w-5 h-5" />
-                    <span className="font-semibold">Instagram</span>
-                  </a>
-                </Button>
-
-                <Button
-                  asChild
-                  variant="default"
-                  size="lg"
-                  className="w-full justify-center"
-                >
-                  <a
-                    href="https://t.me/Hviegas"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3"
-                  >
-                    {/* Telegram glyph */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 240 240"
-                      className="w-5 h-5"
-                    >
-                      <path d="M120 0C53.7 0 0 53.7 0 120s53.7 120 120 120 120-53.7 120-120S186.3 0 120 0zm56.4 79.9l-17.1 80c-1.3 5.9-4.9 7.5-9.9 4.7l-27.4-20.2-13.2 12.7c-1.5 1.5-2.7 2.7-5.5 2.7l2-28.6 52.1-47.1c2.3-2 0.4-3.1-3.4-1.1L88.6 120.7 49.3 110.4c-6-1.8-6.1-6-1.1-8.8l111.5-43.3c5.1-1.9 9.6 1.2 8.7 9.6z" />
-                    </svg>
-                    <span className="font-semibold">Telegram</span>
-                  </a>
-                </Button>
-
-                <Button
-                  asChild
-                  variant="default"
-                  size="lg"
-                  className="w-full justify-center"
-                >
-                  <a
-                    href="https://api.whatsapp.com/send?phone=3530830865984"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3"
-                  >
-                    {/* WhatsApp glyph */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 448 512"
-                      className="w-5 h-5"
-                    >
-                      <path d="M380.9 97.1C339 55.2 283.3 32 224 32 100.3 32 0 132.3 0 256c0 45 12 86.7 34.8 123.8L32 480l100.6-33.3C151.6 461.8 187.5 472 224 472c123.7 0 224-100.3 224-224 0-59.3-23.2-115-65.1-156.9zM224 408c-35.2 0-69.9-9.5-99.8-27.5l-7.2-4.1-58.9 19.3 20.2-57.6-4.4-7.3C64.8 301.6 56 279.7 56 256 56 164.6 132.6 88 224 88c35.2 0 68.6 10.6 96 30.5 27.4 19.9 46 48 54.2 81.5 8.2 33.5 6.8 68.3-4.2 100.4-11 32.1-33.8 60-65.2 81.6-24.1 17-52 26.6-82 26.6z" />
-                    </svg>
-                    <span className="font-semibold">WhatsApp</span>
-                  </a>
-                </Button>
-              </div>
-            </div>
           </div>
 
           {/* Contact Info */}
@@ -441,9 +433,14 @@ const ContactSection = () => {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 hover:scale-105 transition-all duration-300 group"
                   >
-                    <social.icon
-                      className={`w-5 h-5 ${social.color} group-hover:scale-110 transition-transform`}
-                    />
+                    {React.createElement(
+                      social.icon as React.ComponentType<
+                        React.SVGProps<SVGSVGElement>
+                      >,
+                      {
+                        className: `w-5 h-5 ${social.color} group-hover:scale-110 transition-transform`,
+                      }
+                    )}
                     <span className="text-muted-foreground group-hover:text-primary transition-colors">
                       {social.label}
                     </span>
