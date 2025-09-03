@@ -6,20 +6,20 @@ import ProjectsSection from "@/components/ProjectsSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import DynamicSidebar from "@/components/DynamicSidebar";
 import AmbientDots from "@/components/AmbientDots";
 import TopBricksRow from "@/components/TopBricksRow";
 
 const Index = () => {
-  const [showNavbar, setShowNavbar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Mostrar navbar após passar da primeira seção (hero)
+      // Mostrar sidebar após passar da primeira seção (hero)
       const heroSection = document.getElementById("hero");
       if (heroSection) {
         const heroHeight = heroSection.offsetHeight;
-        setShowNavbar(window.scrollY > heroHeight * 0.8);
+        setShowSidebar(window.scrollY > heroHeight * 0.3);
       }
     };
 
@@ -32,7 +32,7 @@ const Index = () => {
       {/* Ambient dots shared across the site (subtle, randomized) */}
       <AmbientDots count={12} />
       <TopControls />
-      <Navbar show={showNavbar} />
+      <DynamicSidebar show={showSidebar} />
       <TopBricksRow />
       <section id="hero">
         <HeroSection />

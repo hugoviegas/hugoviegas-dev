@@ -686,3 +686,290 @@ All colors MUST be HSL.
     opacity: 0.5;
   }
 }
+
+/* Dynamic Sidebar Styles - Enhanced for ultra-minimal design */
+.dynamic-sidebar {
+  will-change: transform, opacity;
+}
+
+.sidebar-item {
+  will-change: transform, opacity, background-color;
+}
+
+.sidebar-icon {
+  will-change: transform, width, height;
+}
+
+.sidebar-label {
+  will-change: opacity, max-width, margin-left;
+}
+
+/* Enhanced glassmorphism effect for all sidebar variants */
+.sidebar-glass {
+  background: rgba(var(--card-rgb), 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-glass-hover {
+  background: rgba(var(--card-rgb), 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Minimal sidebar expansion animations */
+@keyframes sidebarExpand {
+  from {
+    width: auto;
+    opacity: 0.8;
+  }
+  to {
+    width: auto;
+    opacity: 1;
+  }
+}
+
+@keyframes sidebarCollapse {
+  from {
+    width: auto;
+    opacity: 1;
+  }
+  to {
+    width: auto;
+    opacity: 0.8;
+  }
+}
+
+.sidebar-expand {
+  animation: sidebarExpand 0.3s ease-out;
+}
+
+.sidebar-collapse {
+  animation: sidebarCollapse 0.3s ease-out;
+}
+
+/* Smooth reveal animation for sidebar labels */
+@keyframes slideInLabel {
+  from {
+    opacity: 0;
+    max-width: 0;
+    margin-left: 0;
+  }
+  to {
+    opacity: 1;
+    max-width: 8rem;
+    margin-left: 0.5rem;
+  }
+}
+
+@keyframes slideOutLabel {
+  from {
+    opacity: 1;
+    max-width: 8rem;
+    margin-left: 0.5rem;
+  }
+  to {
+    opacity: 0;
+    max-width: 0;
+    margin-left: 0;
+  }
+}
+
+/* Section label popup animation - more responsive */
+@keyframes sectionLabelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-15px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes sectionLabelSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-15px) scale(0.9);
+  }
+}
+
+.section-label-enter {
+  animation: sectionLabelSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.section-label-exit {
+  animation: sectionLabelSlideOut 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Popup visual polish */
+.sidebar-glass > span {
+  /* ensure inner text layers render above glass */
+  display: inline-flex;
+  align-items: center;
+}
+
+.section-label-enter .sidebar-glass,
+.section-label-exit .sidebar-glass {
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
+/* macOS-style hover scaling - more subtle for minimal design */
+.sidebar-hover-scale {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sidebar-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Pulse animation for active items - very subtle */
+@keyframes activePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0);
+  }
+}
+
+.sidebar-active-pulse {
+  animation: activePulse 4s infinite;
+}
+
+/* Smooth opacity transitions based on scroll */
+.sidebar-scroll-fade {
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile floating menu animations - enhanced */
+.mobile-menu-enter {
+  animation: mobileMenuSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mobile-menu-exit {
+  animation: mobileMenuSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes mobileMenuSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes mobileMenuSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.8);
+  }
+}
+
+/* Enhanced tooltip animations */
+.sidebar-tooltip {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: tooltipFadeIn 0.25s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Minimal dots animation for non-active sections */
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.sidebar-dot {
+  animation: dotPulse 3s infinite;
+}
+
+.sidebar-dot:nth-child(odd) {
+  animation-delay: 0.5s;
+}
+
+.sidebar-dot:nth-child(even) {
+  animation-delay: 1s;
+}
+
+/* Active item outline instead of solid blue marker */
+.ring-primary\/30 {
+  box-shadow: 0 0 12px rgba(0, 212, 170, 0.12);
+}
+
+/* Neutral icon background for collapsed state */
+.collapsed-icon-neutral {
+  background: transparent !important;
+}
+
+/* Desktop sidebar specific styles */
+@media (min-width: 768px) {
+  .dynamic-sidebar {
+    /* Ensure smooth GPU acceleration */
+    transform: translateZ(0);
+  }
+
+  .sidebar-glass {
+    /* Enhanced shadow for desktop minimal design */
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  /* Smooth width transitions for expanded state */
+  .sidebar-minimal-container {
+    transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
+
+/* Floating icon used to animate current-section marker */
+.floating-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+  transform-origin: center center;
+  z-index: 10;
+}
+
+/* Ensure floating icon works well in top-bar layout */
+.floating-icon {
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+  z-index: 60; /* above TopControls */
+}
