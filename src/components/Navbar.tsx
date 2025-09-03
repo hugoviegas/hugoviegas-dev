@@ -41,7 +41,16 @@ const Navbar = ({ show }: NavbarProps) => {
         }`}
         style={{ willChange: "transform, opacity" }}
       >
-        <div className="pointer-events-auto flex items-center gap-3 bg-card/50 glass p-2 rounded-full">
+        <div
+          className="pointer-events-auto flex items-center gap-3 bg-card/60 backdrop-blur-md p-2 rounded-full md:gap-2 sm:gap-1 border border-border/30 shadow-lg"
+          style={{
+            background: "hsl(var(--card) / 0.6)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            boxShadow: "var(--shadow-glass)",
+          }}
+        >
           <Button
             variant="ghost"
             size="icon"
@@ -83,12 +92,21 @@ const Navbar = ({ show }: NavbarProps) => {
 
       {/* Centered rounded rectangle similar to TopControls (desktop only) */}
       <div
-        className={`hidden md:flex fixed left-0 right-0 top-4 z-40 justify-center pointer-events-none transition-transform transition-opacity duration-500 ease-out ${
+        className={`hidden md:flex fixed left-0 right-0 top-4 z-50 justify-center pointer-events-none transition-transform transition-opacity duration-500 ease-out ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
         }`}
         style={{ willChange: "transform, opacity" }}
       >
-        <div className="pointer-events-auto glass rounded-2xl px-4 py-2 flex items-center gap-6 shadow-lg border border-white/10">
+        <div
+          className="pointer-events-auto flex items-center gap-6 bg-card/60 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg border border-border/30"
+          style={{
+            background: "hsl(var(--card) / 0.6)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            boxShadow: "var(--shadow-glass)",
+          }}
+        >
           {/* Desktop nav */}
           <div className="flex items-center gap-6">
             {navItems.map((item) =>

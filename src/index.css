@@ -248,6 +248,16 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-glass);
   }
 
+  /* Reusable glass pill used by TopControls and Navbar to ensure consistent blur/opacity */
+  .pill-glass {
+    @apply bg-card/60 backdrop-blur-md border border-border/30 shadow-lg;
+  }
+
+  /* Centered rounded glass used in navbar desktop */
+  .center-glass {
+    @apply bg-card/60 backdrop-blur-md rounded-2xl px-4 py-2 border border-border/30 shadow-lg;
+  }
+
   /* Neon Glow Effects */
   .neon-glow {
     box-shadow: var(--shadow-glow);
