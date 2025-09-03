@@ -24,5 +24,26 @@ export default function FastTransparentCube({
     }
   }, []);
 
-  return <div id="cube-embed" style={{ width, height, borderRadius: 12 }} />;
+  return (
+    // wrapper: invisible, constrains size to fit the session and hides overflow
+    <div
+      role="presentation"
+      style={{
+        width: "100%",
+        maxWidth: width, // numeric -> px
+        height,
+        overflow: "hidden",
+        background: "transparent",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* inner div is the target for AnimCube3; make it fill the wrapper */}
+      <div
+        id="cube-embed"
+        style={{ width: "100%", height: "100%", borderRadius: 12 }}
+      />
+    </div>
+  );
 }

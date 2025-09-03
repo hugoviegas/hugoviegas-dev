@@ -9,11 +9,12 @@ interface NavbarProps {
 
 const Navbar = ({ show }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // close mobile menu on route change or when hide
-    if (!show) setIsMobileMenuOpen(false);
-  }, [show]);
+    // trigger entrance animation once on mount
+    setMounted(true);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
@@ -29,12 +30,16 @@ const Navbar = ({ show }: NavbarProps) => {
     { id: "contact", label: t("contact") },
   ];
 
-  if (!show) return null;
+  // always render the navbar; entrance animation will run on mount
 
   return (
     <>
       {/* Mobile hamburger fixed to the left with the same pill style as TopControls */}
-      <div className="fixed top-3 left-4 z-50 md:hidden">
+      <div
+        className={`fixed left-4 z-50 md:hidden transition-all duration-700 ease-out ${
+          mounted ? "top-3 opacity-100 translate-y-0" : "-top-8 opacity-0 -translate-y-2"
+        }`}
+      >
         <div className="pointer-events-auto flex items-center gap-3 bg-card/50 glass p-2 rounded-full">
           <Button
             variant="ghost"
@@ -46,7 +51,11 @@ const Navbar = ({ show }: NavbarProps) => {
             {isMobileMenuOpen ? (
               <X className="w-5 h-5" />
             ) : (
-              <Menu className="w-5 h-5" />
+              <img
+                src="/obiwan_face.png"
+                alt="Ícone do menu"
+                className="w-5 h-5 rounded-full object-cover"
+              />
             )}
           </Button>
         </div>
@@ -72,19 +81,50 @@ const Navbar = ({ show }: NavbarProps) => {
       )}
 
       {/* Centered rounded rectangle similar to TopControls (desktop only) */}
-      <div className="hidden md:flex fixed top-4 left-0 right-0 z-40 justify-center pointer-events-none">
+      <div
+        className={`hidden md:flex fixed left-0 right-0 z-40 justify-center pointer-events-none transition-all duration-700 ease-out ${
+          mounted ? "top-4 opacity-100 translate-y-0" : "-top-16 opacity-0 -translate-y-4"
+        }`}
+      >
         <div className="pointer-events-auto glass rounded-2xl px-4 py-2 flex items-center gap-6 shadow-lg border border-white/10">
           {/* Desktop nav */}
           <div className="flex items-center gap-6">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="text-muted-foreground hover:text-primary transition-colors px-2 py-1"
-              >
-                {item.label}
-              </button>
-            ))}
+            {navItems.map((item) =>
+              item.id === "about" ? (
+                <div key={item.id} className="flex items-center gap-3">
+                  {/* clickable icon that scrolls to top */}
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="p-0"
+                    aria-label="Ir para o topo"
+                  >
+                    <img
+                      src="/obiwan_face.png"
+                      alt="Obi-Wan"
+                      className="w-4 h-4 rounded-full object-cover"
+                    />
+                  </button>
+
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className="text-muted-foreground hover:text-primary transition-colors px-2 py-1"
+                  >
+                    {item.label}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-muted-foreground hover:text-primary transition-colors px-2 py-1"
+                >
+                  {item.label}
+                </button>
+              )
+            )}
           </div>
         </div>
       </div>
