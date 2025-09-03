@@ -11,7 +11,101 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Dark Theme Base Colors */
-    --background: 220 27% 8%; /* Rich dark blue-gray */
+    --background: @keyframes idle-sway {
+      0% {
+        transform: rotate(var(--rot, 0deg)) translateY(0);
+        filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.12));
+      }
+      50% {
+        transform: rotate(calc(var(--rot, 0deg) + 2deg)) translateY(-1%);
+      }
+      100% {
+        transform: rotate(var(--rot, 0deg)) translateY(0);
+      }
+    }
+
+    /* Top row of bricks - fixed position at top of screen */
+    .top-bricks-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: auto;
+      z-index: 1; /* behind main content but above ambient dots */
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .top-bricks-row {
+      display: flex;
+      flex-wrap: nowrap;
+      width: 200%; /* double width for seamless repeat */
+      animation: infinite-scroll 20s linear infinite;
+    }
+
+    @keyframes infinite-scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%); /* scroll back to start */
+      }
+    }
+
+    .top-brick-wrap {
+      flex-shrink: 0;
+      transform: translateY(-100%); /* start above screen */
+      animation-fill-mode: forwards;
+      animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation-iteration-count: 1;
+    }
+
+    .animate-top-fall {
+      animation-name: top-fall;
+      animation-duration: 1.2s;
+    }
+
+    @keyframes top-fall {
+      0% {
+        transform: translateY(-100%) scale(0.8);
+        opacity: 0;
+      }
+      60% {
+        transform: translateY(8%) scale(1.05);
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(-2%) scale(0.98);
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .top-brick {
+      display: block;
+      opacity: 0.3; /* subtle presence */
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+      transition: opacity 0.3s ease;
+    }
+
+    /* Light theme adjustments for top bricks */
+    .light .top-brick {
+      opacity: 0.4;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    }
+
+    /* Mobile adjustments for top row */
+    @media (max-width: 640px) {
+      .top-brick {
+        opacity: 0.4;
+      }
+
+      .light .top-brick {
+        opacity: 0.5;
+      }
+    } /* Rich dark blue-gray */
     --foreground: 210 40% 98%; /* Almost white */
 
     --card: 220 27% 10%; /* Slightly lighter than bg */
@@ -345,6 +439,59 @@ All colors MUST be HSL.
   /* NO border in dark theme to avoid PNG artifacts */
 }
 
+/* Wrapper that controls the initial fall + soft bounce */
+.ambient-brick-wrap {
+  position: absolute;
+  transform: translate(-50%, -200%); /* start off-screen above */
+  animation-fill-mode: forwards;
+  pointer-events: none;
+}
+
+.animate-fall-bounce {
+  animation-name: fall-bounce;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-iteration-count: 1;
+}
+
+@keyframes fall-bounce {
+  0% {
+    transform: translate(-50%, -250%) scale(0.98);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.02);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(-50%, -45%) scale(0.98);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Idle sway for bricks after they fall */
+.idle-sway {
+  animation-name: idle-sway;
+  animation-duration: 6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  transform-origin: 50% 40%;
+}
+
+@keyframes idle-sway {
+  0% {
+    transform: rotate(var(--rot, 0deg)) translateY(0);
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.12));
+  }
+  50% {
+    transform: rotate(calc(var(--rot, 0deg) + 2deg)) translateY(-1%);
+  }
+  100% {
+    transform: rotate(var(--rot, 0deg)) translateY(0);
+  }
+}
+
 /* Light theme adjustments for bricks - stronger visibility without border artifacts */
 .light .ambient-brick {
   opacity: 0.2;
@@ -363,5 +510,85 @@ All colors MUST be HSL.
 
   .light .ambient-brick {
     opacity: 0.25; /* more visible on mobile light theme */
+  }
+}
+
+/* Top row of bricks - positioned within hero section */
+.top-bricks-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: auto;
+  z-index: 1; /* behind main content but above ambient dots */
+  pointer-events: none;
+  overflow: visible; /* allow full brick display */
+}
+
+.top-bricks-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%; /* single width, no infinite scroll */
+  justify-content: space-between;
+  padding: 0 2vw; /* small padding from edges */
+}
+
+.top-brick-wrap {
+  flex-shrink: 0;
+  display: block;
+  transform: translateY(-150%); /* start higher above screen */
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation-iteration-count: 1;
+  height: auto; /* allow natural height */
+}
+
+.animate-top-fall {
+  animation-name: top-fall;
+  animation-duration: 1.2s;
+}
+
+@keyframes top-fall {
+  0% {
+    transform: translateY(-150%) scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(10%) scale(1.05);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-5%) scale(0.98);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.top-brick {
+  display: block;
+  width: 100%;
+  height: auto; /* maintain aspect ratio */
+  opacity: 0.3; /* subtle presence */
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+  transition: opacity 0.3s ease;
+}
+
+/* Light theme adjustments for top bricks */
+.light .top-brick {
+  opacity: 0.4;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+/* Mobile adjustments for top row */
+@media (max-width: 640px) {
+  .top-brick {
+    opacity: 0.4;
+  }
+
+  .light .top-brick {
+    opacity: 0.5;
   }
 }

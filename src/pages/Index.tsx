@@ -8,6 +8,7 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import AmbientDots from "@/components/AmbientDots";
+import TopBricksRow from "@/components/TopBricksRow";
 
 const Index = () => {
   const [showNavbar, setShowNavbar] = useState(false);
@@ -32,6 +33,7 @@ const Index = () => {
       <AmbientDots count={12} />
       <TopControls />
       <Navbar show={showNavbar} />
+      <TopBricksRow />
       <section id="hero">
         <HeroSection />
       </section>
