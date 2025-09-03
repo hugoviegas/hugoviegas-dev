@@ -218,12 +218,13 @@ All colors MUST be HSL.
 
 @layer base {
   * {
-    /* intentionally left minimal to avoid global border side-effects */
+    /* replicate Tailwind border-border (uses --border token) */
     box-sizing: border-box;
+    /* keep borders off by default; components will add borders where needed */
   }
 
   body {
-    background-color: hsl(var(--background));
+    background: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial;
@@ -235,50 +236,39 @@ All colors MUST be HSL.
 @layer components {
   /* Glassmorphism Components */
   .glass {
-    /* Equivalent of: bg-card/80 backdrop-blur-md border border-white/10 */
-    background-color: hsl(var(--card) / 0.8);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: var(--shadow-glass);
   }
 
   .glass-strong {
-    /* Equivalent of: bg-card/90 backdrop-blur-lg border border-white/20 */
-    background-color: hsl(var(--card) / 0.9);
-    -webkit-backdrop-filter: blur(18px);
-    backdrop-filter: blur(18px);
+    background: hsl(var(--card) / 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: var(--shadow-glass);
   }
 
   /* Reusable glass pill used by TopControls and Navbar to ensure consistent blur/opacity */
   .pill-glass {
-    /* pill glass fallback without relying on @apply */
-    background-color: hsl(var(--card) / 0.6);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border-radius: 9999px;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid hsl(var(--border) / 0.3);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 
   /* Centered rounded glass used in navbar desktop */
   .center-glass {
-    background-color: hsl(var(--card) / 0.6);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 1rem;
     padding: 0.5rem 1rem;
-    border: 1px solid hsl(var(--border) / 0.3);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 
   /* Neon Glow Effects */
@@ -298,60 +288,74 @@ All colors MUST be HSL.
       hsl(var(--primary)),
       hsl(var(--secondary))
     );
-    color: hsl(var(--background));
+    color: hsl(var(--card-foreground));
     font-weight: 600;
     padding: 1rem 2rem;
     border-radius: 0.75rem;
-    transition: transform 300ms ease-out, box-shadow 300ms ease-out;
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 300ms ease;
   }
 
   .btn-hero:hover {
     transform: scale(1.05);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 6px 18px rgba(0, 0, 0, 0.06);
   }
 
   .btn-ghost {
-    border: 1px solid hsl(var(--primary) / 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     color: hsl(var(--primary));
-    transition: background-color 300ms ease-out, border-color 300ms ease-out;
+    background: transparent;
+    transition: background-color 300ms ease, border-color 300ms ease;
   }
 
   .btn-ghost:hover {
-    background-color: hsl(var(--primary) / 0.1);
+    background: hsl(var(--primary) / 0.1);
     border-color: hsl(var(--primary));
   }
 
   /* Card Variants */
   .card-project {
-    /* reuse .glass rules for base */
+    /* reuse glass styles and subtle hover scale */
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: var(--shadow-glass);
-    transition: transform 500ms ease-out, box-shadow 500ms ease-out;
+    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 500ms ease;
     cursor: pointer;
   }
 
   .card-project:hover {
     transform: scale(1.05);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
   }
 
   .card-skill {
-    box-shadow: var(--shadow-glass);
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 1.5rem;
     text-align: center;
     border-radius: 0.75rem;
-    transition: background-color 300ms ease-out, border-color 300ms ease-out;
+    transition: background-color 300ms ease, border-color 300ms ease,
+      transform 300ms ease;
   }
 
   .card-skill:hover {
-    background-color: hsl(var(--primary) / 0.05);
-    border: 1px solid hsl(var(--primary) / 0.3);
+    background: hsl(var(--primary) / 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.04);
   }
 
   /* Typography */
   .heading-hero {
     font-weight: 700;
-    font-size: 3rem;
+    font-size: 3rem; /* base */
     line-height: 1.02;
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   @media (min-width: 768px) {
@@ -366,17 +370,22 @@ All colors MUST be HSL.
     }
   }
 
-  .heading-hero {
-    background: var(--gradient-primary);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
   .heading-section {
     font-weight: 700;
     font-size: 1.75rem;
     color: hsl(var(--foreground));
+  }
+
+  @media (min-width: 768px) {
+    .heading-section {
+      font-size: 2.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .heading-section {
+      font-size: 3rem;
+    }
   }
 
   .text-gradient {
@@ -388,10 +397,11 @@ All colors MUST be HSL.
 
   /* Animations */
   .fade-in {
-    animation-name: fade-in;
+    animation: fade-in 600ms ease both;
   }
+
   .slide-up {
-    animation-name: slide-up;
+    animation: slide-up 600ms ease both;
   }
 }
 

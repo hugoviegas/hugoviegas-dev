@@ -1,8 +1,23 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Github, Linkedin, Mail, Download } from "lucide-react";
+import {
+  ArrowDown,
+  Github,
+  Linkedin,
+  Mail,
+  FileText,
+  Download,
+} from "lucide-react";
 import { LazyImage } from "@/components/LazyImage";
 import { useLanguage } from "@/hooks/useLanguage";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import heroImage from "@/assets/hugo-hero.jpg";
 
 const HeroSection = () => {
@@ -16,7 +31,7 @@ const HeroSection = () => {
       const timeout = setTimeout(() => {
         setDisplayText(fullText.slice(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
-      }, 100);
+      }, 20);
       return () => clearTimeout(timeout);
     } else {
       const blink = document.querySelector(".type-cursor");
@@ -34,9 +49,9 @@ const HeroSection = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Temporary resume URL - replace with a presigned/temporary link when available
+  // Resume URL from Vercel Storage
   const resumeUrl =
-    "https://1drv.ms/b/c/b6aa13ae29a0a7ec/EeynoCmuE6oggLYK8QIAAAABlLWz9Me-9MWv7-vcEOTWrQ?e=2sfMMN";
+    "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20CV%202025.pdf";
 
   // Suppress noisy console errors originating from the Spotify embed while component is mounted
   useEffect(() => {
@@ -62,7 +77,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-12 lg:pt-0">
+    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20" aria-hidden="true">
         <div className="absolute top-20 left-20 w-40 h-40 bg-primary rounded-full blur-3xl subtle-pulse"></div>
@@ -129,16 +144,56 @@ const HeroSection = () => {
               >
                 <Mail className="w-6 h-6 text-primary" />
               </a>
-              <a
-                href={resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-                aria-label="Download Resume"
-                title="Download Resume (temporary link)"
-              >
-                <Download className="w-6 h-6 text-primary" />
-              </a>
+
+              {/* Resume Dialog Button */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button
+                    className="flex items-center gap-2 px-4 py-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                    aria-label={t("seeResume")}
+                    title={t("seeResume")}
+                  >
+                    <FileText className="w-6 h-6 text-primary" />
+                    <span className="text-primary font-medium">
+                      {t("seeResume")}
+                    </span>
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl w-full h-[90vh] p-0">
+                  <DialogHeader className="p-6 pb-0">
+                    <DialogTitle className="flex items-center justify-between">
+                      <span>Hugo Viegas - CV 2025</span>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="ml-4"
+                      >
+                        <a
+                          href={resumeUrl}
+                          download="Hugo_Viegas_CV_2025.pdf"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2"
+                        >
+                          <Download className="w-4 h-4" />
+                          {t("downloadResume")}
+                        </a>
+                      </Button>
+                    </DialogTitle>
+                  </DialogHeader>
+
+                  {/* PDF Viewer */}
+                  <div className="flex-1 p-6 pt-0">
+                    <iframe
+                      src={`${resumeUrl}#toolbar=1&navpanes=0&scrollbar=1`}
+                      className="w-full h-full rounded-lg border"
+                      title="Hugo Viegas CV 2025"
+                      style={{ minHeight: "600px" }}
+                    />
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 

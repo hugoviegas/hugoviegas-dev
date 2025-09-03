@@ -12,12 +12,6 @@ export default defineConfig(({ mode }) => ({
   plugins: [react(), mode === "development" && componentTagger()].filter(
     Boolean
   ),
-  // Ensure PostCSS is explicitly honored during build
-  css: {
-    postcss: {
-      // Vite will pick up postcss.config.js by default; explicit option keeps intent clear
-    },
-  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

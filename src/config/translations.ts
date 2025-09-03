@@ -28,6 +28,8 @@ export const translations: Translations = {
   },
   viewProjects: { EN: "View My Projects", PT: "Ver Meus Projetos" },
   getInTouch: { EN: "Get In Touch", PT: "Entre em Contato" },
+  seeResume: { EN: "See Resume", PT: "Ver Currículo" },
+  downloadResume: { EN: "Download Resume", PT: "Baixar Currículo" },
 
   // About Section
   journeySummary1: {
