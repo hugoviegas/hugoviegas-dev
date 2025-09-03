@@ -13,10 +13,10 @@ const queryClient = new QueryClient();
 const App = () => {
   useEffect(() => {
     // Disable browser scroll restoration to prevent page jumping on refresh
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
     }
-    
+
     // Ensure page starts at top on initial load
     window.scrollTo(0, 0);
   }, []);

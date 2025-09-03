@@ -54,7 +54,12 @@ const TopBricksRow: React.FC = () => {
     <div
       className="top-bricks-container"
       aria-hidden="true"
-      style={{ padding: 0, margin: 0, paddingBottom: `${paddingBottomVw}vw`, overflow: "visible" }}
+      style={{
+        padding: 0,
+        margin: 0,
+        paddingBottom: `${paddingBottomVw}vw`,
+        overflow: "visible",
+      }}
     >
       <div className="top-bricks-row" style={rowStyle}>
         {bricks.map((brick) => (
