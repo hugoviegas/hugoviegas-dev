@@ -51,16 +51,24 @@ const AboutSection = () => {
   return (
     <section id="about" className="py-20 bg-muted/5">
       <div className="container mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">{t("aboutTitle")}</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {t("aboutSummary")}
-          </p>
-        </div>
+        <div className="mb-16 fade-in">
+          <h2 className="heading-section mb-6 text-center lg:text-left">
+            {t("aboutTitle")}
+          </h2>
 
-        {/* Small transparent cube (fast Three.js viewer) */}
-        <div className="mb-10 flex justify-center">
-          <FastTransparentCube width={300} height={300} />
+          {/* Two-column intro: text + cube (only this first text block) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+                {t("aboutSummary")}
+              </p>
+            </div>
+
+            <div className="flex justify-center lg:justify-end">
+              {/* Cube: smaller on mobile, with expand button inside the component */}
+              <FastTransparentCube width={300} height={300} enableExpand />
+            </div>
+          </div>
         </div>
 
         {/* Stats Section */}

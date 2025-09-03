@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
+import { Calendar } from "lucide-react";
 
 interface StatItemProps {
   value: number;
   label: string;
   suffix?: string;
-  icon?: string;
+  icon?: React.ReactNode;
   duration?: number;
 }
 
@@ -50,10 +51,30 @@ const StatsSection = () => {
   const { t } = useLanguage();
 
   const stats = [
-    { value: 90, label: t("stats.processReduction"), suffix: "%", icon: "⚡" },
-    { value: 20, label: t("stats.viewsGrowth"), suffix: "%", icon: "📈" },
-    { value: 4, label: t("stats.yearsExperience"), suffix: "+", icon: "�" },
-    { value: 2, label: t("stats.countriesWorked"), suffix: "", icon: "🌍" },
+    {
+      value: 90,
+      label: t("stats.processReduction"),
+      suffix: "%",
+      icon: <span>⚡</span>,
+    },
+    {
+      value: 20,
+      label: t("stats.viewsGrowth"),
+      suffix: "%",
+      icon: <span>📈</span>,
+    },
+    {
+      value: 4,
+      label: t("stats.yearsExperience"),
+      suffix: "+",
+      icon: <Calendar className="mx-auto" />,
+    },
+    {
+      value: 2,
+      label: t("stats.countriesWorked"),
+      suffix: "",
+      icon: <span>🌍</span>,
+    },
   ];
 
   return (
