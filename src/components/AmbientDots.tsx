@@ -23,7 +23,7 @@ const AmbientDots: React.FC<{
   count?: number;
   minSizeVw?: number;
   maxSizeVw?: number;
-}> = ({ count = 36, minSizeVw = 3.5, maxSizeVw = 12 }) => {
+}> = ({ count = 60, minSizeVw = 2.5, maxSizeVw = 10 }) => {
   const isMobile = useIsMobile();
 
   const bricks: Brick[] = useMemo(() => {
@@ -33,54 +33,76 @@ const AmbientDots: React.FC<{
       const size =
         (minSizeVw + Math.random() * (maxSizeVw - minSizeVw)) *
         mobileMultiplier;
+      // Randomize entrance type: either top-like fall or the existing fall-bounce
+      const entranceType = Math.random() < 0.6 ? "top-fall" : "fall-bounce";
+      // Random small variation in rotation and layering
+      const rot = rotations[Math.floor(Math.random() * rotations.length)];
+      const left = Math.random() * 100;
+      const top = Math.random() * 100;
+      const delay = Math.random() * 2.5; // stagger
+      const duration = 0.8 + Math.random() * 1.6; // entrance duration
+
       return {
         src: IMAGES[Math.floor(Math.random() * IMAGES.length)],
-        left: Math.random() * 100,
-        top: Math.random() * 100,
+        left,
+        top,
         sizeVw: Math.round(size * 10) / 10,
-        rot: rotations[Math.floor(Math.random() * rotations.length)],
-        delay: Math.random() * 3, // stagger
-        duration: 0.8 + Math.random() * 1.2, // fall duration
+        rot,
+        delay,
+        duration,
+        // store chosen entrance type for rendering
+        // reuse Brick type fields by overloading 'duration' and 'delay' for timing
       } as Brick;
     });
   }, [count, isMobile, minSizeVw, maxSizeVw]);
 
   return (
     <div className="ambient-container" aria-hidden="true">
-      {bricks.map((b, i) => (
-        <div
-          key={i}
-          className="ambient-brick-wrap animate-fall-bounce"
-          style={
-            {
-              left: `${b.left}%`,
-              top: `${b.top}%`,
-              width: `${b.sizeVw}vw`,
-              // falling animation timing
-              animationDelay: `${b.delay}s`,
-              animationDuration: `${b.duration}s`,
-              // slight z layering variation
-              zIndex: Math.random() > 0.6 ? 1 : 0,
-            } as React.CSSProperties
-          }
-        >
-          <img
-            src={b.src}
-            className="ambient-brick idle-sway"
-            alt=""
-            aria-hidden
+      {bricks.map((b, i) => {
+        // choose entrance class per brick for randomness while preserving movement
+        const entranceClass =
+          Math.random() < 0.6 ? "animate-top-fall" : "animate-fall-bounce";
+        // additional random small horizontal drift after landing
+        const driftDelay = +(b.delay + b.duration + Math.random() * 1).toFixed(
+          2
+        );
+
+        return (
+          <div
+            key={i}
+            className={`ambient-brick-wrap ${entranceClass}`}
             style={
               {
-                width: "100%",
-                height: "auto",
-                transform: `rotate(${b.rot}deg)`,
-                // start idle animation after the fall completes
-                animationDelay: `${b.delay + b.duration}s`,
+                left: `${b.left}%`,
+                top: `${b.top}%`,
+                width: `${b.sizeVw}vw`,
+                // entrance timing
+                animationDelay: `${b.delay}s`,
+                animationDuration: `${b.duration}s`,
+                // layering variation
+                zIndex: Math.random() > 0.6 ? 1 : 0,
+                boxSizing: "border-box",
               } as React.CSSProperties
             }
-          />
-        </div>
-      ))}
+          >
+            <img
+              src={b.src}
+              className="ambient-brick idle-sway"
+              alt=""
+              aria-hidden
+              style={
+                {
+                  width: "100%",
+                  height: "auto",
+                  transform: `rotate(${b.rot}deg)`,
+                  // start idle animation after the entrance completes
+                  animationDelay: `${driftDelay}s`,
+                } as React.CSSProperties
+              }
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };

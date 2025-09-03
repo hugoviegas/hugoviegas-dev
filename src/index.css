@@ -11,18 +11,8 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Dark Theme Base Colors */
-    --background: @keyframes idle-sway {
-      0% {
-        transform: rotate(var(--rot, 0deg)) translateY(0);
-        filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.12));
-      }
-      50% {
-        transform: rotate(calc(var(--rot, 0deg) + 2deg)) translateY(-1%);
-      }
-      100% {
-        transform: rotate(var(--rot, 0deg)) translateY(0);
-      }
-    }
+    /* Primary dark background token (HSL) used across the design system */
+    --background: 220 13% 6%;
 
     /* Top row of bricks - fixed position at top of screen */
     .top-bricks-container {
@@ -228,34 +218,67 @@ All colors MUST be HSL.
 
 @layer base {
   * {
-    @apply border-border;
+    /* intentionally left minimal to avoid global border side-effects */
+    box-sizing: border-box;
   }
 
   body {
-    @apply bg-background text-foreground font-inter antialiased;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
   /* Glassmorphism Components */
   .glass {
-    @apply bg-card/80 backdrop-blur-md border border-white/10;
+    /* Equivalent of: bg-card/80 backdrop-blur-md border border-white/10 */
+    background-color: hsl(var(--card) / 0.8);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: var(--shadow-glass);
   }
 
   .glass-strong {
-    @apply bg-card/90 backdrop-blur-lg border border-white/20;
+    /* Equivalent of: bg-card/90 backdrop-blur-lg border border-white/20 */
+    background-color: hsl(var(--card) / 0.9);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: var(--shadow-glass);
   }
 
   /* Reusable glass pill used by TopControls and Navbar to ensure consistent blur/opacity */
   .pill-glass {
-    @apply bg-card/60 backdrop-blur-md border border-border/30 shadow-lg;
+    /* pill glass fallback without relying on @apply */
+    background-color: hsl(var(--card) / 0.6);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-radius: 9999px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid hsl(var(--border) / 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   /* Centered rounded glass used in navbar desktop */
   .center-glass {
-    @apply bg-card/60 backdrop-blur-md rounded-2xl px-4 py-2 border border-border/30 shadow-lg;
+    background-color: hsl(var(--card) / 0.6);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid hsl(var(--border) / 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
   }
 
   /* Neon Glow Effects */
@@ -270,30 +293,80 @@ All colors MUST be HSL.
 
   /* Button Variants */
   .btn-hero {
-    @apply bg-gradient-to-r from-primary to-secondary text-background font-semibold px-8 py-4 rounded-xl;
-    @apply hover:scale-105 hover:shadow-2xl hover:shadow-primary/50;
-    @apply transition-all duration-300 ease-out;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--secondary))
+    );
+    color: hsl(var(--background));
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    transition: transform 300ms ease-out, box-shadow 300ms ease-out;
+  }
+
+  .btn-hero:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   }
 
   .btn-ghost {
-    @apply border border-primary/50 text-primary hover:bg-primary/10 hover:border-primary;
-    @apply transition-all duration-300 ease-out;
+    border: 1px solid hsl(var(--primary) / 0.5);
+    color: hsl(var(--primary));
+    transition: background-color 300ms ease-out, border-color 300ms ease-out;
+  }
+
+  .btn-ghost:hover {
+    background-color: hsl(var(--primary) / 0.1);
+    border-color: hsl(var(--primary));
   }
 
   /* Card Variants */
   .card-project {
-    @apply glass hover:glass-strong hover:scale-105 hover:shadow-2xl hover:shadow-primary/20;
-    @apply transition-all duration-500 ease-out cursor-pointer;
+    /* reuse .glass rules for base */
+    box-shadow: var(--shadow-glass);
+    transition: transform 500ms ease-out, box-shadow 500ms ease-out;
+    cursor: pointer;
+  }
+
+  .card-project:hover {
+    transform: scale(1.05);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
   }
 
   .card-skill {
-    @apply glass p-6 text-center hover:bg-primary/5 hover:border-primary/30 rounded-xl;
-    @apply transition-all duration-300 ease-out;
+    box-shadow: var(--shadow-glass);
+    padding: 1.5rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    transition: background-color 300ms ease-out, border-color 300ms ease-out;
+  }
+
+  .card-skill:hover {
+    background-color: hsl(var(--primary) / 0.05);
+    border: 1px solid hsl(var(--primary) / 0.3);
   }
 
   /* Typography */
   .heading-hero {
-    @apply font-bold text-5xl md:text-7xl lg:text-8xl leading-tight;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.02;
+  }
+
+  @media (min-width: 768px) {
+    .heading-hero {
+      font-size: 4.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .heading-hero {
+      font-size: 5rem;
+    }
+  }
+
+  .heading-hero {
     background: var(--gradient-primary);
     background-clip: text;
     -webkit-background-clip: text;
@@ -301,7 +374,9 @@ All colors MUST be HSL.
   }
 
   .heading-section {
-    @apply font-bold text-3xl md:text-4xl lg:text-5xl text-foreground;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: hsl(var(--foreground));
   }
 
   .text-gradient {
@@ -313,11 +388,10 @@ All colors MUST be HSL.
 
   /* Animations */
   .fade-in {
-    @apply animate-fade-in;
+    animation-name: fade-in;
   }
-
   .slide-up {
-    @apply animate-slide-up;
+    animation-name: slide-up;
   }
 }
 

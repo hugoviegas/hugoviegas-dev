@@ -9,11 +9,15 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  plugins: [
-    react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(
+    Boolean
+  ),
+  // Ensure PostCSS is explicitly honored during build
+  css: {
+    postcss: {
+      // Vite will pick up postcss.config.js by default; explicit option keeps intent clear
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
