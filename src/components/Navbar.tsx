@@ -36,9 +36,10 @@ const Navbar = ({ show }: NavbarProps) => {
     <>
       {/* Mobile hamburger fixed to the left with the same pill style as TopControls */}
       <div
-        className={`fixed left-4 z-50 md:hidden transition-all duration-700 ease-out ${
-          mounted ? "top-3 opacity-100 translate-y-0" : "-top-8 opacity-0 -translate-y-2"
+        className={`fixed left-4 top-3 z-50 md:hidden transition-transform transition-opacity duration-500 ease-out ${
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
         }`}
+        style={{ willChange: "transform, opacity" }}
       >
         <div className="pointer-events-auto flex items-center gap-3 bg-card/50 glass p-2 rounded-full">
           <Button
@@ -82,9 +83,10 @@ const Navbar = ({ show }: NavbarProps) => {
 
       {/* Centered rounded rectangle similar to TopControls (desktop only) */}
       <div
-        className={`hidden md:flex fixed left-0 right-0 z-40 justify-center pointer-events-none transition-all duration-700 ease-out ${
-          mounted ? "top-4 opacity-100 translate-y-0" : "-top-16 opacity-0 -translate-y-4"
+        className={`hidden md:flex fixed left-0 right-0 top-4 z-40 justify-center pointer-events-none transition-transform transition-opacity duration-500 ease-out ${
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
         }`}
+        style={{ willChange: "transform, opacity" }}
       >
         <div className="pointer-events-auto glass rounded-2xl px-4 py-2 flex items-center gap-6 shadow-lg border border-white/10">
           {/* Desktop nav */}
