@@ -55,10 +55,16 @@ const TopBricksRow: React.FC = () => {
       className="top-bricks-container"
       aria-hidden="true"
       style={{
+        position: "absolute", // force absolute so it's anchored to parent, not viewport
+        top: 0,
+        left: 0,
+        right: 0,
         padding: 0,
         margin: 0,
         paddingBottom: `${paddingBottomVw}vw`,
         overflow: "visible",
+        pointerEvents: "none",
+        zIndex: 1,
       }}
     >
       <div className="top-bricks-row" style={rowStyle}>
