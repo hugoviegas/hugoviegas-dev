@@ -223,19 +223,36 @@ All colors MUST be HSL.
   inset: 0;
   pointer-events: none;
   z-index: 5; /* sit behind content z-10 */
-  mix-blend-mode: screen; /* subtle additive blend */
+  mix-blend-mode: screen; /* restore original for dark theme */
+  overflow: hidden; /* IMPORTANT: prevent dots from causing scroll */
+}
+
+/* Light theme container adjustments */
+.light .ambient-container {
+  mix-blend-mode: multiply; /* better for light theme */
 }
 
 .ambient-dot {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(24px);
-  transform: translate(-50%, -50%);
+  /* keep blur but use transform-based scaling so element size doesn't affect layout */
+  filter: blur(18px);
+  transform: translate(-50%, -50%) scale(1);
   will-change: opacity, transform;
-  opacity: 0.12;
+  opacity: 0.14; /* restore original dark theme opacity */
   animation-name: ambient-fade;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+  pointer-events: none;
+  max-width: 60vw; /* defensive cap */
+  max-height: 60vw;
+  /* No shadow in dark theme (original behavior) */
+}
+
+/* Light theme adjustments */
+.light .ambient-dot {
+  opacity: 0.25;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes ambient-fade {
@@ -253,10 +270,38 @@ All colors MUST be HSL.
   }
 }
 
+/* Light theme adjustments for fade animation */
+.light .ambient-dot {
+  animation-name: ambient-fade-light;
+}
+
+@keyframes ambient-fade-light {
+  0% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+  100% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}
+
 /* Slightly stronger but soft pulse for hero-specific blobs */
 .subtle-pulse {
   animation: subtle-pulse 4s ease-in-out infinite;
-  opacity: 0.14;
+  opacity: 0.14; /* restore original dark theme opacity */
+  /* No shadow in dark theme (original behavior) */
+}
+
+/* Light theme adjustments for hero blobs */
+.light .subtle-pulse {
+  opacity: 0.25;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
+  animation-name: subtle-pulse-light;
 }
 
 @keyframes subtle-pulse {
@@ -268,5 +313,55 @@ All colors MUST be HSL.
   50% {
     transform: scale(1.06);
     opacity: 0.2;
+  }
+}
+
+@keyframes subtle-pulse-light {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.35;
+  }
+}
+
+/* Ambient bricks (2D lego images) */
+.ambient-brick {
+  position: absolute;
+  transform-origin: center center;
+  pointer-events: none;
+  opacity: 0.12; /* restore original dark theme opacity */
+  filter: drop-shadow(
+    0 6px 16px rgba(0, 0, 0, 0.15)
+  ); /* restore original filter */
+  will-change: transform, opacity;
+  max-width: 20vw; /* keep increased cap size */
+  max-height: 20vw;
+  transition: transform 800ms ease, opacity 800ms ease;
+  transform: translate(-50%, -50%) rotate(var(--rot));
+  /* NO border in dark theme to avoid PNG artifacts */
+}
+
+/* Light theme adjustments for bricks - stronger visibility without border artifacts */
+.light .ambient-brick {
+  opacity: 0.2;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  /* Use double drop-shadow instead of border to avoid PNG artifacts */
+}
+
+/* Mobile adjustments - rely on component size changes instead of transform scale */
+@media (max-width: 640px) {
+  .ambient-brick {
+    opacity: 0.15; /* slightly more visible on mobile dark theme */
+    max-width: 40vw; /* larger cap for mobile */
+    max-height: 40vw;
+  }
+
+  .light .ambient-brick {
+    opacity: 0.25; /* more visible on mobile light theme */
   }
 }
