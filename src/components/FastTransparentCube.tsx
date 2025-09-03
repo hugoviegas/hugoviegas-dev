@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function FastTransparentCube({
   width = 250,
@@ -7,6 +7,8 @@ export default function FastTransparentCube({
   width?: number;
   height?: number;
 }) {
+  const hasInitialized = useRef(false);
+
   useEffect(() => {
     const src = "/vendor/animcube/AnimCube3.js";
     if (!document.querySelector(`script[src="${src}"]`)) {
@@ -14,16 +16,19 @@ export default function FastTransparentCube({
       s.src = src;
       s.async = true;
       s.onload = () => {
-        // preserve scroll position to avoid AnimCube3 auto-scrolling the page
-        const scrollX = window.scrollX;
-        const scrollY = window.scrollY;
+        // Only preserve scroll position if this is not the initial page load
+        const shouldPreserveScroll = hasInitialized.current;
+        const scrollX = shouldPreserveScroll ? window.scrollX : 0;
+        const scrollY = shouldPreserveScroll ? window.scrollY : 0;
 
         // @ts-expect-error AnimCube3 is a global injected by the vendor script
         window.AnimCube3?.("id=cube-embed&buttonbar=0&speed=10");
 
-        // small timeout to allow the script to create nodes, then restore scroll
+        // small timeout to allow the script to create nodes, then restore scroll only if needed
         setTimeout(() => {
-          window.scrollTo(scrollX, scrollY);
+          if (shouldPreserveScroll) {
+            window.scrollTo(scrollX, scrollY);
+          }
 
           // ensure any canvas injected fits the wrapper and doesn't overflow
           const container = document.getElementById("cube-embed");
@@ -41,16 +46,22 @@ export default function FastTransparentCube({
       document.body.appendChild(s);
     } else {
       // preserve and restore scroll when calling init if script already exists
-      const scrollX = window.scrollX;
-      const scrollY = window.scrollY;
+      const shouldPreserveScroll = hasInitialized.current;
+      const scrollX = shouldPreserveScroll ? window.scrollX : 0;
+      const scrollY = shouldPreserveScroll ? window.scrollY : 0;
 
       // @ts-expect-error AnimCube3 may be present as a global
       window.AnimCube3?.("id=cube-embed&buttonbar=0&speed=10");
 
       setTimeout(() => {
-        window.scrollTo(scrollX, scrollY);
+        if (shouldPreserveScroll) {
+          window.scrollTo(scrollX, scrollY);
+        }
       }, 50);
     }
+
+    // Mark as initialized after first run
+    hasInitialized.current = true;
   }, []);
 
   return (

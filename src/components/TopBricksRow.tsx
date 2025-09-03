@@ -45,11 +45,16 @@ const TopBricksRow: React.FC = () => {
     pointerEvents: "none",
   };
 
+  // Compute padding-bottom in vw to provide vertical space for the falling animation.
+  // Using brickPercent (which is percent of viewport width) as an approximation for brick height.
+  // Add a safety multiplier so the image isn't clipped when bouncing.
+  const paddingBottomVw = +(brickPercent * 1.05).toFixed(4); // small safety margin
+
   return (
     <div
       className="top-bricks-container"
       aria-hidden="true"
-      style={{ padding: 0, margin: 0 }}
+      style={{ padding: 0, margin: 0, paddingBottom: `${paddingBottomVw}vw`, overflow: "visible" }}
     >
       <div className="top-bricks-row" style={rowStyle}>
         {bricks.map((brick) => (
