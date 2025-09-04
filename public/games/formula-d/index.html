@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formula D - Controle de Corrida</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Tela Inicial -->
+    <section id="start-screen" class="screen active">
+      <div class="container">
+        <div class="start-content">
+          <h1 class="game-title">🏎️ Formula D</h1>
+          <p class="subtitle">Controle Digital de Corrida</p>
+          <button
+            class="btn btn--primary btn--lg btn--full-width"
+            onclick="showSetup()"
+          >
+            Nova Corrida
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tela de Setup -->
+    <section id="setup-screen" class="screen">
+      <div class="container">
+        <div class="setup-content">
+          <h2>Configurar Corrida</h2>
+
+          <div class="form-group">
+            <label class="form-label">Modo de Jogo</label>
+            <select id="game-mode" class="form-control">
+              <option value="basic">Básico (PD único)</option>
+              <option value="advanced">Avançado (Componentes)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Número de Jogadores</label>
+            <select
+              id="player-count"
+              class="form-control"
+              onchange="updatePlayerInputs()"
+            >
+              <option value="2">2 Jogadores</option>
+              <option value="3">3 Jogadores</option>
+              <option value="4">4 Jogadores</option>
+              <option value="5">5 Jogadores</option>
+              <option value="6">6 Jogadores</option>
+              <option value="7">7 Jogadores</option>
+              <option value="8">8 Jogadores</option>
+              <option value="9">9 Jogadores</option>
+              <option value="10">10 Jogadores</option>
+            </select>
+          </div>
+
+          <div id="players-config" class="players-config">
+            <!-- Players inputs will be generated here -->
+          </div>
+
+          <div class="setup-buttons">
+            <button class="btn btn--outline" onclick="showStart()">
+              Voltar
+            </button>
+            <button class="btn btn--primary" onclick="startGame()">
+              Iniciar Largada
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tela de Largada -->
+    <section id="starting-screen" class="screen">
+      <div class="container">
+        <div class="starting-content">
+          <h2>🏁 Largada</h2>
+          <p class="instruction">
+            Cada piloto rola o dado preto (1-20) para determinar a posição de
+            largada
+          </p>
+
+          <div class="current-starter">
+            <div class="starter-info">
+              <span class="starter-name" id="current-starter-name"
+                >Jogador</span
+              >
+              <div class="starter-car" id="current-starter-color"></div>
+            </div>
+            <button
+              class="btn btn--primary btn--lg"
+              onclick="rollStartingDice()"
+              id="roll-starting-btn"
+            >
+              🎲 Rolar Dado Preto
+            </button>
+            <div
+              class="starting-result"
+              id="starting-result"
+              style="display: none"
+            >
+              <div class="dice-result">
+                <span class="dice-value" id="starting-dice-value">0</span>
+              </div>
+              <p class="result-description" id="starting-description"></p>
+            </div>
+          </div>
+
+          <div class="starting-results">
+            <h3>Resultados da Largada</h3>
+            <div id="starting-list" class="starting-list">
+              <!-- Starting results will be shown here -->
+            </div>
+          </div>
+
+          <div class="starting-buttons">
+            <button class="btn btn--outline" onclick="showSetup()">
+              Voltar
+            </button>
+            <button
+              class="btn btn--primary"
+              onclick="startRace()"
+              id="start-race-btn"
+              style="display: none"
+            >
+              Começar Corrida
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tela de Corrida -->
+    <section id="race-screen" class="screen">
+      <div class="container">
+        <!-- Header da Corrida -->
+        <div class="race-header">
+          <h2>🏁 Corrida Formula D</h2>
+          <div class="race-info">
+            <span class="lap-info">Volta: <span id="current-lap">1</span></span>
+            <span class="weather-info">🌤️ Tempo seco</span>
+          </div>
+        </div>
+
+        <!-- Jogador Atual -->
+        <div class="current-player-section">
+          <h3>Vez do Piloto</h3>
+          <div class="current-player">
+            <div class="player-info">
+              <span class="player-name" id="current-player-name">Jogador</span>
+              <div class="player-car" id="current-player-color"></div>
+              <div class="current-gear">
+                Marcha: <span id="current-gear-display">1ª</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seletor de Marcha -->
+        <div class="gear-section">
+          <h4>Escolher Marcha</h4>
+          <div class="gear-selector">
+            <button class="gear-btn" data-gear="1" onclick="selectGear(1)">
+              1ª
+            </button>
+            <button class="gear-btn" data-gear="2" onclick="selectGear(2)">
+              2ª
+            </button>
+            <button class="gear-btn" data-gear="3" onclick="selectGear(3)">
+              3ª
+            </button>
+            <button class="gear-btn" data-gear="4" onclick="selectGear(4)">
+              4ª
+            </button>
+            <button class="gear-btn" data-gear="5" onclick="selectGear(5)">
+              5ª
+            </button>
+            <button class="gear-btn" data-gear="6" onclick="selectGear(6)">
+              6ª
+            </button>
+          </div>
+          <div class="gear-info">
+            <span id="gear-range-info">Selecione uma marcha</span>
+          </div>
+        </div>
+
+        <!-- Área de Dados -->
+        <div class="dice-section">
+          <h4>Rolagem de Dado</h4>
+          <button
+            class="btn btn--primary btn--lg"
+            onclick="rollDice()"
+            id="roll-dice-btn"
+            disabled
+          >
+            🎲 Rolar Dado
+          </button>
+          <div
+            class="dice-result-container"
+            id="dice-result-container"
+            style="display: none"
+          >
+            <div class="dice-result">
+              <span class="dice-value" id="dice-value">0</span>
+              <span class="movement-text">casas</span>
+            </div>
+            <div class="brake-option" id="brake-option">
+              <label class="form-label">Reduzir movimento (freada)</label>
+              <input
+                type="number"
+                class="form-control brake-input"
+                id="brake-input"
+                min="0"
+                value="0"
+              />
+              <p class="brake-cost" id="brake-cost">Custo: 0 PD</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status do Carro -->
+        <div class="car-status">
+          <h4>Status do Carro</h4>
+          <div id="pd-display" class="pd-display">
+            <!-- PD status will be shown here -->
+          </div>
+        </div>
+
+        <!-- Controles do Turno -->
+        <div class="turn-controls">
+          <button class="btn btn--outline" onclick="undoAction()">
+            ↶ Desfazer
+          </button>
+          <button class="btn btn--secondary" onclick="showEventsModal()">
+            ⚠️ Eventos
+          </button>
+          <button
+            class="btn btn--primary"
+            onclick="finishTurn()"
+            id="finish-turn-btn"
+            disabled
+          >
+            Finalizar Turno
+          </button>
+        </div>
+
+        <!-- Log de Eventos -->
+        <div class="event-log">
+          <h4>Log da Corrida</h4>
+          <div id="event-log-container" class="log-container">
+            <!-- Event log will be shown here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal de Eventos Especiais -->
+    <div class="modal hidden" id="events-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Eventos Especiais</h3>
+          <button class="modal-close" onclick="hideEventsModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="event-buttons">
+            <button
+              class="btn btn--outline event-btn"
+              onclick="applyEvent('overheat')"
+            >
+              Superaquecimento
+            </button>
+            <button
+              class="btn btn--outline event-btn"
+              onclick="applyEvent('tire-wear')"
+            >
+              Desgaste de Pneus
+            </button>
+            <button
+              class="btn btn--outline event-btn"
+              onclick="applyEvent('engine-problem')"
+            >
+              Problema no Motor
+            </button>
+            <button
+              class="btn btn--outline event-btn"
+              onclick="applyEvent('collision')"
+            >
+              Colisão
+            </button>
+            <button
+              class="btn btn--outline event-btn"
+              onclick="applyEvent('weather-change')"
+            >
+              Mudança de Tempo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tela de Vitória -->
+    <section id="victory-screen" class="screen">
+      <div class="container">
+        <div class="victory-content">
+          <h1>🏆 Corrida Finalizada!</h1>
+          <div class="winner-info">
+            <div class="winner-car" id="winner-color"></div>
+            <h2 id="winner-name">Vencedor</h2>
+            <p class="victory-message">Parabéns pela vitória!</p>
+          </div>
+
+          <div class="final-standings">
+            <h3>Classificação Final</h3>
+            <div id="final-standings-list" class="standings-list">
+              <!-- Final standings will be shown here -->
+            </div>
+          </div>
+
+          <div class="victory-buttons">
+            <button class="btn btn--outline" onclick="showRace()">
+              Ver Corrida
+            </button>
+            <button class="btn btn--primary" onclick="newRace()">
+              Nova Corrida
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>

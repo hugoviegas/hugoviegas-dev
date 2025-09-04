@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import FormulaD from "./pages/FormulaD";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +31,9 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              {/* Game page - put the Formula D game files into public/games/formula-d/ */}
+              <Route path="/formula-d" element={<FormulaD />} />
+              {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
