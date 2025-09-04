@@ -1,16 +1,1273 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertTriangle,
+  Car,
+  Clock,
+  Dices,
+  Flag,
+  Home,
+  RotateCcw,
+  Settings,
+  Trophy,
+  Zap,
+} from "lucide-react";
 import Footer from "@/components/Footer";
 
+// Game data
+const GAME_DATA = {
+  diceRanges: {
+    "1": [1, 2],
+    "2": [2, 3, 4],
+    "3": [4, 5, 6, 7, 8],
+    "4": [7, 8, 9, 10, 11, 12],
+    "5": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    "6": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+  },
+  brakingPenalty: {
+    "1": { brakes: 1, tires: 0 },
+    "2": { brakes: 2, tires: 0 },
+    "3": { brakes: 3, tires: 0 },
+    "4": { brakes: 3, tires: 1 },
+    "5": { brakes: 3, tires: 2 },
+    "6": { brakes: 3, tires: 3 },
+  },
+  gearReductionPenalty: {
+    "2": { gearbox: 1, brakes: 0, engine: 0 },
+    "3": { gearbox: 1, brakes: 1, engine: 0 },
+    "4": { gearbox: 1, brakes: 1, engine: 1 },
+  },
+  initialPD: {
+    basic: 18,
+    advanced: {
+      tires: 6,
+      brakes: 3,
+      gearbox: 3,
+      body: 3,
+      engine: 3,
+      suspension: 2,
+    },
+  },
+  carColors: [
+    { name: "red", value: "#DC2626", label: "Vermelho" },
+    { name: "blue", value: "#2563EB", label: "Azul" },
+    { name: "green", value: "#16A34A", label: "Verde" },
+    { name: "yellow", value: "#CA8A04", label: "Amarelo" },
+    { name: "purple", value: "#9333EA", label: "Roxo" },
+    { name: "orange", value: "#EA580C", label: "Laranja" },
+    { name: "pink", value: "#DB2777", label: "Rosa" },
+    { name: "cyan", value: "#0891B2", label: "Ciano" },
+    { name: "brown", value: "#A16207", label: "Marrom" },
+    { name: "gray", value: "#6B7280", label: "Cinza" },
+  ],
+};
+
+interface PlayerPD {
+  tires: number;
+  brakes: number;
+  gearbox: number;
+  body: number;
+  engine: number;
+  suspension: number;
+}
+
+interface Player {
+  id: number;
+  name: string;
+  color: string;
+  gear: number;
+  pd: number | PlayerPD;
+  position: number;
+  startingResult: { dice: number; description: string } | null;
+  eliminated: boolean;
+}
+
+interface GameState {
+  mode: "basic" | "advanced";
+  players: Player[];
+  currentPlayerIndex: number;
+  selectedGear: number | null;
+  diceValue: number | null;
+  brakeAmount: number;
+  gamePhase: "setup" | "starting" | "racing" | "finished";
+  startingOrder: Player[];
+  currentStarterIndex: number;
+  raceLog: Array<{ message: string; timestamp: string }>;
+  lap: number;
+}
+
 const FormulaD = () => {
+  const [gameState, setGameState] = useState<GameState>({
+    mode: "basic",
+    players: [],
+    currentPlayerIndex: 0,
+    selectedGear: null,
+    diceValue: null,
+    brakeAmount: 0,
+    gamePhase: "setup",
+    startingOrder: [],
+    currentStarterIndex: 0,
+    raceLog: [],
+    lap: 1,
+  });
+
+  const [setupData, setSetupData] = useState({
+    mode: "basic" as "basic" | "advanced",
+    playerCount: 4,
+    players: Array(4)
+      .fill(null)
+      .map((_, i) => ({
+        name: `Piloto ${i + 1}`,
+        color: GAME_DATA.carColors[i].name,
+      })),
+  });
+
   useEffect(() => {
-    window.location.href = "/games/formula-d/index.html";
+    addToLog("🏎️ Formula D - Sistema iniciado");
   }, []);
 
-  return (
-    <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-      <p>Redirecionando para o jogo...</p>
-    </div>
-  );
+  // Skip eliminated players automatically during racing phase
+  useEffect(() => {
+    if (gameState.gamePhase === "racing") {
+      const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+      if (currentPlayer?.eliminated) {
+        const nextIndex = getNextPlayerIndex(
+          gameState.currentPlayerIndex,
+          gameState.players
+        );
+        setGameState((prev) => ({ ...prev, currentPlayerIndex: nextIndex }));
+        addToLog(`${currentPlayer.name} está eliminado - pulando turno`);
+      }
+    }
+  }, [gameState.gamePhase, gameState.currentPlayerIndex, gameState.players]);
+
+  const addToLog = (message: string) => {
+    const timestamp = new Date().toLocaleTimeString();
+    setGameState((prev) => ({
+      ...prev,
+      raceLog: [...prev.raceLog.slice(-49), { message, timestamp }],
+    }));
+  };
+
+  const getNextPlayerIndex = (
+    currentIndex: number,
+    players: Player[]
+  ): number => {
+    let nextIndex = (currentIndex + 1) % players.length;
+    let attempts = 0;
+
+    // Skip eliminated players, but prevent infinite loop
+    while (players[nextIndex]?.eliminated && attempts < players.length) {
+      nextIndex = (nextIndex + 1) % players.length;
+      attempts++;
+    }
+
+    return nextIndex;
+  };
+
+  const updateSetupPlayers = (count: number) => {
+    const newPlayers = Array(count)
+      .fill(null)
+      .map((_, i) => ({
+        name:
+          i < setupData.players.length
+            ? setupData.players[i].name
+            : `Piloto ${i + 1}`,
+        color: GAME_DATA.carColors[i].name,
+      }));
+    setSetupData((prev) => ({
+      ...prev,
+      playerCount: count,
+      players: newPlayers,
+    }));
+  };
+
+  const updatePlayerName = (index: number, name: string) => {
+    setSetupData((prev) => ({
+      ...prev,
+      players: prev.players.map((p, i) => (i === index ? { ...p, name } : p)),
+    }));
+  };
+
+  const updatePlayerColor = (index: number, color: string) => {
+    setSetupData((prev) => ({
+      ...prev,
+      players: prev.players.map((p, i) => (i === index ? { ...p, color } : p)),
+    }));
+  };
+
+  const startGame = () => {
+    const players: Player[] = setupData.players.map((p, i) => ({
+      id: i,
+      name: p.name,
+      color: p.color,
+      gear: 1,
+      pd:
+        setupData.mode === "basic"
+          ? GAME_DATA.initialPD.basic
+          : { ...GAME_DATA.initialPD.advanced },
+      position: 0,
+      startingResult: null,
+      eliminated: false,
+    }));
+
+    setGameState((prev) => ({
+      ...prev,
+      mode: setupData.mode,
+      players,
+      gamePhase: "starting",
+      currentStarterIndex: 0,
+      startingOrder: [],
+    }));
+  };
+
+  const rollStartingDice = () => {
+    const diceValue = Math.floor(Math.random() * 20) + 1;
+    const currentPlayer = gameState.players[gameState.currentStarterIndex];
+
+    let description = "";
+    if (diceValue === 1) {
+      description = "Péssima largada - motor morre";
+    } else if (diceValue >= 2 && diceValue <= 16) {
+      description = "Largada normal";
+    } else {
+      description = "Ótima largada - 4 casas grátis";
+    }
+
+    const updatedPlayer = {
+      ...currentPlayer,
+      startingResult: { dice: diceValue, description },
+    };
+
+    setGameState((prev) => {
+      const newPlayers = [...prev.players];
+      newPlayers[prev.currentStarterIndex] = updatedPlayer;
+
+      const newStartingOrder = [...prev.startingOrder, updatedPlayer];
+      const nextIndex = prev.currentStarterIndex + 1;
+
+      return {
+        ...prev,
+        players: newPlayers,
+        startingOrder: newStartingOrder,
+        currentStarterIndex: nextIndex,
+      };
+    });
+
+    addToLog(
+      `${currentPlayer.name} rolou ${diceValue} na largada: ${description}`
+    );
+  };
+
+  const finishStartingPhase = () => {
+    const sortedPlayers = [...gameState.players].sort(
+      (a, b) => (b.startingResult?.dice || 0) - (a.startingResult?.dice || 0)
+    );
+
+    // Apply starting bonuses
+    const playersWithBonuses = sortedPlayers.map((player) => {
+      if (player.startingResult && player.startingResult.dice >= 17) {
+        addToLog(`${player.name} recebe 4 casas grátis pela ótima largada!`);
+        return { ...player, position: player.position + 4 };
+      }
+      return player;
+    });
+
+    setGameState((prev) => ({
+      ...prev,
+      players: playersWithBonuses,
+      currentPlayerIndex: 0,
+      gamePhase: "racing",
+    }));
+  };
+
+  const selectGear = (gear: number) => {
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+    const gearDiff = gear - currentPlayer.gear;
+
+    // Apply gear reduction penalty if needed
+    if (gearDiff <= -2) {
+      const reductionAmount = Math.abs(gearDiff);
+      const reductionKey =
+        reductionAmount.toString() as keyof typeof GAME_DATA.gearReductionPenalty;
+      if (GAME_DATA.gearReductionPenalty[reductionKey]) {
+        const penalty = GAME_DATA.gearReductionPenalty[reductionKey];
+        applyPenalty(penalty, `redução de ${reductionAmount} marchas`);
+      }
+    }
+
+    setGameState((prev) => ({ ...prev, selectedGear: gear }));
+  };
+
+  const rollDice = () => {
+    if (!gameState.selectedGear) return;
+
+    const range =
+      GAME_DATA.diceRanges[
+        gameState.selectedGear.toString() as keyof typeof GAME_DATA.diceRanges
+      ];
+    const diceValue = range[Math.floor(Math.random() * range.length)];
+
+    setGameState((prev) => {
+      const newPlayers = [...prev.players];
+      newPlayers[prev.currentPlayerIndex] = {
+        ...newPlayers[prev.currentPlayerIndex],
+        gear: prev.selectedGear!,
+      };
+
+      return {
+        ...prev,
+        diceValue,
+        players: newPlayers,
+        brakeAmount: 0,
+      };
+    });
+
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+    addToLog(
+      `${currentPlayer.name} rolou ${diceValue} na ${gameState.selectedGear}ª marcha`
+    );
+
+    // Check for engine limit
+    if (
+      (gameState.selectedGear === 5 && diceValue === 20) ||
+      (gameState.selectedGear === 6 && diceValue === 30)
+    ) {
+      addToLog(
+        `⚠️ Motor no limite! ${currentPlayer.name} deve fazer teste de resistência.`
+      );
+      // In a full implementation, this would trigger a special event
+    }
+  };
+
+  interface PenaltyData {
+    [key: string]: number;
+  }
+
+  const applyPenalty = (penalty: PenaltyData, reason: string) => {
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+
+    setGameState((prev) => {
+      const newPlayers = [...prev.players];
+      const player = { ...newPlayers[prev.currentPlayerIndex] };
+
+      if (prev.mode === "basic") {
+        const totalPenalty = Object.values(penalty).reduce(
+          (sum, val) => sum + (val as number),
+          0
+        );
+        const currentPD = player.pd as number;
+        player.pd = Math.max(0, currentPD - totalPenalty);
+
+        if (player.pd === 0) {
+          player.eliminated = true;
+          addToLog(`${player.name} foi eliminado por perda total de PD!`);
+        } else {
+          addToLog(`${player.name} perdeu ${totalPenalty} PD por ${reason}`);
+        }
+      } else {
+        let eliminated = false;
+        const playerPD = player.pd as PlayerPD;
+        Object.keys(penalty).forEach((component) => {
+          if (
+            penalty[component] > 0 &&
+            playerPD[component as keyof PlayerPD] !== undefined
+          ) {
+            playerPD[component as keyof PlayerPD] = Math.max(
+              0,
+              playerPD[component as keyof PlayerPD] - penalty[component]
+            );
+
+            if (
+              playerPD[component as keyof PlayerPD] === 0 &&
+              ["engine", "gearbox"].includes(component)
+            ) {
+              eliminated = true;
+            }
+          }
+        });
+
+        if (eliminated) {
+          player.eliminated = true;
+          addToLog(`${player.name} foi eliminado por falha crítica!`);
+        } else {
+          const penaltyText = Object.entries(penalty)
+            .filter(([_, value]) => (value as number) > 0)
+            .map(([component, value]) => `${value} ${component}`)
+            .join(", ");
+          addToLog(`${player.name} perdeu ${penaltyText} por ${reason}`);
+        }
+      }
+
+      newPlayers[prev.currentPlayerIndex] = player;
+      return { ...prev, players: newPlayers };
+    });
+  };
+
+  const finishTurn = () => {
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+    const finalMovement = (gameState.diceValue || 0) - gameState.brakeAmount;
+
+    // Apply braking penalty
+    if (gameState.brakeAmount > 0 && gameState.selectedGear) {
+      const gearKey =
+        gameState.selectedGear.toString() as keyof typeof GAME_DATA.brakingPenalty;
+      const penalty = GAME_DATA.brakingPenalty[gearKey];
+      const adjustedPenalty = {
+        brakes: penalty.brakes * gameState.brakeAmount,
+        tires: penalty.tires * gameState.brakeAmount,
+      };
+      applyPenalty(adjustedPenalty, "freada");
+      addToLog(`${currentPlayer.name} freou ${gameState.brakeAmount} casas`);
+    }
+
+    // Move player
+    setGameState((prev) => {
+      const newPlayers = [...prev.players];
+      newPlayers[prev.currentPlayerIndex] = {
+        ...newPlayers[prev.currentPlayerIndex],
+        position: newPlayers[prev.currentPlayerIndex].position + finalMovement,
+      };
+
+      // Check for victory
+      if (newPlayers[prev.currentPlayerIndex].position >= 100) {
+        addToLog(
+          `🏆 ${newPlayers[prev.currentPlayerIndex].name} venceu a corrida!`
+        );
+        return {
+          ...prev,
+          players: newPlayers,
+          gamePhase: "finished",
+        };
+      }
+
+      return {
+        ...prev,
+        players: newPlayers,
+        currentPlayerIndex: getNextPlayerIndex(
+          prev.currentPlayerIndex,
+          newPlayers
+        ),
+        selectedGear: null,
+        diceValue: null,
+        brakeAmount: 0,
+      };
+    });
+
+    addToLog(
+      `${currentPlayer.name} avançou ${finalMovement} casas (posição: ${
+        currentPlayer.position + finalMovement
+      })`
+    );
+  };
+
+  const calculateBrakeCost = () => {
+    if (!gameState.selectedGear || gameState.brakeAmount === 0)
+      return "Custo: 0 PD";
+
+    const gearKey =
+      gameState.selectedGear.toString() as keyof typeof GAME_DATA.brakingPenalty;
+    const penalty = GAME_DATA.brakingPenalty[gearKey];
+
+    if (gameState.mode === "basic") {
+      const totalCost =
+        (penalty.brakes + penalty.tires) * gameState.brakeAmount;
+      return `Custo: ${totalCost} PD`;
+    } else {
+      const costs = [];
+      if (penalty.brakes > 0)
+        costs.push(`${penalty.brakes * gameState.brakeAmount} Freios`);
+      if (penalty.tires > 0)
+        costs.push(`${penalty.tires * gameState.brakeAmount} Pneus`);
+      return `Custo: ${costs.join(", ") || "0 PD"}`;
+    }
+  };
+
+  const applyEvent = (eventType: string) => {
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+
+    switch (eventType) {
+      case "overheat":
+        applyPenalty({ engine: 1 }, "superaquecimento");
+        break;
+      case "tire-wear":
+        applyPenalty({ tires: 2 }, "desgaste de pneus");
+        break;
+      case "engine-problem":
+        applyPenalty({ engine: 2 }, "problema no motor");
+        break;
+      case "collision":
+        applyPenalty({ body: 1, suspension: 1 }, "colisão");
+        break;
+      case "weather-change":
+        addToLog("Tempo mudou - cuidado nas próximas curvas!");
+        break;
+    }
+  };
+
+  const undoAction = () => {
+    // Reset current turn state
+    setGameState((prev) => ({
+      ...prev,
+      selectedGear: null,
+      diceValue: null,
+      brakeAmount: 0,
+    }));
+    addToLog("Ação desfeita");
+  };
+
+  const newRace = () => {
+    setGameState({
+      mode: "basic",
+      players: [],
+      currentPlayerIndex: 0,
+      selectedGear: null,
+      diceValue: null,
+      brakeAmount: 0,
+      gamePhase: "setup",
+      startingOrder: [],
+      currentStarterIndex: 0,
+      raceLog: [],
+      lap: 1,
+    });
+    setSetupData({
+      mode: "basic",
+      playerCount: 4,
+      players: Array(4)
+        .fill(null)
+        .map((_, i) => ({
+          name: `Piloto ${i + 1}`,
+          color: GAME_DATA.carColors[i].name,
+        })),
+    });
+  };
+
+  const renderGearSelector = () => {
+    if (gameState.gamePhase !== "racing") return null;
+
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+    const currentGear = currentPlayer.gear;
+
+    return (
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="w-5 h-5" />
+            Seletor de Marcha
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-6 gap-2 mb-4">
+            {[1, 2, 3, 4, 5, 6].map((gear) => {
+              const gearDiff = gear - currentGear;
+              const isDisabled = gearDiff > 1 || gearDiff < -4;
+              const isSelected = gameState.selectedGear === gear;
+
+              return (
+                <Button
+                  key={gear}
+                  variant={isSelected ? "default" : "outline"}
+                  disabled={isDisabled}
+                  onClick={() => selectGear(gear)}
+                  className="h-12 font-bold"
+                >
+                  {gear}ª
+                </Button>
+              );
+            })}
+          </div>
+          {gameState.selectedGear && (
+            <div className="text-center text-sm text-muted-foreground">
+              {gameState.selectedGear}ª marcha:{" "}
+              {
+                GAME_DATA.diceRanges[
+                  gameState.selectedGear.toString() as keyof typeof GAME_DATA.diceRanges
+                ][0]
+              }
+              -
+              {
+                GAME_DATA.diceRanges[
+                  gameState.selectedGear.toString() as keyof typeof GAME_DATA.diceRanges
+                ].slice(-1)[0]
+              }{" "}
+              casas
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const renderDiceSection = () => {
+    if (gameState.gamePhase !== "racing") return null;
+
+    return (
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Dices className="w-5 h-5" />
+            Rolagem de Dado
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="text-center">
+          <Button
+            size="lg"
+            disabled={!gameState.selectedGear || gameState.diceValue !== null}
+            onClick={rollDice}
+            className="mb-4"
+          >
+            <Dices className="w-4 h-4 mr-2" />
+            Rolar Dado
+          </Button>
+
+          {gameState.diceValue && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-16 h-16 bg-primary text-primary-foreground rounded-lg flex items-center justify-center text-2xl font-bold">
+                  {gameState.diceValue}
+                </div>
+                <span className="text-lg">casas</span>
+              </div>
+
+              <div className="max-w-xs mx-auto space-y-2">
+                <Label htmlFor="brake-input">Reduzir movimento (freada)</Label>
+                <Input
+                  id="brake-input"
+                  type="number"
+                  min="0"
+                  max={gameState.diceValue}
+                  value={gameState.brakeAmount}
+                  onChange={(e) =>
+                    setGameState((prev) => ({
+                      ...prev,
+                      brakeAmount: parseInt(e.target.value) || 0,
+                    }))
+                  }
+                  className="text-center"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Movimento final:{" "}
+                  {(gameState.diceValue || 0) - gameState.brakeAmount} casas
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {calculateBrakeCost()}
+                </p>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
+  const renderPlayerStatus = () => {
+    if (gameState.gamePhase !== "racing") return null;
+
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+    const colorObj = GAME_DATA.carColors.find(
+      (c) => c.name === currentPlayer.color
+    );
+
+    return (
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Car className="w-5 h-5" />
+            Status do Carro
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-4 mb-4">
+            <div
+              className="w-8 h-8 rounded-full border-2 border-foreground"
+              style={{ backgroundColor: colorObj?.value }}
+            />
+            <div>
+              <h3 className="font-semibold">{currentPlayer.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                Marcha: {currentPlayer.gear}ª | Posição:{" "}
+                {currentPlayer.position}
+                {currentPlayer.eliminated && (
+                  <span className="text-red-500 ml-2">ELIMINADO</span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          {gameState.mode === "basic" ? (
+            <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+              <span className="font-medium">Pontos de Desgaste</span>
+              <Badge
+                variant={
+                  (currentPlayer.pd as number) <= 5 ? "destructive" : "default"
+                }
+              >
+                {currentPlayer.pd as number}
+              </Badge>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              {Object.entries(currentPlayer.pd as PlayerPD).map(
+                ([component, value]) => (
+                  <div
+                    key={component}
+                    className="p-2 bg-muted rounded text-center"
+                  >
+                    <div className="text-xs text-muted-foreground capitalize">
+                      {component}
+                    </div>
+                    <div
+                      className={`font-bold ${
+                        value === 0
+                          ? "text-destructive"
+                          : value === 1
+                          ? "text-yellow-500"
+                          : "text-green-500"
+                      }`}
+                    >
+                      {value}
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
+  if (gameState.gamePhase === "setup") {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+              <Car className="w-8 h-8" />
+              Formula D
+            </h1>
+            <p className="text-muted-foreground">Controle Digital de Corrida</p>
+          </div>
+
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle>Configurar Nova Corrida</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label>Modo de Jogo</Label>
+                <Select
+                  value={setupData.mode}
+                  onValueChange={(value: "basic" | "advanced") =>
+                    setSetupData((prev) => ({ ...prev, mode: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="basic">Básico (PD único)</SelectItem>
+                    <SelectItem value="advanced">
+                      Avançado (Componentes)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Número de Jogadores</Label>
+                <Select
+                  value={setupData.playerCount.toString()}
+                  onValueChange={(value) => updateSetupPlayers(parseInt(value))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                      <SelectItem key={num} value={num.toString()}>
+                        {num} Jogadores
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-4">
+                <Label>Configuração dos Pilotos</Label>
+                {setupData.players.map((player, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-4 p-4 border rounded-lg"
+                  >
+                    <span className="font-medium min-w-[30px]">
+                      P{index + 1}
+                    </span>
+                    <Input
+                      value={player.name}
+                      onChange={(e) => updatePlayerName(index, e.target.value)}
+                      placeholder="Nome do piloto"
+                      className="flex-1"
+                    />
+                    <div className="flex gap-1">
+                      {GAME_DATA.carColors.slice(0, 5).map((color) => (
+                        <button
+                          key={color.name}
+                          className={`w-8 h-8 rounded-full border-2 transition-transform ${
+                            player.color === color.name
+                              ? "border-foreground scale-110"
+                              : "border-muted-foreground/30"
+                          }`}
+                          style={{ backgroundColor: color.value }}
+                          onClick={() => updatePlayerColor(index, color.name)}
+                          title={color.label}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-4">
+                <Button variant="outline" onClick={() => {}} className="flex-1">
+                  <Home className="w-4 h-4 mr-2" />
+                  Voltar
+                </Button>
+                <Button onClick={startGame} className="flex-1">
+                  <Flag className="w-4 h-4 mr-2" />
+                  Iniciar Largada
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (gameState.gamePhase === "starting") {
+    const currentPlayer = gameState.players[gameState.currentStarterIndex];
+    const isComplete =
+      gameState.startingOrder.length >= gameState.players.length;
+    const sortedResults = [...gameState.startingOrder].sort(
+      (a, b) => (b.startingResult?.dice || 0) - (a.startingResult?.dice || 0)
+    );
+
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
+              <Flag className="w-6 h-6" />
+              Largada
+            </h1>
+            <p className="text-muted-foreground">
+              Cada piloto rola o dado preto (1-20) para determinar a posição de
+              largada
+            </p>
+          </div>
+
+          {!isComplete && currentPlayer && (
+            <Card className="max-w-md mx-auto mb-8">
+              <CardContent className="pt-6 text-center">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <div
+                    className="w-12 h-12 rounded-full border-2 border-foreground"
+                    style={{
+                      backgroundColor: GAME_DATA.carColors.find(
+                        (c) => c.name === currentPlayer.color
+                      )?.value,
+                    }}
+                  />
+                  <span className="text-xl font-semibold">
+                    {currentPlayer.name}
+                  </span>
+                </div>
+                <Button size="lg" onClick={rollStartingDice}>
+                  <Dices className="w-4 h-4 mr-2" />
+                  Rolar Dado Preto
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {gameState.startingOrder.length > 0 && (
+            <Card className="max-w-2xl mx-auto mb-8">
+              <CardHeader>
+                <CardTitle>Resultados da Largada</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {sortedResults.map((player, index) => (
+                    <div
+                      key={player.id}
+                      className="flex items-center justify-between p-3 border rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Badge variant="outline">{index + 1}º</Badge>
+                        <div
+                          className="w-6 h-6 rounded-full"
+                          style={{
+                            backgroundColor: GAME_DATA.carColors.find(
+                              (c) => c.name === player.color
+                            )?.value,
+                          }}
+                        />
+                        <span>{player.name}</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-bold">
+                          {player.startingResult?.dice}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {player.startingResult?.description}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="flex gap-4 justify-center">
+            <Button
+              variant="outline"
+              onClick={() =>
+                setGameState((prev) => ({ ...prev, gamePhase: "setup" }))
+              }
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Voltar
+            </Button>
+            {isComplete && (
+              <Button size="lg" onClick={finishStartingPhase}>
+                <Zap className="w-4 h-4 mr-2" />
+                Começar Corrida
+              </Button>
+            )}
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (gameState.gamePhase === "racing") {
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
+              <Car className="w-6 h-6" />
+              Corrida Formula D
+            </h1>
+            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+              <span>Volta: {gameState.lap}</span>
+              <span>☀️ Tempo seco</span>
+            </div>
+          </div>
+
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Vez do Piloto</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div
+                  className="w-10 h-10 rounded-full border-2 border-foreground"
+                  style={{
+                    backgroundColor: GAME_DATA.carColors.find(
+                      (c) => c.name === currentPlayer.color
+                    )?.value,
+                  }}
+                />
+                <div className="text-center">
+                  <h3 className="text-xl font-semibold">
+                    {currentPlayer.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Marcha atual: {currentPlayer.gear}ª
+                  </p>
+                  {currentPlayer.eliminated && (
+                    <Badge variant="destructive" className="mt-1">
+                      ELIMINADO
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              {currentPlayer.eliminated && (
+                <div className="text-center mb-4">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Este jogador está eliminado.
+                  </p>
+                  <Button
+                    onClick={() => {
+                      const nextIndex = getNextPlayerIndex(
+                        gameState.currentPlayerIndex,
+                        gameState.players
+                      );
+                      setGameState((prev) => ({
+                        ...prev,
+                        currentPlayerIndex: nextIndex,
+                      }));
+                      addToLog(
+                        `${currentPlayer.name} está eliminado - pulando turno`
+                      );
+                    }}
+                  >
+                    Pular Turno
+                  </Button>
+                </div>
+              )}
+
+              {/* Current standings */}
+              <div className="mt-4">
+                <h4 className="text-sm font-medium mb-2">
+                  Classificação Atual:
+                </h4>
+                <div className="space-y-1">
+                  {[...gameState.players]
+                    .sort((a, b) => b.position - a.position)
+                    .map((player, index) => (
+                      <div
+                        key={player.id}
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{index + 1}º</span>
+                          <div
+                            className="w-4 h-4 rounded-full"
+                            style={{
+                              backgroundColor: GAME_DATA.carColors.find(
+                                (c) => c.name === player.color
+                              )?.value,
+                            }}
+                          />
+                          <span
+                            className={
+                              player.id === currentPlayer.id ? "font-bold" : ""
+                            }
+                          >
+                            {player.name}
+                          </span>
+                          {player.eliminated && (
+                            <Badge variant="destructive" className="text-xs">
+                              ELIM
+                            </Badge>
+                          )}
+                        </div>
+                        <span className="text-muted-foreground">
+                          {player.position} casas
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {!currentPlayer.eliminated && renderGearSelector()}
+          {!currentPlayer.eliminated && renderDiceSection()}
+          {renderPlayerStatus()}
+
+          <div className="flex gap-4 mb-6">
+            <Button variant="outline" className="flex-1" onClick={undoAction}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Desfazer
+            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="flex-1">
+                  <AlertTriangle className="w-4 h-4 mr-2" />
+                  Eventos
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Eventos Especiais</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => applyEvent("overheat")}
+                  >
+                    Superaquecimento
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => applyEvent("tire-wear")}
+                  >
+                    Desgaste de Pneus
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => applyEvent("engine-problem")}
+                  >
+                    Problema no Motor
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => applyEvent("collision")}
+                  >
+                    Colisão
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => applyEvent("weather-change")}
+                  >
+                    Mudança de Tempo
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Button
+              className="flex-1"
+              disabled={gameState.diceValue === null}
+              onClick={finishTurn}
+            >
+              <Flag className="w-4 h-4 mr-2" />
+              Finalizar Turno
+            </Button>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="w-5 h-5" />
+                Log da Corrida
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="max-h-48 overflow-y-auto space-y-1">
+                {gameState.raceLog.map((entry, index) => (
+                  <div
+                    key={index}
+                    className="text-sm p-2 border-b border-border/50"
+                  >
+                    <div>{entry.message}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {entry.timestamp}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (gameState.gamePhase === "finished") {
+    const winner = gameState.players.find((p) => p.position >= 100);
+    const standings = [...gameState.players].sort((a, b) => {
+      if (a.eliminated && !b.eliminated) return 1;
+      if (!a.eliminated && b.eliminated) return -1;
+      return b.position - a.position;
+    });
+
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+              <Trophy className="w-8 h-8" />
+              Corrida Finalizada!
+            </h1>
+          </div>
+
+          {winner && (
+            <Card className="max-w-md mx-auto mb-8">
+              <CardContent className="pt-6 text-center">
+                <div
+                  className="w-20 h-20 rounded-full border-4 border-foreground mx-auto mb-4"
+                  style={{
+                    backgroundColor: GAME_DATA.carColors.find(
+                      (c) => c.name === winner.color
+                    )?.value,
+                  }}
+                />
+                <h2 className="text-2xl font-bold mb-2">{winner.name}</h2>
+                <p className="text-muted-foreground">Parabéns pela vitória!</p>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="max-w-2xl mx-auto mb-8">
+            <CardHeader>
+              <CardTitle>Classificação Final</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {standings.map((player, index) => (
+                  <div
+                    key={player.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Badge variant={index === 0 ? "default" : "outline"}>
+                        {index + 1}º
+                      </Badge>
+                      <div
+                        className="w-6 h-6 rounded-full"
+                        style={{
+                          backgroundColor: GAME_DATA.carColors.find(
+                            (c) => c.name === player.color
+                          )?.value,
+                        }}
+                      />
+                      <span>{player.name}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {player.eliminated
+                        ? "ELIMINADO"
+                        : `${player.position} casas`}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="flex gap-4 justify-center">
+            <Button variant="outline" onClick={newRace}>
+              <Home className="w-4 h-4 mr-2" />
+              Nova Corrida
+            </Button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  return null;
 };
 
 export default FormulaD;
