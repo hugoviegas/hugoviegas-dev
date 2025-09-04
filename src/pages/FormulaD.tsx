@@ -24,9 +24,11 @@ import {
   AlertTriangle,
   Car,
   Clock,
+  Crown,
   Dices,
   Flag,
   Home,
+  Medal,
   RotateCcw,
   Settings,
   Trophy,
@@ -117,34 +119,85 @@ interface GameState {
 }
 
 const FormulaD = () => {
-  const [gameState, setGameState] = useState<GameState>({
-    mode: "basic",
-    players: [],
-    currentPlayerIndex: 0,
-    selectedGear: null,
-    diceValue: null,
-    brakeAmount: 0,
-    gamePhase: "setup",
-    startingOrder: [],
-    currentStarterIndex: 0,
-    raceLog: [],
-    lap: 1,
+  // Load game state from localStorage on component mount
+  const loadGameState = (): GameState | null => {
+    try {
+      const saved = localStorage.getItem("formulaD-gameState");
+      return saved ? JSON.parse(saved) : null;
+    } catch (error) {
+      console.error("Error loading game state:", error);
+      return null;
+    }
+  };
+
+  const loadSetupData = () => {
+    try {
+      const saved = localStorage.getItem("formulaD-setupData");
+      return saved
+        ? JSON.parse(saved)
+        : {
+            mode: "basic" as "basic" | "advanced",
+            playerCount: 4,
+            players: Array(4)
+              .fill(null)
+              .map((_, i) => ({
+                name: `Piloto ${i + 1}`,
+                color: GAME_DATA.carColors[i].name,
+              })),
+          };
+    } catch (error) {
+      console.error("Error loading setup data:", error);
+      return {
+        mode: "basic" as "basic" | "advanced",
+        playerCount: 4,
+        players: Array(4)
+          .fill(null)
+          .map((_, i) => ({
+            name: `Piloto ${i + 1}`,
+            color: GAME_DATA.carColors[i].name,
+          })),
+      };
+    }
+  };
+
+  const [gameState, setGameState] = useState<GameState>(() => {
+    const saved = loadGameState();
+    return (
+      saved || {
+        mode: "basic",
+        players: [],
+        currentPlayerIndex: 0,
+        selectedGear: null,
+        diceValue: null,
+        brakeAmount: 0,
+        gamePhase: "setup",
+        startingOrder: [],
+        currentStarterIndex: 0,
+        raceLog: [],
+        lap: 1,
+      }
+    );
   });
 
-  const [setupData, setSetupData] = useState({
-    mode: "basic" as "basic" | "advanced",
-    playerCount: 4,
-    players: Array(4)
-      .fill(null)
-      .map((_, i) => ({
-        name: `Piloto ${i + 1}`,
-        color: GAME_DATA.carColors[i].name,
-      })),
-  });
+  const [setupData, setSetupData] = useState(() => loadSetupData());
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showWinners, setShowWinners] = useState(false);
+
+  // Save game state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("formulaD-gameState", JSON.stringify(gameState));
+  }, [gameState]);
+
+  // Save setup data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("formulaD-setupData", JSON.stringify(setupData));
+  }, [setupData]);
 
   useEffect(() => {
-    addToLog("🏎️ Formula D - Sistema iniciado");
-  }, []);
+    if (gameState.raceLog.length === 0) {
+      addToLog("🏎️ Formula D - Sistema iniciado");
+    }
+  }, [gameState.raceLog.length]);
 
   // Skip eliminated players automatically during racing phase
   useEffect(() => {
@@ -299,6 +352,130 @@ const FormulaD = () => {
       currentPlayerIndex: 0,
       gamePhase: "racing",
     }));
+  };
+
+  const resetGame = () => {
+    // Clear localStorage
+    localStorage.removeItem("formulaD-gameState");
+    localStorage.removeItem("formulaD-setupData");
+
+    // Reset to initial state
+    const initialSetupData = {
+      mode: "basic" as "basic" | "advanced",
+      playerCount: 4,
+      players: Array(4)
+        .fill(null)
+        .map((_, i) => ({
+          name: `Piloto ${i + 1}`,
+          color: GAME_DATA.carColors[i].name,
+        })),
+    };
+
+    const initialGameState = {
+      mode: "basic" as "basic" | "advanced",
+      players: [],
+      currentPlayerIndex: 0,
+      selectedGear: null,
+      diceValue: null,
+      brakeAmount: 0,
+      gamePhase: "setup" as "setup" | "starting" | "racing" | "finished",
+      startingOrder: [],
+      currentStarterIndex: 0,
+      raceLog: [],
+      lap: 1,
+    };
+
+    setSetupData(initialSetupData);
+    setGameState(initialGameState);
+
+    // Add initial log message
+    setTimeout(() => {
+      addToLog("🏎️ Formula D - Sistema reiniciado");
+    }, 100);
+  };
+
+  const returnToStart = () => {
+    setGameState((prev) => ({
+      ...prev,
+      gamePhase: "setup",
+      players: [],
+      currentPlayerIndex: 0,
+      selectedGear: null,
+      diceValue: null,
+      brakeAmount: 0,
+      startingOrder: [],
+      currentStarterIndex: 0,
+      raceLog: [],
+      lap: 1,
+    }));
+    setShowWinners(false);
+    setShowConfetti(false);
+    addToLog("🏁 Voltando para configuração inicial");
+  };
+
+  const finishRace = () => {
+    // Sort players by position (highest position wins)
+    const sortedPlayers = [...gameState.players]
+      .filter((player) => !player.eliminated)
+      .sort((a, b) => b.position - a.position);
+
+    // Add eliminated players at the end
+    const eliminatedPlayers = gameState.players
+      .filter((player) => player.eliminated)
+      .sort((a, b) => b.position - a.position);
+
+    const finalStandings = [...sortedPlayers, ...eliminatedPlayers];
+
+    // Update game state to finished
+    setGameState((prev) => ({
+      ...prev,
+      gamePhase: "finished",
+      players: finalStandings,
+    }));
+
+    // Show confetti and winners
+    setShowConfetti(true);
+    setShowWinners(true);
+
+    // Add final log messages
+    addToLog("🏁 CORRIDA FINALIZADA!");
+    if (finalStandings.length > 0) {
+      addToLog(`🥇 VENCEDOR: ${finalStandings[0].name}!`);
+      if (finalStandings.length > 1) {
+        addToLog(`🥈 2º lugar: ${finalStandings[1].name}`);
+      }
+      if (finalStandings.length > 2) {
+        addToLog(`🥉 3º lugar: ${finalStandings[2].name}`);
+      }
+    }
+
+    // Stop confetti after 5 seconds
+    setTimeout(() => {
+      setShowConfetti(false);
+    }, 5000);
+  };
+
+  const getNextPlayerBasedOnPosition = (players?: Player[]): number => {
+    const playersToCheck = players || gameState.players;
+
+    // Get all non-eliminated players with their current positions and gears
+    const activePlayers = playersToCheck
+      .map((player, index) => ({ ...player, originalIndex: index }))
+      .filter((player) => !player.eliminated);
+
+    if (activePlayers.length === 0) return 0;
+
+    // Sort by position (furthest back goes first), then by gear (lower gear goes first)
+    activePlayers.sort((a, b) => {
+      if (a.position !== b.position) {
+        return a.position - b.position; // Lower position (further back) goes first
+      }
+      return a.gear - b.gear; // Lower gear goes first for ties
+    });
+
+    // If there are still ties, maintain current order or use manual selection
+    const nextPlayer = activePlayers[0];
+    return nextPlayer.originalIndex;
   };
 
   const selectGear = (gear: number) => {
@@ -464,10 +641,7 @@ const FormulaD = () => {
       return {
         ...prev,
         players: newPlayers,
-        currentPlayerIndex: getNextPlayerIndex(
-          prev.currentPlayerIndex,
-          newPlayers
-        ),
+        currentPlayerIndex: getNextPlayerBasedOnPosition(newPlayers),
         selectedGear: null,
         diceValue: null,
         brakeAmount: 0,
@@ -757,15 +931,175 @@ const FormulaD = () => {
     );
   };
 
+  // Confetti component
+  const ConfettiAnimation = () => {
+    if (!showConfetti) return null;
+
+    return (
+      <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className={`absolute w-2 h-2 animate-bounce`}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              backgroundColor: [
+                "#ff0000",
+                "#00ff00",
+                "#0000ff",
+                "#ffff00",
+                "#ff00ff",
+                "#00ffff",
+              ][Math.floor(Math.random() * 6)],
+              animationDelay: `${Math.random() * 2}s`,
+              animationDuration: `${2 + Math.random() * 3}s`,
+              transform: `rotate(${Math.random() * 360}deg)`,
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  // Podium component
+  const PodiumDisplay = () => {
+    if (!showWinners) return null;
+
+    const winners = gameState.players
+      .filter((player) => !player.eliminated)
+      .sort((a, b) => b.position - a.position)
+      .slice(0, 3);
+
+    return (
+      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-40 p-4">
+        <Card className="max-w-2xl w-full">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold flex items-center justify-center gap-3">
+              <Crown className="w-8 h-8 text-yellow-500" />
+              🏁 PÓDIUM FINAL 🏁
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-center items-end gap-4 mb-6">
+              {/* 2nd place */}
+              {winners[1] && (
+                <div className="text-center">
+                  <div className="bg-gray-400 text-white p-4 rounded-lg mb-2 h-24 flex items-center justify-center">
+                    <div>
+                      <Medal className="w-6 h-6 mx-auto mb-1" />
+                      <div className="text-sm font-bold">2º</div>
+                    </div>
+                  </div>
+                  <div
+                    className="w-16 h-16 rounded-full border-4 border-white mx-auto mb-2"
+                    style={{
+                      backgroundColor: GAME_DATA.carColors.find(
+                        (c) => c.name === winners[1].color
+                      )?.value,
+                    }}
+                  />
+                  <p className="font-bold text-sm">{winners[1].name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Pos: {winners[1].position}
+                  </p>
+                </div>
+              )}
+
+              {/* 1st place */}
+              {winners[0] && (
+                <div className="text-center">
+                  <div className="bg-yellow-500 text-white p-4 rounded-lg mb-2 h-32 flex items-center justify-center">
+                    <div>
+                      <Crown className="w-8 h-8 mx-auto mb-1" />
+                      <div className="text-lg font-bold">1º</div>
+                    </div>
+                  </div>
+                  <div
+                    className="w-20 h-20 rounded-full border-4 border-yellow-500 mx-auto mb-2"
+                    style={{
+                      backgroundColor: GAME_DATA.carColors.find(
+                        (c) => c.name === winners[0].color
+                      )?.value,
+                    }}
+                  />
+                  <p className="font-bold text-lg">{winners[0].name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Pos: {winners[0].position}
+                  </p>
+                  <Badge className="mt-1 bg-yellow-500">🏆 CAMPEÃO</Badge>
+                </div>
+              )}
+
+              {/* 3rd place */}
+              {winners[2] && (
+                <div className="text-center">
+                  <div className="bg-amber-600 text-white p-4 rounded-lg mb-2 h-20 flex items-center justify-center">
+                    <div>
+                      <Medal className="w-5 h-5 mx-auto mb-1" />
+                      <div className="text-sm font-bold">3º</div>
+                    </div>
+                  </div>
+                  <div
+                    className="w-14 h-14 rounded-full border-4 border-white mx-auto mb-2"
+                    style={{
+                      backgroundColor: GAME_DATA.carColors.find(
+                        (c) => c.name === winners[2].color
+                      )?.value,
+                    }}
+                  />
+                  <p className="font-bold text-sm">{winners[2].name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Pos: {winners[2].position}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="text-center space-y-4">
+              <p className="text-lg font-semibold">
+                🎉 Parabéns a todos os pilotos! 🎉
+              </p>
+              <div className="flex gap-2 justify-center">
+                <Button onClick={() => setShowWinners(false)} variant="outline">
+                  Fechar
+                </Button>
+                <Button
+                  onClick={returnToStart}
+                  className="flex items-center gap-2"
+                >
+                  <Home className="w-4 h-4" />
+                  Nova Corrida
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   if (gameState.gamePhase === "setup") {
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto py-8 px-4 max-w-4xl">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-              <Car className="w-8 h-8" />
-              Formula D
-            </h1>
+            <div className="flex items-center justify-between mb-4">
+              <div></div> {/* Spacer */}
+              <h1 className="text-4xl font-bold flex items-center gap-3">
+                <Car className="w-8 h-8" />
+                Formula D
+              </h1>
+              <Button
+                onClick={resetGame}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reset
+              </Button>
+            </div>
             <p className="text-muted-foreground">Controle Digital de Corrida</p>
           </div>
 
@@ -829,8 +1163,8 @@ const FormulaD = () => {
                       placeholder="Nome do piloto"
                       className="flex-1"
                     />
-                    <div className="flex gap-1">
-                      {GAME_DATA.carColors.slice(0, 5).map((color) => (
+                    <div className="flex gap-1 flex-wrap">
+                      {GAME_DATA.carColors.map((color) => (
                         <button
                           key={color.name}
                           className={`w-8 h-8 rounded-full border-2 transition-transform ${
@@ -1045,6 +1379,54 @@ const FormulaD = () => {
                 </div>
               )}
 
+              {/* Manual turn control */}
+              <div className="mb-4">
+                <div className="flex gap-2 flex-wrap justify-center">
+                  <Button
+                    onClick={() => {
+                      const nextIndex = getNextPlayerBasedOnPosition();
+                      setGameState((prev) => ({
+                        ...prev,
+                        currentPlayerIndex: nextIndex,
+                      }));
+                      addToLog("Próximo jogador (por posição)");
+                    }}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Próximo (Auto)
+                  </Button>
+                  {gameState.players.map(
+                    (player, index) =>
+                      !player.eliminated &&
+                      index !== gameState.currentPlayerIndex && (
+                        <Button
+                          key={player.id}
+                          onClick={() => {
+                            setGameState((prev) => ({
+                              ...prev,
+                              currentPlayerIndex: index,
+                            }));
+                            addToLog(`Turno manual para ${player.name}`);
+                          }}
+                          variant="outline"
+                          size="sm"
+                          style={{
+                            backgroundColor: GAME_DATA.carColors.find(
+                              (c) => c.name === player.color
+                            )?.value,
+                            color: ["yellow", "white"].includes(player.color)
+                              ? "#000"
+                              : "#fff",
+                          }}
+                        >
+                          {player.name}
+                        </Button>
+                      )
+                  )}
+                </div>
+              </div>
+
               {/* Current standings */}
               <div className="mt-4">
                 <h4 className="text-sm font-medium mb-2">
@@ -1155,6 +1537,28 @@ const FormulaD = () => {
             </Button>
           </div>
 
+          {/* Game control buttons */}
+          <div className="flex gap-2 mb-4 justify-center">
+            <Button
+              onClick={returnToStart}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Home className="w-4 h-4" />
+              Voltar ao Início
+            </Button>
+            <Button
+              onClick={finishRace}
+              variant="destructive"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Crown className="w-4 h-4" />
+              Terminar Corrida
+            </Button>
+          </div>
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -1164,17 +1568,20 @@ const FormulaD = () => {
             </CardHeader>
             <CardContent>
               <div className="max-h-48 overflow-y-auto space-y-1">
-                {gameState.raceLog.map((entry, index) => (
-                  <div
-                    key={index}
-                    className="text-sm p-2 border-b border-border/50"
-                  >
-                    <div>{entry.message}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {entry.timestamp}
+                {gameState.raceLog
+                  .slice()
+                  .reverse()
+                  .map((entry, index) => (
+                    <div
+                      key={index}
+                      className="text-sm p-2 border-b border-border/50"
+                    >
+                      <div>{entry.message}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {entry.timestamp}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -1267,7 +1674,12 @@ const FormulaD = () => {
     );
   }
 
-  return null;
+  return (
+    <>
+      <ConfettiAnimation />
+      <PodiumDisplay />
+    </>
+  );
 };
 
 export default FormulaD;
