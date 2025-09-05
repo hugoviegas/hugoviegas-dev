@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,10 +31,16 @@ import {
   Medal,
   RotateCcw,
   Settings,
+  SkipForward,
   Trophy,
   Zap,
 } from "lucide-react";
 import Footer from "@/components/Footer";
+import GearSelectorComp from "./formulad/GearSelector";
+import DicePanelComp from "./formulad/DicePanel";
+import PlayerStatusComp from "./formulad/PlayerStatus";
+import BottomControlsComp from "./formulad/BottomControls";
+import type { GameCtx } from "./formulad/types";
 
 // Game data
 const GAME_DATA = {
@@ -82,6 +88,14 @@ const GAME_DATA = {
     { name: "brown", value: "#A16207", label: "Marrom" },
     { name: "gray", value: "#6B7280", label: "Cinza" },
   ],
+  tracks: [
+    { id: "interlagos", label: "Interlagos" },
+    { id: "silverstone", label: "Silverstone" },
+    { id: "monza", label: "Monza" },
+    { id: "spa", label: "Spa-Francorchamps" },
+    { id: "suzuka", label: "Suzuka" },
+    { id: "monterey", label: "WeatherTech Raceway Laguna Seca" },
+  ],
 };
 
 interface PlayerPD {
@@ -102,6 +116,10 @@ interface Player {
   position: number;
   startingResult: { dice: number; description: string } | null;
   eliminated: boolean;
+  lapsCompleted?: number;
+  canIncreaseGear?: boolean; // controls per-turn gear-increase availability
+  finished?: boolean;
+  isAI?: boolean;
 }
 
 interface GameState {
@@ -111,11 +129,19 @@ interface GameState {
   selectedGear: number | null;
   diceValue: number | null;
   brakeAmount: number;
+  brakePD?: number;
+  brakePDComponents?: Partial<PlayerPD>;
+  pendingPrevGear?: number | null;
   gamePhase: "setup" | "starting" | "racing" | "finished";
   startingOrder: Player[];
   currentStarterIndex: number;
   raceLog: Array<{ message: string; timestamp: string }>;
   lap: number;
+  totalLaps?: number;
+  // global turn/round counter and tracker for who played in the current round
+  turnNumber?: number;
+  roundTracker?: number[]; // array of player IDs who already played this round
+  track?: string;
 }
 
 const FormulaD = () => {
@@ -170,6 +196,8 @@ const FormulaD = () => {
         selectedGear: null,
         diceValue: null,
         brakeAmount: 0,
+        turnNumber: 1,
+        roundTracker: [],
         gamePhase: "setup",
         startingOrder: [],
         currentStarterIndex: 0,
@@ -180,6 +208,8 @@ const FormulaD = () => {
   });
 
   const [setupData, setSetupData] = useState(() => loadSetupData());
+  const [colorScrollIndex, setColorScrollIndex] = useState(0);
+  const colorContainerRef = useRef<HTMLDivElement | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showWinners, setShowWinners] = useState(false);
 
@@ -282,12 +312,19 @@ const FormulaD = () => {
       position: 0,
       startingResult: null,
       eliminated: false,
+      lapsCompleted: 0,
+      canIncreaseGear: true,
+      finished: false,
     }));
+
+    // single-player mode: do not add a CPU opponent — play with only the configured human players
 
     setGameState((prev) => ({
       ...prev,
       mode: setupData.mode,
       players,
+      totalLaps: setupData.laps || 3,
+      track: setupData.track || GAME_DATA.tracks[0].id,
       gamePhase: "starting",
       currentStarterIndex: 0,
       startingOrder: [],
@@ -348,9 +385,13 @@ const FormulaD = () => {
 
     setGameState((prev) => ({
       ...prev,
-      players: playersWithBonuses,
       currentPlayerIndex: 0,
       gamePhase: "racing",
+      // ensure per-player gear rule resets
+      players: playersWithBonuses.map((p) => ({
+        ...p,
+        canIncreaseGear: true,
+      })) as Player[],
     }));
   };
 
@@ -414,17 +455,24 @@ const FormulaD = () => {
   };
 
   const finishRace = () => {
-    // Sort players by position (highest position wins)
-    const sortedPlayers = [...gameState.players]
-      .filter((player) => !player.eliminated)
-      .sort((a, b) => b.position - a.position);
+    // Sort players primarily by finished status, then lapsCompleted, then position.
+    const active = [...gameState.players].filter((p) => !p.eliminated);
+    active.sort((a, b) => {
+      // finished players first
+      if ((a.finished ? 1 : 0) !== (b.finished ? 1 : 0))
+        return (b.finished ? 1 : 0) - (a.finished ? 1 : 0);
+      const lapsA = a.lapsCompleted || 0;
+      const lapsB = b.lapsCompleted || 0;
+      if (lapsA !== lapsB) return lapsB - lapsA;
+      return b.position - a.position;
+    });
 
-    // Add eliminated players at the end
-    const eliminatedPlayers = gameState.players
-      .filter((player) => player.eliminated)
-      .sort((a, b) => b.position - a.position);
+    const eliminatedPlayers = [...gameState.players].filter(
+      (p) => p.eliminated
+    );
+    eliminatedPlayers.sort((a, b) => b.position - a.position);
 
-    const finalStandings = [...sortedPlayers, ...eliminatedPlayers];
+    const finalStandings = [...active, ...eliminatedPlayers];
 
     // Update game state to finished
     setGameState((prev) => ({
@@ -441,12 +489,10 @@ const FormulaD = () => {
     addToLog("🏁 CORRIDA FINALIZADA!");
     if (finalStandings.length > 0) {
       addToLog(`🥇 VENCEDOR: ${finalStandings[0].name}!`);
-      if (finalStandings.length > 1) {
+      if (finalStandings.length > 1)
         addToLog(`🥈 2º lugar: ${finalStandings[1].name}`);
-      }
-      if (finalStandings.length > 2) {
+      if (finalStandings.length > 2)
         addToLog(`🥉 3º lugar: ${finalStandings[2].name}`);
-      }
     }
 
     // Stop confetti after 5 seconds
@@ -482,15 +528,26 @@ const FormulaD = () => {
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
     const gearDiff = gear - currentPlayer.gear;
 
-    // Apply gear reduction penalty if needed
+    // Prevent increasing gear if player is not allowed yet
+    if (gear > currentPlayer.gear && !currentPlayer.canIncreaseGear) {
+      addToLog(
+        `${currentPlayer.name} não pode aumentar marcha até o próximo turno.`
+      );
+      return;
+    }
+
+    // If reducing gear by 2+ steps, defer the penalty until finishTurn
     if (gearDiff <= -2) {
-      const reductionAmount = Math.abs(gearDiff);
-      const reductionKey =
-        reductionAmount.toString() as keyof typeof GAME_DATA.gearReductionPenalty;
-      if (GAME_DATA.gearReductionPenalty[reductionKey]) {
-        const penalty = GAME_DATA.gearReductionPenalty[reductionKey];
-        applyPenalty(penalty, `redução de ${reductionAmount} marchas`);
-      }
+      // store the previous gear so we can compute and apply penalty at the end of the turn
+      setGameState((prev) => ({
+        ...prev,
+        selectedGear: gear,
+        pendingPrevGear: currentPlayer.gear,
+      }));
+      addToLog(
+        `${currentPlayer.name} selecionou redução de ${currentPlayer.gear} -> ${gear} (penalidade será aplicada ao finalizar turno)`
+      );
+      return;
     }
 
     setGameState((prev) => ({ ...prev, selectedGear: gear }));
@@ -516,7 +573,10 @@ const FormulaD = () => {
         ...prev,
         diceValue,
         players: newPlayers,
+        // reset manual brake inputs for the new roll
         brakeAmount: 0,
+        brakePD: 0,
+        brakePDComponents: {},
       };
     });
 
@@ -603,19 +663,65 @@ const FormulaD = () => {
 
   const finishTurn = () => {
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
-    const finalMovement = (gameState.diceValue || 0) - gameState.brakeAmount;
+    // Determine final movement using manual PD (brakePD) when available, otherwise fallback to brakeAmount
+    const brakeUsed =
+      typeof gameState.brakePD === "number"
+        ? gameState.brakePD
+        : gameState.brakeAmount;
+    const finalMovement = Math.max(
+      0,
+      (gameState.diceValue || 0) - (brakeUsed || 0)
+    );
 
-    // Apply braking penalty
-    if (gameState.brakeAmount > 0 && gameState.selectedGear) {
-      const gearKey =
-        gameState.selectedGear.toString() as keyof typeof GAME_DATA.brakingPenalty;
-      const penalty = GAME_DATA.brakingPenalty[gearKey];
-      const adjustedPenalty = {
-        brakes: penalty.brakes * gameState.brakeAmount,
-        tires: penalty.tires * gameState.brakeAmount,
-      };
-      applyPenalty(adjustedPenalty, "freada");
-      addToLog(`${currentPlayer.name} freou ${gameState.brakeAmount} casas`);
+    // Apply manual braking PD
+    if (brakeUsed > 0) {
+      if (gameState.mode === "basic") {
+        // basic: single PD numeric
+        applyPenalty({ pd: brakeUsed }, "freada (manual)");
+        addToLog(`${currentPlayer.name} gastou ${brakeUsed} PD (freada)`);
+      } else if (
+        gameState.brakePDComponents &&
+        Object.keys(gameState.brakePDComponents).length > 0
+      ) {
+        // Convert Partial<PlayerPD> to PenaltyData by filtering undefined
+        const penaltyFromComponents: { [k: string]: number } = {};
+        Object.entries(gameState.brakePDComponents).forEach(([k, v]) => {
+          if (v && v > 0) penaltyFromComponents[k] = v;
+        });
+        if (Object.keys(penaltyFromComponents).length > 0) {
+          applyPenalty(penaltyFromComponents, "freada (manual)");
+          const compText = Object.entries(penaltyFromComponents)
+            .map(([k, v]) => `${v} ${k}`)
+            .join(", ");
+          addToLog(
+            `${currentPlayer.name} gastou PD por componente: ${compText}`
+          );
+        }
+      } else if (typeof gameState.brakePD === "number") {
+        // advanced mode but player used the numeric input - treat as generic PD reduction
+        applyPenalty({ pd: gameState.brakePD }, "freada (manual)");
+        addToLog(
+          `${currentPlayer.name} gastou ${gameState.brakePD} PD (freada)`
+        );
+      }
+    }
+
+    // Apply deferred gear reduction penalty if present
+    if (gameState.pendingPrevGear != null && gameState.selectedGear != null) {
+      const prevGear = gameState.pendingPrevGear;
+      const newGear = gameState.selectedGear;
+      const reductionAmount = prevGear - newGear;
+      if (reductionAmount >= 2) {
+        const key =
+          reductionAmount.toString() as keyof typeof GAME_DATA.gearReductionPenalty;
+        const penalty = GAME_DATA.gearReductionPenalty[key];
+        if (penalty) {
+          applyPenalty(penalty, `redução de ${reductionAmount} marchas`);
+          addToLog(
+            `${currentPlayer.name} sofreu penalidade por redução de ${reductionAmount} marchas`
+          );
+        }
+      }
     }
 
     // Move player
@@ -626,28 +732,47 @@ const FormulaD = () => {
         position: newPlayers[prev.currentPlayerIndex].position + finalMovement,
       };
 
-      // Check for victory
-      if (newPlayers[prev.currentPlayerIndex].position >= 100) {
-        addToLog(
-          `🏆 ${newPlayers[prev.currentPlayerIndex].name} venceu a corrida!`
-        );
-        return {
-          ...prev,
-          players: newPlayers,
-          gamePhase: "finished",
-        };
+      // Victory by position removed: race end is controlled by laps (see markLap/finishRace)
+
+      const nextIndex = getNextPlayerBasedOnPosition(newPlayers);
+
+      // after a player's turn ends, they cannot increase gear until their next turn
+      newPlayers[prev.currentPlayerIndex].canIncreaseGear = false;
+      // allow the player who will play next to increase gear when their turn starts
+      if (newPlayers[nextIndex]) newPlayers[nextIndex].canIncreaseGear = true;
+
+      // Update round tracker and turn counter safely (avoid undefined variables)
+      const prevTracker = prev.roundTracker || [];
+      const playerId = newPlayers[prev.currentPlayerIndex].id;
+      const updatedTracker = [...prevTracker, playerId];
+      const uniqueTracker = Array.from(new Set(updatedTracker));
+
+      const activePlayersCount = newPlayers.filter((p) => !p.eliminated).length;
+
+      let clearedRoundTracker: number[] = uniqueTracker;
+      let newTurnNumber = prev.turnNumber || 1;
+
+      // If all active players have played this round, clear tracker and increment turn counter
+      if (uniqueTracker.length >= Math.max(1, activePlayersCount)) {
+        clearedRoundTracker = [];
+        newTurnNumber = (prev.turnNumber || 1) + 1;
       }
 
       return {
         ...prev,
         players: newPlayers,
-        currentPlayerIndex: getNextPlayerBasedOnPosition(newPlayers),
+        currentPlayerIndex: nextIndex,
         selectedGear: null,
         diceValue: null,
         brakeAmount: 0,
+        // clear manual brake inputs and pending gear after finishing
+        brakePD: 0,
+        brakePDComponents: {},
+        pendingPrevGear: null,
+        roundTracker: clearedRoundTracker,
+        turnNumber: newTurnNumber,
       };
     });
-
     addToLog(
       `${currentPlayer.name} avançou ${finalMovement} casas (posição: ${
         currentPlayer.position + finalMovement
@@ -656,24 +781,26 @@ const FormulaD = () => {
   };
 
   const calculateBrakeCost = () => {
-    if (!gameState.selectedGear || gameState.brakeAmount === 0)
-      return "Custo: 0 PD";
-
-    const gearKey =
-      gameState.selectedGear.toString() as keyof typeof GAME_DATA.brakingPenalty;
-    const penalty = GAME_DATA.brakingPenalty[gearKey];
+    // Show cost based on manual PD input; if none provided, cost is 0
+    const brakeUsed =
+      typeof gameState.brakePD === "number"
+        ? gameState.brakePD
+        : gameState.brakeAmount;
+    if (!gameState.selectedGear || !brakeUsed) return "Custo: 0 PD";
 
     if (gameState.mode === "basic") {
-      const totalCost =
-        (penalty.brakes + penalty.tires) * gameState.brakeAmount;
-      return `Custo: ${totalCost} PD`;
+      return `Custo: ${brakeUsed} PD`;
     } else {
-      const costs = [];
-      if (penalty.brakes > 0)
-        costs.push(`${penalty.brakes * gameState.brakeAmount} Freios`);
-      if (penalty.tires > 0)
-        costs.push(`${penalty.tires * gameState.brakeAmount} Pneus`);
-      return `Custo: ${costs.join(", ") || "0 PD"}`;
+      if (
+        gameState.brakePDComponents &&
+        Object.keys(gameState.brakePDComponents).length > 0
+      ) {
+        const costs = Object.entries(gameState.brakePDComponents)
+          .map(([k, v]) => `${v} ${k}`)
+          .join(", ");
+        return `Custo: ${costs}`;
+      }
+      return `Custo: ${brakeUsed} PD`;
     }
   };
 
@@ -700,43 +827,65 @@ const FormulaD = () => {
   };
 
   const undoAction = () => {
-    // Reset current turn state
-    setGameState((prev) => ({
-      ...prev,
-      selectedGear: null,
-      diceValue: null,
-      brakeAmount: 0,
-    }));
-    addToLog("Ação desfeita");
-  };
+    setGameState((prev) => {
+      const newPlayers = [...prev.players];
+      const currentPlayer = { ...newPlayers[prev.currentPlayerIndex] };
+      const brakeUsed =
+        typeof prev.brakePD === "number" ? prev.brakePD : prev.brakeAmount;
+      const movement = (prev.diceValue || 0) - (brakeUsed || 0);
+      const finalMovement = Math.max(0, movement);
 
-  const newRace = () => {
-    setGameState({
-      mode: "basic",
-      players: [],
-      currentPlayerIndex: 0,
-      selectedGear: null,
-      diceValue: null,
-      brakeAmount: 0,
-      gamePhase: "setup",
-      startingOrder: [],
-      currentStarterIndex: 0,
-      raceLog: [],
-      lap: 1,
-    });
-    setSetupData({
-      mode: "basic",
-      playerCount: 4,
-      players: Array(4)
-        .fill(null)
-        .map((_, i) => ({
-          name: `Piloto ${i + 1}`,
-          color: GAME_DATA.carColors[i].name,
-        })),
+      currentPlayer.position += finalMovement;
+
+      // after a player's turn ends, they cannot increase gear until their next turn
+      currentPlayer.canIncreaseGear = false;
+
+      newPlayers[prev.currentPlayerIndex] = currentPlayer;
+
+      const nextIndex = getNextPlayerBasedOnPosition(newPlayers);
+
+      // when we set the next player, if it's a different player we should allow that player to increase gear
+      if (newPlayers[nextIndex]) {
+        newPlayers[nextIndex].canIncreaseGear = true;
+      }
+
+      return {
+        ...prev,
+        players: newPlayers,
+        currentPlayerIndex: nextIndex,
+        selectedGear: null,
+        diceValue: null,
+        brakeAmount: 0,
+      };
     });
   };
 
-  const renderGearSelector = () => {
+  const markLap = (playerIndex: number) => {
+    setGameState((prev) => {
+      const newPlayers = [...prev.players];
+      const player = { ...newPlayers[playerIndex] } as Player;
+      player.lapsCompleted = (player.lapsCompleted || 0) + 1;
+      // mark finished when reaches totalLaps
+      if ((prev.totalLaps || 3) <= (player.lapsCompleted || 0)) {
+        player.finished = true;
+        addToLog(`${player.name} completou a corrida!`);
+      } else {
+        addToLog(`${player.name} completou volta ${player.lapsCompleted}`);
+      }
+
+      newPlayers[playerIndex] = player;
+
+      // if all players finished, finalize
+      const allFinished = newPlayers.every((p) => p.finished || p.eliminated);
+      if (allFinished) {
+        setTimeout(() => finishRace(), 200);
+      }
+
+      return { ...prev, players: newPlayers };
+    });
+  };
+
+  const GearSelector = () => {
     if (gameState.gamePhase !== "racing") return null;
 
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
@@ -792,7 +941,7 @@ const FormulaD = () => {
     );
   };
 
-  const renderDiceSection = () => {
+  const DicePanel = () => {
     if (gameState.gamePhase !== "racing") return null;
 
     return (
@@ -854,7 +1003,7 @@ const FormulaD = () => {
     );
   };
 
-  const renderPlayerStatus = () => {
+  const PlayerStatus = () => {
     if (gameState.gamePhase !== "racing") return null;
 
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
@@ -900,41 +1049,91 @@ const FormulaD = () => {
               </Badge>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-2">
-              {Object.entries(currentPlayer.pd as PlayerPD).map(
-                ([component, value]) => (
-                  <div
-                    key={component}
-                    className="p-2 bg-muted rounded text-center"
-                  >
-                    <div className="text-xs text-muted-foreground capitalize">
-                      {component}
-                    </div>
+            <>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.entries(currentPlayer.pd as PlayerPD).map(
+                  ([component, value]) => (
                     <div
-                      className={`font-bold ${
-                        value === 0
-                          ? "text-destructive"
-                          : value === 1
-                          ? "text-yellow-500"
-                          : "text-green-500"
-                      }`}
+                      key={component}
+                      className="p-2 bg-muted rounded text-center"
                     >
-                      {value}
+                      <div className="text-xs text-muted-foreground capitalize">
+                        {component}
+                      </div>
+                      <div
+                        className={`font-bold ${
+                          value === 0
+                            ? "text-destructive"
+                            : value === 1
+                            ? "text-yellow-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {value}
+                      </div>
                     </div>
-                  </div>
-                )
-              )}
-            </div>
+                  )
+                )}
+              </div>
+              <div className="mt-2 text-center">
+                <Button
+                  size="sm"
+                  onClick={() => markLap(gameState.currentPlayerIndex)}
+                >
+                  Dar uma volta
+                </Button>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>
     );
   };
 
+  // Bottom controls bar (fixed)
+  const BottomControls = () => {
+    const currentPlayer = gameState.players[gameState.currentPlayerIndex];
+
+    return (
+      <div className="fixed bottom-4 left-0 right-0 flex items-center justify-center pointer-events-auto z-50">
+        <div className="bg-background/90 backdrop-blur-md border rounded-full px-4 py-2 flex items-center gap-4 shadow-lg">
+          <div className="text-sm text-muted-foreground">{`Turno ${
+            gameState.lap
+          } • ${currentPlayer?.name || ""}`}</div>
+          <Button
+            size="lg"
+            onClick={rollDice}
+            disabled={!gameState.selectedGear || gameState.diceValue !== null}
+            className="mx-2"
+          >
+            <Dices className="w-4 h-4 mr-2" />
+            Rolar
+          </Button>
+          <Button
+            size="lg"
+            onClick={finishTurn}
+            disabled={gameState.diceValue === null}
+            className="mx-2"
+          >
+            <Flag className="w-4 h-4 mr-2" />
+            Finalizar Turno
+          </Button>
+          <div className="ml-2 text-sm text-center">
+            <div className="font-semibold">
+              {currentPlayer?.position ?? 0} casas
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {currentPlayer ? `${currentPlayer.gear}ª marcha` : ""}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // Confetti component
   const ConfettiAnimation = () => {
     if (!showConfetti) return null;
-
     return (
       <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
         {[...Array(50)].map((_, i) => (
@@ -962,13 +1161,19 @@ const FormulaD = () => {
     );
   };
 
-  // Podium component
+  // Podium component (separate)
   const PodiumDisplay = () => {
     if (!showWinners) return null;
-
     const winners = gameState.players
       .filter((player) => !player.eliminated)
-      .sort((a, b) => b.position - a.position)
+      .sort((a, b) => {
+        if ((a.finished ? 1 : 0) !== (b.finished ? 1 : 0))
+          return (b.finished ? 1 : 0) - (a.finished ? 1 : 0);
+        const lapsA = a.lapsCompleted || 0;
+        const lapsB = b.lapsCompleted || 0;
+        if (lapsA !== lapsB) return lapsB - lapsA;
+        return b.position - a.position;
+      })
       .slice(0, 3);
 
     return (
@@ -1079,6 +1284,30 @@ const FormulaD = () => {
     );
   };
 
+  // Minimal AI: choose a valid gear randomly, roll, then finish turn
+  // const runAiTurn = () => {
+  //   const current = gameState.players[gameState.currentPlayerIndex];
+  //   if (!current || !current.isAI) return;
+
+  //   // pick a random selectable gear (1-6 that obeys increase/decrease rules)
+  //   const currentGear = current.gear;
+  //   const selectable = [1, 2, 3, 4, 5, 6].filter(
+  //     (g) =>
+  //       !(g > currentGear && !current.canIncreaseGear) &&
+  //       !(g - currentGear > 1) &&
+  //       !(g - currentGear < -4)
+  //   );
+  //   const choice = selectable[Math.floor(Math.random() * selectable.length)];
+  //   setGameState((prev) => ({ ...prev, selectedGear: choice }));
+
+  //   // small delay to emulate thinking
+  //   setTimeout(() => {
+  //     rollDice();
+  //     // after roll, finish turn automatically
+  //     setTimeout(() => finishTurn(), 300);
+  //   }, 300);
+  // };
+
   if (gameState.gamePhase === "setup") {
     return (
       <div className="min-h-screen bg-background">
@@ -1138,9 +1367,54 @@ const FormulaD = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {[2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                       <SelectItem key={num} value={num.toString()}>
                         {num} Jogadores
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Seleção de Pista</Label>
+                <Select
+                  value={setupData.track || GAME_DATA.tracks[0].id}
+                  onValueChange={(value) =>
+                    setSetupData((prev) => ({ ...prev, track: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {GAME_DATA.tracks.map((t) => (
+                      <SelectItem key={t.id} value={t.id}>
+                        {t.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Quantidade de Voltas</Label>
+                <Select
+                  value={(setupData.laps || 3).toString()}
+                  onValueChange={(value) =>
+                    setSetupData((prev) => ({
+                      ...prev,
+                      laps: parseInt(value),
+                    }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 5, 10].map((n) => (
+                      <SelectItem key={n} value={n.toString()}>
+                        {n} voltas
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -1163,20 +1437,67 @@ const FormulaD = () => {
                       placeholder="Nome do piloto"
                       className="flex-1"
                     />
-                    <div className="flex gap-1 flex-wrap">
-                      {GAME_DATA.carColors.map((color) => (
+                    <div className="flex flex-col items-start gap-2 w-48">
+                      <div className="text-xs text-muted-foreground">Cor</div>
+                      <div className="relative w-full">
+                        {/* arrows only visible on small screens */}
                         <button
-                          key={color.name}
-                          className={`w-8 h-8 rounded-full border-2 transition-transform ${
-                            player.color === color.name
-                              ? "border-foreground scale-110"
-                              : "border-muted-foreground/30"
-                          }`}
-                          style={{ backgroundColor: color.value }}
-                          onClick={() => updatePlayerColor(index, color.name)}
-                          title={color.label}
-                        />
-                      ))}
+                          className="sm:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/60 p-1 rounded"
+                          onClick={() => {
+                            const el = document.querySelector(
+                              "#color-container-" + index
+                            ) as HTMLElement | null;
+                            if (el)
+                              el.scrollBy({ left: -120, behavior: "smooth" });
+                          }}
+                          aria-hidden={false}
+                        >
+                          ◀
+                        </button>
+
+                        <div
+                          id={`color-container-${index}`}
+                          className="flex gap-2 overflow-x-auto scrollbar-none px-6 sm:px-0"
+                          style={{ scrollSnapType: "x mandatory" }}
+                        >
+                          {GAME_DATA.carColors.map((color, ci) => (
+                            <div
+                              key={color.name}
+                              className="flex flex-col items-center flex-shrink-0 w-12"
+                            >
+                              <div className="text-[11px] mb-1 text-center">
+                                {color.label}
+                              </div>
+                              <button
+                                className={`w-8 h-8 rounded-full border-2 transition-transform ${
+                                  player.color === color.name
+                                    ? "border-foreground scale-110"
+                                    : "border-muted-foreground/30"
+                                }`}
+                                style={{ backgroundColor: color.value }}
+                                onClick={() =>
+                                  updatePlayerColor(index, color.name)
+                                }
+                                title={color.label}
+                              />
+                            </div>
+                          ))}
+                        </div>
+
+                        <button
+                          className="sm:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/60 p-1 rounded"
+                          onClick={() => {
+                            const el = document.querySelector(
+                              "#color-container-" + index
+                            ) as HTMLElement | null;
+                            if (el)
+                              el.scrollBy({ left: 120, behavior: "smooth" });
+                          }}
+                          aria-hidden={false}
+                        >
+                          ▶
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1320,6 +1641,7 @@ const FormulaD = () => {
               Corrida Formula D
             </h1>
             <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+              <span>Round: {gameState.turnNumber || 1}</span>
               <span>Volta: {gameState.lap}</span>
               <span>☀️ Tempo seco</span>
             </div>
@@ -1473,9 +1795,15 @@ const FormulaD = () => {
             </CardContent>
           </Card>
 
-          {!currentPlayer.eliminated && renderGearSelector()}
-          {!currentPlayer.eliminated && renderDiceSection()}
-          {renderPlayerStatus()}
+          {!currentPlayer.eliminated && (
+            <GearSelectorComp ctx={{ gameState, selectGear, GAME_DATA }} />
+          )}
+          {!currentPlayer.eliminated && (
+            <DicePanelComp
+              ctx={{ gameState, rollDice, calculateBrakeCost, setGameState }}
+            />
+          )}
+          <PlayerStatusComp ctx={{ gameState, markLap, GAME_DATA }} />
 
           <div className="flex gap-4 mb-6">
             <Button variant="outline" className="flex-1" onClick={undoAction}>
@@ -1587,17 +1915,26 @@ const FormulaD = () => {
           </Card>
         </div>
         <Footer />
+        <BottomControlsComp
+          ctx={{ gameState, rollDice, finishTurn, markLap, selectGear }}
+        />
       </div>
     );
   }
 
   if (gameState.gamePhase === "finished") {
-    const winner = gameState.players.find((p) => p.position >= 100);
+    // Order players by: not eliminated, finished status, lapsCompleted desc, position desc
     const standings = [...gameState.players].sort((a, b) => {
       if (a.eliminated && !b.eliminated) return 1;
       if (!a.eliminated && b.eliminated) return -1;
+      if ((a.finished ? 1 : 0) !== (b.finished ? 1 : 0))
+        return (b.finished ? 1 : 0) - (a.finished ? 1 : 0);
+      const lapsA = a.lapsCompleted || 0;
+      const lapsB = b.lapsCompleted || 0;
+      if (lapsA !== lapsB) return lapsB - lapsA;
       return b.position - a.position;
     });
+    const winner = standings.find((p) => !p.eliminated) || standings[0] || null;
 
     return (
       <div className="min-h-screen bg-background">
@@ -1663,7 +2000,7 @@ const FormulaD = () => {
           </Card>
 
           <div className="flex gap-4 justify-center">
-            <Button variant="outline" onClick={newRace}>
+            <Button variant="outline" onClick={returnToStart}>
               <Home className="w-4 h-4 mr-2" />
               Nova Corrida
             </Button>

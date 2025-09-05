@@ -22,6 +22,8 @@ const App = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Render FormulaD normally as a React element so hooks work correctly.
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
