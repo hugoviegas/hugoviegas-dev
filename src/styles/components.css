@@ -1,0 +1,254 @@
+/* Component-level styles: rounded buttons and navbar active glass transitions */
+@import "./design-tokens.css";
+
+:root {
+  /* Default button radius changed to md for a softer, more relaxed look */
+  --button-border-radius-default: var(--radius-md);
+}
+
+/* Buttons - rounded by default */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-button-padding);
+  border-radius: var(--button-border-radius-default);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.995);
+}
+
+.btn.btn-square {
+  border-radius: var(--radius-sm); /* keep a square-ish option */
+}
+
+/* Utility hook: apply to existing button components */
+.rounded-btn {
+  border-radius: var(--button-border-radius-default) !important;
+}
+
+/* Navbar: active item glass transition */
+.nav-container {
+  --nav-gap: var(--space-6);
+}
+
+.nav-item {
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--nav-border-radius);
+  color: hsl(var(--color-text-muted));
+  transition: background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.nav-item:hover {
+  color: hsl(var(--color-text-primary));
+}
+
+.nav-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.nav-item.active {
+  color: hsl(var(--color-text-primary));
+}
+
+.nav-item.active::after {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--color-glass-bg)),
+    rgba(255, 255, 255, 0.03)
+  );
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-item.glass-focus {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* small helpers for desktop container */
+.nav-pill {
+  background: hsl(var(--color-bg-primary));
+  border-radius: var(--nav-border-radius);
+  padding: 0.25rem 0.5rem;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Theme toggle (prefixed with tp- to avoid collisions) */
+.tp-toggle {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tp-slider {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-base, 240ms)
+    var(--ease-out, cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.tp-sun {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--duration-base), transform var(--duration-base);
+}
+
+.tp-sun-circle {
+  width: 14px;
+  height: 14px;
+  background: #ffd700;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.45);
+}
+
+.tp-sun-rays {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  display: block;
+  pointer-events: none;
+  /* center the rays container over the sun circle */
+  left: -40%;
+  top: -40%;
+  /* transform: translate(-50%, -50%); */
+  animation: tp-rotate-rays 20s linear infinite;
+}
+
+.tp-ray {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 6px;
+  background: #ffd700;
+  border-radius: 1px;
+  transform-origin: center center;
+  /* center the element, then rotate and push outward */
+  transform: translate(-50%, -50%) rotate(0deg) translateY(-12px);
+}
+.tp-ray:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(0deg) translateY(-12px);
+}
+.tp-ray:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(45deg) translateY(-12px);
+}
+.tp-ray:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(90deg) translateY(-12px);
+}
+.tp-ray:nth-child(4) {
+  transform: translate(-50%, -50%) rotate(135deg) translateY(-12px);
+}
+.tp-ray:nth-child(5) {
+  transform: translate(-50%, -50%) rotate(180deg) translateY(-12px);
+}
+.tp-ray:nth-child(6) {
+  transform: translate(-50%, -50%) rotate(225deg) translateY(-12px);
+}
+.tp-ray:nth-child(7) {
+  transform: translate(-50%, -50%) rotate(270deg) translateY(-12px);
+}
+.tp-ray:nth-child(8) {
+  transform: translate(-50%, -50%) rotate(315deg) translateY(-12px);
+}
+
+.tp-moon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #c7c7c7;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(199, 199, 199, 0.3);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity var(--duration-base), transform var(--duration-base);
+}
+
+.tp-moon-crater {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 50%;
+}
+.tp-crater1 {
+  width: 3px;
+  height: 3px;
+  top: 4px;
+  left: 5px;
+}
+.tp-crater2 {
+  width: 2px;
+  height: 2px;
+  top: 8px;
+  right: 3px;
+}
+.tp-crater3 {
+  width: 2px;
+  height: 2px;
+  bottom: 3px;
+  left: 4px;
+}
+
+/* Light/Dark state transitions (use additional class applied from TSX) */
+.tp-light .tp-slider {
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+.tp-dark .tp-slider {
+  transform: translateX(0);
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+}
+
+.tp-light .tp-sun {
+  opacity: 1;
+  transform: scale(1);
+}
+.tp-light .tp-moon {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.tp-dark .tp-sun {
+  opacity: 0;
+  transform: scale(0) rotate(180deg);
+}
+.tp-dark .tp-moon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes tp-rotate-rays {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

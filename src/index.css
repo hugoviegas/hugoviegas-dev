@@ -1,233 +1,26 @@
+/* Hugo Viegas Portfolio - Main Stylesheet
+ * Updated to use the new design system foundation
+ */
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
+/* Import the complete design system */
+@import "./styles/index.css";
+
+/* Tailwind CSS framework */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Hugo Viegas Portfolio Design System - Dark Theme with Neon Accents
-All colors MUST be HSL.
-*/
-
-@layer base {
-  :root {
-    /* Dark Theme Base Colors */
-    /* Primary dark background token (HSL) used across the design system */
-    --background: 220 13% 6%;
-
-    /* Top row of bricks - fixed position at top of screen */
-    .top-bricks-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: auto;
-      z-index: 1; /* behind main content but above ambient dots */
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .top-bricks-row {
-      display: flex;
-      flex-wrap: nowrap;
-      width: 200%; /* double width for seamless repeat */
-      animation: infinite-scroll 20s linear infinite;
-    }
-
-    @keyframes infinite-scroll {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-50%); /* scroll back to start */
-      }
-    }
-
-    .top-brick-wrap {
-      flex-shrink: 0;
-      transform: translateY(-100%); /* start above screen */
-      animation-fill-mode: forwards;
-      animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-      animation-iteration-count: 1;
-    }
-
-    .animate-top-fall {
-      animation-name: top-fall;
-      animation-duration: 1.2s;
-    }
-
-    @keyframes top-fall {
-      0% {
-        transform: translateY(-100%) scale(0.8);
-        opacity: 0;
-      }
-      60% {
-        transform: translateY(8%) scale(1.05);
-        opacity: 1;
-      }
-      80% {
-        transform: translateY(-2%) scale(0.98);
-      }
-      100% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-    }
-
-    .top-brick {
-      display: block;
-      opacity: 0.3; /* subtle presence */
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-      transition: opacity 0.3s ease;
-    }
-
-    /* Light theme adjustments for top bricks */
-    .light .top-brick {
-      opacity: 0.4;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
-    }
-
-    /* Mobile adjustments for top row */
-    @media (max-width: 640px) {
-      .top-brick {
-        opacity: 0.4;
-      }
-
-      .light .top-brick {
-        opacity: 0.5;
-      }
-    } /* Rich dark blue-gray */
-    --foreground: 210 40% 98%; /* Almost white */
-
-    --card: 220 27% 10%; /* Slightly lighter than bg */
-    --card-foreground: 210 40% 98%;
-
-    --popover: 220 27% 12%;
-    --popover-foreground: 210 40% 98%;
-
-    /* Neon Accent Colors */
-    --primary: 174 100% 42%; /* Neon Cyan #00D4AA */
-    --primary-foreground: 220 27% 8%;
-
-    --secondary: 262 83% 67%; /* Neon Purple #8B5CF6 */
-    --secondary-foreground: 210 40% 98%;
-
-    --accent: 120 100% 60%; /* Neon Green #39FF14 */
-    --accent-foreground: 220 27% 8%;
-
-    --muted: 220 27% 15%;
-    --muted-foreground: 215 16% 65%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 220 27% 20%;
-    --input: 220 27% 15%;
-    --ring: 174 100% 42%;
-
-    --radius: 0.75rem;
-
-    /* Custom Design Tokens */
-    --glass-bg: 220 27% 12% / 0.8; /* Glassmorphism background */
-    --glass-border: 210 40% 98% / 0.1; /* Subtle glass border */
-    --neon-glow: 174 100% 42% / 0.5; /* Neon glow effect */
-    --gradient-primary: linear-gradient(
-      135deg,
-      hsl(174 100% 42%),
-      hsl(262 83% 67%)
-    );
-    --gradient-accent: linear-gradient(
-      135deg,
-      hsl(120 100% 60%),
-      hsl(174 100% 42%)
-    );
-    --shadow-glow: 0 0 40px hsl(var(--neon-glow));
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
-
-    /* Animation Variables */
-    --animation-speed: 0.3s;
-    --transition-smooth: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .light {
-    /* Light Theme Base Colors */
-    --background: 0 0% 100%; /* Pure white */
-    --foreground: 240 10% 3.9%; /* Dark gray */
-
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 240 10% 3.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-
-    /* Light Theme Accent Colors */
-    --primary: 174 100% 32%; /* Slightly darker cyan */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 262 83% 57%; /* Slightly darker purple */
-    --secondary-foreground: 0 0% 100%;
-
-    --accent: 120 100% 40%; /* Slightly darker green */
-    --accent-foreground: 0 0% 100%;
-
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 174 100% 32%;
-
-    --radius: 0.75rem;
-
-    /* Light Theme Custom Tokens */
-    --glass-bg: 0 0% 100% / 0.8;
-    --glass-border: 240 5.9% 90% / 0.5;
-    --neon-glow: 174 100% 32% / 0.3;
-    --gradient-primary: linear-gradient(
-      135deg,
-      hsl(174 100% 32%),
-      hsl(262 83% 57%)
-    );
-    --gradient-accent: linear-gradient(
-      135deg,
-      hsl(120 100% 40%),
-      hsl(174 100% 32%)
-    );
-    --shadow-glow: 0 0 20px hsl(var(--neon-glow));
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
-  }
-}
-
 @layer base {
   * {
-    /* replicate Tailwind border-border (uses --border token) */
     box-sizing: border-box;
-    /* keep borders off by default; components will add borders where needed */
   }
 
   body {
-    background: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-      "Helvetica Neue", Arial;
+    background: hsl(var(--color-bg-primary));
+    color: hsl(var(--color-text-primary));
+    font-family: var(--font-family-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -236,123 +29,116 @@ All colors MUST be HSL.
 @layer components {
   /* Glassmorphism Components */
   .glass {
-    background: hsl(var(--card) / 0.8);
+    background: var(--color-glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-glass-border);
     box-shadow: var(--shadow-glass);
   }
 
   .glass-strong {
-    background: hsl(var(--card) / 0.9);
+    background: hsl(var(--color-glass-bg) / 0.9);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid hsl(var(--color-glass-border) / 0.8);
     box-shadow: var(--shadow-glass);
   }
 
   /* Reusable glass pill used by TopControls and Navbar to ensure consistent blur/opacity */
   .pill-glass {
-    background: hsl(var(--card) / 0.6);
+    background: var(--color-glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-glass-border);
+    box-shadow: var(--shadow-glass);
   }
 
   /* Centered rounded glass used in navbar desktop */
   .center-glass {
-    background: hsl(var(--card) / 0.6);
+    background: var(--color-glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-radius: 1rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-glass-border);
+    box-shadow: var(--shadow-glass);
   }
 
   /* Neon Glow Effects */
   .neon-glow {
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--shadow-neon-primary);
   }
 
   .neon-text {
-    text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)),
-      0 0 30px hsl(var(--primary));
+    text-shadow: 0 0 10px hsl(var(--color-brand-primary)),
+      0 0 20px hsl(var(--color-brand-primary)),
+      0 0 30px hsl(var(--color-brand-primary));
   }
 
   /* Button Variants */
   .btn-hero {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--primary)),
-      hsl(var(--secondary))
-    );
-    color: hsl(var(--card-foreground));
-    font-weight: 600;
-    padding: 1rem 2rem;
-    border-radius: 0.75rem;
-    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 300ms ease;
+    background: var(--color-gradient-primary);
+    color: hsl(var(--color-text-inverse));
+    font-weight: var(--font-weight-semibold);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-transform), var(--transition-base);
   }
 
   .btn-hero:hover {
     transform: scale(1.05);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 6px 18px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-lg);
   }
 
   .btn-ghost {
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    color: hsl(var(--primary));
+    border: 1px solid hsl(var(--color-border-primary));
+    color: hsl(var(--color-brand-primary));
     background: transparent;
-    transition: background-color 300ms ease, border-color 300ms ease;
+    transition: var(--transition-colors);
   }
 
   .btn-ghost:hover {
-    background: hsl(var(--primary) / 0.1);
-    border-color: hsl(var(--primary));
+    background: hsl(var(--color-brand-primary) / 0.1);
+    border-color: hsl(var(--color-brand-primary));
   }
 
   /* Card Variants */
   .card-project {
-    /* reuse glass styles and subtle hover scale */
-    background: hsl(var(--card) / 0.8);
+    background: var(--color-glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-glass-border);
     box-shadow: var(--shadow-glass);
-    transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 500ms ease;
+    transition: var(--transition-transform), var(--transition-base);
     cursor: pointer;
   }
 
   .card-project:hover {
     transform: scale(1.05);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-xl);
   }
 
   .card-skill {
-    background: hsl(var(--card) / 0.8);
+    background: var(--color-glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    padding: 1.5rem;
+    padding: var(--space-6);
     text-align: center;
-    border-radius: 0.75rem;
-    transition: background-color 300ms ease, border-color 300ms ease,
-      transform 300ms ease;
+    border-radius: var(--radius-lg);
+    transition: var(--transition-colors), var(--transition-transform);
   }
 
   .card-skill:hover {
-    background: hsl(var(--primary) / 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: hsl(var(--color-brand-primary) / 0.05);
+    border: 1px solid hsl(var(--color-glass-border));
   }
 
   /* Typography */
   .heading-hero {
-    font-weight: 700;
-    font-size: 3rem; /* base */
-    line-height: 1.02;
-    background: var(--gradient-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-5xl);
+    line-height: var(--line-height-tight);
+    background: var(--color-gradient-primary);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -360,36 +146,36 @@ All colors MUST be HSL.
 
   @media (min-width: 768px) {
     .heading-hero {
-      font-size: 4.5rem;
+      font-size: var(--font-size-6xl);
     }
   }
 
   @media (min-width: 1024px) {
     .heading-hero {
-      font-size: 5rem;
+      font-size: var(--font-size-7xl);
     }
   }
 
   .heading-section {
-    font-weight: 700;
-    font-size: 1.75rem;
-    color: hsl(var(--foreground));
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-3xl);
+    color: hsl(var(--color-text-primary));
   }
 
   @media (min-width: 768px) {
     .heading-section {
-      font-size: 2.25rem;
+      font-size: var(--font-size-4xl);
     }
   }
 
   @media (min-width: 1024px) {
     .heading-section {
-      font-size: 3rem;
+      font-size: var(--font-size-5xl);
     }
   }
 
   .text-gradient {
-    background: var(--gradient-primary);
+    background: var(--color-gradient-primary);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -397,11 +183,11 @@ All colors MUST be HSL.
 
   /* Animations */
   .fade-in {
-    animation: fade-in 600ms ease both;
+    animation: fade-in var(--duration-slow) var(--ease-out) both;
   }
 
   .slide-up {
-    animation: slide-up 600ms ease both;
+    animation: slide-up var(--duration-slow) var(--ease-out) both;
   }
 }
 
@@ -410,9 +196,9 @@ All colors MUST be HSL.
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 5; /* sit behind content z-10 */
-  mix-blend-mode: screen; /* restore original for dark theme */
-  overflow: hidden; /* IMPORTANT: prevent dots from causing scroll */
+  z-index: var(--z-index-base);
+  mix-blend-mode: screen;
+  overflow: hidden;
 }
 
 /* Light theme container adjustments */
@@ -422,19 +208,17 @@ All colors MUST be HSL.
 
 .ambient-dot {
   position: absolute;
-  border-radius: 9999px;
-  /* keep blur but use transform-based scaling so element size doesn't affect layout */
+  border-radius: var(--radius-full);
   filter: blur(18px);
   transform: translate(-50%, -50%) scale(1);
   will-change: opacity, transform;
-  opacity: 0.14; /* restore original dark theme opacity */
+  opacity: 0.14;
   animation-name: ambient-fade;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: var(--ease-in-out);
   animation-iteration-count: infinite;
   pointer-events: none;
-  max-width: 60vw; /* defensive cap */
+  max-width: 60vw;
   max-height: 60vw;
-  /* No shadow in dark theme (original behavior) */
 }
 
 /* Light theme adjustments */
@@ -521,16 +305,13 @@ All colors MUST be HSL.
   position: absolute;
   transform-origin: center center;
   pointer-events: none;
-  opacity: 0.12; /* restore original dark theme opacity */
-  filter: drop-shadow(
-    0 6px 16px rgba(0, 0, 0, 0.15)
-  ); /* restore original filter */
+  opacity: 0.12;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.15));
   will-change: transform, opacity;
-  max-width: 20vw; /* keep increased cap size */
+  max-width: 20vw;
   max-height: 20vw;
-  transition: transform 800ms ease, opacity 800ms ease;
+  transition: var(--transition-transform), var(--transition-opacity);
   transform: translate(-50%, -50%) rotate(var(--rot));
-  /* NO border in dark theme to avoid PNG artifacts */
 }
 
 /* Wrapper that controls the initial fall + soft bounce */
@@ -568,7 +349,7 @@ All colors MUST be HSL.
 .idle-sway {
   animation-name: idle-sway;
   animation-duration: 6s;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: var(--ease-in-out);
   animation-iteration-count: infinite;
   transform-origin: 50% 40%;
 }
@@ -614,18 +395,18 @@ All colors MUST be HSL.
   left: 0;
   right: 0;
   height: auto;
-  z-index: 1; /* behind main content but above ambient dots */
+  z-index: var(--z-index-base);
   pointer-events: none;
-  overflow: visible; /* allow full brick display */
+  overflow: visible;
 }
 
 .top-bricks-row {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  width: 100%; /* single width, no infinite scroll */
+  width: 100%;
   justify-content: space-between;
-  padding: 0 2vw; /* small padding from edges */
+  padding: 0 var(--space-4);
 }
 
 .top-brick-wrap {
@@ -664,10 +445,10 @@ All colors MUST be HSL.
 .top-brick {
   display: block;
   width: 100%;
-  height: auto; /* maintain aspect ratio */
-  opacity: 0.3; /* subtle presence */
+  height: auto;
+  opacity: 0.3;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-  transition: opacity 0.3s ease;
+  transition: var(--transition-opacity);
 }
 
 /* Light theme adjustments for top bricks */
@@ -706,20 +487,18 @@ All colors MUST be HSL.
 
 /* Enhanced glassmorphism effect for all sidebar variants */
 .sidebar-glass {
-  background: rgba(var(--card-rgb), 0.75);
+  background: var(--color-glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass);
 }
 
 .sidebar-glass-hover {
-  background: rgba(var(--card-rgb), 0.85);
+  background: hsl(var(--color-glass-bg) / 0.9);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Minimal sidebar expansion animations */
@@ -826,7 +605,7 @@ All colors MUST be HSL.
 
 /* macOS-style hover scaling - more subtle for minimal design */
 .sidebar-hover-scale {
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: var(--transition-transform);
 }
 
 .sidebar-hover-scale:hover {
@@ -850,7 +629,7 @@ All colors MUST be HSL.
 
 /* Smooth opacity transitions based on scroll */
 .sidebar-scroll-fade {
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--transition-opacity);
 }
 
 /* Mobile floating menu animations - enhanced */
@@ -886,7 +665,7 @@ All colors MUST be HSL.
 
 /* Enhanced tooltip animations */
 .sidebar-tooltip {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--transition-base);
   animation: tooltipFadeIn 0.25s ease-out;
 }
 
@@ -951,7 +730,7 @@ All colors MUST be HSL.
 
   /* Smooth width transitions for expanded state */
   .sidebar-minimal-container {
-    transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: width var(--duration-slow) var(--ease-out);
   }
 }
 
@@ -971,5 +750,5 @@ All colors MUST be HSL.
 /* Ensure floating icon works well in top-bar layout */
 .floating-icon {
   transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
-  z-index: 60; /* above TopControls */
+  z-index: var(--z-index-sticky);
 }

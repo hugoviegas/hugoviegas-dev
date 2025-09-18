@@ -15,8 +15,8 @@ const TopControls = memo(() => {
   };
 
   return (
-    <div className="fixed top-4 left-0 right-0 z-[60] flex justify-end items-center px-6 lg:px-8 pointer-events-none md:px-4 sm:px-2">
-      <div className="pointer-events-auto flex items-center gap-3 bg-card/60 backdrop-blur-md p-2 rounded-full md:gap-2 sm:gap-1 border border-border/30 shadow-lg">
+    <div className="fixed top-3 left-0 right-0 z-[60] flex justify-end items-center px-6 lg:px-8 pointer-events-none md:px-4 sm:px-2">
+      <div className="pointer-events-auto sidebar-glass rounded-full px-3 py-2 shadow-lg border border-border/20 flex items-center gap-3 md:gap-2 sm:gap-1 z-[70]">
         <ThemeToggle />
         <Button
           variant="ghost"

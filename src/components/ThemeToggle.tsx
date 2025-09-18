@@ -1,4 +1,3 @@
-import { Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
@@ -10,8 +9,10 @@ export function ThemeToggle() {
     setTheme(targetTheme);
   };
 
+  const isDark = theme === "dark";
+
   return (
-    // use icon size to keep circular shape and visual parity with TopControls
+    // keep the Button wrapper and sizing for parity with TopControls
     <Button
       variant="ghost"
       size="icon"
@@ -20,11 +21,31 @@ export function ThemeToggle() {
       className="rounded-full hover:bg-accent/10 transition-colors"
     >
       <span className="sr-only">Toggle theme</span>
-      {theme === "light" ? (
-        <Sun className="w-5 h-5" />
-      ) : (
-        <Moon className="w-5 h-5" />
-      )}
+
+      {/* Animated toggle built from CSS (scoped with tp- prefix to avoid collisions) */}
+      <div className={`tp-toggle ${isDark ? "tp-dark" : "tp-light"}`}>
+        <div className="tp-slider">
+          <div className="tp-sun">
+            <div className="tp-sun-rays">
+              <div className="tp-ray" />
+              <div className="tp-ray" />
+              <div className="tp-ray" />
+              <div className="tp-ray" />
+              <div className="tp-ray" />
+              <div className="tp-ray" />
+              <div className="tp-ray" />
+              <div className="tp-ray" />
+            </div>
+            <div className="tp-sun-circle" />
+          </div>
+
+          <div className="tp-moon">
+            <div className="tp-moon-crater tp-crater1" />
+            <div className="tp-moon-crater tp-crater2" />
+            <div className="tp-moon-crater tp-crater3" />
+          </div>
+        </div>
+      </div>
     </Button>
   );
 }

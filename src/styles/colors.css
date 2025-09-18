@@ -1,0 +1,542 @@
+/* Hugo Viegas Portfolio - Color Palette System
+ * Semantic color utilities and component-specific color classes
+ * Extends design tokens with practical color application
+ */
+
+@import "./design-tokens.css";
+
+/* ===========================================
+   SEMANTIC COLOR UTILITIES
+   =========================================== */
+
+/* Text Colors */
+.text-primary {
+  color: hsl(var(--color-text-primary));
+}
+.text-secondary {
+  color: hsl(var(--color-text-secondary));
+}
+.text-muted {
+  color: hsl(var(--color-text-muted));
+}
+.text-inverse {
+  color: hsl(var(--color-text-inverse));
+}
+
+/* Background Colors */
+.bg-primary {
+  background-color: hsl(var(--color-bg-primary));
+}
+.bg-secondary {
+  background-color: hsl(var(--color-bg-secondary));
+}
+.bg-tertiary {
+  background-color: hsl(var(--color-bg-tertiary));
+}
+.bg-surface {
+  background-color: hsl(var(--color-bg-surface));
+}
+.bg-overlay {
+  background-color: hsl(var(--color-bg-overlay));
+}
+
+/* Border Colors */
+.border-primary {
+  border-color: hsl(var(--color-border-primary));
+}
+.border-secondary {
+  border-color: hsl(var(--color-border-secondary));
+}
+.border-focus {
+  border-color: hsl(var(--color-border-focus));
+}
+.border-error {
+  border-color: hsl(var(--color-border-error));
+}
+
+/* Interactive States */
+.bg-hover {
+  background-color: hsl(var(--color-interactive-hover));
+}
+.bg-active {
+  background-color: hsl(var(--color-interactive-active));
+}
+.bg-focus {
+  background-color: hsl(var(--color-interactive-focus));
+}
+
+/* ===========================================
+   BRAND COLOR UTILITIES
+   =========================================== */
+
+/* Primary Brand Colors */
+.text-brand-primary {
+  color: hsl(var(--color-brand-primary));
+}
+.bg-brand-primary {
+  background-color: hsl(var(--color-brand-primary));
+}
+.border-brand-primary {
+  border-color: hsl(var(--color-brand-primary));
+}
+
+.text-brand-secondary {
+  color: hsl(var(--color-brand-secondary));
+}
+.bg-brand-secondary {
+  background-color: hsl(var(--color-brand-secondary));
+}
+.border-brand-secondary {
+  border-color: hsl(var(--color-brand-secondary));
+}
+
+.text-brand-accent {
+  color: hsl(var(--color-brand-accent));
+}
+.bg-brand-accent {
+  background-color: hsl(var(--color-brand-accent));
+}
+.border-brand-accent {
+  border-color: hsl(var(--color-brand-accent));
+}
+
+/* Status Colors */
+.text-success {
+  color: hsl(var(--color-brand-success));
+}
+.bg-success {
+  background-color: hsl(var(--color-brand-success));
+}
+.border-success {
+  border-color: hsl(var(--color-brand-success));
+}
+
+.text-warning {
+  color: hsl(var(--color-brand-warning));
+}
+.bg-warning {
+  background-color: hsl(var(--color-brand-warning));
+}
+.border-warning {
+  border-color: hsl(var(--color-brand-warning));
+}
+
+.text-error {
+  color: hsl(var(--color-brand-error));
+}
+.bg-error {
+  background-color: hsl(var(--color-brand-error));
+}
+.border-error {
+  border-color: hsl(var(--color-brand-error));
+}
+
+/* ===========================================
+   GRADIENT UTILITIES
+   =========================================== */
+
+.bg-gradient-primary {
+  background: var(--color-gradient-primary);
+}
+.bg-gradient-accent {
+  background: var(--color-gradient-accent);
+}
+.bg-gradient-subtle {
+  background: var(--color-gradient-subtle);
+}
+
+.text-gradient-primary {
+  background: var(--color-gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-accent {
+  background: var(--color-gradient-accent);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===========================================
+   GLASSMORPHISM UTILITIES
+   =========================================== */
+
+.glass-bg {
+  background: var(--color-glass-bg);
+}
+.glass-border {
+  border-color: var(--color-glass-border);
+}
+.glass-shadow {
+  box-shadow: var(--shadow-glass);
+}
+
+.glass {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-strong {
+  background: hsl(var(--color-glass-bg) / 0.9);
+  border: 1px solid hsl(var(--color-glass-border) / 0.8);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ===========================================
+   NEON GLOW UTILITIES
+   =========================================== */
+
+.neon-glow-primary {
+  box-shadow: var(--shadow-neon-primary);
+}
+.neon-glow-secondary {
+  box-shadow: var(--shadow-neon-secondary);
+}
+.neon-glow-accent {
+  box-shadow: var(--shadow-neon-accent);
+}
+
+.neon-text-primary {
+  color: hsl(var(--color-brand-primary));
+  text-shadow: 0 0 10px hsl(var(--color-brand-primary)),
+    0 0 20px hsl(var(--color-brand-primary)),
+    0 0 30px hsl(var(--color-brand-primary));
+}
+
+.neon-text-secondary {
+  color: hsl(var(--color-brand-secondary));
+  text-shadow: 0 0 10px hsl(var(--color-brand-secondary)),
+    0 0 20px hsl(var(--color-brand-secondary)),
+    0 0 30px hsl(var(--color-brand-secondary));
+}
+
+.neon-text-accent {
+  color: hsl(var(--color-brand-accent));
+  text-shadow: 0 0 10px hsl(var(--color-brand-accent)),
+    0 0 20px hsl(var(--color-brand-accent)),
+    0 0 30px hsl(var(--color-brand-accent));
+}
+
+/* ===========================================
+   COMPONENT-SPECIFIC COLOR CLASSES
+   =========================================== */
+
+/* Button Variants */
+.btn-primary {
+  background: hsl(var(--color-brand-primary));
+  color: hsl(var(--color-text-inverse));
+  border: 1px solid hsl(var(--color-brand-primary));
+}
+
+.btn-primary:hover {
+  background: hsl(var(--color-brand-primary) / 0.9);
+  box-shadow: var(--shadow-neon-primary);
+}
+
+.btn-secondary {
+  background: hsl(var(--color-brand-secondary));
+  color: hsl(var(--color-text-inverse));
+  border: 1px solid hsl(var(--color-brand-secondary));
+}
+
+.btn-secondary:hover {
+  background: hsl(var(--color-brand-secondary) / 0.9);
+  box-shadow: var(--shadow-neon-secondary);
+}
+
+.btn-accent {
+  background: hsl(var(--color-brand-accent));
+  color: hsl(var(--color-text-inverse));
+  border: 1px solid hsl(var(--color-brand-accent));
+}
+
+.btn-accent:hover {
+  background: hsl(var(--color-brand-accent) / 0.9);
+  box-shadow: var(--shadow-neon-accent);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: hsl(var(--color-brand-primary));
+  border: 1px solid hsl(var(--color-brand-primary) / 0.5);
+}
+
+.btn-ghost:hover {
+  background: hsl(var(--color-brand-primary) / 0.1);
+  border-color: hsl(var(--color-brand-primary));
+}
+
+.btn-outline {
+  background: transparent;
+  color: hsl(var(--color-text-primary));
+  border: 1px solid hsl(var(--color-border-primary));
+}
+
+.btn-outline:hover {
+  background: hsl(var(--color-interactive-hover));
+  border-color: hsl(var(--color-brand-primary));
+  color: hsl(var(--color-brand-primary));
+}
+
+/* Card Variants */
+.card-primary {
+  background: hsl(var(--color-bg-surface));
+  border: 1px solid hsl(var(--color-border-primary));
+  box-shadow: var(--shadow-base);
+}
+
+.card-glass {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.card-gradient {
+  background: var(--color-gradient-subtle);
+  border: 1px solid hsl(var(--color-border-primary) / 0.5);
+  box-shadow: var(--shadow-base);
+}
+
+/* Input Variants */
+.input-primary {
+  background: hsl(var(--color-bg-surface));
+  border: 1px solid hsl(var(--color-border-primary));
+  color: hsl(var(--color-text-primary));
+}
+
+.input-primary:focus {
+  border-color: hsl(var(--color-border-focus));
+  box-shadow: 0 0 0 2px hsl(var(--color-interactive-focus) / 0.2);
+}
+
+.input-glass {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  color: hsl(var(--color-text-primary));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.input-glass:focus {
+  border-color: hsl(var(--color-border-focus));
+  box-shadow: 0 0 0 2px hsl(var(--color-interactive-focus) / 0.3);
+}
+
+.input-error {
+  border-color: hsl(var(--color-border-error));
+  box-shadow: 0 0 0 2px hsl(var(--color-brand-error) / 0.2);
+}
+
+/* Badge Variants */
+.badge-primary {
+  background: hsl(var(--color-brand-primary));
+  color: hsl(var(--color-text-inverse));
+}
+
+.badge-secondary {
+  background: hsl(var(--color-brand-secondary));
+  color: hsl(var(--color-text-inverse));
+}
+
+.badge-accent {
+  background: hsl(var(--color-brand-accent));
+  color: hsl(var(--color-text-inverse));
+}
+
+.badge-success {
+  background: hsl(var(--color-brand-success));
+  color: hsl(var(--color-text-inverse));
+}
+
+.badge-warning {
+  background: hsl(var(--color-brand-warning));
+  color: hsl(var(--color-text-inverse));
+}
+
+.badge-error {
+  background: hsl(var(--color-brand-error));
+  color: hsl(var(--color-text-inverse));
+}
+
+.badge-outline {
+  background: transparent;
+  border: 1px solid hsl(var(--color-border-primary));
+  color: hsl(var(--color-text-primary));
+}
+
+/* ===========================================
+   THEME-SPECIFIC OVERRIDES
+   =========================================== */
+
+.light .glass-bg {
+  background: hsl(var(--color-glass-bg));
+}
+.light .glass-border {
+  border-color: hsl(var(--color-glass-border));
+}
+.light .glass-shadow {
+  box-shadow: var(--shadow-glass-light);
+}
+
+.light .glass {
+  background: hsl(var(--color-glass-bg));
+  border: 1px solid hsl(var(--color-glass-border));
+  box-shadow: var(--shadow-glass-light);
+}
+
+.light .glass-strong {
+  background: hsl(var(--color-glass-bg) / 0.9);
+  border: 1px solid hsl(var(--color-glass-border) / 0.8);
+  box-shadow: var(--shadow-glass-light);
+}
+
+/* ===========================================
+   LEGACY COMPATIBILITY CLASSES
+   =========================================== */
+
+/* Map existing classes to new system for gradual migration */
+.btn-hero {
+  background: var(--color-gradient-primary);
+  color: hsl(var(--color-text-inverse));
+  border: 1px solid hsl(var(--color-brand-primary));
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.btn-hero:hover {
+  background: var(--color-gradient-primary);
+  box-shadow: var(--shadow-neon-primary);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: hsl(var(--color-brand-primary));
+  border: 1px solid hsl(var(--color-brand-primary) / 0.5);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.btn-ghost:hover {
+  background: hsl(var(--color-brand-primary) / 0.1);
+  border-color: hsl(var(--color-brand-primary));
+}
+
+.card-project {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+.card-project:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-skill {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: var(--space-6);
+  text-align: center;
+  transition: background-color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.card-skill:hover {
+  background: hsl(var(--color-brand-primary) / 0.05);
+  border-color: hsl(var(--color-brand-primary) / 0.3);
+  transform: translateY(-2px);
+}
+
+.heading-hero {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-5xl);
+  line-height: var(--line-height-tight);
+  background: var(--color-gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-section {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-3xl);
+  color: hsl(var(--color-text-primary));
+  line-height: var(--line-height-tight);
+}
+
+.text-gradient {
+  background: var(--color-gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===========================================
+   UTILITY CLASSES FOR COMMON PATTERNS
+   =========================================== */
+
+/* Focus States */
+.focus-ring {
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--color-interactive-focus));
+}
+
+/* Hover States */
+.hover-lift {
+  transition: transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Interactive Elements */
+.interactive {
+  transition: all var(--duration-base) var(--ease-out);
+  cursor: pointer;
+}
+
+.interactive:hover {
+  transform: scale(1.02);
+}
+
+.interactive:active {
+  transform: scale(0.98);
+}
+
+/* Status Indicators */
+.status-online {
+  background: hsl(var(--color-brand-success));
+  box-shadow: 0 0 10px hsl(var(--color-brand-success) / 0.5);
+}
+
+.status-busy {
+  background: hsl(var(--color-brand-warning));
+  box-shadow: 0 0 10px hsl(var(--color-brand-warning) / 0.5);
+}
+
+.status-offline {
+  background: hsl(var(--color-neutral-500));
+  box-shadow: 0 0 10px hsl(var(--color-neutral-500) / 0.3);
+}

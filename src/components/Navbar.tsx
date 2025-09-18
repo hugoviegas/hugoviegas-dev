@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -11,6 +11,19 @@ const Navbar = ({ show }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  // language hook + nav items (memoized so effects can depend on stable ref)
+  const { t } = useLanguage();
+
+  const navItems = useMemo(
+    () => [
+      { id: "about", label: t("about") },
+      { id: "projects", label: t("projects") },
+      { id: "experience", label: t("experience") },
+      { id: "contact", label: t("contact") },
+    ],
+    [t]
+  );
+
   useEffect(() => {
     // trigger entrance animation once on mount
     setMounted(true);
@@ -21,14 +34,31 @@ const Navbar = ({ show }: NavbarProps) => {
     setIsMobileMenuOpen(false);
   };
 
-  const { t } = useLanguage();
+  // track active section for nav highlighting (desktop + mobile)
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
-  const navItems = [
-    { id: "about", label: t("about") },
-    { id: "projects", label: t("projects") },
-    { id: "experience", label: t("experience") },
-    { id: "contact", label: t("contact") },
-  ];
+  useEffect(() => {
+    const ids = navItems.map((n) => n.id);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { root: null, rootMargin: "-40% 0px -40% 0px", threshold: 0.1 }
+    );
+
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [navItems]);
+
+  // ...existing code...
 
   // always render the navbar; entrance animation will run on mount
 
@@ -80,7 +110,10 @@ const Navbar = ({ show }: NavbarProps) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="w-full text-left px-4 py-3 text-muted-foreground hover:text-primary hover:bg-accent/10 rounded-full transition-colors"
+                  className={`w-full text-left px-4 py-3 text-muted-foreground hover:text-primary hover:bg-accent/10 transition-colors nav-item ${
+                    activeSection === item.id ? "active" : ""
+                  }`}
+                  aria-current={activeSection === item.id ? "page" : undefined}
                 >
                   {item.label}
                 </button>
@@ -130,7 +163,9 @@ const Navbar = ({ show }: NavbarProps) => {
 
                   <button
                     onClick={() => scrollToSection(item.id)}
-                    className="text-muted-foreground hover:text-primary transition-colors px-2 py-1"
+                    className={`nav-item ${
+                      activeSection === item.id ? "active" : ""
+                    } text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded-btn`}
                   >
                     {item.label}
                   </button>

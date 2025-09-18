@@ -1,0 +1,36 @@
+/* Hugo Viegas Portfolio - Design System Index
+ * Central import file for all design system components
+ * Import this file to get the complete design system
+ */
+
+/* Core Design Tokens - Foundation layer */
+@import "./design-tokens.css";
+
+/* Layout and Spacing System */
+@import "./grid-system.css";
+
+/* Color Palette and Visual Identity */
+@import "./colors.css";
+
+/* Typography Scale and Text Styling */
+@import "./typography.css";
+@import "./components.css";
+
+/* ===========================================
+   DESIGN SYSTEM STATUS
+   ===========================================
+
+   ✅ Foundation Layer Complete:
+   - Design tokens with semantic color system
+   - 8px grid system for consistent spacing
+   - Comprehensive typography scale
+   - Color palette with brand and semantic colors
+
+   🎯 Next Steps:
+   - Update main index.css to use new system
+   - Migrate components to use design tokens
+   - Standardize button variants
+   - Implement consistent layout patterns
+   - Add Lego-themed creative elements
+
+   =========================================== */
