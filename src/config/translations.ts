@@ -18,6 +18,10 @@ export const translations: Translations = {
 
   // Hero Section
   hello: { EN: "Hello, I'm", PT: "Olá, eu sou" },
+  goodMorning: { EN: "Hi, Good Morning! I'm", PT: "Oi, Bom Dia! Eu sou" },
+  goodAfternoon: { EN: "Hi, Good Afternoon! I'm", PT: "Oi, Boa Tarde! Eu sou" },
+  goodEvening: { EN: "Hi, Good Evening! I'm", PT: "Oi, Boa Noite! Eu sou" },
+  goodNight: { EN: "Hi, Good Night! I'm", PT: "Oi, Boa Noite! Eu sou" },
   role: {
     EN: "IT Support Specialist → Full-Stack Developer",
     PT: "Especialista em TI → Desenvolvedor Full-Stack",

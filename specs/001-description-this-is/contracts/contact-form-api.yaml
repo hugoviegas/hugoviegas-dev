@@ -1,0 +1,57 @@
+# Contact Form API Contract
+
+## Overview
+Contract for contact form submission to Web3Forms service with spam protection and validation.
+
+## Endpoint
+```
+POST https://api.web3forms.com/submit
+```
+
+## Request Format
+```typescript
+interface ContactFormRequest {
+  access_key: string; // Web3Forms API key
+  name: string;       // User's full name
+  email: string;      // User's email address
+  subject: string;    // Message subject
+  message: string;    // Message content
+}
+```
+
+## Request Headers
+```
+Content-Type: application/x-www-form-urlencoded
+```
+
+## Response Format
+```typescript
+interface ContactFormResponse {
+  success: boolean;
+  message?: string;   // Error message if success is false
+  data?: any;         // Additional response data
+}
+```
+
+## Validation Rules
+- `name`: Required, 2-100 characters, alphanumeric + spaces only
+- `email`: Required, valid email format (RFC 5322 compliant)
+- `subject`: Required, 5-100 characters
+- `message`: Required, 10-1000 characters
+- Spam protection: `_honeypot` field must be empty
+
+## Error Codes
+- `400`: Validation failed
+- `403`: Spam detected
+- `429`: Rate limit exceeded
+- `500`: Server error
+
+## Rate Limiting
+- 5 submissions per hour per IP
+- 10 submissions per day per IP
+
+## Security Measures
+- Honeypot field for spam detection
+- Input sanitization on client and server
+- CORS protection
+- API key authentication

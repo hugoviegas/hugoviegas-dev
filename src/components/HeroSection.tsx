@@ -18,13 +18,21 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.jpg";
 
 const HeroSection = () => {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { t } = useLanguage();
+  const [currentGreeting, setCurrentGreeting] = useState("");
+  const { t, language } = useLanguage();
   const fullText = t("role");
+
+  // Update greeting when component mounts or language changes
+  useEffect(() => {
+    const greeting = getCurrentGreeting();
+    setCurrentGreeting(greeting.text[language]);
+  }, [language]);
 
   useEffect(() => {
     if (currentIndex < fullText.length) {
@@ -43,6 +51,10 @@ const HeroSection = () => {
 
   const scrollToProjects = () => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToAbout = () => {
+    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const scrollToContact = () => {
@@ -90,7 +102,9 @@ const HeroSection = () => {
           {/* Content Column */}
           <div className="space-y-8 fade-in">
             <div className="space-y-4">
-              <div className="text-primary font-mono text-lg">{t("hello")}</div>
+              <div className="text-primary font-mono text-lg">
+                {currentGreeting}
+              </div>
               <h1 className="heading-hero leading-tight mb-2">Hugo Viegas</h1>
               <div className="h-24 flex items-center">
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
@@ -239,8 +253,8 @@ const HeroSection = () => {
         {/* Section footer: scroll indicator placed here to avoid overlapping mobile content */}
         <div className="mt-8 flex justify-center">
           <button
-            onClick={scrollToProjects}
-            aria-label="Scroll to projects"
+            onClick={scrollToAbout}
+            aria-label="Scroll to about section"
             className="animate-bounce p-2 rounded-full glass hover:scale-110 transition-transform"
           >
             <ArrowDown className="w-6 h-6 text-primary" />

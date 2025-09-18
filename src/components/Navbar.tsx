@@ -36,7 +36,7 @@ const Navbar = ({ show }: NavbarProps) => {
     <>
       {/* Mobile hamburger fixed to the left with the same pill style as TopControls */}
       <div
-        className={`fixed left-4 top-3 z-50 md:hidden transition-transform transition-opacity duration-500 ease-out ${
+        className={`fixed left-4 top-4 z-50 md:hidden transition-transform transition-opacity duration-500 ease-out ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
         }`}
         style={{ willChange: "transform, opacity" }}
@@ -73,7 +73,7 @@ const Navbar = ({ show }: NavbarProps) => {
 
       {/* Mobile dropdown panel (left-aligned under the hamburger) */}
       {isMobileMenuOpen && (
-        <div className="fixed top-16 left-4 z-40 md:hidden">
+        <div className="fixed top-20 left-4 z-40 md:hidden">
           <div className="w-[90vw] max-w-xs glass rounded-xl p-3 shadow-lg border border-white/10">
             <div className="flex flex-col gap-2">
               {navItems.map((item) => (
@@ -92,7 +92,7 @@ const Navbar = ({ show }: NavbarProps) => {
 
       {/* Centered rounded rectangle similar to TopControls (desktop only) */}
       <div
-        className={`hidden md:flex fixed left-0 right-0 top-4 z-50 justify-center pointer-events-none transition-transform transition-opacity duration-500 ease-out ${
+        className={`hidden md:flex fixed left-0 right-0 top-16 z-50 justify-center pointer-events-none transition-transform transition-opacity duration-500 ease-out ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
         }`}
         style={{ willChange: "transform, opacity" }}

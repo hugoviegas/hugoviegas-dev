@@ -1,0 +1,85 @@
+# Time Utilities Contract
+
+## Overview
+Contract for time-based utilities that provide greeting calculation and timezone handling.
+
+## Interface
+```typescript
+interface TimeUtils {
+  getCurrentTime(): TimeContext;
+  getTimeBasedGreeting(hour?: number): GreetingData;
+  formatTimeForDisplay(date: Date): string;
+  getUserTimezone(): string;
+}
+```
+
+## Data Structures
+```typescript
+interface TimeContext {
+  currentHour: number;     // 0-23
+  currentMinute: number;   // 0-59
+  timezone: string;        // IANA timezone identifier
+  timestamp: Date;         // Current timestamp
+  isDST: boolean;          // Daylight saving time flag
+}
+
+interface GreetingData {
+  type: TimeBasedGreeting;
+  text: {
+    EN: string;
+    PT: string;
+  };
+  emoji: string;
+  timeRange: {
+    start: number;  // Hour (0-23)
+    end: number;    // Hour (0-23)
+  };
+}
+
+type TimeBasedGreeting = 'morning' | 'afternoon' | 'evening' | 'night';
+```
+
+## Greeting Calculation Rules
+```typescript
+const GREETING_RANGES = {
+  morning: { start: 5, end: 11, emoji: '🌅' },
+  afternoon: { start: 12, end: 16, emoji: '☀️' },
+  evening: { start: 17, end: 20, emoji: '🌆' },
+  night: { start: 21, end: 4, emoji: '🌙' }
+};
+```
+
+## Timezone Handling
+1. **Primary**: Use `Intl.DateTimeFormat().resolvedOptions().timeZone`
+2. **Fallback**: Use browser's local timezone
+3. **Override**: Allow manual timezone selection (future feature)
+
+## Error Handling
+- **Invalid timezone**: Fallback to UTC
+- **Date parsing errors**: Use current system time
+- **DST calculation failures**: Assume standard time
+
+## Performance Requirements
+- Greeting calculation: <1ms
+- Timezone detection: <5ms
+- Memory usage: Minimal (static data only)
+
+## Testing Scenarios
+- Different timezones (UTC, EST, PST, GMT, etc.)
+- DST transitions
+- Edge cases (midnight, noon)
+- Invalid timezone strings
+- Browser compatibility
+
+## Integration Points
+- **HeroSection**: Display time-based greeting
+- **WorldClocks**: Show multiple timezone times
+- **Contact form**: Timestamp submissions
+- **Analytics**: Track user timezone distribution
+
+## Future Extensions
+- Weather-based greetings
+- Holiday-aware greetings
+- User preference for 12/24 hour format
+- Relative time formatting ("2 hours ago")
+- Meeting scheduler integration

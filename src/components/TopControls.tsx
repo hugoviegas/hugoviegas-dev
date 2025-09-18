@@ -7,7 +7,7 @@ const TopControls = memo(() => {
   const { language, toggleLanguage, currentLanguage } = useLanguage();
   const [isToggling, setIsToggling] = useState(false);
 
-  const handleToggle = async () => {
+  const handleToggle = () => {
     setIsToggling(true);
     toggleLanguage();
     // Small delay to show the transition
@@ -15,7 +15,7 @@ const TopControls = memo(() => {
   };
 
   return (
-    <div className="fixed top-3 left-0 right-0 z-50 flex justify-end items-center px-6 lg:px-8 pointer-events-none md:px-4 sm:px-2">
+    <div className="fixed top-4 left-0 right-0 z-[60] flex justify-end items-center px-6 lg:px-8 pointer-events-none md:px-4 sm:px-2">
       <div className="pointer-events-auto flex items-center gap-3 bg-card/60 backdrop-blur-md p-2 rounded-full md:gap-2 sm:gap-1 border border-border/30 shadow-lg">
         <ThemeToggle />
         <Button
