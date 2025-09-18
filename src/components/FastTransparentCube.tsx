@@ -1,4 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
+declare global {
+  interface Window {
+    AnimCube3?: (params?: string) => void;
+    acjs_move?: unknown[];
+    acjs_getMove?: unknown;
+    acjs_startAnimation?: unknown;
+    acjs_doMove?: unknown;
+    acjs_put_var?: unknown;
+    acjs_clear?: unknown;
+  }
+}
 import { Button } from "@/components/ui/button";
 import { X, Maximize } from "lucide-react";
 
@@ -24,12 +37,31 @@ export default function FastTransparentCube({
   useEffect(() => {
     const src = "/vendor/animcube/AnimCube3.js";
 
+    // Prepare direct-access arrays so AnimCube3 will expose internal vars/functions
+    // when it initializes (init_direct_access looks for window.acjs_<name> arrays).
+    // Create them before the script is appended so init_direct_access can populate them.
+    try {
+      window.acjs_move = window.acjs_move || [];
+      // AnimCube direct-access placeholders
+      window.acjs_getMove = window.acjs_getMove || [];
+      // AnimCube direct-access placeholders
+      window.acjs_startAnimation = window.acjs_startAnimation || [];
+      // optional useful handles
+      // AnimCube direct-access placeholders
+      window.acjs_doMove = window.acjs_doMove || [];
+      // AnimCube direct-access placeholders
+      window.acjs_put_var = window.acjs_put_var || [];
+      window.acjs_clear = window.acjs_clear || [];
+    } catch (e) {
+      // ignore in non-browser environments
+    }
+
     const initCube = () => {
       const shouldPreserveScroll = hasInitialized.current;
       const scrollX = shouldPreserveScroll ? window.scrollX : 0;
       const scrollY = shouldPreserveScroll ? window.scrollY : 0;
 
-      // @ts-expect-error AnimCube3 global
+      // AnimCube3 global
       window.AnimCube3?.("id=cube-embed&buttonbar=0&speed=10");
 
       setTimeout(() => {
@@ -61,7 +93,7 @@ export default function FastTransparentCube({
       s.async = true;
       s.onload = initCube;
       document.body.appendChild(s);
-      // @ts-expect-error AnimCube3 global check
+      // AnimCube3 global check
     } else if (window.AnimCube3) {
       setTimeout(initCube, 100);
     }
@@ -209,6 +241,49 @@ export default function FastTransparentCube({
     };
   }, [expandedOpen, isAnimating, flipToOriginal]);
 
+  // Play a predefined move sequence on the existing AnimCube instance
+  const playSequence = useCallback((seq = "R U R' U'") => {
+    if (!cubeRef.current) return;
+
+    try {
+      // Preferred: use direct AnimCube3 functions if exposed
+      if (
+        typeof window.acjs_put_var !== "undefined" &&
+        typeof window.acjs_getMove !== "undefined"
+      ) {
+        // Some animcube builds expose acjs_* arrays via init_direct_access
+        try {
+          // Try to set the move parameter and start animation via exposed helpers
+          const id = cubeRef.current.id || "cube-embed";
+          // Put move param and start animation if function exists
+          if (
+            window.acjs_put_var &&
+            typeof window.acjs_put_var === "function"
+          ) {
+            window.acjs_put_var("move", seq, "s");
+          }
+        } catch (e) {
+          // ignore and fallback
+        }
+      }
+
+      // Fallback: call AnimCube3 init with move parameter on the existing container
+      // This may reinitialize the instance but often triggers the move playback.
+      if (window.AnimCube3 && typeof window.AnimCube3 === "function") {
+        try {
+          window.AnimCube3(
+            `id=${cubeRef.current.id}&move=${encodeURIComponent(seq)}`
+          );
+        } catch (e) {
+          // ignore
+        }
+      }
+    } catch (err) {
+      // no-op on error
+      console.warn("playSequence failed", err);
+    }
+  }, []);
+
   const wrapperStyle = {
     width: "100%",
     maxWidth: `${width}px`,
@@ -261,65 +336,91 @@ export default function FastTransparentCube({
       </div>
 
       {/* OVERLAY: Target para o cubo se mover */}
-      {expandedOpen && (
-        <div
-          ref={overlayRef}
-          className="fixed inset-0 z-[100] flex items-center justify-center"
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
-            backdropFilter: "blur(20px)",
-            animation: "fadeIn 0.3s ease-out",
-            padding: 20,
-          }}
-          onClick={!isAnimating ? flipToOriginal : undefined}
-        >
-          <Button
-            size="sm"
-            variant="outline"
-            className="absolute top-6 right-6 z-[101] !p-3 backdrop-blur-sm bg-white/20 hover:bg-white/30 border-white/30"
-            onClick={!isAnimating ? flipToOriginal : undefined}
-          >
-            <X className="w-6 h-6 text-white" />
-          </Button>
+      {expandedOpen && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              ref={overlayRef}
+              className="fixed inset-0 flex items-center justify-center"
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0.8)",
+                backdropFilter: "blur(20px)",
+                animation: "fadeIn 0.3s ease-out",
+                padding: 20,
+                zIndex: 9999999,
+              }}
+              onClick={!isAnimating ? flipToOriginal : undefined}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  right: 12,
+                  zIndex: 101,
+                  display: "flex",
+                  gap: 8,
+                }}
+              >
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="!p-3 backdrop-blur-sm bg-white/20 hover:bg-white/30 border-white/30"
+                  onClick={!isAnimating ? flipToOriginal : undefined}
+                >
+                  <X className="w-6 h-6 text-white" />
+                </Button>
 
-          <div
-            className="cube-target"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              width: "95vw",
-              height: "95vh",
-              maxWidth: "1100px",
-              maxHeight: "900px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              animation: "scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-              borderRadius: 16,
-              overflow: "hidden",
-              boxShadow: "0 30px 60px -12px rgba(0, 0, 0, 0.9)",
-              background: "transparent",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-            }}
-          >
-            {/* O cubo será movido para cá via FLIP */}
-          </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="!p-3 backdrop-blur-sm bg-white/15 hover:bg-white/25 border-white/30"
+                  onClick={() => playSequence("R U R' U'")}
+                  disabled={isAnimating}
+                  aria-label="Play cube moves"
+                >
+                  ▶
+                </Button>
+              </div>
 
-          <div
-            style={{
-              position: "absolute",
-              bottom: 30,
-              left: "50%",
-              transform: "translateX(-50%)",
-              color: "rgba(255, 255, 255, 0.8)",
-              fontSize: "14px",
-              textAlign: "center",
-              fontFamily: "sans-serif",
-            }}
-          >
-            Pressione ESC ou clique no X para fechar
-          </div>
-        </div>
-      )}
+              <div
+                className="cube-target"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "95vw",
+                  height: "95vh",
+                  maxWidth: "1100px",
+                  maxHeight: "900px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  animation: "scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  boxShadow: "0 30px 60px -12px rgba(0, 0, 0, 0.9)",
+                  background: "transparent",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                }}
+              >
+                {/* O cubo será movido para cá via FLIP */}
+              </div>
+
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 30,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  color: "rgba(255, 255, 255, 0.8)",
+                  fontSize: "14px",
+                  textAlign: "center",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                Pressione ESC ou clique no X para fechar
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
 
       <style>{`
         @keyframes fadeIn {
