@@ -49,8 +49,8 @@ const TopControls = memo(() => {
           size="sm"
           onClick={handleToggle}
           disabled={isToggling}
-          className={`flex items-center gap-2 rounded-full hover:bg-accent/20 transition-all duration-200 md:gap-1 sm:gap-0.5 px-3 py-2 ${
-            isToggling ? "opacity-70 scale-95" : "hover:scale-105"
+          className={`flex items-center gap-2 rounded-full hover:bg-accent/20 transition-transform duration-200 md:gap-3 lg:gap-3 px-3 py-2 lg:px-4 lg:py-2 ${
+            isToggling ? "opacity-85" : ""
           }`}
           aria-label={`Switch to ${
             language === "EN" ? "Portuguese" : "English"
@@ -68,11 +68,11 @@ const TopControls = memo(() => {
                   : "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f1ec-1f1e7.svg"
               }
               alt={liveFlag}
-              width={20}
-              height={14}
+              width={22}
+              height={16}
             />
           </span>
-          <span className="text-sm font-medium md:text-xs sm:text-[10px] min-w-[20px]">
+          <span className="text-sm font-medium md:text-sm lg:text-base sm:text-[10px] min-w-[24px]">
             {language}
           </span>
         </Button>

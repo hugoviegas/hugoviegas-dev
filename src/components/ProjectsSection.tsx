@@ -87,10 +87,10 @@ const ProjectsSection = () => {
 
   return (
     <section id="projects" className="py-20">
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto px-6 lg:px-8 wide-container">
         <div className="text-center mb-16 fade-in">
           <h2 className="heading-section mb-6">{t("projectsTitle")}</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-[min(1100px,92vw)] mx-auto leading-relaxed">
             {t("projectsIntro")}
           </p>
         </div>

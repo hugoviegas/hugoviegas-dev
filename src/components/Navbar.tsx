@@ -104,7 +104,7 @@ const Navbar = ({ show }: NavbarProps) => {
       {/* Mobile dropdown panel (left-aligned under the hamburger) */}
       {isMobileMenuOpen && (
         <div className="fixed top-20 left-4 z-40 md:hidden">
-          <div className="w-[90vw] max-w-xs glass rounded-xl p-3 shadow-lg border border-white/10">
+          <div className="w-[90vw] max-w-[min(420px,92vw)] glass rounded-xl p-3 shadow-lg border border-white/10">
             <div className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <button
@@ -141,7 +141,7 @@ const Navbar = ({ show }: NavbarProps) => {
           }}
         >
           {/* Desktop nav */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 lg:gap-8 xl:gap-10">
             {navItems.map((item) =>
               item.id === "about" ? (
                 <div key={item.id} className="flex items-center gap-3">
@@ -165,7 +165,7 @@ const Navbar = ({ show }: NavbarProps) => {
                     onClick={() => scrollToSection(item.id)}
                     className={`nav-item ${
                       activeSection === item.id ? "active" : ""
-                    } text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded-btn`}
+                    } text-muted-foreground hover:text-primary transition-colors px-3 py-2 rounded-btn min-w-[64px] lg:min-w-[84px]`}
                   >
                     {item.label}
                   </button>
@@ -174,7 +174,7 @@ const Navbar = ({ show }: NavbarProps) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-muted-foreground hover:text-primary transition-colors px-2 py-1"
+                  className="text-muted-foreground hover:text-primary transition-colors px-3 py-2 lg:px-4 lg:py-2 min-w-[60px] lg:min-w-[76px]"
                 >
                   {item.label}
                 </button>

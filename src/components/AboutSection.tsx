@@ -97,7 +97,7 @@ const AboutSection = () => {
                     {t("readFullStory")}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                <DialogContent className="max-w-[min(1400px,92vw)] max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-gradient">
                       {t("fullStoryTitle")}

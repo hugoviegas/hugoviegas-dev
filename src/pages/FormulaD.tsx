@@ -1311,7 +1311,7 @@ const FormulaD = () => {
   if (gameState.gamePhase === "setup") {
     return (
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="container mx-auto py-8 px-4 max-w-[min(1400px,92vw)]">
           <div className="text-center mb-8">
             <div className="flex items-center justify-between mb-4">
               <div></div> {/* Spacer */}
@@ -1531,7 +1531,7 @@ const FormulaD = () => {
 
     return (
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="container mx-auto py-8 px-4 max-w-[min(1400px,92vw)]">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
               <Flag className="w-6 h-6" />
@@ -1634,7 +1634,7 @@ const FormulaD = () => {
 
     return (
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="container mx-auto py-8 px-4 max-w-[min(1400px,92vw)]">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold mb-4 flex items-center justify-center gap-3">
               <Car className="w-6 h-6" />
@@ -1938,7 +1938,7 @@ const FormulaD = () => {
 
     return (
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="container mx-auto py-8 px-4 max-w-[min(1400px,92vw)]">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
               <Trophy className="w-8 h-8" />

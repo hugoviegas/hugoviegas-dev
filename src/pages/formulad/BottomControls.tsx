@@ -122,7 +122,7 @@ const BottomControls: React.FC<{ ctx: GameCtx }> = ({ ctx }) => {
       </div>
 
       <div className="fixed bottom-4 left-0 right-0 pointer-events-auto z-40">
-        <div className="max-w-4xl w-full mx-auto px-4">
+        <div className="max-w-[min(1400px,92vw)] w-full mx-auto px-4">
           <div className="bg-background/80 backdrop-blur-md border border-border/40 rounded-full px-3 py-2 flex items-center justify-between shadow-lg flex-wrap md:flex-nowrap">
             {/* Left: player info (compact) */}
             <div className="flex items-center gap-3 min-w-[160px]">

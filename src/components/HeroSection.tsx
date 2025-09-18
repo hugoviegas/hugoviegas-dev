@@ -97,7 +97,7 @@ const HeroSection = () => {
         <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-accent rounded-full blur-xl subtle-pulse delay-2000"></div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-6 lg:px-8 relative z-10 wide-container">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content Column */}
           <div className="space-y-8 fade-in">
@@ -112,7 +112,7 @@ const HeroSection = () => {
                   <span className="type-cursor inline-block w-1 h-8 bg-primary ml-2"></span>
                 </h2>
               </div>
-              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed mt-4">
+              <p className="text-xl text-muted-foreground max-w-[min(960px,92vw)] leading-relaxed mt-4">
                 {t("description")}
               </p>
             </div>
@@ -173,7 +173,7 @@ const HeroSection = () => {
                     </span>
                   </button>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl w-full h-[90vh] p-0">
+                <DialogContent className="max-w-[min(1400px,92vw)] w-full h-[90vh] p-0">
                   <DialogHeader className="p-6 pb-0">
                     <DialogTitle className="flex items-center justify-between">
                       <span>Hugo Viegas - CV 2025</span>

@@ -16,6 +16,15 @@
 @import "./typography.css";
 @import "./components.css";
 
+/* Utility: allow wider container on very large viewports while keeping sensible caps */
+.wide-container {
+  max-width: min(1400px, 92vw);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
 /* ===========================================
    DESIGN SYSTEM STATUS
    ===========================================

@@ -291,9 +291,9 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
           )}
         </Button>
 
-        {/* Indicator ring when menu is open */}
+        {/* Indicator ring when menu is open (non-interactive, no blink) */}
         {isMobileMenuOpen && (
-          <div className="absolute inset-0 rounded-full border-2 border-primary/40 animate-ping" />
+          <div className="absolute inset-0 rounded-full border-2 border-primary/40 pointer-events-none" />
         )}
       </div>
 
