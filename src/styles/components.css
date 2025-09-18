@@ -102,6 +102,78 @@
   justify-content: center;
 }
 
+/* Emoji/flag helper: prefer system emoji fonts so color flags render on desktop */
+.tp-flag {
+  font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji",
+    "Twemoji Mozilla", "EmojiOne Color", var(--font-family-primary);
+  line-height: 1; /* avoid clipping */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* debug/test styles removed */
+
+/* Live twemoji in the top controls */
+.tp-twemoji-live {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+/* Shake + explode animation for GB -> IE transition */
+.tp-explode {
+  animation: tp-shake 400ms ease-in-out,
+    tp-explode-fade 400ms ease-in-out 400ms forwards;
+}
+
+@keyframes tp-shake {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-6px) rotate(-6deg);
+  }
+  40% {
+    transform: translateX(6px) rotate(6deg);
+  }
+  60% {
+    transform: translateX(-4px) rotate(-4deg);
+  }
+  80% {
+    transform: translateX(4px) rotate(4deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes tp-explode-fade {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* Higher-specificity override when inside sidebar/glass containers (desktop) */
+.sidebar-glass .tp-flag,
+.pill-glass .tp-flag {
+  font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji",
+    "Twemoji Mozilla", "EmojiOne Color", var(--font-family-primary) !important;
+  line-height: 1 !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  /* prevent color manipulation or clipping from other rules */
+  color: inherit !important;
+  background: transparent !important;
+}
+
 .tp-slider {
   width: 28px;
   height: 28px;

@@ -2,14 +2,40 @@ import { memo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useEffect } from "react";
 
 const TopControls = memo(() => {
   const { language, toggleLanguage, currentLanguage } = useLanguage();
   const [isToggling, setIsToggling] = useState(false);
+  // Twemoji flag state + animation control
+  const [liveFlag, setLiveFlag] = useState<"BR" | "IE" | "GB">(
+    currentLanguage.code === "PT" ? "BR" : "IE"
+  );
+  const [animateGBtoIE, setAnimateGBtoIE] = useState(false);
+  const [showFlagTest, setShowFlagTest] = useState(false);
 
   const handleToggle = () => {
     setIsToggling(true);
+    // If switching to English, trigger GB->IE animation
+    const switchingTo = language === "EN" ? "PT" : "EN";
     toggleLanguage();
+
+    if (switchingTo === "EN") {
+      // Immediately show GB flag and start animation sequence
+      setLiveFlag("GB");
+      // After 2s, animate (shake/explode) and then swap to IE
+      setTimeout(() => {
+        setAnimateGBtoIE(true);
+        // After animation (800ms), swap to IE and reset animation
+        setTimeout(() => {
+          setLiveFlag("IE");
+          setAnimateGBtoIE(false);
+        }, 800);
+      }, 2000);
+    } else {
+      // switching to Portuguese: set to BR immediately
+      setLiveFlag("BR");
+    }
     // Small delay to show the transition
     setTimeout(() => setIsToggling(false), 150);
   };
@@ -30,19 +56,27 @@ const TopControls = memo(() => {
             language === "EN" ? "Portuguese" : "English"
           }`}
         >
-          <span
-            className={`text-lg md:text-base sm:text-sm transition-transform duration-200 ${
-              isToggling ? "rotate-12" : ""
-            }`}
-            role="img"
-            aria-label={currentLanguage.name}
-          >
-            {currentLanguage.flag}
+          {/* Live flag using Twemoji SVGs for consistent rendering */}
+          <span className="inline-flex items-center">
+            <img
+              className={`tp-twemoji-live ${animateGBtoIE ? "tp-explode" : ""}`}
+              src={
+                liveFlag === "BR"
+                  ? "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f1e7-1f1f7.svg"
+                  : liveFlag === "IE"
+                  ? "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f1ee-1f1ea.svg"
+                  : "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f1ec-1f1e7.svg"
+              }
+              alt={liveFlag}
+              width={20}
+              height={14}
+            />
           </span>
           <span className="text-sm font-medium md:text-xs sm:text-[10px] min-w-[20px]">
             {language}
           </span>
         </Button>
+        {/* debug popup removed */}
       </div>
     </div>
   );
