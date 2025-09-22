@@ -19,11 +19,27 @@ type Brick = {
 
 const IMAGES = [redFront, redTop, whiteFront, whiteTop, yellowFront];
 
+// Default ambient brick count used when no `count` prop is provided.
+// Change this value to adjust the global default density of ambient blocks.
+export const AMBIENT_DEFAULT_COUNT = 10;
+
+/**
+ * AmbientDots
+ *
+ * Props:
+ *  - count: number of ambient bricks to render across the viewport.
+ *           You can change the per-page density by passing a different
+ *           `count` when rendering the component (see `src/pages/Index.tsx`).
+ *  - minSizeVw / maxSizeVw: size range (in vw) for each brick.
+ *
+ * To adjust the site's default density globally, change `AMBIENT_DEFAULT_COUNT` above.
+ * To tune a specific page, pass a `count` prop from that page (for example in `Index.tsx`).
+ */
 const AmbientDots: React.FC<{
   count?: number;
   minSizeVw?: number;
   maxSizeVw?: number;
-}> = ({ count = 60, minSizeVw = 2.5, maxSizeVw = 10 }) => {
+}> = ({ count = AMBIENT_DEFAULT_COUNT, minSizeVw = 2.5, maxSizeVw = 10 }) => {
   const isMobile = useIsMobile();
 
   const bricks: Brick[] = useMemo(() => {

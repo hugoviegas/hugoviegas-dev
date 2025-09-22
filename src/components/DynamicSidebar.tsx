@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.png";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -13,10 +14,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
   const [currentSection, setCurrentSection] = useState("hero");
   const [isHovered, setIsHovered] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [showSectionLabel, setShowSectionLabel] = useState(false);
-  const [sectionLabelMounted, setSectionLabelMounted] = useState(false);
-  const sectionLabelTimer = useRef<number | null>(null);
-  const [previousSection, setPreviousSection] = useState("hero");
+  // section label popup removed per user request (no left-corner indicator)
   const sidebarRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [floatingPos, setFloatingPos] = useState({
@@ -131,29 +129,8 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
 
       // Trigger section change animation if section changed
       if (current !== currentSection) {
-        setPreviousSection(currentSection);
         setCurrentSection(current);
-
-        // Show section label briefly when changing sections (only on desktop)
-        if (current !== "hero" && window.innerWidth >= 768) {
-          // Mount then show; handle a graceful exit animation before unmounting
-          if (sectionLabelTimer.current) {
-            window.clearTimeout(sectionLabelTimer.current);
-            sectionLabelTimer.current = null;
-          }
-          setSectionLabelMounted(true);
-          setShowSectionLabel(true);
-
-          // Keep visible for a short duration, then trigger exit and unmount after animation
-          sectionLabelTimer.current = window.setTimeout(() => {
-            setShowSectionLabel(false);
-            // unmount after exit animation (match CSS ~320ms)
-            sectionLabelTimer.current = window.setTimeout(() => {
-              setSectionLabelMounted(false);
-              sectionLabelTimer.current = null;
-            }, 340);
-          }, 1400);
-        }
+        // Note: section label popup removed intentionally
       }
     };
 
@@ -259,7 +236,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
     } else {
       return (
         <img
-          src="/gold-coin-top.png"
+          src={goldCoin2d}
           alt="Current section"
           className="w-5 h-5 object-contain"
         />
@@ -333,7 +310,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
                       />
                     ) : isActive ? (
                       <img
-                        src="/gold-coin-top.png"
+                        src={goldCoin2d}
                         alt="Current section"
                         className="w-5 h-5 object-contain"
                       />
@@ -393,11 +370,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
                         alt="Obi-Wan"
                       />
                     ) : isActive ? (
-                      <img
-                        src="/gold-coin-top.png"
-                        className="w-5 h-5"
-                        alt="coin"
-                      />
+                      <img src={goldCoin2d} className="w-5 h-5" alt="coin" />
                     ) : (
                       <div className="w-2 h-2 rounded-full bg-muted-foreground/40" />
                     )}
@@ -433,36 +406,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
               isHovered ? "scale-105 px-3 py-4" : "scale-100 px-3 py-3"
             }`}
           >
-            {/* Collapsed state - show only current section icon */}
-            {!isHovered && (
-              <div className="flex flex-col items-center">
-                <button
-                  onClick={() => scrollToSection(currentSection)}
-                  ref={(el) => (itemRefs.current[currentSection] = el)}
-                  className="relative flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-400 bg-transparent hover:bg-accent/6 border border-transparent hover:border-primary/20"
-                  aria-label={`Current section: ${getCurrentSectionLabel()}`}
-                >
-                  {getCurrentSectionIcon()}
-
-                  {/* removed blue left marker for a cleaner look */}
-                </button>
-
-                {/* Small indicator dots for other sections */}
-                <div className="flex flex-col gap-2 mt-3">
-                  {navItems
-                    .filter((item) => item.id !== currentSection)
-                    .map((item, index) => (
-                      <button
-                        key={item.id}
-                        ref={(el) => (itemRefs.current[item.id] = el)}
-                        onClick={() => scrollToSection(item.id)}
-                        className="w-2 h-2 rounded-full bg-muted-foreground/30 hover:bg-primary/60 transition-all duration-300"
-                        aria-label={`Navigate to ${item.label}`}
-                      />
-                    ))}
-                </div>
-              </div>
-            )}
+            {/* Collapsed state removed: current-section icon hidden by default (user requested) */}
 
             {/* Expanded state - show all sections with labels */}
             {isHovered && (
@@ -497,7 +441,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
                             />
                           ) : isActive ? (
                             <img
-                              src="/gold-coin-top.png"
+                              src={goldCoin2d}
                               alt="Current section"
                               className="w-5 h-5 object-contain transition-all duration-300"
                             />
@@ -528,27 +472,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
               </div>
             )}
 
-            {/* Floating icon that moves to the active item */}
-            <div
-              className="floating-icon pointer-events-none absolute"
-              style={{
-                left: floatingPos.visible ? floatingPos.left : 8,
-                top: floatingPos.visible ? floatingPos.top : 8,
-                opacity: floatingPos.visible ? 1 : 0,
-                transition:
-                  "left 300ms cubic-bezier(0.22,1,0.36,1), top 300ms cubic-bezier(0.22,1,0.36,1), opacity 220ms",
-              }}
-            >
-              {currentSection === "hero" ? (
-                <img
-                  src="/obiwan_face.png"
-                  className="w-5 h-5 rounded-full"
-                  alt="Obi-Wan"
-                />
-              ) : (
-                <img src="/gold-coin-top.png" className="w-5 h-5" alt="coin" />
-              )}
-            </div>
+            {/* Floating icon removed per request (no current-section indicator in collapsed sidebar) */}
 
             {/* Decorative elements */}
             <div className="absolute -top-1 -left-1 w-2 h-2 bg-primary/8 rounded-full blur-sm" />
@@ -556,28 +480,6 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
               className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-accent/8 rounded-full blur-sm"
               style={{ opacity: 0.6 }}
             />
-          </div>
-        </div>
-      )}
-
-      {/* Section label popup - appears briefly when changing sections */}
-      {sectionLabelMounted && currentSection !== "hero" && (
-        <div
-          className={`hidden md:block fixed left-16 top-1/2 -translate-y-1/2 z-40 transition-all duration-400 ease-out ${
-            showSectionLabel ? "section-label-enter" : "section-label-exit"
-          }`}
-        >
-          <div className="sidebar-glass rounded-xl px-4 py-2 shadow-xl border border-primary/14">
-            <span className="text-sm font-semibold text-primary whitespace-nowrap flex items-center gap-3">
-              <img
-                src="/gold-coin-top.png"
-                alt=""
-                className="w-4 h-4 object-contain"
-              />
-              <span className="block text-foreground opacity-90 transform transition-all duration-300">
-                {getCurrentSectionLabel()}
-              </span>
-            </span>
           </div>
         </div>
       )}

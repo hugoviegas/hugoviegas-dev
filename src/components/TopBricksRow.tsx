@@ -12,7 +12,8 @@ const TopBricksRow: React.FC = () => {
   const isMobile = useIsMobile();
 
   // Choose a target approximate brick size (percent-based will be computed)
-  const approxBrickPercent = isMobile ? 12 : 10; // used as a hint only
+  // Reduce approx percent to increase number of bricks (higher density)
+  const approxBrickPercent = isMobile ? 8 : 6; // smaller = more bricks
 
   // Compute how many bricks to evenly fill 100% width, then compute exact percent per brick
   const bricksNeeded = useMemo(() => {

@@ -30,7 +30,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground relative">
       {/* Ambient dots shared across the site (subtle, randomized) */}
-      <AmbientDots count={12} />
+      <AmbientDots count={36} />
       <TopControls />
       <DynamicSidebar show={showSidebar} />
       <TopBricksRow />

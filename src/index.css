@@ -354,6 +354,151 @@
   transform-origin: 50% 40%;
 }
 
+/* Small lego-drop animation used for decorative bricks */
+.animate-lego-drop {
+  animation-name: lego-drop;
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes lego-drop {
+  0% {
+    transform: translateY(-12px) scale(0.98);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(2px) scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Projects: lego square tile and contrast glass variant */
+.lego-square {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  height: 20.5rem; /* square-ish on desktop, stacks naturally on mobile */
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.lego-square:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+.lego-contrast {
+  /* Use existing glass variables for consistent contrast with theme */
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid hsl(var(--color-glass-border) / 0.9);
+}
+
+.lego-content {
+  position: relative;
+  z-index: 1;
+  color: hsl(var(--color-text-primary));
+}
+
+.lego-square img {
+  object-fit: cover;
+}
+
+/* Ensure card-project image overlay and reduced darkening so content remains readable but not fully black */
+.card-project img {
+  opacity: 0.9;
+}
+.card-project .bg-gradient-to-t {
+  opacity: 0.28;
+}
+
+/* Decorative bricks along the sides of project cards */
+.decor-bricks img {
+  transform-origin: center center;
+}
+.lego-rot-1 {
+  transform: rotate(-8deg);
+}
+.lego-rot-2 {
+  transform: rotate(6deg);
+}
+.decor-bricks img {
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+}
+
+/* Brick explosion layer: hidden by default, animate on hover of the card */
+
+/* brick explosion layer now sits behind the card (lower z-index) */
+.project-wrapper {
+  position: relative;
+}
+.project-wrapper .brick-explosion-layer {
+  /* larger collision box so bricks can originate near edges and fly around the card */
+  position: absolute;
+  left: -28%;
+  right: -28%;
+  top: -20%;
+  bottom: -8%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0; /* behind the card */
+  opacity: 0;
+  transition: opacity 120ms linear;
+}
+
+/* show bricks when wrapper hovered/focused */
+.project-wrapper:hover .brick-explosion-layer,
+.project-wrapper:focus-within .brick-explosion-layer {
+  opacity: 1;
+}
+
+.brick-explosion-item {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  transform-origin: center center;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease;
+  will-change: transform, opacity;
+}
+
+/* Use wrapper hover (not card) so hovering near edges still triggers the effect */
+.project-wrapper:hover .brick-explosion-item,
+.project-wrapper:focus-within .brick-explosion-item {
+  opacity: 1;
+  /* use CSS variable --be-delay to stagger */
+  transition-delay: var(--be-delay, 0ms);
+}
+
+/* On wrapper hover, bricks move outward using per-item move vars and rotate using --rand-rot */
+.project-wrapper:hover .brick-explosion-item {
+  transform: translateX(var(--move-x, -20px)) translateY(var(--move-y, -60px))
+    rotate(var(--rand-rot, 0deg));
+}
+
+/* keep bricks visible while hovered; when mouse leaves, they fade out quickly */
+.card-project .brick-explosion-item {
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+}
+
+/* Slight low-opacity hints around the edge so bricks are discoverable (very subtle) */
+.project-wrapper .brick-explosion-item {
+  opacity: 0.06;
+  transform: translateY(-6px) scale(0.98);
+}
+
+/* Ensure the project card renders above the explosion layer */
+.card-project {
+  z-index: 5;
+  position: relative;
+}
+
 @keyframes idle-sway {
   0% {
     transform: rotate(var(--rot, 0deg)) translateY(0);
