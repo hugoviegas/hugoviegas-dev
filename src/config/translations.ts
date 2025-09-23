@@ -49,6 +49,7 @@ export const translations: Translations = {
 
   // Skills Section
   skillsTitle: { EN: "Skills & Technologies", PT: "Habilidades & Tecnologias" },
+  otherSkills: { EN: "Other Skills", PT: "Outras Habilidades" },
   showMoreSkills: { EN: "Show More Skills", PT: "Mostrar Mais Habilidades" },
   showLessSkills: { EN: "Show Less", PT: "Mostrar Menos" },
 

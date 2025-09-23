@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
-import { Calendar } from "lucide-react";
+import { Calendar, Zap, TrendingUp, Globe } from "lucide-react";
 
 interface StatItemProps {
   value: number;
@@ -55,25 +55,25 @@ const StatsSection = () => {
       value: 90,
       label: t("stats.processReduction"),
       suffix: "%",
-      icon: <span>⚡</span>,
+      icon: <Zap className="mx-auto text-orange-400" size={32} />,
     },
     {
       value: 20,
       label: t("stats.viewsGrowth"),
       suffix: "%",
-      icon: <span>📈</span>,
+      icon: <TrendingUp className="mx-auto text-blue-400" size={32} />,
     },
     {
       value: 4,
       label: t("stats.yearsExperience"),
       suffix: "+",
-      icon: <Calendar className="mx-auto" />,
+      icon: <Calendar className="mx-auto text-green-400" size={32} />,
     },
     {
       value: 2,
       label: t("stats.countriesWorked"),
       suffix: "",
-      icon: <span>🌍</span>,
+      icon: <Globe className="mx-auto text-cyan-400" size={32} />,
     },
   ];
 
