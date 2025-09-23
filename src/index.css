@@ -442,10 +442,18 @@
 .project-wrapper .brick-explosion-layer {
   /* larger collision box so bricks can originate near edges and fly around the card */
   position: absolute;
-  left: -28%;
-  right: -28%;
-  top: -20%;
-  bottom: -8%;
+  /* extents are now driven by scoped variables so we can clamp/scale per viewport */
+  /* Use min() with a pixel cap so percent-based extents don't grow unbounded on very wide screens */
+  left: calc(
+    -1 * min(var(--brick-ex-left, 28%), var(--brick-ex-left-px, 240px))
+  );
+  right: calc(
+    -1 * min(var(--brick-ex-right, 28%), var(--brick-ex-right-px, 240px))
+  );
+  top: calc(-1 * min(var(--brick-ex-top, 20%), var(--brick-ex-top-px, 160px)));
+  bottom: calc(
+    -1 * min(var(--brick-ex-bottom, 8%), var(--brick-ex-bottom-px, 120px))
+  );
   pointer-events: none;
   overflow: visible;
   z-index: 0; /* behind the card */
@@ -459,11 +467,23 @@
   opacity: 1;
 }
 
+/* Prevent the decorative brick explosion from expanding the page width on
+   small devices. Allow bricks to appear outside the card by keeping
+   overflow visible on the .project-wrapper, but clip anything that would
+   overflow the projects container (viewport-scoped). This keeps the effect
+   intact while avoiding layout shifts / horizontal scroll on mobile. */
+#projects .container,
+#projects .wide-container {
+  overflow-x: hidden;
+}
+
 .brick-explosion-item {
   position: absolute;
   top: 0;
   opacity: 0;
   transform-origin: center center;
+  /* allow multiplying the per-item move values by a responsive scale */
+  --brick-scale: 1;
   transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease;
   will-change: transform, opacity;
 }
@@ -478,7 +498,10 @@
 
 /* On wrapper hover, bricks move outward using per-item move vars and rotate using --rand-rot */
 .project-wrapper:hover .brick-explosion-item {
-  transform: translateX(var(--move-x, -20px)) translateY(var(--move-y, -60px))
+  /* multiply the random movement by a responsive scale so very large viewports
+     don't result in overly large travel distances */
+  transform: translateX(calc(var(--move-x, -20px) * var(--brick-scale, 1)))
+    translateY(calc(var(--move-y, -60px) * var(--brick-scale, 1)))
     rotate(var(--rand-rot, 0deg));
 }
 
@@ -491,6 +514,68 @@
 .project-wrapper .brick-explosion-item {
   opacity: 0.06;
   transform: translateY(-6px) scale(0.98);
+}
+
+/* Cap the visual size of explosion items and scale movement on different viewports.
+   Defaults are chosen to be proportional on small screens and limited on very large ones. */
+#projects {
+  /* how far the explosion area extends beyond the card (percent of card/container) */
+  --brick-ex-left: 28%;
+  --brick-ex-right: 28%;
+  --brick-ex-top: 20%;
+  --brick-ex-bottom: 8%;
+  /* item maximum size (responsive): min 24px, preferred 3.5vw, max 64px */
+  --brick-item-max-size: clamp(24px, 3.5vw, 64px);
+  /* global movement scale (1 = full movement as generated inline) */
+  --brick-scale: 1;
+}
+
+/* On very large screens reduce how far bricks can travel and slightly cap their size */
+@media (min-width: 1400px) {
+  #projects {
+    --brick-ex-left: 12%;
+    --brick-ex-right: 12%;
+    --brick-ex-top: 10%;
+    --brick-ex-bottom: 6%;
+    --brick-item-max-size: clamp(28px, 2.2vw, 56px);
+    --brick-scale: 0.5; /* shrink movement distances more on very wide screens */
+    /* pixel caps to prevent very large percent-based offsets */
+    --brick-ex-left-px: 160px;
+    --brick-ex-right-px: 160px;
+    --brick-ex-top-px: 120px;
+    --brick-ex-bottom-px: 96px;
+  }
+}
+
+/* On small screens keep the explosion richer but bounded relative to viewport */
+@media (max-width: 640px) {
+  #projects {
+    --brick-ex-left: 20%;
+    --brick-ex-right: 20%;
+    --brick-ex-top: 18%;
+    --brick-ex-bottom: 6%;
+    --brick-item-max-size: clamp(20px, 5.5vw, 48px);
+    --brick-scale: 1;
+  }
+}
+
+/* Apply the size cap to each brick so inline width values can't grow beyond the cap */
+.project-wrapper .brick-explosion-item {
+  max-width: var(--brick-item-max-size);
+  max-height: var(--brick-item-max-size);
+  width: auto !important; /* allow max-width to take precedence */
+  height: auto !important;
+}
+
+/* Make the projects container full-viewport width but keep the inner layout centered
+   so bricks that exceed the card can be clipped to the viewport without shifting it. */
+#projects .container,
+#projects .wide-container {
+  overflow-x: hidden;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 /* Ensure the project card renders above the explosion layer */

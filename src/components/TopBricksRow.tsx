@@ -63,7 +63,7 @@ const TopBricksRow: React.FC = () => {
         padding: 0,
         margin: 0,
         paddingBottom: `${paddingBottomVw}vw`,
-        overflow: "visible",
+        overflow: "hidden",
         pointerEvents: "none",
         zIndex: 1,
       }}

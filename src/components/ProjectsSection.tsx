@@ -29,7 +29,7 @@ const ProjectsSection = () => {
       description:
         "Professional restaurant website for D'Arcy McGee's Irish Pub featuring modern responsive design, interactive menu system, event listings, and seamless user experience.",
       image: darcyMcgeesProject,
-      technologies: ["HTML5", "CSS3", "JavaScript", "Responsive Design"],
+      technologies: ["HTML5", "CSS3", "ReactJs", "Responsive Design"],
       category: "Web Development",
       featured: true,
       liveUrl: "https://www.darcymcgeespub.com/",
@@ -60,7 +60,7 @@ const ProjectsSection = () => {
       description:
         "Full-stack e-commerce solution built with React and Node.js. Features include user authentication, payment processing, inventory management, and admin dashboard.",
       image: ecommerceProject,
-      technologies: ["React", "Node.js", "Express", "MongoDB", "Stripe"],
+      technologies: ["React", "Node.js", "Express", "SQL", "Stripe"],
       category: "Web Development",
       featured: false,
       liveUrl: "#",
