@@ -9,6 +9,7 @@ import {
   Download,
 } from "lucide-react";
 import { LazyImage } from "@/components/LazyImage";
+import LegoButton from "./LegoButton";
 import { useLanguage } from "@/hooks/useLanguage";
 import {
   Dialog,
@@ -119,19 +120,12 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                onClick={scrollToProjects}
-                className="btn-hero text-lg px-8 py-6"
-              >
+              <LegoButton onClick={scrollToProjects}>
                 {t("viewProjects")}
-              </Button>
-              <Button
-                onClick={scrollToContact}
-                variant="outline"
-                className="btn-ghost text-lg px-8 py-6"
-              >
+              </LegoButton>
+              <LegoButton onClick={scrollToContact} brickColor="yellow">
                 {t("getInTouch")}
-              </Button>
+              </LegoButton>
             </div>
 
             {/* Social Links */}

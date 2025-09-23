@@ -14,6 +14,7 @@ import {
   Instagram,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import LegoButton from "./LegoButton";
 import WorldClocks from "@/components/WorldClocks";
 
 const ContactSection = () => {
@@ -360,10 +361,10 @@ const ContactSection = () => {
                 autoComplete="off"
               />
 
-              <Button
+              <LegoButton
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-hero w-full text-lg py-6"
+                className="w-full"
               >
                 {isSubmitting ? (
                   t("send.sending")
@@ -373,7 +374,7 @@ const ContactSection = () => {
                     {t("send.sendMessage")}
                   </>
                 )}
-              </Button>
+              </LegoButton>
             </form>
           </div>
 

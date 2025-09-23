@@ -3,6 +3,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
+import LegoButton from "./LegoButton";
 import automationProject from "@/assets/project-automation.jpg";
 import ecommerceProject from "@/assets/project-ecommerce.jpg";
 import taskManagerProject from "@/assets/project-taskmanager.jpg";
@@ -253,8 +254,7 @@ const ProjectsSection = () => {
           <p className="text-lg text-muted-foreground mb-6">
             {t("projectsCTA")}
           </p>
-          <Button
-            className="btn-hero"
+          <LegoButton
             onClick={() =>
               document
                 .getElementById("contact")
@@ -262,7 +262,7 @@ const ProjectsSection = () => {
             }
           >
             {t("projectsCTABtn")}
-          </Button>
+          </LegoButton>
         </div>
       </div>
     </section>
