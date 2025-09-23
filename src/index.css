@@ -1094,3 +1094,71 @@
     font-size: 18px;
   }
 }
+
+/* Hero Image Brick Explosion */
+.hero-image-wrapper {
+  position: relative;
+  overflow: visible;
+  /* Contain any potential layout expansion */
+}
+
+.hero-brick-explosion-layer {
+  position: absolute;
+  top: -15%;
+  left: -15%;
+  right: -15%;
+  bottom: -15%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0; /* behind the image */
+  opacity: 0;
+  transition: opacity 150ms linear;
+  /* Ensure explosion doesn't affect page layout */
+  max-width: min(400px, 30vw);
+  max-height: min(400px, 30vw);
+}
+
+.hero-image-wrapper:hover .hero-brick-explosion-layer {
+  opacity: 1;
+}
+
+.hero-brick-explosion-item {
+  position: absolute;
+  opacity: 0;
+  transform-origin: center center;
+  transform: scale(0.9);
+  transition: all 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+  z-index: 1;
+}
+
+.hero-image-wrapper:hover .hero-brick-explosion-item {
+  opacity: 0.7;
+  transform: translateX(var(--hero-move-x, 0)) translateY(var(--hero-move-y, 0))
+    rotate(var(--hero-rand-rot, 0deg)) scale(1);
+  transition-delay: var(--hero-delay, 0ms);
+}
+
+/* Remove neon glow from hero image */
+.hero-image-no-glow {
+  transition: all 0.3s ease;
+}
+
+.hero-image-no-glow:hover {
+  transform: scale(1.02);
+  /* removed neon-glow effect */
+}
+
+/* Responsive adjustments for hero explosion */
+@media (max-width: 640px) {
+  .hero-brick-explosion-layer {
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+  }
+
+  .hero-brick-explosion-item {
+    max-width: 20px;
+  }
+}

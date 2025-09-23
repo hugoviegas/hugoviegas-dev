@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { LazyImage } from "@/components/LazyImage";
 import LegoButton from "./LegoButton";
+import HeroBrickExplosion from "./HeroBrickExplosion";
 import { useLanguage } from "@/hooks/useLanguage";
 import {
   Dialog,
@@ -207,9 +208,14 @@ const HeroSection = () => {
 
           {/* Image Column */}
           <div className="relative lg:justify-self-end fade-in delay-300">
-            <div className="relative mx-auto">
+            <div className="relative mx-auto hero-image-wrapper">
+              {/* Brick explosion layer behind the image */}
+              <div className="hero-brick-explosion-layer">
+                <HeroBrickExplosion />
+              </div>
+
               {/* Glassmorphism Frame - single rounded square that the image fills */}
-              <div className="glass-strong rounded-3xl relative overflow-hidden lg:flex-shrink-0 aspect-square w-11/12 max-w-[420px] sm:w-80 md:w-96 lg:w-96 mx-auto transition-all duration-300 hover:neon-glow">
+              <div className="glass-strong rounded-3xl relative overflow-hidden lg:flex-shrink-0 aspect-square w-11/12 max-w-[420px] sm:w-80 md:w-96 lg:w-96 mx-auto hero-image-no-glow">
                 {/* subtle gradient overlay for depth */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none"></div>
 
