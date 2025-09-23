@@ -1095,70 +1095,86 @@
   }
 }
 
-/* Hero Image Brick Explosion */
+/* Hero Image Brick Explosion Styles */
 .hero-image-wrapper {
   position: relative;
-  overflow: visible;
-  /* Contain any potential layout expansion */
 }
 
 .hero-brick-explosion-layer {
+  /* positioned to cover area around the hero image */
   position: absolute;
-  top: -15%;
-  left: -15%;
-  right: -15%;
+  left: -30%;
+  right: -30%;
+  top: -25%;
   bottom: -15%;
   pointer-events: none;
   overflow: visible;
   z-index: 0; /* behind the image */
   opacity: 0;
-  transition: opacity 150ms linear;
-  /* Ensure explosion doesn't affect page layout */
-  max-width: min(400px, 30vw);
-  max-height: min(400px, 30vw);
+  transition: opacity 200ms linear;
 }
 
+/* show bricks when hero image wrapper is hovered */
 .hero-image-wrapper:hover .hero-brick-explosion-layer {
   opacity: 1;
 }
 
 .hero-brick-explosion-item {
   position: absolute;
+  top: 0;
   opacity: 0;
   transform-origin: center center;
-  transform: scale(0.9);
-  transition: all 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease;
   will-change: transform, opacity;
   z-index: 1;
 }
 
+/* Use wrapper hover so hovering near edges still triggers the effect */
 .hero-image-wrapper:hover .hero-brick-explosion-item {
-  opacity: 0.7;
-  transform: translateX(var(--hero-move-x, 0)) translateY(var(--hero-move-y, 0))
-    rotate(var(--hero-rand-rot, 0deg)) scale(1);
+  opacity: 0.9;
+  /* use CSS variable --hero-delay to stagger */
   transition-delay: var(--hero-delay, 0ms);
 }
 
-/* Remove neon glow from hero image */
-.hero-image-no-glow {
-  transition: all 0.3s ease;
+/* On wrapper hover, bricks move outward using per-item move vars and rotate using --hero-rand-rot */
+.hero-image-wrapper:hover .hero-brick-explosion-item {
+  transform: translateX(var(--hero-move-x, -30px))
+    translateY(var(--hero-move-y, -80px)) rotate(var(--hero-rand-rot, 0deg))
+    scale(1.1);
 }
 
-.hero-image-no-glow:hover {
-  transform: scale(1.02);
-  /* removed neon-glow effect */
+/* Slight low-opacity hints around the edge so bricks are discoverable (very subtle) */
+.hero-image-wrapper .hero-brick-explosion-item {
+  opacity: 0.08;
+  transform: translateY(-8px) scale(0.95);
+}
+
+/* Ensure the hero image renders above the explosion layer */
+.hero-image-wrapper .glass-strong {
+  z-index: 5;
+  position: relative;
 }
 
 /* Responsive adjustments for hero explosion */
 @media (max-width: 640px) {
   .hero-brick-explosion-layer {
-    top: -10%;
-    left: -10%;
-    right: -10%;
-    bottom: -10%;
+    left: -25%;
+    right: -25%;
+    top: -20%;
+    bottom: -12%;
   }
 
   .hero-brick-explosion-item {
-    max-width: 20px;
+    max-width: 32px;
+    max-height: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-brick-explosion-layer {
+    left: -35%;
+    right: -35%;
+    top: -30%;
+    bottom: -18%;
   }
 }

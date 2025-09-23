@@ -10,8 +10,17 @@ import {
 } from "lucide-react";
 import { LazyImage } from "@/components/LazyImage";
 import LegoButton from "./LegoButton";
-import HeroBrickExplosion from "./HeroBrickExplosion";
 import { useLanguage } from "@/hooks/useLanguage";
+import redFront from "@/assets/lego-bricks/red-front.png";
+import yellowFront from "@/assets/lego-bricks/yellow-front.png";
+import blueFront from "@/assets/lego-bricks/blue-front.png";
+import whiteFront from "@/assets/lego-bricks/white-front.png";
+import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.png";
+import goldCoinFront from "@/assets/lego-bricks/gold-coin-front.png";
+import goldCoinTop from "@/assets/lego-bricks/gold-coin-top.png";
+import redTop from "@/assets/lego-bricks/red-top.png";
+import whiteTop from "@/assets/lego-bricks/white-top.png";
+import whiteTopSingle from "@/assets/lego-bricks/white-top-single.png";
 import {
   Dialog,
   DialogContent,
@@ -89,6 +98,66 @@ const HeroSection = () => {
       console.error = origConsoleError as Console["error"];
     };
   }, []);
+
+  // Hero Brick Explosion component
+  const HERO_BRICK_IMAGES = [
+    redFront,
+    yellowFront,
+    blueFront,
+    whiteFront,
+    whiteTop,
+    whiteTopSingle,
+    redTop,
+    goldCoin2d,
+    goldCoinFront,
+    goldCoinTop,
+  ];
+
+  const HeroBrickExplosion = () => {
+    // Create 20 bricks with randomized sizes/angles/positions around the hero image
+    const count = 20;
+    return (
+      <>
+        {Array.from({ length: count }).map((_, i) => {
+          const img =
+            HERO_BRICK_IMAGES[
+              Math.floor(Math.random() * HERO_BRICK_IMAGES.length)
+            ];
+          const size = 16 + Math.floor(Math.random() * 24); // 16-40px
+          // random starting position within the explosion layer
+          const left = Math.random() * 100; // percent
+          const top = Math.random() * 100; // percent
+          const rotate = -30 + Math.random() * 60; // degrees
+          const delay = Math.random() * 300; // ms stagger
+          // movement vector for the hover explosion (px)
+          const moveX = Math.round(-80 + Math.random() * 160); // -80 .. +80
+          const moveY = Math.round(-100 + Math.random() * 60); // -100 .. -40 (prefer upward)
+
+          return (
+            <img
+              key={i}
+              src={img}
+              alt=""
+              className="hero-brick-explosion-item"
+              style={{
+                width: `${size}px`,
+                height: "auto",
+                left: `${left}%`,
+                top: `${top}%`,
+                // initial rotation and per-item CSS vars used by hover animation
+                ...({
+                  ["--hero-delay"]: `${delay}ms`,
+                  ["--hero-rand-rot"]: `${rotate}deg`,
+                  ["--hero-move-x"]: `${moveX}px`,
+                  ["--hero-move-y"]: `${moveY}px`,
+                } as React.CSSProperties),
+              }}
+            />
+          );
+        })}
+      </>
+    );
+  };
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0">
@@ -208,25 +277,28 @@ const HeroSection = () => {
 
           {/* Image Column */}
           <div className="relative lg:justify-self-end fade-in delay-300">
-            <div className="relative mx-auto hero-image-wrapper">
-              {/* Brick explosion layer behind the image */}
-              <div className="hero-brick-explosion-layer">
-                <HeroBrickExplosion />
-              </div>
+            <div className="relative mx-auto">
+              {/* Hero image wrapper with brick explosion effect */}
+              <div className="hero-image-wrapper relative">
+                {/* Brick explosion layer sits behind the image */}
+                <div className="hero-brick-explosion-layer pointer-events-none">
+                  <HeroBrickExplosion />
+                </div>
 
-              {/* Glassmorphism Frame - single rounded square that the image fills */}
-              <div className="glass-strong rounded-3xl relative overflow-hidden lg:flex-shrink-0 aspect-square w-11/12 max-w-[420px] sm:w-80 md:w-96 lg:w-96 mx-auto hero-image-no-glow">
-                {/* subtle gradient overlay for depth */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none"></div>
+                {/* Glassmorphism Frame - single rounded square that the image fills */}
+                <div className="glass-strong rounded-3xl relative overflow-hidden lg:flex-shrink-0 aspect-square w-11/12 max-w-[420px] sm:w-80 md:w-96 lg:w-96 mx-auto transition-all duration-300">
+                  {/* subtle gradient overlay for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none"></div>
 
-                {/* image fills the frame (no smaller inner square) */}
-                <div className="relative z-10 w-full h-full">
-                  <LazyImage
-                    src={heroImage}
-                    alt="Hugo Viegas - IT Support Specialist transitioning to Full-Stack Developer"
-                    className="object-cover w-full h-full shadow-2xl"
-                    placeholder="Loading profile..."
-                  />
+                  {/* image fills the frame (no smaller inner square) */}
+                  <div className="relative z-10 w-full h-full">
+                    <LazyImage
+                      src={heroImage}
+                      alt="Hugo Viegas - IT Support Specialist transitioning to Full-Stack Developer"
+                      className="object-cover w-full h-full shadow-2xl"
+                      placeholder="Loading profile..."
+                    />
+                  </div>
                 </div>
               </div>
               {/* Compact Spotify embed under profile image */}
