@@ -75,22 +75,28 @@
 }
 
 .lightsaber-mask.pulse {
-  animation: mask-pulse 2.8s ease-in-out infinite;
+  animation: mask-pulse 1.9s ease-in-out infinite;
+  will-change: transform, opacity, filter;
 }
 
 /* Pulse animation: scales glow and changes opacity to simulate breathing light */
 @keyframes saber-pulse {
   0% {
-    transform: translate(-50%, -50%) scale(0.95);
-    opacity: 0.85;
+    filter: blur(11px) saturate(1.04) contrast(1.03);
+    opacity: 0.78;
+    /* keep width same (scaleX=1), slightly reduce height */
+    transform: scaleX(1) scaleY(0.94);
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.08);
+    filter: blur(4px) saturate(1.44) contrast(1.18);
     opacity: 1;
+    /* keep width same, increase height more for a bigger pulse */
+    transform: scaleX(1) scaleY(1.14);
   }
   100% {
-    transform: translate(-50%, -50%) scale(0.95);
-    opacity: 0.85;
+    filter: blur(11px) saturate(1.04) contrast(1.03);
+    opacity: 0.78;
+    transform: scaleX(1) scaleY(0.94);
   }
 }
 
@@ -138,5 +144,12 @@
   }
   .lightsaber-glow.power-up {
     animation: none;
+  }
+  /* respect reduced motion for the mask pulse as well */
+  .lightsaber-mask.pulse {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
   }
 }

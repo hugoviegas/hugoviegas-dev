@@ -419,7 +419,7 @@ export default function LightsaberViewerMV() {
               const o = idx * 4;
               out[o] = 24;
               out[o + 1] = 255;
-              out[o + 2] = 96;
+              out[o + 2] = 200;
               out[o + 3] = 255;
             }
           }
@@ -494,8 +494,8 @@ export default function LightsaberViewerMV() {
           maskCtx.globalCompositeOperation = "destination-in";
           maskCtx.drawImage(maskSmall, 0, 0, sw, sh, 0, 0, w, h);
           maskCtx.globalCompositeOperation = "source-in";
-          // restore to the original saturated green (slightly more conservative)
-          maskCtx.fillStyle = "rgba(40,240,110,1)";
+          // restore to a brighter, more visible green
+          maskCtx.fillStyle = "rgba(80,255,140,1)";
           maskCtx.fillRect(0, 0, w, h);
           maskCtx.globalCompositeOperation = "source-over";
         } else {
@@ -682,7 +682,94 @@ export default function LightsaberViewerMV() {
     };
 
     mvEl.addEventListener("click", handleClick);
-    return () => mvEl.removeEventListener("click", handleClick);
+    // Add wheel handler to rotate only vertically (change elevation)
+    const handleWheel = (ev: WheelEvent) => {
+      ev.preventDefault();
+      try {
+        const maybeFn = (mvEl as unknown as Record<string, unknown>)[
+          "getCameraOrbit"
+        ] as unknown;
+        if (typeof maybeFn === "function") {
+          type GetCameraOrbitFn = () => [number, number, number] | null;
+          const cur = (maybeFn as GetCameraOrbitFn).call(mvEl) as
+            | [number, number, number]
+            | null;
+          const az = (cur && cur[0]) || 0;
+          const el = (cur && cur[1]) || 0;
+          const delta = Math.sign(ev.deltaY) * 2;
+          let newEl = (el * 180) / Math.PI - delta;
+          newEl = Math.max(15, Math.min(85, newEl));
+          try {
+            (mvEl as unknown as Record<string, unknown>)["cameraOrbit"] = `${
+              (az * 180) / Math.PI
+            }deg ${newEl}deg auto`;
+          } catch (err) {
+            /* ignore */
+          }
+        } else {
+          throw new Error("no getCameraOrbit");
+        }
+      } catch (e) {
+        // fallback: try reading attribute and update camera-orbit attribute
+        try {
+          const attr = mvEl.getAttribute("camera-orbit") || "0deg 75deg auto";
+          const parts = attr.split(" ");
+          const azdeg = parts[0];
+          const eldeg = parseFloat(parts[1].replace("deg", ""));
+          const delta = Math.sign(ev.deltaY) * 2;
+          let newEl = eldeg - delta;
+          newEl = Math.max(15, Math.min(85, newEl));
+          mvEl.setAttribute("camera-orbit", `${azdeg} ${newEl}deg auto`);
+        } catch (e2) {
+          /* noop */
+        }
+      }
+    };
+
+    // To restrict azimuth (horizontal rotation) we listen for pointermove and ignore horizontal drags
+    let pointerId: number | null = null;
+    let startY = 0;
+    let startElDeg = 75;
+    const handlePointerDown = (ev: PointerEvent) => {
+      // only left button
+      if (ev.button !== 0) return;
+      pointerId = ev.pointerId;
+      startY = ev.clientY;
+      const attr = mvEl.getAttribute("camera-orbit") || "0deg 75deg auto";
+      const parts = attr.split(" ");
+      startElDeg = parseFloat(parts[1].replace("deg", ""));
+      (mvEl as HTMLElement).setPointerCapture(pointerId);
+    };
+    const handlePointerMove = (ev: PointerEvent) => {
+      if (pointerId !== ev.pointerId) return;
+      const dy = ev.clientY - startY;
+      const deltaDeg = dy * 0.08; // sensitivity
+      let newEl = startElDeg + deltaDeg;
+      newEl = Math.max(15, Math.min(85, newEl));
+      mvEl.setAttribute("camera-orbit", `0deg ${newEl}deg auto`);
+    };
+    const handlePointerUp = (ev: PointerEvent) => {
+      if (pointerId !== ev.pointerId) return;
+      try {
+        (mvEl as HTMLElement).releasePointerCapture(pointerId);
+      } catch (e) {
+        // ignore release errors
+      }
+      pointerId = null;
+    };
+
+    mvEl.addEventListener("wheel", handleWheel, { passive: false });
+    mvEl.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+
+    return () => {
+      mvEl.removeEventListener("click", handleClick);
+      mvEl.removeEventListener("wheel", handleWheel);
+      mvEl.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+    };
   }, [
     modelLoaded,
     powered,
@@ -723,8 +810,9 @@ export default function LightsaberViewerMV() {
             src="/3d-model/Star Wars - Lightsabers.glb"
             alt="Lightsaber"
             disable-zoom
-            min-camera-orbit="0deg 75deg auto"
-            max-camera-orbit="0deg 75deg auto"
+            camera-controls
+            min-camera-orbit="0deg 15deg auto"
+            max-camera-orbit="0deg 85deg auto"
             camera-orbit="0deg 75deg auto"
             exposure="1"
             style={{
