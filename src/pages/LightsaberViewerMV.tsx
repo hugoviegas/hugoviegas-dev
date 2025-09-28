@@ -19,10 +19,25 @@ interface MaterialLike {
 }
 type ThreeScene = { traverse?: (cb: (obj: unknown) => void) => void };
 
+function getRGBFromColor(col: unknown): [number, number, number] {
+  if (!col) return [0, 0, 0];
+  if (Array.isArray(col)) return [col[0] ?? 0, col[1] ?? 0, col[2] ?? 0];
+  if (typeof col === "object" && col !== null) {
+    const c = col as Partial<ColorLike> & Record<string, unknown>;
+    return [
+      typeof c.r === "number" ? c.r : 0,
+      typeof c.g === "number" ? c.g : 0,
+      typeof c.b === "number" ? c.b : 0,
+    ];
+  }
+  return [0, 0, 0];
+}
+
 export default function LightsaberViewerMV() {
   const mvRef = useRef<HTMLDivElement | null>(null);
   const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const maskLoopRef = useRef<number | null>(null);
+  const bladeAnimationFrameRef = useRef<number | null>(null);
 
   const [pulseEnabled] = useState<boolean>(true);
   const originalMaterialIntensityRef = useRef<Map<MaterialLike, number>>(
@@ -31,6 +46,14 @@ export default function LightsaberViewerMV() {
   const [powered, setPowered] = useState<boolean>(false);
   const [modelLoaded, setModelLoaded] = useState<boolean>(false);
   const [bladeProgress, setBladeProgress] = useState<number>(0);
+
+  const BLADE_ON_DURATION = 420;
+  const BLADE_OFF_DURATION = 360;
+  const bladeProgressRef = useRef(bladeProgress);
+
+  useEffect(() => {
+    bladeProgressRef.current = bladeProgress;
+  }, [bladeProgress]);
 
   // helper: read r,g,b from various color shapes (three.Color-like or array)
   function getRGBFromColor(col: unknown): [number, number, number] {
@@ -74,6 +97,73 @@ export default function LightsaberViewerMV() {
       document.head.appendChild(legacyScript);
     }
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (bladeAnimationFrameRef.current) {
+        cancelAnimationFrame(bladeAnimationFrameRef.current);
+        bladeAnimationFrameRef.current = null;
+      }
+    };
+  }, []);
+
+  const animateBlade = useCallback(
+    ({
+      from,
+      to,
+      duration,
+      onComplete,
+    }: {
+      from: number;
+      to: number;
+      duration: number;
+      onComplete?: () => void;
+    }) => {
+      if (bladeAnimationFrameRef.current) {
+        cancelAnimationFrame(bladeAnimationFrameRef.current);
+        bladeAnimationFrameRef.current = null;
+      }
+
+      const easeInOutCubic = (t: number) =>
+        t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      const start = performance.now();
+
+      const step = (now: number) => {
+        const elapsed = Math.min(1, (now - start) / duration);
+        const eased = easeInOutCubic(elapsed);
+        const value = from + (to - from) * eased;
+        setBladeProgress(value);
+
+        const canvas = maskCanvasRef.current;
+        if (canvas) {
+          const opacity =
+            to > from ? Math.min(1, value * 1.05) : Math.max(0, value * 1.02);
+          const blur = to > from ? 18 - value * 8 : 10 + (1 - value) * 12;
+          canvas.style.opacity = opacity.toFixed(3);
+          canvas.style.filter = `blur(${Math.max(6, blur).toFixed(
+            2
+          )}px) saturate(1.08)`;
+        }
+
+        if (elapsed < 1) {
+          bladeAnimationFrameRef.current = requestAnimationFrame(step);
+        } else {
+          bladeAnimationFrameRef.current = null;
+          if (to === 0) {
+            const canvas = maskCanvasRef.current;
+            if (canvas) {
+              canvas.style.opacity = "0";
+              canvas.style.filter = "blur(18px) saturate(1)";
+            }
+          }
+          onComplete?.();
+        }
+      };
+
+      bladeAnimationFrameRef.current = requestAnimationFrame(step);
+    },
+    []
+  );
 
   // Detect model-viewer readiness: listen to the 'load' event and probe for the internal canvas
   useEffect(() => {
@@ -123,53 +213,8 @@ export default function LightsaberViewerMV() {
   }, [mvRef]);
 
   // Add click handler for model-viewer
-  useEffect(() => {
-    const mvEl = mvRef.current?.querySelector(
-      "model-viewer"
-    ) as HTMLElement | null;
-    if (!mvEl || !modelLoaded) return;
-
-    const handleClick = () => {
-      if (powered) {
-        const c = maskCanvasRef.current;
-        if (c) {
-          c.classList.remove("pulse");
-          c.classList.remove("power-up");
-          stopGreenMaskLoop();
-        }
-        try {
-          for (const [
-            mat,
-            v,
-          ] of originalMaterialIntensityRef.current.entries()) {
-            mat.emissiveIntensity = v;
-            mat.needsUpdate = true;
-          }
-          originalMaterialIntensityRef.current.clear();
-        } catch (err) {
-          console.debug("powerOff restore error", err);
-        }
-        setPowered(false);
-      } else {
-        startGreenMaskLoop();
-        const canvas = maskCanvasRef.current;
-        if (canvas) {
-          canvas.classList.add("power-up");
-        }
-        fadeInMask(700).then(() => {
-          const c = maskCanvasRef.current;
-          if (c && pulseEnabled) {
-            c.classList.add("pulse");
-          }
-          setPowered(true);
-        });
-      }
-    };
-
-    mvEl.addEventListener("click", handleClick);
-    return () => mvEl.removeEventListener("click", handleClick);
-  }); // Create or start the overlay mask loop that confines glow to the blade.
-  function startGreenMaskLoop() {
+  // Create or start the overlay mask loop that confines glow to the blade.
+  const startGreenMaskLoop = useCallback(() => {
     // If already running, keep running
     if (maskLoopRef.current) return;
 
@@ -429,11 +474,11 @@ export default function LightsaberViewerMV() {
         if (target > 0) {
           const maskData = maskCtx.createImageData(sw, sh);
           const md = maskData.data;
-          const progressX = Math.floor(sw * bladeProgress);
+          const progressX = Math.floor(sw * bladeProgressRef.current);
           for (let i = 0; i < sw * sh; i++) {
             const x = i % sw;
             const isTarget = labels[i] === target;
-            const isVisible = bladeProgress >= 1 || x <= progressX;
+            const isVisible = bladeProgressRef.current >= 1 || x <= progressX;
             const a = isTarget && isVisible ? 255 : 0;
             md[i * 4] = 0;
             md[i * 4 + 1] = 0;
@@ -468,158 +513,186 @@ export default function LightsaberViewerMV() {
     // start loop
     rafId = requestAnimationFrame(update);
     maskLoopRef.current = rafId;
-  }
+  }, []);
 
-  function stopGreenMaskLoop() {
+  const stopGreenMaskLoop = useCallback(() => {
     if (maskLoopRef.current) {
       cancelAnimationFrame(maskLoopRef.current);
       maskLoopRef.current = null;
+    }
+    if (bladeAnimationFrameRef.current) {
+      cancelAnimationFrame(bladeAnimationFrameRef.current);
+      bladeAnimationFrameRef.current = null;
     }
     if (maskCanvasRef.current) {
       maskCanvasRef.current.remove();
       maskCanvasRef.current = null;
     }
-  }
-
-  // Animate mask canvas opacity and blade progress from left to right
-  function fadeInMask(duration: number) {
-    return new Promise<void>((resolve) => {
-      const canvas = maskCanvasRef.current;
-      if (!canvas) {
-        resolve();
-        return;
-      }
-      const start = performance.now();
-      const startFilter = 24;
-      const endFilter = 8;
-      function frame(now: number) {
-        const t = Math.min(1, (now - start) / duration);
-        const ease = 1 - Math.pow(1 - t, 3);
-        canvas.style.opacity = String(ease);
-        const blur = Math.round(startFilter + (endFilter - startFilter) * ease);
-        canvas.style.filter = `blur(${blur}px) saturate(1.1)`;
-
-        // Animate blade progress from left to right
-        setBladeProgress(ease);
-
-        if (t < 1) requestAnimationFrame(frame);
-        else resolve();
-      }
-      requestAnimationFrame(frame);
-    });
-  }
-
-  // This function is now inlined in the click handler above
-  // Keeping as a reference for any external calls if needed
-
-  const powerOff = useCallback(() => {
-    const c = maskCanvasRef.current;
-    if (c) {
-      c.classList.remove("pulse");
-      c.classList.remove("power-up");
-
-      // Animate blade disappearing from right to left
-      const start = performance.now();
-      const duration = 400;
-      function animate(now: number) {
-        const t = Math.min(1, (now - start) / duration);
-        const progress = 1 - t; // Reverse direction
-        setBladeProgress(progress);
-
-        c.style.opacity = String(progress);
-        c.style.filter = `blur(${20 + (1 - progress) * 10}px)`;
-
-        if (t < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          setTimeout(() => stopGreenMaskLoop(), 50);
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-    try {
-      for (const [mat, v] of originalMaterialIntensityRef.current.entries()) {
-        try {
-          mat.emissiveIntensity = v;
-          mat.needsUpdate = true;
-        } catch (err) {
-          console.debug("restore mat error", err);
-        }
-      }
-      originalMaterialIntensityRef.current.clear();
-    } catch (err) {
-      console.debug("powerOff restore error", err);
-    }
-    setPowered(false);
   }, []);
 
   // Material animation (best-effort when scene is available)
-  function performPowerOnAnimation(
-    scene: ThreeScene,
-    duration: number,
-    targetIntensity: number
-  ) {
-    const greenMaterials: MaterialLike[] = [];
-    const allMaterials: {
-      mat: MaterialLike;
-      color: [number, number, number];
-      name?: string;
-    }[] = [];
-    try {
-      scene.traverse!((obj: unknown) => {
-        const node = obj as { material?: unknown; name?: string } | null;
-        if (!node || typeof node.material === "undefined") return;
-        const mat = node.material as MaterialLike;
-        const col = mat.color;
-        if (!col) return;
-        const [r, g, b] = getRGBFromColor(col);
-        allMaterials.push({ mat, color: [r, g, b], name: node.name });
-        const isGreenByColor = g > 0.25 && g > r * 1.4 && g > b * 1.4;
-        const isGreenByName = !!(
-          node.name &&
-          (node.name.toLowerCase().includes("blade") ||
-            node.name.toLowerCase().includes("green") ||
-            node.name.toLowerCase().includes("saber"))
-        );
-        if (isGreenByColor || isGreenByName) greenMaterials.push(mat);
-      });
-    } catch (err) {
-      console.debug("scene traverse error", err);
-    }
-
-    if (greenMaterials.length === 0) {
-      // fallback: any bright material
-      for (const { mat, color } of allMaterials) {
-        const [r, g, b] = color;
-        if (r > 0.2 || g > 0.2 || b > 0.2) greenMaterials.push(mat);
+  const performPowerOnAnimation = useCallback(
+    (scene: ThreeScene, duration: number, targetIntensity: number) => {
+      const greenMaterials: MaterialLike[] = [];
+      const allMaterials: {
+        mat: MaterialLike;
+        color: [number, number, number];
+        name?: string;
+      }[] = [];
+      try {
+        scene.traverse!((obj: unknown) => {
+          const node = obj as { material?: unknown; name?: string } | null;
+          if (!node || typeof node.material === "undefined") return;
+          const mat = node.material as MaterialLike;
+          const col = mat.color;
+          if (!col) return;
+          const [r, g, b] = getRGBFromColor(col);
+          allMaterials.push({ mat, color: [r, g, b], name: node.name });
+          const isGreenByColor = g > 0.25 && g > r * 1.4 && g > b * 1.4;
+          const isGreenByName = !!(
+            node.name &&
+            (node.name.toLowerCase().includes("blade") ||
+              node.name.toLowerCase().includes("green") ||
+              node.name.toLowerCase().includes("saber"))
+          );
+          if (isGreenByColor || isGreenByName) greenMaterials.push(mat);
+        });
+      } catch (err) {
+        console.debug("scene traverse error", err);
       }
-    }
-    if (greenMaterials.length === 0) return;
 
-    const start = performance.now();
-    const initial = greenMaterials.map((m) => ({
-      v:
-        typeof m.emissiveIntensity === "number"
-          ? (m.emissiveIntensity as number)
-          : 0,
-    }));
-    (function step(now: number) {
-      const t = Math.min(1, (now - start) / duration);
-      const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      greenMaterials.forEach((mat, i) => {
-        try {
-          const init = initial[i].v;
-          if (!mat.emissive) mat.emissive = { r: 0.2, g: 0.8, b: 0.2 };
-          mat.emissiveIntensity = init + (targetIntensity - init) * ease;
-          mat.needsUpdate = true;
-        } catch (err) {
-          console.debug("material animate error", err);
+      if (greenMaterials.length === 0) {
+        // fallback: any bright material
+        for (const { mat, color } of allMaterials) {
+          const [r, g, b] = color;
+          if (r > 0.2 || g > 0.2 || b > 0.2) greenMaterials.push(mat);
         }
-      });
-      if (t < 1) requestAnimationFrame(step);
-      else setPowered(true);
-    })(performance.now());
-  }
+      }
+      if (greenMaterials.length === 0) return;
+
+      const start = performance.now();
+      const initial = greenMaterials.map((m) => ({
+        v:
+          typeof m.emissiveIntensity === "number"
+            ? (m.emissiveIntensity as number)
+            : 0,
+      }));
+      (function step(now: number) {
+        const t = Math.min(1, (now - start) / duration);
+        const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        greenMaterials.forEach((mat, i) => {
+          try {
+            const init = initial[i].v;
+            if (!mat.emissive) mat.emissive = { r: 0.2, g: 0.8, b: 0.2 };
+            mat.emissiveIntensity = init + (targetIntensity - init) * ease;
+            mat.needsUpdate = true;
+          } catch (err) {
+            console.debug("material animate error", err);
+          }
+        });
+        if (t < 1) requestAnimationFrame(step);
+      })(performance.now());
+    },
+    []
+  );
+
+  useEffect(() => {
+    const mvEl = mvRef.current?.querySelector(
+      "model-viewer"
+    ) as HTMLElement | null;
+    if (!mvEl || !modelLoaded) return;
+
+    const handleClick = () => {
+      if (powered) {
+        const canvas = maskCanvasRef.current;
+        if (canvas) {
+          canvas.classList.remove("pulse", "power-up");
+          canvas.classList.add("power-down");
+        }
+        animateBlade({
+          from: bladeProgress,
+          to: 0,
+          duration: BLADE_OFF_DURATION,
+          onComplete: () => {
+            const c = maskCanvasRef.current;
+            if (c) {
+              c.classList.remove("power-down");
+            }
+            stopGreenMaskLoop();
+          },
+        });
+        try {
+          for (const [
+            mat,
+            v,
+          ] of originalMaterialIntensityRef.current.entries()) {
+            mat.emissiveIntensity = v;
+            mat.needsUpdate = true;
+          }
+          originalMaterialIntensityRef.current.clear();
+        } catch (err) {
+          console.debug("powerOff restore error", err);
+        }
+        setPowered(false);
+      } else {
+        startGreenMaskLoop();
+        const canvas = maskCanvasRef.current;
+        if (canvas) {
+          canvas.classList.remove("pulse", "power-down");
+          canvas.classList.add("power-up");
+          canvas.style.opacity = "0";
+          canvas.style.filter = "blur(18px) saturate(1)";
+        }
+        setBladeProgress(0);
+        animateBlade({
+          from: 0,
+          to: 1,
+          duration: BLADE_ON_DURATION,
+          onComplete: () => {
+            const c = maskCanvasRef.current;
+            if (c) {
+              c.classList.remove("power-up");
+              if (pulseEnabled) c.classList.add("pulse");
+              c.style.opacity = "1";
+            }
+            setPowered(true);
+          },
+        });
+
+        // try to animate scene materials if available (best-effort)
+        let attempts = 0;
+        const maxAttempts = 30;
+        (function checkScene() {
+          attempts++;
+          try {
+            const mv = mvEl as unknown as {
+              model?: { scene?: unknown };
+            } | null;
+            const scene = mv?.model?.scene as unknown as ThreeScene | undefined;
+            if (scene && typeof scene.traverse === "function") {
+              performPowerOnAnimation(scene, BLADE_ON_DURATION, 2.5);
+              return;
+            }
+          } catch (e) {
+            console.debug("scene probe error", e);
+          }
+          if (attempts < maxAttempts) setTimeout(checkScene, 150);
+        })();
+      }
+    };
+
+    mvEl.addEventListener("click", handleClick);
+    return () => mvEl.removeEventListener("click", handleClick);
+  }, [
+    modelLoaded,
+    powered,
+    pulseEnabled,
+    animateBlade,
+    bladeProgress,
+    startGreenMaskLoop,
+    stopGreenMaskLoop,
+    performPowerOnAnimation,
+  ]);
 
   return (
     <div className="min-h-screen p-6">
