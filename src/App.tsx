@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
+import LightsaberViewerMV from "./pages/LightsaberViewerMV";
+import LightsaberDemo from "./pages/LightsaberDemo";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,7 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/lightsaber" element={<LightsaberViewerMV />} />
               {/* Game page - put the Formula D game files into public/games/formula-d/ */}
               <Route path="/formula-d" element={<FormulaD />} />
               {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
