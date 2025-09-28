@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "../styles/lightsaber-viewer.css";
 
@@ -24,14 +24,13 @@ export default function LightsaberViewerMV() {
   const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const maskLoopRef = useRef<number | null>(null);
 
-  const [amplitude, setAmplitude] = useState<number>(6);
-  const [speed, setSpeed] = useState<number>(0.9);
-  const [pulseEnabled, setPulseEnabled] = useState<boolean>(true);
+  const [pulseEnabled] = useState<boolean>(true);
   const originalMaterialIntensityRef = useRef<Map<MaterialLike, number>>(
     new Map()
   );
   const [powered, setPowered] = useState<boolean>(false);
   const [modelLoaded, setModelLoaded] = useState<boolean>(false);
+  const [bladeProgress, setBladeProgress] = useState<number>(0);
 
   // helper: read r,g,b from various color shapes (three.Color-like or array)
   function getRGBFromColor(col: unknown): [number, number, number] {
@@ -123,7 +122,53 @@ export default function LightsaberViewerMV() {
     };
   }, [mvRef]);
 
-  // Create or start the overlay mask loop that confines glow to the blade.
+  // Add click handler for model-viewer
+  useEffect(() => {
+    const mvEl = mvRef.current?.querySelector(
+      "model-viewer"
+    ) as HTMLElement | null;
+    if (!mvEl || !modelLoaded) return;
+
+    const handleClick = () => {
+      if (powered) {
+        const c = maskCanvasRef.current;
+        if (c) {
+          c.classList.remove("pulse");
+          c.classList.remove("power-up");
+          stopGreenMaskLoop();
+        }
+        try {
+          for (const [
+            mat,
+            v,
+          ] of originalMaterialIntensityRef.current.entries()) {
+            mat.emissiveIntensity = v;
+            mat.needsUpdate = true;
+          }
+          originalMaterialIntensityRef.current.clear();
+        } catch (err) {
+          console.debug("powerOff restore error", err);
+        }
+        setPowered(false);
+      } else {
+        startGreenMaskLoop();
+        const canvas = maskCanvasRef.current;
+        if (canvas) {
+          canvas.classList.add("power-up");
+        }
+        fadeInMask(700).then(() => {
+          const c = maskCanvasRef.current;
+          if (c && pulseEnabled) {
+            c.classList.add("pulse");
+          }
+          setPowered(true);
+        });
+      }
+    };
+
+    mvEl.addEventListener("click", handleClick);
+    return () => mvEl.removeEventListener("click", handleClick);
+  }); // Create or start the overlay mask loop that confines glow to the blade.
   function startGreenMaskLoop() {
     // If already running, keep running
     if (maskLoopRef.current) return;
@@ -380,12 +425,16 @@ export default function LightsaberViewerMV() {
         maskCtx.drawImage(tmp, 0, 0, sw, sh, 0, 0, w, h);
         maskCtx.restore();
 
-        // confine glow strictly to the target component
+        // confine glow strictly to the target component with blade progress
         if (target > 0) {
           const maskData = maskCtx.createImageData(sw, sh);
           const md = maskData.data;
+          const progressX = Math.floor(sw * bladeProgress);
           for (let i = 0; i < sw * sh; i++) {
-            const a = labels[i] === target ? 255 : 0;
+            const x = i % sw;
+            const isTarget = labels[i] === target;
+            const isVisible = bladeProgress >= 1 || x <= progressX;
+            const a = isTarget && isVisible ? 255 : 0;
             md[i * 4] = 0;
             md[i * 4 + 1] = 0;
             md[i * 4 + 2] = 0;
@@ -432,7 +481,7 @@ export default function LightsaberViewerMV() {
     }
   }
 
-  // Animate mask canvas opacity and blur to simulate powering on
+  // Animate mask canvas opacity and blade progress from left to right
   function fadeInMask(duration: number) {
     return new Promise<void>((resolve) => {
       const canvas = maskCanvasRef.current;
@@ -449,6 +498,10 @@ export default function LightsaberViewerMV() {
         canvas.style.opacity = String(ease);
         const blur = Math.round(startFilter + (endFilter - startFilter) * ease);
         canvas.style.filter = `blur(${blur}px) saturate(1.1)`;
+
+        // Animate blade progress from left to right
+        setBladeProgress(ease);
+
         if (t < 1) requestAnimationFrame(frame);
         else resolve();
       }
@@ -456,65 +509,33 @@ export default function LightsaberViewerMV() {
     });
   }
 
-  // Power-on orchestration
-  function powerOn(duration = 700, targetIntensity = 2.5) {
-    const mvElement = mvRef.current?.querySelector(
-      "model-viewer"
-    ) as HTMLElement | null;
-    if (!mvElement) return;
-    if (!modelLoaded) {
-      // delay until model load
-      setTimeout(() => {
-        if (modelLoaded) powerOn(duration, targetIntensity);
-      }, 700);
-      return;
-    }
+  // This function is now inlined in the click handler above
+  // Keeping as a reference for any external calls if needed
 
-    startGreenMaskLoop();
-    const canvas = maskCanvasRef.current;
-    if (canvas) {
-      canvas.classList.remove("pulse");
-      canvas.classList.add("power-up");
-    }
-    fadeInMask(duration).then(() => {
-      const c = maskCanvasRef.current;
-      if (c && pulseEnabled) {
-        c.classList.remove("power-up");
-        c.classList.add("pulse");
-      }
-      setPowered(true);
-    });
-
-    // try to animate scene materials if available (best-effort)
-    let attempts = 0;
-    const maxAttempts = 30;
-    (function checkScene() {
-      attempts++;
-      try {
-        const mv = mvElement as unknown as {
-          model?: { scene?: unknown };
-        } | null;
-        const scene = mv?.model?.scene as unknown as ThreeScene | undefined;
-        if (scene && typeof scene.traverse === "function") {
-          performPowerOnAnimation(scene, duration, targetIntensity);
-          return;
-        }
-      } catch (e) {
-        console.debug("scene probe error", e);
-      }
-      if (attempts < maxAttempts) setTimeout(checkScene, 150);
-    })();
-  }
-
-  function powerOff() {
+  const powerOff = useCallback(() => {
     const c = maskCanvasRef.current;
     if (c) {
       c.classList.remove("pulse");
       c.classList.remove("power-up");
-      c.style.transition = "opacity 220ms ease-out, filter 260ms ease-out";
-      c.style.opacity = "0";
-      c.style.filter = "blur(20px)";
-      setTimeout(() => stopGreenMaskLoop(), 260);
+
+      // Animate blade disappearing from right to left
+      const start = performance.now();
+      const duration = 400;
+      function animate(now: number) {
+        const t = Math.min(1, (now - start) / duration);
+        const progress = 1 - t; // Reverse direction
+        setBladeProgress(progress);
+
+        c.style.opacity = String(progress);
+        c.style.filter = `blur(${20 + (1 - progress) * 10}px)`;
+
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setTimeout(() => stopGreenMaskLoop(), 50);
+        }
+      }
+      requestAnimationFrame(animate);
     }
     try {
       for (const [mat, v] of originalMaterialIntensityRef.current.entries()) {
@@ -530,7 +551,7 @@ export default function LightsaberViewerMV() {
       console.debug("powerOff restore error", err);
     }
     setPowered(false);
-  }
+  }, []);
 
   // Material animation (best-effort when scene is available)
   function performPowerOnAnimation(
@@ -607,58 +628,13 @@ export default function LightsaberViewerMV() {
           ← Home
         </Link>
       </nav>
-      <h1 className="text-2xl font-bold mb-4">
-        Lightsaber viewer (model-viewer)
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">Lightsaber Viewer</h1>
 
-      <div className="mb-4 flex items-center gap-4">
-        <label className="text-sm">Amplitude: {amplitude}px</label>
-        <input
-          type="range"
-          min="0"
-          max="30"
-          value={amplitude}
-          onChange={(e) => setAmplitude(Number(e.target.value))}
-        />
-        <label className="text-sm">Speed: {speed.toFixed(2)}</label>
-        <input
-          type="range"
-          min="0.1"
-          max="2"
-          step="0.01"
-          value={speed}
-          onChange={(e) => setSpeed(Number(e.target.value))}
-        />
-        <label className="text-sm flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={pulseEnabled}
-            onChange={(e) => setPulseEnabled(e.target.checked)}
-          />{" "}
-          Pulse
-        </label>
-        <button
-          type="button"
-          className={`ml-4 px-3 py-1 rounded text-sm ${
-            powered
-              ? "bg-green-600 text-white"
-              : modelLoaded
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "bg-gray-400 text-gray-600"
-          }`}
-          onClick={() => {
-            if (powered) powerOff();
-            else powerOn();
-          }}
-          disabled={!modelLoaded}
-        >
-          {powered
-            ? "Powered (Click to Turn Off)"
-            : modelLoaded
-            ? "Power On"
-            : "Loading..."}
-        </button>
-      </div>
+      <p className="text-sm text-gray-400 mb-4">
+        {modelLoaded
+          ? "Click on the lightsaber to power on/off"
+          : "Loading model..."}
+      </p>
 
       <div
         ref={mvRef}
@@ -673,9 +649,17 @@ export default function LightsaberViewerMV() {
             interaction-prompt="none"
             src="/3d-model/Star Wars - Lightsabers.glb"
             alt="Lightsaber"
-            camera-controls
+            disable-zoom
+            min-camera-orbit="0deg 75deg auto"
+            max-camera-orbit="0deg 75deg auto"
+            camera-orbit="0deg 75deg auto"
             exposure="1"
-            style={{ width: "100%", height: "100%", borderRadius: "12px" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: "12px",
+              cursor: powered ? "pointer" : modelLoaded ? "pointer" : "default",
+            }}
           ></model-viewer>
         </div>
       </div>
