@@ -138,7 +138,7 @@ const HeroSection = () => {
   return (
     <section
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0"
-      style={{ minWidth: "320px" }}
+      style={{ minWidth: "480px" }}
     >
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20" aria-hidden="true">

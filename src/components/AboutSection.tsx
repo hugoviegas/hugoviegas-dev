@@ -103,7 +103,11 @@ const AboutSection = () => {
   };
 
   return (
-    <section id="about" className="py-20 bg-muted/3 relative">
+    <section
+      id="about"
+      className="py-20 bg-muted/3 relative"
+      style={{ minWidth: "480px" }}
+    >
       <DecoLegoBricks />
 
       <div className="container mx-auto px-6 lg:px-8 relative z-10">

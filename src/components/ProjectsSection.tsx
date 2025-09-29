@@ -231,7 +231,11 @@ const ProjectsSection = () => {
   };
 
   return (
-    <section id="projects" className="py-20 relative">
+    <section
+      id="projects"
+      className="py-20 relative"
+      style={{ minWidth: "480px" }}
+    >
       <div className="container mx-auto px-6 lg:px-8 wide-container">
         <div className="text-center mb-12 fade-in">
           <h2 className="heading-section mb-4">{t("projectsTitle")}</h2>

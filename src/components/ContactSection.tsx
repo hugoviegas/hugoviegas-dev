@@ -263,7 +263,7 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="py-20" style={{ minWidth: '480px' }}>
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
           <h2 className="heading-section mb-6">{t("contactTitle")}</h2>

@@ -91,7 +91,11 @@ export function ExperienceSection(props) {
   const { t } = useLanguage(); // previously caused ReferenceError: useLanguage is not defined
 
   return (
-    <section id="experience" className="py-20 bg-muted/5">
+    <section
+      id="experience"
+      className="py-20 bg-muted/5"
+      style={{ minWidth: "480px" }}
+    >
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
           <h2 className="heading-section mb-6">{t("experienceTitle")}</h2>

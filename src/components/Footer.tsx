@@ -24,7 +24,10 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-muted/5 border-t border-white/10">
+    <footer
+      className="bg-muted/5 border-t border-white/10"
+      style={{ minWidth: "480px" }}
+    >
       <div className="container mx-auto px-6 lg:px-8 py-12 wide-container">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           {/* Brand */}
