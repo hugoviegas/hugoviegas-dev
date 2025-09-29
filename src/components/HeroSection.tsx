@@ -92,48 +92,47 @@ const HeroSection = () => {
   ];
 
   const HeroBrickExplosion = () => {
-    // Create 20 bricks with randomized sizes/angles/positions around the hero image
-    const count = 20;
+    // Force exactly 6 bricks and adjust width to 200%
+    const count = 6;
+
     return (
-      <>
+      <div
+        style={{
+          display: "flex",
+          flexFlow: "row",
+          gap: "0px",
+          width: "200%",
+          boxSizing: "border-box",
+        }}
+      >
         {Array.from({ length: count }).map((_, i) => {
-          const img =
-            HERO_BRICK_IMAGES[
-              Math.floor(Math.random() * HERO_BRICK_IMAGES.length)
-            ];
-          const size = 16 + Math.floor(Math.random() * 24); // 16-40px
-          // random starting position within the explosion layer
-          const left = Math.random() * 100; // percent
-          const top = Math.random() * 100; // percent
-          const rotate = -30 + Math.random() * 60; // degrees
-          const delay = Math.random() * 300; // ms stagger
-          // movement vector for the hover explosion (px)
-          const moveX = Math.round(-80 + Math.random() * 160); // -80 .. +80
-          const moveY = Math.round(-100 + Math.random() * 60); // -100 .. -40 (prefer upward)
+          const img = HERO_BRICK_IMAGES[i % HERO_BRICK_IMAGES.length];
+          const size = 18; // Fixed size
+          const rotate = -15 + Math.random() * 30; // Random rotation
+          const delay = Math.random() * 300; // Random delay
 
           return (
-            <img
+            <div
               key={i}
-              src={img}
-              alt=""
-              className="hero-brick-explosion-item"
               style={{
-                width: `${size}px`,
-                height: "auto",
-                left: `${left}%`,
-                top: `${top}%`,
-                // initial rotation and per-item CSS vars used by hover animation
-                ...({
-                  ["--hero-delay"]: `${delay}ms`,
-                  ["--hero-rand-rot"]: `${rotate}deg`,
-                  ["--hero-move-x"]: `${moveX}px`,
-                  ["--hero-move-y"]: `${moveY}px`,
-                } as React.CSSProperties),
+                flex: `0 0 ${100 / count}%`,
+                boxSizing: "border-box",
               }}
-            />
+            >
+              <img
+                src={img}
+                alt=""
+                className="hero-brick-explosion-item"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  transform: `rotate(${rotate}deg)`,
+                }}
+              />
+            </div>
           );
         })}
-      </>
+      </div>
     );
   };
 

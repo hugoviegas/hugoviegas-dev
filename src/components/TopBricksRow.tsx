@@ -41,7 +41,7 @@ const TopBricksRow: React.FC = () => {
     gap: 0,
     padding: 0,
     margin: 0,
-    width: "100%",
+    width: "200%", // Updated to span 200% width
     boxSizing: "border-box",
     pointerEvents: "none",
   };
