@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.jpg";
+import HeroLightsaber from "./HeroLightsaber";
 
 const HeroSection = () => {
   const [displayText, setDisplayText] = useState("");
@@ -75,29 +76,6 @@ const HeroSection = () => {
   // Resume URL from Vercel Storage
   const resumeUrl =
     "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20CV%202025.pdf";
-
-  // Suppress noisy console errors originating from the Spotify embed while component is mounted
-  useEffect(() => {
-    const origConsoleError = console.error as (...args: unknown[]) => void;
-    console.error = (...args: unknown[]) => {
-      try {
-        const msg = String(args[0] || "");
-        // Filter known spotify embed noisy messages
-        if (
-          msg.includes("Refused to display") ||
-          msg.includes("Blocked a frame with origin")
-        ) {
-          return;
-        }
-      } catch (e) {
-        // ignore
-      }
-      origConsoleError(...args);
-    };
-    return () => {
-      console.error = origConsoleError as Console["error"];
-    };
-  }, []);
 
   // Hero Brick Explosion component
   const HERO_BRICK_IMAGES = [
@@ -301,21 +279,11 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-              {/* Compact Spotify embed under profile image */}
+
+              {/* Interactive Lightsaber under profile image (bigger, no box) */}
               <div className="mt-6 flex justify-center">
-                <div className="w-full max-w-[396px]">
-                  <iframe
-                    data-testid="embed-iframe"
-                    title="Spotify Playlist Compact"
-                    style={{ borderRadius: 12 }}
-                    src="https://open.spotify.com/embed/playlist/1Xi9HL4NA9vFhDUY9wjJtB?utm_source=generator&theme=0"
-                    width="100%"
-                    height="152"
-                    frameBorder="0"
-                    allowFullScreen
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                  />
+                <div className="w-full lg:max-w-[680px] h-[200px] rounded-none overflow-visible">
+                  <HeroLightsaber />
                 </div>
               </div>
             </div>
