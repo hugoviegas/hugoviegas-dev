@@ -136,7 +136,10 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0">
+    <section
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0"
+      style={{ minWidth: "320px" }}
+    >
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20" aria-hidden="true">
         <div className="absolute top-20 left-20 w-40 h-40 bg-primary rounded-full blur-3xl subtle-pulse"></div>
@@ -144,7 +147,10 @@ const HeroSection = () => {
         <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-accent rounded-full blur-xl subtle-pulse delay-2000"></div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 relative z-10 wide-container">
+      <div
+        className="container mx-auto px-6 lg:px-8 relative z-10 wide-container"
+        style={{ maxWidth: "480px" }}
+      >
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content Column */}
           <div className="space-y-8 fade-in">
