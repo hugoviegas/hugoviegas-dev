@@ -1,115 +1,205 @@
-# Tasks: Visualizar objetos 3D (Bricks viewer)
+# Tasks: Star Wars Starship Background
 
-**Input**: Design docs in `specs/003-visualizar-objetos-3d/` (plan.md, research.md, spec.md)
+**Input**: Design documents from `/specs/003-visualizar-objetos-3d/`
+**Prerequisites**: plan.md (required), research.md, data-model.md, contracts/
 
-## Execution Flow
+## Execution Flow (main)
 
-Setup → Tests (TDD) → Implementation → Integration → Polish
+```
+1. Load plan.md from feature directory ✓
+   → Extract: TypeScript 5.8.3, React 18.3.1, React Three Fiber, Three.js
+2. Load optional design documents ✓
+   → data-model.md: StarshipConfig, AnimationState, StarshipInstance entities
+   → contracts/: Component and API contract specifications
+   → research.md: React Three Fiber decisions, animation patterns
+3. Generate tasks by category ✓
+   → Setup: React Three Fiber dependencies, TypeScript types
+   → Tests: Component tests, integration tests, performance tests
+   → Core: Components, hooks, configurations
+   → Integration: Demo page, background integration
+   → Polish: Unit tests, performance optimization, documentation
+4. Apply task rules ✓
+   → Different files = mark [P] for parallel
+   → Same file = sequential (no [P])
+   → Tests before implementation (TDD)
+5. Number tasks sequentially (T001, T002...) ✓
+6. Generate dependency graph ✓
+7. Create parallel execution examples ✓
+```
 
-### Phase 1: Setup
+## Format: `[ID] [P?] Description`
 
-- T001 Install runtime dependencies required by the viewer (adds packages to package.json)
+- **[P]**: Can run in parallel (different files, no dependencies)
+- Include exact file paths in descriptions
 
-  - Path: repo root `package.json`
-  - Description: Add `three`, `@react-three/fiber`, and `@react-three/drei` as dependencies. Commit package.json and lockfile.
-  - Notes: This is a single-file change (no [P]).
+## Path Conventions
 
-- T002 Project lint/format check
-  - Path: repo root (existing eslint/prettier config)
-  - Description: Run lint and format to ensure new files meet project standards. Add any minimal config if missing.
-  - Notes: Can be executed in parallel with other setup tasks [P].
+- **Web app**: `src/` at repository root for React components
+- **Tests**: `src/components/StarshipBackground/__tests__/`
+- All paths relative to repository root: `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path`
 
-### Phase 2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE Implementation
+## Phase 3.1: Setup
 
-**CRITICAL**: Tests should be added and must fail before implementation.
+- [x] T001 Install React Three Fiber dependencies (@react-three/fiber, @react-three/drei, three, @types/three)
+- [x] T002 [P] Create TypeScript type definitions in `src/components/StarshipBackground/types.ts`
+- [x] T003 [P] Create component directory structure `src/components/StarshipBackground/`
 
-- T003 [P] Contract test: viewer route exists and returns 200
+## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
 
-  - Path: `tests/contract/test_bricks_route.test.ts` (new)
-  - Description: Add a contract test that requests GET `/bricks` and asserts HTTP 200 and content-type text/html. This should fail initially.
+**CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
 
-- T004 [P] Integration test: model loads on page and canvas visible
-  - Path: `tests/integration/test_bricks_viewer.test.ts` (new)
-  - Description: End-to-end test (puppeteer/playwright style) that opens `/bricks`, waits for a canvas element, and asserts that the OBJ loader was attempted (e.g., console log or network request to `/src/assets/3d-model/obiwan-3d.obj`). This test should fail initially.
+- [x] T004 [P] Component contract test for StarshipBackground in `src/components/StarshipBackground/__tests__/StarshipBackground.test.tsx`
+- [x] T005 [P] Component contract test for StarshipModel in `src/components/StarshipBackground/__tests__/StarshipModel.test.tsx`
+- [x] T006 [P] Hook contract test for useStarshipAnimation in `src/components/StarshipBackground/__tests__/useStarshipAnimation.test.tsx`
+- [x] T007 [P] Integration test for starship spawning and animation in `src/components/StarshipBackground/__tests__/StarshipAnimation.integration.test.tsx`
+- [x] T008 [P] Configuration validation test in `src/components/StarshipBackground/__tests__/starshipConfigs.test.ts`
 
-### Phase 3: Core Implementation (after tests fail)
+## Phase 3.3: Core Implementation (ONLY after tests are failing)
 
-- T005 Create page component for `/bricks`
+- [x] T009 [P] StarshipConfig and related types implementation in `src/components/StarshipBackground/types.ts`
+- [x] T010 [P] Default starship configurations in `src/components/StarshipBackground/starshipConfigs.ts`
+- [x] T011 [P] useStarshipAnimation custom hook in `src/components/StarshipBackground/useStarshipAnimation.tsx`
+- [x] T012 [P] StarshipModel component in `src/components/StarshipBackground/StarshipModel.tsx`
+- [x] T013 StarshipBackground main component in `src/components/StarshipBackground/index.tsx`
+- [x] T014 [P] Configuration validation utilities in `src/components/StarshipBackground/utils.ts`
+- [x] T015 [P] Performance monitoring utilities in `src/components/StarshipBackground/performanceUtils.ts`
 
-  - Path: `src/pages/Bricks.tsx` or `src/pages/bricks.tsx` (follow project's routing convention)
-  - Description: Create a React page that renders the site `Navbar` and a main area with a full-size canvas placeholder for the 3D viewer. Export default page for routing.
+## Phase 3.4: Debug and Development Tools
 
-- T006 Create viewer component using r3f
+- [x] T016 [P] Debug controls component in `src/components/StarshipBackground/DebugControls.tsx`
+- [x] T017 [P] Debug overlay component in `src/components/StarshipBackground/DebugOverlay.tsx`
+- [x] T018 [P] Configuration export/import utilities in `src/components/StarshipBackground/configUtils.ts`
 
-  - Path: `src/components/ThreeViewer/Viewer.tsx` and `src/components/ThreeViewer/index.tsx`
-  - Description: Implement a viewer that mounts `<Canvas>` from `@react-three/fiber`, loads `src/assets/3d-model/obiwan-3d.obj` via `MTLLoader` + `OBJLoader` (or `useLoader` helpers), applies basic lighting, sets a static frontal camera, and starts a slow automatic rotation animation.
-  - Requirements: Click-drag rotates the object, mouse scroll zooms; panning disabled. Automatic rotation should pause on interaction and resume after 10s idle.
+## Phase 3.5: Integration and Pages
 
-- T007 Wire the page to use the Viewer component
+- [x] T019 Create StarshipDemo page in `src/pages/StarshipDemo.tsx`
+- [x] T020 Add StarshipDemo route to router configuration in `src/App.tsx`
+- [x] T021 Update navigation to include demo page link
 
-  - Path: `src/pages/Bricks.tsx` (same as T005)
-  - Description: Import and render `ThreeViewer` inside the main area; ensure the Navbar link back to home is present.
+## Phase 3.6: Background Integration
 
-- T008 Add dark/light background support
-  - Path: `src/components/ThreeViewer/Viewer.tsx` and possibly theme files
-  - Description: Respect existing site theme if available, otherwise provide a toggle or CSS classes to show dark/light background behind the canvas.
+- [x] T022 Integrate StarshipBackground into main Index page in `src/pages/Index.tsx`
+- [x] T023 Add responsive configuration for mobile devices
+- [x] T024 Implement performance-based adaptive quality settings
 
-### Phase 4: Integration & Static Assets
+## Phase 3.7: Polish and Optimization
 
-- T009 Ensure assets are reachable and paths resolved
+- [x] T025 [P] Unit tests for configuration validation in `src/components/StarshipBackground/__tests__/validation.test.ts`
+- [x] T026 [P] Unit tests for performance monitoring in `src/components/StarshipBackground/__tests__/performance.test.ts`
+- [x] T027 [P] Performance tests for frame rate under load in `src/components/StarshipBackground/__tests__/performance.integration.test.tsx`
+- [x] T028 [P] Mobile device compatibility tests
+- [x] T029 Error boundary implementation for 3D rendering failures
+- [x] T030 Memory leak prevention and cleanup verification
+- [x] T031 [P] Update component documentation and usage examples
 
-  - Path: `src/assets/3d-model/` and public serving configuration
-  - Description: Verify `obiwan-3d.obj`, `obiwan-3d.mtl`, and textures load correctly. Adjust relative paths or copy textures into public folder if needed.
+## Dependencies
 
-- T010 Error handling: show placeholder on load failure
-  - Path: `src/components/ThreeViewer/Viewer.tsx` and `public/placeholder.svg`
-  - Description: Implement graceful error UI: when loader errors, render placeholder and friendly message.
+### Critical Path
 
-### Phase 5: Polish & Tests
+- Setup (T001-T003) → Tests (T004-T008) → Core Implementation (T009-T015)
+- T009 (types) blocks T010, T011, T012 (implementations depend on types)
+- T011 (hook) blocks T012, T013 (components use hook)
+- T012 (StarshipModel) blocks T013 (StarshipBackground uses StarshipModel)
+- Core Implementation (T009-T015) → Integration (T019-T021)
+- Integration (T019-T024) → Polish (T025-T031)
 
-- T011 [P] Unit test: Viewer component basic render
+### Independent Parallel Tracks
 
-  - Path: `tests/unit/test_viewer_render.test.tsx`
-  - Description: Render `Viewer` in test and assert canvas mounts; mock loader to avoid network.
+- Debug tools (T016-T018) can be developed parallel to core implementation
+- Tests within same phase can run parallel (different files)
+- Documentation and optimization tasks (T025-T031) are mostly independent
 
-- T012 Integration test: interaction behavior
+## Parallel Execution Examples
 
-  - Path: `tests/integration/test_bricks_interaction.test.ts`
-  - Description: Verify click-drag pauses rotation and rotation resumes after 10s. This can be an end-to-end test simulating input events.
+### Phase 3.2: Tests (All can run in parallel)
 
-- T013 [P] Accessibility check
+```bash
+# Launch T004-T008 together:
+Task: "Component contract test for StarshipBackground in src/components/StarshipBackground/__tests__/StarshipBackground.test.tsx"
+Task: "Component contract test for StarshipModel in src/components/StarshipBackground/__tests__/StarshipModel.test.tsx"
+Task: "Hook contract test for useStarshipAnimation in src/components/StarshipBackground/__tests__/useStarshipAnimation.test.tsx"
+Task: "Integration test for starship spawning in src/components/StarshipBackground/__tests__/StarshipAnimation.integration.test.tsx"
+Task: "Configuration validation test in src/components/StarshipBackground/__tests__/starshipConfigs.test.ts"
+```
 
-  - Path: `tests/accessibility/test_bricks_a11y.test.ts` or integrate with axe
-  - Description: Ensure canvas has appropriate labels/fallbacks; verify keyboard accessibility where relevant.
+### Phase 3.3: Core Implementation (After T009 completes)
 
-- T014 [P] Docs: update `specs/003-visualizar-objetos-3d/quickstart.md` and README with how to run the viewer locally
-  - Path: `specs/003-visualizar-objetos-3d/quickstart.md`, `README.md`
-  - Description: Add final quickstart and troubleshooting notes.
+```bash
+# Launch T010-T012, T014-T015 together (T013 waits for T011, T012):
+Task: "Default starship configurations in src/components/StarshipBackground/starshipConfigs.ts"
+Task: "useStarshipAnimation custom hook in src/components/StarshipBackground/useStarshipAnimation.tsx"
+Task: "StarshipModel component in src/components/StarshipBackground/StarshipModel.tsx"
+Task: "Configuration validation utilities in src/components/StarshipBackground/utils.ts"
+Task: "Performance monitoring utilities in src/components/StarshipBackground/performanceUtils.ts"
+```
 
-### Polish (ad-hoc)
+### Phase 3.4: Debug Tools (All parallel)
 
-- T014a [X] Model-viewer polish: add glow overlay + pulsing light + smoother motion
-  - Path: `src/pages/LightsaberViewerMV.tsx`, `src/styles/lightsaber-viewer.css`
-  - Description: Implemented a CSS glow overlay, pulse animation, and configurable amplitude/speed motion for a quick visual effect without heavy native deps.
+```bash
+# Launch T016-T018 together:
+Task: "Debug controls component in src/components/StarshipBackground/DebugControls.tsx"
+Task: "Debug overlay component in src/components/StarshipBackground/DebugOverlay.tsx"
+Task: "Configuration export/import utilities in src/components/StarshipBackground/configUtils.ts"
+```
 
-## Parallel execution groups
+## Model Configuration Tasks
 
-- Group A [P]: T003, T004 (tests can be created in parallel)
-- Group B [P]: T011, T013, T014 (unit/docs/a11y)
+The following GLB models need configuration via debug mode:
 
-## Task ordering & dependencies (short)
+1. **X-wing.glb** - Small fighter configuration
+2. **Star Destroyer.glb** - Large capital ship configuration
+3. **First Order Star Destroyer.glb** - Modern capital ship configuration
+4. **Imperial Shuttle.glb** - Transport vessel configuration
+5. **Micro Millennium Falcon.glb** - Iconic freighter configuration
+6. **small venator class star destroyer.glb** - Republic ship configuration
 
-- Setup (T001/T002) must run before Tests (T003/T004) and Implementation (T005-T008).
-- Tests (T003/T004) must be added and fail before Implementation (T005-T008).
-- T005/T006 must exist before T007.
-- T009 and T010 are integration tasks after the viewer exists.
+Each model will need manual configuration through debug controls to set proper:
 
-## Execution notes
+- Scale values for appropriate size
+- Initial rotation for correct orientation
+- Speed ranges for realistic movement
+- Spawn zones for natural trajectories
 
-- Use project routing conventions (check `src/pages` naming and route registration).
-- When adding package.json deps, run `npm install` and commit `package-lock.json`/`bun.lockb` as appropriate.
-- For OBJ/MTL loading in r3f, prefer the `useLoader` pattern and three/examples loaders.
+## Acceptance Criteria
 
----
+### Functional Requirements
 
-Generated by tasks workflow for feature: Visualizar objetos 3D (Bricks viewer)
+- [ ] Renders animated starships as background overlay
+- [ ] Supports up to 6 concurrent starship models
+- [ ] Maintains >30fps performance on desktop, >20fps on mobile
+- [ ] Handles model loading errors gracefully
+- [ ] Adapts model count based on screen size
+- [ ] Debug mode allows real-time configuration
+
+### Technical Requirements
+
+- [ ] Uses React Three Fiber for 3D rendering
+- [ ] Follows established component patterns from LightsaberViewer
+- [ ] Implements proper cleanup to prevent memory leaks
+- [ ] Supports responsive design principles
+- [ ] Integrates with existing theme system
+
+### Testing Requirements
+
+- [ ] All components have unit tests
+- [ ] Integration tests verify animation behavior
+- [ ] Performance tests validate frame rate goals
+- [ ] Error handling tests cover failure scenarios
+- [ ] Mobile compatibility verified on actual devices
+
+## Notes
+
+- All [P] tasks use different files and can run in parallel
+- Verify all tests fail before implementing (TDD approach)
+- Debug mode should only be enabled in development
+- Performance monitoring should track FPS and memory usage
+- Configuration export allows saving debug session results
+
+## Task Generation Rules Applied
+
+1. **From Component Contracts**: Each component → contract test + implementation
+2. **From Data Model**: Each entity → type definition + validation
+3. **From API Contracts**: Configuration management → utilities + tests
+4. **From User Stories**: Demo page → integration test + implementation
+5. **Ordering**: Setup → Tests → Core → Integration → Polish
+6. **Dependencies**: Types before implementations, hooks before components

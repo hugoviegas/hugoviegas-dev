@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowDown,
@@ -32,12 +32,14 @@ import {
 import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.jpg";
 import HeroLightsaber from "./HeroLightsaber";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentGreeting, setCurrentGreeting] = useState("");
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const fullText = t("role");
 
   // Update greeting when component mounts or language changes
@@ -72,6 +74,10 @@ const HeroSection = () => {
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const goToProposal = useCallback(() => {
+    navigate("/proposta-etal");
+  }, [navigate]);
 
   // Resume URL from Vercel Storage
   const resumeUrl =
@@ -147,10 +153,7 @@ const HeroSection = () => {
         <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-accent rounded-full blur-xl subtle-pulse delay-2000"></div>
       </div>
 
-      <div
-        className="container mx-auto px-6 lg:px-8 relative z-10 wide-container"
-        style={{ maxWidth: "480px" }}
-      >
+      <div className="container mx-auto px-6 lg:px-8 relative z-10 wide-container">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content Column */}
           <div className="space-y-8 fade-in">

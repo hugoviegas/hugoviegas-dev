@@ -1,7 +1,7 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: Visualizar objetos 3D - Star Wars Background
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+**Branch**: `003-visualizar-objetos-3d` | **Date**: 2025-09-29 | **Spec**: [specs/003-visualizar-objetos-3d/spec.md](./spec.md)
+**Input**: Feature specification from `/specs/003-visualizar-objetos-3d/spec.md`
 
 ## Execution Flow (/plan command scope)
 
@@ -33,25 +33,28 @@
 
 ## Summary
 
-Primary requirement: Provide a simple portfolio page `/bricks` that displays OBJ 3D models from `src/assets/3d-model` (example `obiwan-3d.obj`) with automatic rotation and interactive rotate/zoom controls. Technical approach: implement an in-frontend WebGL viewer using React + @react-three/fiber and three.js loaders; no backend changes.
+Create an animated Star Wars starships background using GLB 3D models (First Order Star Destroyer, Imperial Shuttle, Micro Millennium Falcon, small venator class star destroyer, Star Destroyer, X-wing). Following the same logic as the lightsaber implementation, starships will travel across the background in random directions with configurable positioning, scaling, and movement patterns. Initially implemented on a dedicated page for testing, then integrated as the main page background replacement.
 
 ## Technical Context
 
-**Language/Version**: TypeScript/React (existing project uses TypeScript + Vite)  
-**Primary Dependencies**: three, @react-three/fiber, @react-three/drei (optional)  
-**Storage**: N/A (static assets)  
-**Testing**: existing project test setup (Jest) — integration tests described in quickstart can be added later  
-**Target Platform**: Web (desktop & mobile browsers)  
-**Project Type**: Frontend web (Vite + React)  
-**Performance Goals**: 60 FPS target for simple models; performance tuning deferred (no explicit target requested)  
-**Constraints**: Assets served statically; OBJ/MTL/textures must be resolved relative to asset paths  
-**Scale/Scope**: Single page feature for portfolio
+**Language/Version**: TypeScript 5.8.3, React 18.3.1  
+**Primary Dependencies**: React Three Fiber (@react-three/fiber), Three.js, React Router DOM 6.30.1  
+**Storage**: N/A (static 3D models)  
+**Testing**: Jest, React Testing Library  
+**Target Platform**: Web (desktop and mobile responsive)
+**Project Type**: web - React frontend application  
+**Performance Goals**: 60 fps animations, smooth model loading  
+**Constraints**: Responsive design, optimized 3D performance, random movement patterns  
+**Scale/Scope**: 6 starship models, multiple concurrent animations, debug controls for positioning
 
 ## Constitution Check
 
 _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-Constitution check: Pass (feature is small, frontend-only, no new infra; Test-First principle can be applied later for contract tests if desired).
+**Library-First Approach**: ✅ PASS - Creating reusable StarshipBackground component following established pattern from LightsaberViewer  
+**Component Architecture**: ✅ PASS - Following React component patterns with clear separation of concerns  
+**Performance Standards**: ✅ PASS - Using React Three Fiber for optimized 3D rendering  
+**Testing Standards**: ✅ PASS - Component will have unit tests for configuration and behavior
 
 ## Project Structure
 
@@ -69,51 +72,35 @@ specs/[###-feature]/
 
 ### Source Code (repository root)
 
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
-
 ```
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+├── components/
+│   ├── StarshipBackground/      # New animated background component
+│   │   ├── index.tsx           # Main component export
+│   │   ├── StarshipModel.tsx   # Individual starship model component
+│   │   ├── useStarshipAnimation.tsx # Animation hooks
+│   │   └── starshipConfigs.ts  # Model configurations and positioning
+│   └── [existing components...]
+├── pages/
+│   ├── StarshipDemo.tsx        # New demo page for testing
+│   └── [existing pages...]
+└── assets/
+    └── 3d-model/
+        └── Lego glb models/    # Existing GLB files
+            ├── First Order Star Destroyer.glb
+            ├── Imperial Shuttle.glb
+            ├── Micro Millennium Falcon.glb
+            ├── small venator class star destroyer.glb
+            ├── Star Destroyer.glb
+            └── X-wing.glb
 
 tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+└── components/
+    └── StarshipBackground/
+        └── StarshipBackground.test.tsx
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Web application structure with new StarshipBackground component following the established component pattern from LightsaberViewer. Demo page created first for testing, then integration as background replacement.
 
 ## Phase 0: Outline & Research
 
@@ -185,18 +172,22 @@ _This section describes what the /tasks command will do - DO NOT execute during 
 
 - Load `.specify/templates/tasks-template.md` as base
 - Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
-- Each contract → contract test task [P]
-- Each entity → model creation task [P]
-- Each user story → integration test task
-- Implementation tasks to make tests pass
+- StarshipBackground component creation [P]
+- StarshipModel individual component [P]
+- useStarshipAnimation custom hook [P]
+- Debug controls component [P]
+- Configuration management utilities [P]
+- Integration tests for animation behaviors
+- Demo page creation for testing
 
 **Ordering Strategy**:
 
-- TDD order: Tests before implementation
-- Dependency order: Models before services before UI
+- TDD order: Component tests before implementation
+- Dependency order: Types → Hooks → Components → Pages
 - Mark [P] for parallel execution (independent files)
+- Debug components can be developed separately
 
-**Estimated Output**: 25-30 numbered, ordered tasks in tasks.md
+**Estimated Output**: 15-20 numbered, ordered tasks in tasks.md
 
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
@@ -225,8 +216,8 @@ _This checklist is updated during execution flow_
 
 - [x] Phase 0: Research complete (/plan command)
 - [x] Phase 1: Design complete (/plan command)
-- [ ] Phase 2: Task planning complete (/plan command - describe approach only)
-- [ ] Phase 3: Tasks generated (/tasks command)
+- [x] Phase 2: Task planning complete (/plan command - describe approach only)
+- [x] Phase 3: Tasks generated (/tasks command)
 - [ ] Phase 4: Implementation complete
 - [ ] Phase 5: Validation passed
 
@@ -235,7 +226,7 @@ _This checklist is updated during execution flow_
 - [x] Initial Constitution Check: PASS
 - [x] Post-Design Constitution Check: PASS
 - [x] All NEEDS CLARIFICATION resolved
-- [ ] Complexity deviations documented
+- [x] Complexity deviations documented (N/A - no violations)
 
 ---
 

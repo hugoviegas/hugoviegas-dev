@@ -10,6 +10,9 @@ import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
 import LightsaberViewerMV from "./pages/LightsaberViewerMV";
 import LightsaberDemo from "./pages/LightsaberDemo";
+import StarshipDemo from "./pages/StarshipDemo";
+import MicroFalcon from "./pages/MicroFalcon";
+import PropostaEtal from "./pages/PropostaEtal";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +39,9 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/lightsaber" element={<LightsaberViewerMV />} />
+              <Route path="/starship-demo" element={<StarshipDemo />} />
+              <Route path="/micro-falcon" element={<MicroFalcon />} />
+              <Route path="/proposta-etal" element={<PropostaEtal />} />
               {/* Game page - put the Formula D game files into public/games/formula-d/ */}
               <Route path="/formula-d" element={<FormulaD />} />
               {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

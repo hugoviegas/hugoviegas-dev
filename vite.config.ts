@@ -9,6 +9,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  // Include GLB assets so Vite doesn't attempt to parse them as JS
+  assetsInclude: ["**/*.glb"],
   plugins: [react(), mode === "development" && componentTagger()].filter(
     Boolean
   ),
