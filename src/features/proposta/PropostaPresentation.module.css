@@ -575,6 +575,65 @@
   transition: color 0.6s ease, text-shadow 0.6s ease;
 }
 
+.priceRevealButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.priceRevealButton:not(:disabled):hover {
+  transform: scale(1.05);
+}
+
+.priceRevealButton:disabled {
+  cursor: default;
+}
+
+.amountHidden {
+  color: rgba(189, 198, 235, 0.5);
+  text-shadow: 0 0 20px rgba(189, 198, 235, 0.2);
+  animation: pulseQuestion 2s ease-in-out infinite;
+  position: relative;
+}
+
+.amountHidden::after {
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(189, 198, 235, 0.6);
+  opacity: 0;
+  animation: hintFade 3s ease-in-out infinite;
+}
+
+@keyframes pulseQuestion {
+  0%,
+  100% {
+    text-shadow: 0 0 15px rgba(189, 198, 235, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 35px rgba(189, 198, 235, 0.4);
+  }
+}
+
+@keyframes hintFade {
+  0%,
+  40%,
+  100% {
+    opacity: 0;
+  }
+  50%,
+  90% {
+    opacity: 1;
+  }
+}
+
 .amountCounting {
   color: rgba(255, 200, 93, 0.85);
   text-shadow: 0 0 28px rgba(255, 200, 93, 0.4);

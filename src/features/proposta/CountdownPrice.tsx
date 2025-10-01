@@ -12,8 +12,17 @@ const CountdownPrice = ({
 }: CountdownPriceProps) => {
   const [value, setValue] = useState(100000);
   const [isComplete, setIsComplete] = useState(false);
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  const handleReveal = () => {
+    if (!isRevealed) {
+      setIsRevealed(true);
+    }
+  };
 
   useEffect(() => {
+    if (!isRevealed) return;
+
     const startValue = 100000;
     const startTime = Date.now();
     const endTime = startTime + duration;
@@ -43,16 +52,23 @@ const CountdownPrice = ({
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [finalValue, duration]);
+  }, [finalValue, duration, isRevealed]);
 
   return (
-    <p
-      className={`${styles.amountLarge} ${
-        isComplete ? styles.amountComplete : styles.amountCounting
+    <button
+      type="button"
+      onClick={handleReveal}
+      className={`${styles.amountLarge} ${styles.priceRevealButton} ${
+        isRevealed
+          ? isComplete
+            ? styles.amountComplete
+            : styles.amountCounting
+          : styles.amountHidden
       }`}
+      disabled={isRevealed}
     >
-      R$ {value.toLocaleString("pt-BR")}
-    </p>
+      {isRevealed ? `R$ ${value.toLocaleString("pt-BR")}` : "R$ ??.???"}
+    </button>
   );
 };
 
