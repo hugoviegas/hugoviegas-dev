@@ -684,11 +684,13 @@
 }
 
 @keyframes buttonPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 26px 56px rgba(104, 96, 255, 0.32);
   }
   50% {
-    box-shadow: 0 26px 56px rgba(104, 96, 255, 0.48), 0 0 40px rgba(126, 110, 255, 0.3);
+    box-shadow: 0 26px 56px rgba(104, 96, 255, 0.48),
+      0 0 40px rgba(126, 110, 255, 0.3);
   }
 }
 
@@ -832,7 +834,11 @@
   max-width: 680px;
   margin: 0 auto;
   padding: var(--proposal-spacing-10);
-  background: linear-gradient(145deg, rgba(19, 24, 53, 0.95), rgba(8, 10, 24, 0.98));
+  background: linear-gradient(
+    145deg,
+    rgba(19, 24, 53, 0.95),
+    rgba(8, 10, 24, 0.98)
+  );
   border-radius: var(--proposal-radius-lg);
   border: 1px solid rgba(126, 110, 255, 0.35);
   box-shadow: 0 32px 80px rgba(108, 96, 255, 0.28);
@@ -845,7 +851,11 @@
   content: "";
   position: absolute;
   inset: -100%;
-  background: radial-gradient(circle, rgba(126, 110, 255, 0.15), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(126, 110, 255, 0.15),
+    transparent 70%
+  );
   animation: rotateGradient 8s linear infinite;
 }
 
@@ -873,18 +883,24 @@
   width: 120px;
   height: 120px;
   margin: 0 auto var(--proposal-spacing-6);
-  background: linear-gradient(135deg, rgba(126, 110, 255, 0.2), rgba(56, 206, 188, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(126, 110, 255, 0.2),
+    rgba(56, 206, 188, 0.15)
+  );
   border-radius: 50%;
   display: grid;
   place-items: center;
   color: rgba(126, 110, 255, 0.95);
-  animation: handshakeRotate 3s ease-in-out infinite, handshakePulse 2s ease-in-out infinite;
+  animation: handshakeRotate 3s ease-in-out infinite,
+    handshakePulse 2s ease-in-out infinite;
   position: relative;
   z-index: 1;
 }
 
 @keyframes handshakeRotate {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(-5deg);
   }
   25% {
@@ -899,7 +915,8 @@
 }
 
 @keyframes handshakePulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(126, 110, 255, 0.4);
   }
   50% {
@@ -950,7 +967,8 @@
 }
 
 @keyframes sparkleFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg) scale(1);
     opacity: 0;
   }
@@ -970,7 +988,11 @@
   font-size: clamp(1.8rem, 4vw, 2.4rem);
   font-weight: 700;
   margin-bottom: var(--proposal-spacing-4);
-  background: linear-gradient(135deg, rgba(126, 110, 255, 0.95), rgba(56, 206, 188, 0.9));
+  background: linear-gradient(
+    135deg,
+    rgba(126, 110, 255, 0.95),
+    rgba(56, 206, 188, 0.9)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

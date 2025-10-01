@@ -24,9 +24,9 @@ const CTAButtons = () => {
           </div>
           <h3 className={styles.thankYouTitle}>Obrigado pela confiança!</h3>
           <p className={styles.thankYouMessage}>
-            Estou muito animado para construir esta solução com vocês. 
-            Em breve entrarei em contato para agendar nosso kick-off e 
-            começarmos esta jornada digital juntos.
+            Estou muito animado para construir esta solução com vocês. Em breve
+            entrarei em contato para agendar nosso kick-off e começarmos esta
+            jornada digital juntos.
           </p>
           <div className={styles.nextSteps}>
             <div className={styles.nextStepItem}>
@@ -49,19 +49,15 @@ const CTAButtons = () => {
 
   return (
     <div className={styles.ctaGroup}>
-      <Button 
-        size="lg" 
+      <Button
+        size="lg"
         className={styles.primaryAction}
         onClick={handleAcceptProposal}
       >
         <Handshake size={20} />
         Aceitar proposta
       </Button>
-      <Button
-        size="lg"
-        variant="outline"
-        className={styles.secondaryAction}
-      >
+      <Button size="lg" variant="outline" className={styles.secondaryAction}>
         <CalendarClock size={20} />
         Agendar reunião
       </Button>
