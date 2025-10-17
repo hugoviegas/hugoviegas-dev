@@ -19,6 +19,7 @@ import FastTransparentCube from "@/components/FastTransparentCube";
 import WorldClocks from "@/components/WorldClocks";
 import MicroFalconViewer from "@/components/MicroFalconViewer";
 import ModelViewer from "@/components/ModelViewer";
+import ModelCarousel from "@/components/ModelCarousel";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -477,32 +478,18 @@ const ContactSection = () => {
               <MicroFalconViewer />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="glass-strong p-4 rounded-2xl">
-                <ModelViewer
-                  modelPath={"/src/assets/3d-model/Lego-glb-models/X-wing.glb"}
-                  containerHeight={260}
-                  desiredSize={2.6}
-                />
-              </div>
-              <div className="glass-strong p-4 rounded-2xl">
-                <ModelViewer
-                  modelPath={
-                    "/src/assets/3d-model/Lego-glb-models/Star Destroyer.glb"
-                  }
-                  containerHeight={260}
-                  desiredSize={2.6}
-                />
-              </div>
-              <div className="glass-strong p-4 rounded-2xl">
-                <ModelViewer
-                  modelPath={
-                    "/src/assets/3d-model/Lego-glb-models/Imperial Shuttle.glb"
-                  }
-                  containerHeight={260}
-                  desiredSize={2.6}
-                />
-              </div>
+            <div className="glass-strong p-4 rounded-2xl">
+              <ModelCarousel
+                modelPaths={[
+                  "/src/assets/3d-model/Lego-glb-models/X-wing.glb",
+                  "/src/assets/3d-model/Lego-glb-models/Star Destroyer.glb",
+                  "/src/assets/3d-model/Lego-glb-models/Imperial Shuttle.glb",
+                ]}
+                containerHeight={340}
+                desiredSize={2.6}
+                autoPlay
+                autoPlayInterval={4000}
+              />
             </div>
           </div>
         </div>

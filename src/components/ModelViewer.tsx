@@ -11,16 +11,18 @@ type Props = {
   desiredSize?: number;
 };
 
-const GenericModel: React.FC<{ modelPath: string; desiredSize: number }> = ({
-  modelPath,
-  desiredSize,
-}) => {
+const GenericModel: React.FC<{
+  modelPath: string;
+  desiredSize: number;
+  autoRotate?: boolean;
+}> = ({ modelPath, desiredSize, autoRotate = false }) => {
   const { scene } = useGLTF(modelPath);
   const rotationGroupRef = useRef<Group | null>(null);
   const pivotRef = useRef<Group | null>(null);
   const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
   useFrame((_, delta) => {
+    if (!autoRotate) return;
     if (rotationGroupRef.current)
       rotationGroupRef.current.rotation.y += delta * 0.35;
   });
@@ -49,7 +51,7 @@ const GenericModel: React.FC<{ modelPath: string; desiredSize: number }> = ({
 const ModelViewer: React.FC<Props> = ({
   modelPath,
   containerHeight = 320,
-  autoRotate = true,
+  autoRotate = false,
   desiredSize = 2.8,
 }) => {
   useGLTF.preload(modelPath);
@@ -69,13 +71,17 @@ const ModelViewer: React.FC<Props> = ({
         <directionalLight position={[-4, -3, -4]} intensity={0.5} />
 
         <Suspense fallback={null}>
-          <GenericModel modelPath={modelPath} desiredSize={desiredSize} />
+          <GenericModel
+            modelPath={modelPath}
+            desiredSize={desiredSize}
+            autoRotate={autoRotate}
+          />
           <Environment preset="city" />
         </Suspense>
 
         <OrbitControls
           enablePan={false}
-          autoRotate={autoRotate}
+          autoRotate={false}
           autoRotateSpeed={0.35}
           enableDamping
           dampingFactor={0.08}

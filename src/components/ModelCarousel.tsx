@@ -17,12 +17,14 @@ type Props = {
   desiredSize?: number;
   autoPlay?: boolean;
   autoPlayInterval?: number;
+  autoRotate?: boolean;
 };
 
-const ModelInstance: React.FC<{ modelPath: string; desiredSize: number }> = ({
-  modelPath,
-  desiredSize,
-}) => {
+const ModelInstance: React.FC<{
+  modelPath: string;
+  desiredSize: number;
+  autoRotate?: boolean;
+}> = ({ modelPath, desiredSize, autoRotate = false }) => {
   const { scene } = useGLTF(modelPath);
   const rotationGroupRef = useRef<Group | null>(null);
   const pivotRef = useRef<Group | null>(null);
@@ -41,16 +43,16 @@ const ModelInstance: React.FC<{ modelPath: string; desiredSize: number }> = ({
   }, [clonedScene, desiredSize]);
 
   useEffect(() => {
-    const id = rotationGroupRef.current;
+    if (!autoRotate) return;
     let raf = 0;
-    const tick = (t: number) => {
+    const tick = () => {
       if (rotationGroupRef.current)
-        rotationGroupRef.current.rotation.y += 0.0035 * (16 / (1 / 60));
+        rotationGroupRef.current.rotation.y += 0.0035;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [autoRotate]);
 
   return (
     <group ref={rotationGroupRef}>
@@ -150,7 +152,7 @@ const ModelCarousel: React.FC<Props> = ({
 
         <OrbitControls
           enablePan={false}
-          autoRotate
+          autoRotate={false}
           enableDamping
           dampingFactor={0.08}
           minDistance={3}

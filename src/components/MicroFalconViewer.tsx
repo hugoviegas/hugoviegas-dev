@@ -16,9 +16,10 @@ const FalconModel = () => {
   const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
   useFrame((_, delta) => {
-    if (rotationGroupRef.current) {
-      rotationGroupRef.current.rotation.y += delta * 0.4;
-    }
+    // No automatic rotation by default; leave hook for future prop
+    // if (rotationGroupRef.current) {
+    //   rotationGroupRef.current.rotation.y += delta * 0.4;
+    // }
   });
 
   useLayoutEffect(() => {
@@ -144,7 +145,7 @@ const MicroFalconViewer = () => {
 
         <OrbitControls
           enablePan={false}
-          autoRotate
+          autoRotate={false}
           autoRotateSpeed={0.4}
           enableDamping
           dampingFactor={0.08}
