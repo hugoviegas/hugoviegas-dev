@@ -17,6 +17,8 @@ import { useToast } from "@/hooks/use-toast";
 import LegoButton from "./LegoButton";
 import FastTransparentCube from "@/components/FastTransparentCube";
 import WorldClocks from "@/components/WorldClocks";
+import MicroFalconViewer from "@/components/MicroFalconViewer";
+import ModelViewer from "@/components/ModelViewer";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -469,6 +471,38 @@ const ContactSection = () => {
 
             <div className="glass-strong p-6 rounded-3xl flex justify-center">
               <FastTransparentCube width={240} height={240} enableExpand />
+            </div>
+
+            <div className="glass-strong p-6 rounded-3xl">
+              <MicroFalconViewer />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="glass-strong p-4 rounded-2xl">
+                <ModelViewer
+                  modelPath={"/src/assets/3d-model/Lego-glb-models/X-wing.glb"}
+                  containerHeight={260}
+                  desiredSize={2.6}
+                />
+              </div>
+              <div className="glass-strong p-4 rounded-2xl">
+                <ModelViewer
+                  modelPath={
+                    "/src/assets/3d-model/Lego-glb-models/Star Destroyer.glb"
+                  }
+                  containerHeight={260}
+                  desiredSize={2.6}
+                />
+              </div>
+              <div className="glass-strong p-4 rounded-2xl">
+                <ModelViewer
+                  modelPath={
+                    "/src/assets/3d-model/Lego-glb-models/Imperial Shuttle.glb"
+                  }
+                  containerHeight={260}
+                  desiredSize={2.6}
+                />
+              </div>
             </div>
           </div>
         </div>
