@@ -1,4 +1,11 @@
-import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, {
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
 import { Box3, Vector3, Color, WebGLRenderer } from "three";
@@ -12,7 +19,10 @@ type Props = {
   autoPlayInterval?: number;
 };
 
-const ModelInstance: React.FC<{ modelPath: string; desiredSize: number }> = ({ modelPath, desiredSize }) => {
+const ModelInstance: React.FC<{ modelPath: string; desiredSize: number }> = ({
+  modelPath,
+  desiredSize,
+}) => {
   const { scene } = useGLTF(modelPath);
   const rotationGroupRef = useRef<Group | null>(null);
   const pivotRef = useRef<Group | null>(null);
@@ -34,7 +44,8 @@ const ModelInstance: React.FC<{ modelPath: string; desiredSize: number }> = ({ m
     const id = rotationGroupRef.current;
     let raf = 0;
     const tick = (t: number) => {
-      if (rotationGroupRef.current) rotationGroupRef.current.rotation.y += 0.0035 * (16 / (1 / 60));
+      if (rotationGroupRef.current)
+        rotationGroupRef.current.rotation.y += 0.0035 * (16 / (1 / 60));
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -68,7 +79,10 @@ const ModelCarousel: React.FC<Props> = ({
   // autoplay
   useEffect(() => {
     if (!autoPlay) return;
-    const iv = setInterval(() => setIndex((i) => (i + 1) % modelPaths.length), autoPlayInterval);
+    const iv = setInterval(
+      () => setIndex((i) => (i + 1) % modelPaths.length),
+      autoPlayInterval
+    );
     return () => clearInterval(iv);
   }, [autoPlay, autoPlayInterval, modelPaths.length]);
 
@@ -79,7 +93,9 @@ const ModelCarousel: React.FC<Props> = ({
       if (!el || !gl) return;
       const style = window.getComputedStyle(el);
       const bg = style.backgroundColor || style.background || "rgba(0,0,0,0)";
-      const rgbaMatch = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/i);
+      const rgbaMatch = bg.match(
+        /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/i
+      );
       if (rgbaMatch) {
         const r = Number(rgbaMatch[1]) / 255;
         const g = Number(rgbaMatch[2]) / 255;
@@ -100,7 +116,11 @@ const ModelCarousel: React.FC<Props> = ({
   };
 
   return (
-    <div ref={containerRef} className="w-full rounded-3xl overflow-hidden" style={{ height: containerHeight }}>
+    <div
+      ref={containerRef}
+      className="w-full rounded-3xl overflow-hidden"
+      style={{ height: containerHeight }}
+    >
       <Canvas
         camera={{ position: [0, 1.4, 4.2], fov: 45 }}
         gl={{ alpha: true, antialias: true }}
@@ -108,7 +128,12 @@ const ModelCarousel: React.FC<Props> = ({
           applyContainerBgToGL(gl as WebGLRenderer);
           const handler = () => applyContainerBgToGL(gl as WebGLRenderer);
           window.addEventListener("microfalcon-reapply-bg", handler);
-          ((gl as unknown) as WebGLRenderer & { __microfalcon_cleanup?: () => void }).__microfalcon_cleanup = () => window.removeEventListener("microfalcon-reapply-bg", handler);
+          (
+            gl as unknown as WebGLRenderer & {
+              __microfalcon_cleanup?: () => void;
+            }
+          ).__microfalcon_cleanup = () =>
+            window.removeEventListener("microfalcon-reapply-bg", handler);
         }}
       >
         <ambientLight intensity={0.85} />
@@ -116,18 +141,30 @@ const ModelCarousel: React.FC<Props> = ({
         <directionalLight position={[-4, -3, -4]} intensity={0.5} />
 
         <Suspense fallback={null}>
-          <ModelInstance modelPath={modelPaths[index]} desiredSize={desiredSize} />
+          <ModelInstance
+            modelPath={modelPaths[index]}
+            desiredSize={desiredSize}
+          />
           <Environment preset="city" />
         </Suspense>
 
-        <OrbitControls enablePan={false} autoRotate enableDamping dampingFactor={0.08} minDistance={3} maxDistance={6} />
+        <OrbitControls
+          enablePan={false}
+          autoRotate
+          enableDamping
+          dampingFactor={0.08}
+          minDistance={3}
+          maxDistance={6}
+        />
       </Canvas>
 
       {/* Controls */}
       <div className="flex items-center justify-between mt-3 px-2">
         <button
           className="px-3 py-2 rounded bg-muted/20 hover:bg-muted/30"
-          onClick={() => setIndex((i) => (i - 1 + modelPaths.length) % modelPaths.length)}
+          onClick={() =>
+            setIndex((i) => (i - 1 + modelPaths.length) % modelPaths.length)
+          }
         >
           Prev
         </button>
@@ -136,7 +173,9 @@ const ModelCarousel: React.FC<Props> = ({
             <button
               key={i}
               onClick={() => setIndex(i)}
-              className={`w-3 h-3 rounded-full ${i === index ? "bg-primary" : "bg-muted/40"}`}
+              className={`w-3 h-3 rounded-full ${
+                i === index ? "bg-primary" : "bg-muted/40"
+              }`}
               aria-label={`Show model ${i + 1}`}
             />
           ))}
