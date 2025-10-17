@@ -7,7 +7,7 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+    port: 5173,
   },
   // Include GLB assets so Vite doesn't attempt to parse them as JS
   assetsInclude: ["**/*.glb"],

@@ -87,9 +87,9 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
       label: getCurrentLanguage() === "PT" ? "Eu" : "Me",
       isHome: true,
     },
+    { id: "experience", label: t("experience") },
     { id: "about", label: t("about") },
     { id: "projects", label: t("projects") },
-    { id: "experience", label: t("experience") },
     { id: "contact", label: t("contact") },
   ];
 
@@ -98,7 +98,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
 
-      const sections = ["hero", "about", "projects", "experience", "contact"];
+      const sections = ["hero", "experience", "about", "projects", "contact"];
       const sectionElements = sections.map((id) => document.getElementById(id));
 
       let current = "hero";

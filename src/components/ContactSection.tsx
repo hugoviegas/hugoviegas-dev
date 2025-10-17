@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LegoButton from "./LegoButton";
+import FastTransparentCube from "@/components/FastTransparentCube";
 import WorldClocks from "@/components/WorldClocks";
 
 const ContactSection = () => {
@@ -465,6 +466,10 @@ const ContactSection = () => {
 
             {/* World Clocks (rendered directly so only inner card is shown) */}
             <WorldClocks />
+
+            <div className="glass-strong p-6 rounded-3xl flex justify-center">
+              <FastTransparentCube width={240} height={240} enableExpand />
+            </div>
           </div>
         </div>
       </div>

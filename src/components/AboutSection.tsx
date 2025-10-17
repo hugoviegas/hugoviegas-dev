@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Code,
   Globe,
@@ -20,9 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useLanguage } from "@/hooks/useLanguage";
-import StatsSection from "@/components/StatsSection";
 import SkillsSection from "@/components/SkillsSection";
-import FastTransparentCube from "@/components/FastTransparentCube";
 import redFront from "@/assets/lego-bricks/red-front.png";
 import yellowFront from "@/assets/lego-bricks/yellow-front.png";
 import blueFront from "@/assets/lego-bricks/blue-front.png";
@@ -63,12 +60,6 @@ const AboutSection = () => {
       bgColor: "bg-orange-400/10",
     },
   ];
-
-  const [startSolved, setStartSolved] = useState(false);
-
-  const widgetSrc = `https://ruwix.com/widget/3d/?flags=showalg${
-    startSolved ? "%20startsolved" : ""
-  }`;
 
   // Decorative LEGO bricks component
   const DecoLegoBricks = () => {
@@ -111,43 +102,8 @@ const AboutSection = () => {
       <DecoLegoBricks />
 
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="mb-16 fade-in">
-          <h2 className="heading-section mb-8 text-center">
-            {t("aboutTitle")}
-          </h2>
-
-          {/* Intro section with better spacing */}
-          <div className="glass-strong rounded-3xl p-8 lg:p-12 mb-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
-                <p className="text-xl text-foreground/90 leading-relaxed">
-                  {t("aboutSummary")}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Badge variant="secondary" className="px-4 py-2 text-sm">
-                    <Code className="w-4 h-4 mr-2" />
-                    Full-Stack Developer
-                  </Badge>
-                  <Badge variant="secondary" className="px-4 py-2 text-sm">
-                    <Globe className="w-4 h-4 mr-2" />
-                    Dublin, Ireland
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="flex justify-center lg:justify-end">
-                {/* Cube with better responsive sizing */}
-                <div className="relative">
-                  <FastTransparentCube width={280} height={280} enableExpand />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Section */}
-        <div className="mb-20">
-          <StatsSection />
+        <div className="mb-12 text-center fade-in">
+          <h2 className="heading-section">{t("aboutTitle")}</h2>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">

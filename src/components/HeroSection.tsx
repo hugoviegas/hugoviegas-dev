@@ -81,7 +81,7 @@ const HeroSection = () => {
 
   // Resume URL from Vercel Storage
   const resumeUrl =
-    "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20CV%202025.pdf";
+    "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
 
   // Hero Brick Explosion component
   const HERO_BRICK_IMAGES = [

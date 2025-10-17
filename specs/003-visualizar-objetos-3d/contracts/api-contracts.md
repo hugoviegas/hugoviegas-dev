@@ -1,301 +1,158 @@
-# API Contracts: StarshipBackground Configuration
+# Interaction Contracts: Navigation, Modals & Viewer Behaviour
 
-## Configuration API
+> No remote APIs are introduced. These contracts document UI events, component interactions, and shared utilities required for the refreshed portfolio and `/bricks` viewer.
 
-### Default Configurations Endpoint
+## Event Bus Overview
 
-Provides predefined configurations for all available starship models.
-
-```typescript
-// Static configuration export
-export const getDefaultStarshipConfigs = (): StarshipConfig[] => {
-  return [
-    {
-      id: "xwing",
-      name: "X-wing Fighter",
-      modelPath: "/src/assets/3d-model/Lego glb models/X-wing.glb",
-      scale: [0.8, 0.8, 0.8],
-      initialRotation: [0, Math.PI / 4, 0],
-      speed: { min: 0.5, max: 1.2, rotationSpeed: 0.1 },
-      trajectory: "linear",
-      spawnZone: {
-        entry: [-10, 2, 5],
-        exit: [10, -2, -5],
-        variation: 3,
-      },
-    },
-    // ... other starship configurations
-  ];
-};
-```
-
-### Custom Configuration API
-
-Allows runtime modification of starship configurations.
+All events are dispatched via lightweight React context (`NavigationEventBus`) to keep sections decoupled.
 
 ```typescript
-// Configuration management interface
-interface ConfigurationManager {
-  loadConfig(id: string): Promise<StarshipConfig>;
-  saveConfig(config: StarshipConfig): Promise<void>;
-  validateConfig(config: Partial<StarshipConfig>): ValidationResult;
-  getAvailableModels(): Promise<string[]>;
-  exportConfiguration(): string;
-  importConfiguration(json: string): Promise<StarshipConfig[]>;
+type NavigationEvent =
+  | {
+      type: "nav:jump";
+      target: PortfolioSection["id"];
+      source: "navbar" | "hero-cta";
+    }
+  | { type: "modal:cube:open"; trigger: "hero" }
+  | { type: "modal:cube:close"; reason: "esc" | "cta" | "backdrop" }
+  | { type: "viewer:interaction"; viewer: "cube" | "bricks"; timestamp: number }
+  | { type: "viewer:auto-rotate:resume"; viewer: "cube" | "bricks" };
+
+interface NavigationEventBus {
+  dispatch(event: NavigationEvent): void;
+  subscribe(handler: (event: NavigationEvent) => void): () => void;
 }
 ```
 
-## Animation Control API
+## Modal Lifecycle Contract
 
-### Animation State Management
+### Open Sequence
 
-Interface for controlling individual starship animations.
+1. `nav:jump` (if hero button triggers scroll) → ensure hero section is focused.
+2. Dispatch `modal:cube:open`.
+3. Modal component:
+   - Sets `CubeModalState.isOpen = true`.
+   - Locks body scroll (`overflow-hidden` on `<body>`).
+   - Focuses close button (`refClose.current.focus()`).
+   - Dispatches `viewer:interaction` for cube with current timestamp.
+
+### Close Sequence
+
+- Accepts ESC key, close button click, or backdrop click.
+- Dispatch `modal:cube:close` with reason.
+- Restores focus to trigger button and removes body scroll lock.
+- Schedules `viewer:auto-rotate:resume` after 10s (shared helper ensures consistent behaviour with `/bricks`).
+
+## Navigation Contract
 
 ```typescript
-interface AnimationController {
-  // Instance management
-  createInstance(configId: string): Promise<StarshipInstance>;
-  destroyInstance(instanceId: string): Promise<void>;
-  getAllInstances(): StarshipInstance[];
+interface NavbarLink {
+  id: PortfolioSection["id"];
+  label: string; // ≤ 10 characters
+  href: `#${PortfolioSection["anchor"]}`;
+}
 
-  // Animation controls
-  pauseAnimation(instanceId?: string): void;
-  resumeAnimation(instanceId?: string): void;
-  resetAnimation(instanceId: string): void;
-
-  // State updates
-  updatePosition(instanceId: string, position: Vector3): void;
-  updateRotation(instanceId: string, rotation: Vector3): void;
-  updateSpeed(instanceId: string, speed: SpeedConfig): void;
-
-  // Event listeners
-  onInstanceCreated(callback: (instance: StarshipInstance) => void): void;
-  onInstanceDestroyed(callback: (instanceId: string) => void): void;
-  onAnimationUpdate(callback: (instances: StarshipInstance[]) => void): void;
+interface ScrollSpyConfig {
+  sections: PortfolioSection[];
+  onActiveChange: (id: PortfolioSection["id"]) => void;
+  offsetPx: number; // Accounts for navbar height
 }
 ```
 
-### Performance Monitoring API
+- Navbar dispatches `nav:jump` before calling `scrollIntoView({ behavior: "smooth" })`.
+- Scroll spy listens to intersection observer updates and updates active link state (debounced 150ms).
+- Hero CTA "See Projects" should reuse `nav:jump` with target `"projects"`.
 
-Interface for tracking system performance and optimization.
+## Skills Grid Contract
 
 ```typescript
-interface PerformanceMonitor {
-  getCurrentFPS(): number;
-  getAverageFrameTime(): number;
-  getMemoryUsage(): MemoryInfo;
-  getActiveInstanceCount(): number;
+interface SkillsGridProps {
+  categories: SkillCategory[];
+  tiles: SkillTile[]; // Already grouped by categoryId
+  columns: { base: 2; lg: 3; xl: 4 };
+  onTileFocus?: (tile: SkillTile) => void; // For tooltip or analytics
+}
 
-  // Performance events
-  onPerformanceDrop(callback: (metrics: PerformanceMetrics) => void): void;
-  onMemoryWarning(callback: (usage: MemoryInfo) => void): void;
-
-  // Optimization controls
-  enableAdaptiveQuality(enabled: boolean): void;
-  setPerformanceMode(mode: "high" | "medium" | "low"): void;
-  getOptimizationSuggestions(): OptimizationSuggestion[];
+interface SkillTileProps {
+  tile: SkillTile;
+  iconSize?: number; // default 64
+  showLabel: boolean; // always true on desktop; optional on mobile
 }
 ```
 
-## Debug API
+- Icons must include `alt` text describing the technology.
+- Fallback icons flagged with `data-fallback="true"` for later refinement.
+- Grid uses CSS `gap-4` desktop, `gap-3` mobile.
 
-### Debug Controls Interface
-
-API for development-time configuration and testing.
+## Experience Tabs Contract
 
 ```typescript
-interface DebugController {
-  // Visual debugging
-  showBoundingBoxes(enabled: boolean): void;
-  showTrajectories(enabled: boolean): void;
-  showPerformanceOverlay(enabled: boolean): void;
+interface ExperienceTabsProps {
+  groups: ExperienceGroupBlock[]; // Each group corresponds to tab
+  defaultGroup: "work";
+  onGroupChange?: (group: ExperienceGroupBlock["group"]) => void;
+}
 
-  // Configuration testing
-  previewConfiguration(config: StarshipConfig): Promise<void>;
-  testTrajectory(instanceId: string, trajectory: TrajectoryType): void;
-
-  // Data export/import
-  exportCurrentSession(): DebugSession;
-  loadDebugSession(session: DebugSession): Promise<void>;
-
-  // Real-time manipulation
-  selectInstance(instanceId: string): void;
-  updateInstanceProperty(
-    instanceId: string,
-    property: string,
-    value: any
-  ): void;
-  duplicateInstance(instanceId: string): Promise<StarshipInstance>;
+interface ExperienceCardProps {
+  entry: ExperienceEntry;
 }
 ```
 
-### Debug Data Types
+- Tabs use Radix `Tabs` or headless implementation ensuring keyboard navigation (Arrow keys, Home/End).
+- `ExperienceCard` renders title, organization, timeframe, highlights list.
+- When group changes, container height animates but should clamp to `min-h-[220px]` to avoid jump.
 
-Supporting types for debug functionality.
+## Contact Section Contract
 
 ```typescript
-interface DebugSession {
-  timestamp: number;
-  configurations: StarshipConfig[];
-  activeInstances: StarshipInstance[];
-  performanceMetrics: PerformanceMetrics;
-  userNotes?: string;
+interface ContactSectionProps {
+  channels: ContactChannel[];
+  availabilityNote?: string;
 }
 
-interface OptimizationSuggestion {
-  type: "reduce_instances" | "lower_quality" | "adjust_spawn_rate";
-  severity: "low" | "medium" | "high";
-  description: string;
-  impact: string;
-  implementation?: () => void;
-}
-
-interface MemoryInfo {
-  usedJSHeapSize: number;
-  totalJSHeapSize: number;
-  jsHeapSizeLimit: number;
-  textureMemory?: number;
-  geometryMemory?: number;
+interface ContactCardProps {
+  channel: ContactChannel;
 }
 ```
 
-## Error Handling API
+- Each card is a `button` or `a` element with `role="link"`, `tabIndex=0`.
+- Primary action triggers `window.open(channel.href)` or `mailto:`.
+- Secondary text displayed under label using subdued color.
 
-### Error Types and Handlers
-
-Standardized error handling for all starship operations.
+## Viewer Synchronisation Helpers
 
 ```typescript
-// Error type definitions
-type StarshipError =
-  | ModelLoadError
-  | AnimationError
-  | ConfigurationError
-  | PerformanceError;
-
-interface ErrorHandler {
-  onModelLoadError(error: ModelLoadError): void;
-  onAnimationError(error: AnimationError): void;
-  onConfigurationError(error: ConfigurationError): void;
-  onPerformanceError(error: PerformanceError): void;
+interface ViewerRotationController {
+  markInteraction(viewer: "cube" | "bricks"): void;
+  shouldResume(viewer: "cube" | "bricks", now: number): boolean;
 }
 
-// Specific error types
-interface ModelLoadError {
-  type: "model_load_error";
-  modelPath: string;
-  cause: "not_found" | "invalid_format" | "network_error";
-  message: string;
-  retryable: boolean;
-}
+const INTERACTION_TIMEOUT_MS = 10_000; // from feature spec clarifications
+```
 
-interface AnimationError {
-  type: "animation_error";
-  instanceId: string;
-  phase: "initialization" | "update" | "cleanup";
-  message: string;
-  recoverable: boolean;
-}
+- `markInteraction` invoked when user drags or zooms.
+- `shouldResume` used inside animation loop; returns true when idle duration ≥ timeout.
+- Shared between hero modal viewer and `/bricks` page to keep behaviour consistent.
 
-interface ConfigurationError {
-  type: "configuration_error";
-  field: string;
-  value: any;
-  constraint: string;
-  suggestion?: string;
+## Error & Fallback Contract
+
+```typescript
+type ViewerError =
+  | { type: "model-load"; message: string; suggestion?: string }
+  | { type: "asset-missing"; assetPath: string }
+  | { type: "webgl"; message: string };
+
+interface ViewerFallbackProps {
+  error: ViewerError;
+  onRetry?: () => void;
 }
 ```
 
-## Event System API
+- When OBJ fails to load, display placeholder from `public/placeholder.svg` and copy "Couldn't load the brick right now." with optional retry button in dev mode.
+- Log detailed error to console for debugging but avoid exposing raw stack to users.
 
-### Event Emission and Handling
+## Analytics & Telemetry (Optional Future Work)
 
-Event-driven communication between components.
+- Provide hook `useHeroInteractions` capturing CTA clicks and modal open count. Data stored locally (no external service) unless integration requested later.
 
-```typescript
-interface StarshipEventEmitter {
-  // Model events
-  emit(event: "model:loaded", data: { instanceId: string; model: GLTF }): void;
-  emit(event: "model:error", data: { instanceId: string; error: Error }): void;
-
-  // Animation events
-  emit(event: "animation:start", data: { instanceId: string }): void;
-  emit(event: "animation:complete", data: { instanceId: string }): void;
-  emit(event: "animation:reset", data: { instanceId: string }): void;
-
-  // Performance events
-  emit(event: "performance:warning", data: PerformanceMetrics): void;
-  emit(event: "performance:critical", data: PerformanceMetrics): void;
-
-  // Debug events
-  emit(event: "debug:selection", data: { instanceId: string }): void;
-  emit(
-    event: "debug:config_change",
-    data: { instanceId: string; config: StarshipConfig }
-  ): void;
-
-  // Event listeners
-  on<T>(event: string, callback: (data: T) => void): void;
-  off(event: string, callback?: Function): void;
-  once<T>(event: string, callback: (data: T) => void): void;
-}
-```
-
-## Validation API
-
-### Configuration Validation
-
-Comprehensive validation for all configuration objects.
-
-```typescript
-interface ConfigValidator {
-  validateStarshipConfig(config: StarshipConfig): ValidationResult;
-  validateSpawnZone(zone: SpawnZone): ValidationResult;
-  validateSpeedConfig(speed: SpeedConfig): ValidationResult;
-  validateModelPath(path: string): Promise<ValidationResult>;
-}
-
-interface ValidationResult {
-  valid: boolean;
-  errors: ValidationError[];
-  warnings: ValidationWarning[];
-  suggestions?: string[];
-}
-
-interface ValidationError {
-  field: string;
-  message: string;
-  severity: "error" | "warning";
-  code: string;
-}
-```
-
-## Response Formats
-
-### Success Response
-
-```typescript
-interface SuccessResponse<T> {
-  success: true;
-  data: T;
-  timestamp: number;
-  metadata?: Record<string, any>;
-}
-```
-
-### Error Response
-
-```typescript
-interface ErrorResponse {
-  success: false;
-  error: {
-    type: string;
-    message: string;
-    code?: string;
-    details?: any;
-  };
-  timestamp: number;
-}
-```
-
-These contracts define the complete API surface for the StarshipBackground system, ensuring consistent interfaces between all components and clear expectations for implementation.
+These contracts ensure interactive pieces remain predictable and accessible while honouring the 3D viewer requirements defined in the feature specification.

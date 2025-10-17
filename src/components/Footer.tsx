@@ -36,7 +36,7 @@ const Footer = () => {
               Hugo Viegas
             </h3>
             <p className="text-muted-foreground">
-              IT Support Specialist → Full-Stack Developer
+              IT Support Specialist | System Administrator
             </p>
           </div>
 

@@ -16,133 +16,91 @@
    → Setup: React Three Fiber dependencies, TypeScript types
    → Tests: Component tests, integration tests, performance tests
    → Core: Components, hooks, configurations
-   → Integration: Demo page, background integration
-   → Polish: Unit tests, performance optimization, documentation
-4. Apply task rules ✓
-   → Different files = mark [P] for parallel
-   → Same file = sequential (no [P])
-   → Tests before implementation (TDD)
-5. Number tasks sequentially (T001, T002...) ✓
-6. Generate dependency graph ✓
-7. Create parallel execution examples ✓
+   # Tasks: Visualizar objetos 3D + Portfolio Simplification
+
+   **Input**: Design documents from `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\specs\003-visualizar-objetos-3d`
+   **Prerequisites**: `plan.md`, `research.md`, `data-model.md`, `contracts/`, `quickstart.md`
+
+   ## Phase 3.1: Setup
+   - [ ] T001 Audit existing assets and create `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\assets\skills\` with official/fallback SVG icons listed in research (include `README.md` documenting sources).
+   - [ ] T002 Establish copy source files in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\content\microcopy.ts` with short-form strings following research tone guidelines.
+
+   ## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
+   **All tests must be committed failing before implementation begins.**
+   - [ ] T003 Write contract test for `NavigationEventBus` interactions in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\__tests__\NavigationEventBus.contract.test.tsx`.
+   - [ ] T004 [P] Write contract test for `ViewerRotationController` idle-resume behaviour in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\lib\__tests__\viewerRotationController.contract.test.ts`.
+   - [ ] T005 [P] Add component contract tests for `HeroSection` actions and accessible labels in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\__tests__\HeroSection.contract.test.tsx`.
+   - [ ] T006 [P] Add component contract tests for `CubeModal` focus trap and ESC handling in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\__tests__\CubeModal.contract.test.tsx`.
+   - [ ] T007 [P] Add snapshot/regression tests for skills grid layout in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\__tests__\SkillsSection.contract.test.tsx`.
+   - [ ] T008 [P] Add accessibility & tab-change tests for `ExperienceSection` in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\__tests__\ExperienceSection.contract.test.tsx`.
+   - [ ] T009 [P] Add contract tests for `ContactSection` link semantics in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\__tests__\ContactSection.contract.test.tsx`.
+   - [ ] T010 [P] Create integration test covering section order + navbar scrollspy in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\__tests__\PortfolioLayout.integration.test.tsx`.
+   - [ ] T011 [P] Create integration test for `/bricks` viewer idle-resume + fallback in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\LightsaberViewer\__tests__\BricksViewer.integration.test.tsx`.
+
+   ## Phase 3.3: Core Implementation (ONLY after tests are failing)
+   - [ ] T012 Implement portfolio type definitions (entities/helpers from data-model) in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\types\portfolio.ts`.
+   - [ ] T013 Populate structured data (`PortfolioSection`, skills, experience, journey, contact) in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\content\sections.ts`.
+   - [ ] T014 Create shared `ViewerRotationController` helper per contract in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\lib\viewer-rotation.ts`.
+   - [ ] T015 Build `NavigationEventBus` React context + provider in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\contexts\NavigationEventBus.tsx`.
+   - [ ] T016 Refactor `HeroSection` to new concise layout, lego cube button, and background controls in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\HeroSection.tsx`.
+   - [ ] T017 Implement dedicated `CubeModal` component using Radix Dialog in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\CubeModal.tsx`.
+   - [ ] T018 Update `Navbar` to consume ordered sections + dispatch events in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\Navbar.tsx`.
+   - [ ] T019 Rebuild `SkillsSection` with icon grid + categories in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\SkillsSection.tsx`.
+   - [ ] T020 Refactor `ExperienceSection` into Radix tabs for Work/Education/Certificates in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\ExperienceSection.tsx`.
+   - [ ] T021 Trim copy and align CTAs in `ProjectsSection` at `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\ProjectsSection.tsx`.
+   - [ ] T022 Replace About prose with highlight blocks in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\AboutSection.tsx`.
+   - [ ] T023 Rework `ContactSection` cards per contract in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\ContactSection.tsx`.
+   - [ ] T024 Update `PropostaPresentation` composition/order and wire hero cube modal + event bus in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\PropostaPresentation.tsx`.
+   - [ ] T025 Adjust lightsaber background + lego particles in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\HeroLightsaber.tsx` and related CSS to remove floor glow and pause on modal.
+   - [ ] T026 Align `/bricks` viewer with shared rotation helper and fallback messaging in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\components\LightsaberViewer\LightsaberViewer.tsx` (plus related control hooks).
+
+   ## Phase 3.4: Integration
+   - [ ] T027 Wire `NavigationEventBusProvider` into `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\App.tsx` and ensure scrollspy uses new data.
+   - [ ] T028 Synchronise hero modal + `/bricks` page idle timers via shared store in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\features\proposta\hooks\useRotationControl.ts`.
+   - [ ] T029 Update translations/config references in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\config\translations.ts` and `languages.ts` to match new copy keys.
+
+   ## Phase 3.5: Polish
+   - [ ] T030 [P] Optimise new skill SVG assets with SVGO and document usage in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\assets\skills\README.md`.
+   - [ ] T031 [P] Update `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\README.md` and `quickstart.md` notes with new layout instructions and modal toggle guidance.
+   - [ ] T032 [P] Run `npm run lint` and `npm test` ensuring all suites (including new contracts/integration) pass; capture notes in `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\TODO.md` if follow-ups needed.
+
+   ## Dependencies
+   - T001 → prerequisite for components needing local icons (blocks T019, T030).
+   - T002 → prerequisite for copy-driven components (blocks T016, T021, T022, T023).
+   - Tests T003–T011 must be completed (and failing) before starting T012 onwards.
+   - T012 provides types for data files (blocks T013, T015, T024).
+   - T013 feeds section-driven components (blocks T018–T024).
+   - T014 must finish before T011 can pass and before T026 & T028.
+   - T015 must precede T018 and T024.
+   - T016–T023 feed integration wiring (T024–T028).
+   - T029 depends on T021–T024 for final copy keys.
+   - Polish tasks T030–T032 run only after all prior implementation/integration tasks succeed.
+
+   ## Parallel Execution Example
 ```
 
-## Format: `[ID] [P?] Description`
+# After T003 completes, launch parallel contract tests
 
-- **[P]**: Can run in parallel (different files, no dependencies)
-- Include exact file paths in descriptions
+Task.run --tasks "T004,T005,T006,T007,T008,T009,T010,T011"
 
-## Path Conventions
+# During polish, optimise assets and docs together
 
-- **Web app**: `src/` at repository root for React components
-- **Tests**: `src/components/StarshipBackground/__tests__/`
-- All paths relative to repository root: `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path`
+Task.run --tasks "T030,T031" # leave T032 last to verify everything
 
-## Phase 3.1: Setup
-
-- [x] T001 Install React Three Fiber dependencies (@react-three/fiber, @react-three/drei, three, @types/three)
-- [x] T002 [P] Create TypeScript type definitions in `src/components/StarshipBackground/types.ts`
-- [x] T003 [P] Create component directory structure `src/components/StarshipBackground/`
-
-## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
-
-**CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
-
-- [x] T004 [P] Component contract test for StarshipBackground in `src/components/StarshipBackground/__tests__/StarshipBackground.test.tsx`
-- [x] T005 [P] Component contract test for StarshipModel in `src/components/StarshipBackground/__tests__/StarshipModel.test.tsx`
-- [x] T006 [P] Hook contract test for useStarshipAnimation in `src/components/StarshipBackground/__tests__/useStarshipAnimation.test.tsx`
-- [x] T007 [P] Integration test for starship spawning and animation in `src/components/StarshipBackground/__tests__/StarshipAnimation.integration.test.tsx`
-- [x] T008 [P] Configuration validation test in `src/components/StarshipBackground/__tests__/starshipConfigs.test.ts`
-
-## Phase 3.3: Core Implementation (ONLY after tests are failing)
-
-- [x] T009 [P] StarshipConfig and related types implementation in `src/components/StarshipBackground/types.ts`
-- [x] T010 [P] Default starship configurations in `src/components/StarshipBackground/starshipConfigs.ts`
-- [x] T011 [P] useStarshipAnimation custom hook in `src/components/StarshipBackground/useStarshipAnimation.tsx`
-- [x] T012 [P] StarshipModel component in `src/components/StarshipBackground/StarshipModel.tsx`
-- [x] T013 StarshipBackground main component in `src/components/StarshipBackground/index.tsx`
-- [x] T014 [P] Configuration validation utilities in `src/components/StarshipBackground/utils.ts`
-- [x] T015 [P] Performance monitoring utilities in `src/components/StarshipBackground/performanceUtils.ts`
-
-## Phase 3.4: Debug and Development Tools
-
-- [x] T016 [P] Debug controls component in `src/components/StarshipBackground/DebugControls.tsx`
-- [x] T017 [P] Debug overlay component in `src/components/StarshipBackground/DebugOverlay.tsx`
-- [x] T018 [P] Configuration export/import utilities in `src/components/StarshipBackground/configUtils.ts`
-
-## Phase 3.5: Integration and Pages
-
-- [x] T019 Create StarshipDemo page in `src/pages/StarshipDemo.tsx`
-- [x] T020 Add StarshipDemo route to router configuration in `src/App.tsx`
-- [x] T021 Update navigation to include demo page link
-
-## Phase 3.6: Background Integration
-
-- [x] T022 Integrate StarshipBackground into main Index page in `src/pages/Index.tsx`
-- [x] T023 Add responsive configuration for mobile devices
-- [x] T024 Implement performance-based adaptive quality settings
-
-## Phase 3.7: Polish and Optimization
-
-- [x] T025 [P] Unit tests for configuration validation in `src/components/StarshipBackground/__tests__/validation.test.ts`
-- [x] T026 [P] Unit tests for performance monitoring in `src/components/StarshipBackground/__tests__/performance.test.ts`
-- [x] T027 [P] Performance tests for frame rate under load in `src/components/StarshipBackground/__tests__/performance.integration.test.tsx`
-- [x] T028 [P] Mobile device compatibility tests
-- [x] T029 Error boundary implementation for 3D rendering failures
-- [x] T030 Memory leak prevention and cleanup verification
-- [x] T031 [P] Update component documentation and usage examples
-
-## Dependencies
-
-### Critical Path
-
-- Setup (T001-T003) → Tests (T004-T008) → Core Implementation (T009-T015)
-- T009 (types) blocks T010, T011, T012 (implementations depend on types)
-- T011 (hook) blocks T012, T013 (components use hook)
-- T012 (StarshipModel) blocks T013 (StarshipBackground uses StarshipModel)
-- Core Implementation (T009-T015) → Integration (T019-T021)
-- Integration (T019-T024) → Polish (T025-T031)
-
-### Independent Parallel Tracks
-
-- Debug tools (T016-T018) can be developed parallel to core implementation
-- Tests within same phase can run parallel (different files)
-- Documentation and optimization tasks (T025-T031) are mostly independent
-
-## Parallel Execution Examples
-
-### Phase 3.2: Tests (All can run in parallel)
-
-```bash
-# Launch T004-T008 together:
-Task: "Component contract test for StarshipBackground in src/components/StarshipBackground/__tests__/StarshipBackground.test.tsx"
-Task: "Component contract test for StarshipModel in src/components/StarshipBackground/__tests__/StarshipModel.test.tsx"
-Task: "Hook contract test for useStarshipAnimation in src/components/StarshipBackground/__tests__/useStarshipAnimation.test.tsx"
-Task: "Integration test for starship spawning in src/components/StarshipBackground/__tests__/StarshipAnimation.integration.test.tsx"
-Task: "Configuration validation test in src/components/StarshipBackground/__tests__/starshipConfigs.test.ts"
 ```
 
-### Phase 3.3: Core Implementation (After T009 completes)
+## Notes
+- Respect TDD: do not modify implementation files until T003–T011 are committed failing.
+- When multiple tasks touch the same file, leave them unmarked for parallel execution to avoid conflicts.
+- Keep hero modal accessible: verify focus handling manually after T017/T024.
+- Update asset attributions in README as icons are added.
 
-```bash
-# Launch T010-T012, T014-T015 together (T013 waits for T011, T012):
-Task: "Default starship configurations in src/components/StarshipBackground/starshipConfigs.ts"
-Task: "useStarshipAnimation custom hook in src/components/StarshipBackground/useStarshipAnimation.tsx"
-Task: "StarshipModel component in src/components/StarshipBackground/StarshipModel.tsx"
-Task: "Configuration validation utilities in src/components/StarshipBackground/utils.ts"
-Task: "Performance monitoring utilities in src/components/StarshipBackground/performanceUtils.ts"
-```
-
-### Phase 3.4: Debug Tools (All parallel)
-
-```bash
-# Launch T016-T018 together:
-Task: "Debug controls component in src/components/StarshipBackground/DebugControls.tsx"
-Task: "Debug overlay component in src/components/StarshipBackground/DebugOverlay.tsx"
-Task: "Configuration export/import utilities in src/components/StarshipBackground/configUtils.ts"
-```
-
-## Model Configuration Tasks
+## Validation Checklist
+- [ ] Each contract file has a dedicated contract test task.
+- [ ] Every entity in `data-model.md` is represented in type/data tasks (T012–T013).
+- [ ] Tests precede implementation tasks chronologically.
+- [ ] [P] markers only assigned where files are independent.
+- [ ] All tasks include absolute paths for clarity.
 
 The following GLB models need configuration via debug mode:
 
@@ -203,3 +161,4 @@ Each model will need manual configuration through debug controls to set proper:
 4. **From User Stories**: Demo page → integration test + implementation
 5. **Ordering**: Setup → Tests → Core → Integration → Polish
 6. **Dependencies**: Types before implementations, hooks before components
+```

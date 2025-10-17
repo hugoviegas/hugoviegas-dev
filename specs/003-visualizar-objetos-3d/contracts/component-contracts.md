@@ -1,207 +1,225 @@
-# Component Contracts: StarshipBackground
+# Component Contracts: Portfolio Refresh
 
-## StarshipBackground Component Contract
+## HeroSection
 
 ### Purpose
 
-Main background component that renders animated Star Wars starships using 3D models.
+Present concise intro text, hero image, background animations, and action buttons including the cube modal trigger.
 
 ### Interface
 
 ```typescript
-interface StarshipBackgroundProps {
-  configs?: StarshipConfig[]; // Custom starship configurations
-  maxConcurrent?: number; // Maximum concurrent animations (default: 6)
-  debugMode?: boolean; // Enable debug controls (default: false)
-  backgroundOpacity?: number; // Background transparency (0-1, default: 0.3)
-  className?: string; // Additional CSS classes
-  onStarshipClick?: (id: string) => void; // Click handler for debug mode
-  onLoadingChange?: (loading: boolean) => void; // Loading state callback
-  onError?: (error: Error) => void; // Error callback
+interface HeroSectionProps {
+  profileImageSrc: string;
+  headline: string; // ≤ 35 characters
+  subheadline: string; // ≤ 70 characters
+  actions: HeroActionModel[]; // From data model
+  onAction: (actionId: HeroActionModel["id"]) => void;
+  backgroundSettings: HeroBackgroundSettings;
+}
+
+interface HeroBackgroundSettings {
+  showLightsaber: boolean;
+  legoParticleDensity: "low" | "medium" | "high";
 }
 ```
 
-### Behavior Contract
+### Behaviour
 
-- **Rendering**: Must render as full viewport background overlay
-- **Performance**: Must maintain >30fps with up to 6 concurrent models
-- **Loading**: Must show loading state while models are being fetched
-- **Error Handling**: Must gracefully handle model loading failures
-- **Responsiveness**: Must adapt model count based on screen size
-- **Cleanup**: Must properly dispose Three.js resources on unmount
+- Render actions in a single row on desktop, stacked on mobile.
+- Trigger `onAction` before executing local behaviour (e.g., open modal, mailto).
+- Ensure cube action includes visually-hidden text "Open Rubik's cube viewer" for screen readers.
+- Remove ground glow and ensure floating lightsaber respects theme brightness.
+- Pause lightsaber animation while cube modal open (prop from parent).
 
-### State Management
-
-- Manages internal animation loop using `useFrame`
-- Tracks active starship instances and their positions
-- Handles spawning and despawning based on visibility
-- Maintains performance metrics in debug mode
-
-## StarshipModel Component Contract
+## CubeModal
 
 ### Purpose
 
-Individual starship 3D model with animation state management.
+Display interactive Rubik's cube using existing `FastCube` component inside accessible modal.
 
 ### Interface
 
 ```typescript
-interface StarshipModelProps {
-  config: StarshipConfig; // Starship configuration
-  animationState: AnimationState; // Current animation state
-  onLoaded?: () => void; // Model loaded callback
-  onError?: (error: Error) => void; // Error callback
-  debugMode?: boolean; // Show debug helpers
-  onClick?: () => void; // Click handler
+interface CubeModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  viewerConfig: CubeViewerPreset;
+  onInteraction: () => void; // Called when user drags/zooms
 }
 ```
 
-### Behavior Contract
+### Behaviour
 
-- **Model Loading**: Must load GLB model using `useGLTF`
-- **Animation**: Must update position/rotation based on animationState
-- **Debug Mode**: Must show bounding boxes and trajectory paths when enabled
-- **Click Detection**: Must support raycasting for click interactions
-- **Performance**: Must implement frustum culling for off-screen models
+- Implement via Radix `Dialog.Root` with `open`/`onOpenChange`.
+- Overlay uses semi-transparent dark background (`bg-slate-950/70`).
+- Focus trap ensures first focus on close button; trap released on close.
+- Accept ESC, close button, overlay click.
+- When `onInteraction` triggered, update shared rotation timestamp.
+- Expose `aria-label` describing viewer: "Interactive Rubik's cube".
 
-## useStarshipAnimation Hook Contract
+## NavigationBar
 
 ### Purpose
 
-Custom hook for managing starship animation logic and state.
+Provide quick links to sections following new order.
 
 ### Interface
 
 ```typescript
-function useStarshipAnimation(
-  configs: StarshipConfig[],
-  maxConcurrent: number,
-  debugMode: boolean
-): {
-  instances: StarshipInstance[];
-  spawnStarship: (configId: string) => void;
-  removeStarship: (instanceId: string) => void;
-  updateInstance: (
-    instanceId: string,
-    updates: Partial<AnimationState>
-  ) => void;
-  performanceStats: PerformanceStats;
-};
-```
-
-### Behavior Contract
-
-- **Instance Management**: Must create/destroy starship instances
-- **Animation Updates**: Must update positions using requestAnimationFrame
-- **Spawn Logic**: Must randomly spawn new starships based on timing
-- **Cleanup**: Must remove off-screen starships
-- **Performance**: Must track FPS and memory usage
-
-## Debug Controls Component Contract
-
-### Purpose
-
-Developer interface for configuring starship positions and animations.
-
-### Interface
-
-```typescript
-interface DebugControlsProps {
-  instances: StarshipInstance[];
-  onConfigChange: (instanceId: string, config: Partial<StarshipConfig>) => void;
-  onExportConfig: () => void;
-  onToggleTrajectories: () => void;
-  onToggleStats: () => void;
+interface NavigationBarProps {
+  links: NavbarLink[];
+  activeId: PortfolioSection["id"];
+  onNavigate: (id: PortfolioSection["id"]) => void;
 }
 ```
 
-### Behavior Contract
+### Behaviour
 
-- **Configuration**: Must provide controls for position, rotation, scale
-- **Real-time Updates**: Must update models as user adjusts values
-- **Export**: Must generate copyable configuration JSON
-- **Visual Aids**: Must show/hide trajectories and bounding boxes
+- Desktop: inline list with underline indicator; mobile: collapsible menu/hamburger.
+- On click, call `onNavigate` then smooth-scroll using section anchor.
+- Manage reduced motion preference (fallback to instant scroll if `prefers-reduced-motion: reduce`).
+- Provide `aria-current="true"` on active link.
 
-## Model Configuration Contract
+## SkillsSection
 
 ### Purpose
 
-Standardized configuration format for different starship models.
+Show categories of skills as compact icon grid without percentages.
 
-### Schema Validation
+### Interface
 
 ```typescript
-const StarshipConfigSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  modelPath: z.string().regex(/\.glb$/),
-  scale: z.tuple([
-    z.number().positive(),
-    z.number().positive(),
-    z.number().positive(),
-  ]),
-  initialRotation: z.tuple([z.number(), z.number(), z.number()]),
-  speed: z
-    .object({
-      min: z.number().positive(),
-      max: z.number().positive(),
-      rotationSpeed: z.number().optional(),
-    })
-    .refine((data) => data.min < data.max),
-  trajectory: z.enum(["linear", "curved", "spiral", "diagonal"]),
-  spawnZone: z.object({
-    entry: z.tuple([z.number(), z.number(), z.number()]),
-    exit: z.tuple([z.number(), z.number(), z.number()]),
-    variation: z.number().nonnegative(),
-  }),
-});
+interface SkillsSectionProps {
+  categories: SkillCategory[];
+  tiles: SkillTile[];
+  layout?: { baseColumns: number; lgColumns: number };
+}
 ```
 
-### Behavior Contract
+### Behaviour
 
-- **Validation**: Must validate all configurations on load
-- **Defaults**: Must provide sensible defaults for missing values
-- **Persistence**: Must support saving/loading custom configurations
+- Render each category with label and optional description.
+- Use CSS grid with responsive columns (default 2 base / 3 large).
+- Each `SkillTile` displayed as 64px card with icon centered and label beneath or as tooltip.
+- Provide fallback background for darker icons to ensure contrast.
+- Support keyboard navigation; each tile `button` with `aria-label` = skill name.
 
-## Error Handling Contract
+## ExperienceSection
 
-### Loading Errors
+### Purpose
 
-- Model file not found → Show fallback message, continue with other models
-- Invalid GLB format → Log error, skip model, show debug info if enabled
-- Network timeout → Retry once, then fallback
+Display Work, Education, and Certificates in tabbed layout.
 
-### Runtime Errors
+### Interface
 
-- Animation loop errors → Pause animations, show error state
-- Memory issues → Reduce concurrent models, log warning
-- Performance drops → Automatically reduce quality/count
+```typescript
+interface ExperienceSectionProps {
+  groups: ExperienceGroupBlock[]; // Expect 3 groups
+}
 
-### Debug Error States
+interface ExperienceTabProps {
+  group: ExperienceGroupBlock;
+  isActive: boolean;
+  onSelect: () => void;
+}
 
-- Invalid configuration → Highlight errors in debug panel
-- Animation conflicts → Show warning indicators
-- Performance warnings → Display FPS/memory alerts
+interface ExperienceCardProps {
+  entry: ExperienceEntry;
+}
+```
 
-## Testing Contract
+### Behaviour
 
-### Unit Tests Required
+- Tabs accessible (ARIA role="tablist" etc.).
+- Active tab content fades in (<200ms) without vertical jump.
+- Cards show title, organization, timeframe, 1-3 bullet highlights, optional tags.
+- Provide print-friendly styles (cards collapse to simple list).
 
-- StarshipConfig validation
-- Animation state updates
-- Model loading error handling
-- Performance metric calculation
+## ProjectsSection
 
-### Integration Tests Required
+### Purpose
 
-- Full background rendering
-- Model spawning/despawning
-- Debug controls functionality
-- Responsive behavior
+Retain existing project cards but ensure copy trimmed and order consistent with new layout.
 
-### Performance Tests Required
+### Adjustments
 
-- Frame rate under maximum load
-- Memory usage with all models
-- Loading time benchmarks
-- Mobile device compatibility
+- Accept optional `intro` prop for short statement (≤ 20 words).
+- Ensure CTA buttons align with new design (Lego-styled primary buttons).
+
+## AboutSection
+
+### Purpose
+
+Replace long prose with short highlight block(s).
+
+### Interface
+
+```typescript
+interface AboutSectionProps {
+  highlights: TextHighlightBlock[];
+}
+```
+
+### Behaviour
+
+- Render each highlight as card with optional icon and supporting text.
+- Provide variant for "stats row" to show numbers (if kept) without percentages.
+
+## ContactSection
+
+### Purpose
+
+Offer clear methods to reach the author with simplified copy.
+
+### Interface
+
+```typescript
+interface ContactSectionProps {
+  channels: ContactChannel[];
+  availabilityNote?: string;
+}
+```
+
+### Behaviour
+
+- Render cards or list items each containing icon, label, secondary text.
+- `a` elements with `rel="noopener"` for external links.
+- Provide `data-track="contact"` attribute for future analytics.
+- Include optional inline form toggle for future expansions (not required now).
+
+## BricksViewerPage
+
+### Purpose
+
+Uphold spec requirements for `/bricks` route while aligning visuals with refreshed design.
+
+### Interface
+
+```typescript
+interface BricksViewerPageProps {
+  config: BricksViewerConfig;
+  onError: (error: ViewerError) => void;
+}
+```
+
+### Behaviour
+
+- Render navbar consistent with home page.
+- Use `Canvas` from `@react-three/fiber` with controlled orbit controls (drag + scroll, no pan).
+- Auto-rotate at `config.autoRotateSpeed`; pause on user interaction using shared helper.
+- On error, render `ViewerFallback` with message and optional retry for dev.
+
+## AnimatedSection Wrapper
+
+- Continue using existing `AnimatedSection` to handle fade/slide-in.
+- Ensure threshold tuned so shorter sections still trigger (consider 0.35 viewport intersection).
+
+## Testing Expectations
+
+- Unit tests for `HeroSection` verifying `onAction` fired and accessible labels present.
+- Accessibility tests for `CubeModal` ensuring focus trap & ESC close using RTL + `@testing-library/user-event`.
+- Snapshot/regression tests for `SkillsSection` grid ordering.
+- Interaction test verifying navigation order updates `aria-current` correctly.
+
+These contracts align components with the simplified layout while preserving the original 3D viewer functionality mandated by the feature specification.

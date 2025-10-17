@@ -1,7 +1,7 @@
-# Implementation Plan: Visualizar objetos 3D - Star Wars Background
+# Implementation Plan: Visualizar objetos 3D + Portfolio Simplification
 
-**Branch**: `003-visualizar-objetos-3d` | **Date**: 2025-09-29 | **Spec**: [specs/003-visualizar-objetos-3d/spec.md](./spec.md)
-**Input**: Feature specification from `/specs/003-visualizar-objetos-3d/spec.md`
+**Branch**: `003-visualizar-objetos-3d` | **Date**: 2025-10-06 | **Spec**: `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\specs\003-visualizar-objetos-3d\spec.md`
+**Input**: Feature specification from `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\specs\003-visualizar-objetos-3d\spec.md` and user brief about compacting portfolio content
 
 ## Execution Flow (/plan command scope)
 
@@ -33,136 +33,130 @@
 
 ## Summary
 
-Create an animated Star Wars starships background using GLB 3D models (First Order Star Destroyer, Imperial Shuttle, Micro Millennium Falcon, small venator class star destroyer, Star Destroyer, X-wing). Following the same logic as the lightsaber implementation, starships will travel across the background in random directions with configurable positioning, scaling, and movement patterns. Initially implemented on a dedicated page for testing, then integrated as the main page background replacement.
+We will evolve the bricks viewer feature into a cohesive portfolio refresh. The `/bricks` experience must still deliver the Obi-Wan 3D model with automatic rotation and manual controls, while the landing page is refactored to present concise copy, reorganised sections (Me → Experience → Projects → About → Contact), a skill grid grouped by category icons, and a hero action that launches the Rubik's cube viewer inside a modal triggered by a Lego-inspired button. Experience items need separate tabs for Work, Education, and Certificates, contact details must match the simplified tone, and the hero background should show a floating lightsaber plus Lego bricks without the current glow under the profile photo.
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.8.3, React 18.3.1  
-**Primary Dependencies**: React Three Fiber (@react-three/fiber), Three.js, React Router DOM 6.30.1  
-**Storage**: N/A (static 3D models)  
-**Testing**: Jest, React Testing Library  
-**Target Platform**: Web (desktop and mobile responsive)
-**Project Type**: web - React frontend application  
-**Performance Goals**: 60 fps animations, smooth model loading  
-**Constraints**: Responsive design, optimized 3D performance, random movement patterns  
-**Scale/Scope**: 6 starship models, multiple concurrent animations, debug controls for positioning
+**Language/Version**: TypeScript 5.8.3, JSX/TSX with React 18.3.1  
+**Primary Dependencies**: Vite 5 toolchain, React Router DOM 6.30.1, Tailwind CSS 3.4.17, Radix UI primitives, @react-three/fiber + Three.js for the 3D viewer, Lucide React icons  
+**Storage**: None (static assets under `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\src\assets`)  
+**Testing**: Jest + React Testing Library per `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\jest.config.js`  
+**Target Platform**: Responsive web (desktop & mobile) served via Vercel  
+**Project Type**: Web frontend (single Vite React SPA)  
+**Performance Goals**: Maintain 60fps animations for hero background and 3D viewer, keep initial bundle within current budget (≤ 250 KB gzipped) while trimming textual content  
+**Constraints**: Ensure accessible modals (focus trap, ESC close) for cube popup, preserve dark/light theming, avoid layout shifts when replacing hero subcomponents  
+**Scale/Scope**: Single personal portfolio with five top-level sections and one dedicated `/bricks` showcase page
 
 ## Constitution Check
 
 _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-**Library-First Approach**: ✅ PASS - Creating reusable StarshipBackground component following established pattern from LightsaberViewer  
-**Component Architecture**: ✅ PASS - Following React component patterns with clear separation of concerns  
-**Performance Standards**: ✅ PASS - Using React Three Fiber for optimized 3D rendering  
-**Testing Standards**: ✅ PASS - Component will have unit tests for configuration and behavior
+- Constitution document currently provides no explicit principles; treat as neutral baseline. No conflicting mandates detected.
+- Proceed under assumption of standard simplicity and accessibility expectations for portfolio features.
+- Result: **PASS** (nothing to remediate at this stage).
+
+**Post-Design Review**
+
+- Phase 1 outputs (research, data model, contracts, quickstart) align with accessibility and simplicity goals.
+- No additional governance conflicts introduced. **PASS**.
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```
-specs/[###-feature]/
+C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\specs\003-visualizar-objetos-3d\
 ├── plan.md              # This file (/plan command output)
 ├── research.md          # Phase 0 output (/plan command)
 ├── data-model.md        # Phase 1 output (/plan command)
 ├── quickstart.md        # Phase 1 output (/plan command)
-├── contracts/           # Phase 1 output (/plan command)
+├── contracts\           # Phase 1 output (/plan command)
 └── tasks.md             # Phase 2 output (/tasks command - NOT created by /plan)
 ```
 
 ### Source Code (repository root)
 
+<!--
+  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
+  for this feature. Delete unused options and expand the chosen structure with
+  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  not include Option labels.
+-->
+
 ```
 src/
+├── App.tsx
+├── main.tsx
+├── assets/
+│   ├── 3d-model/
+│   ├── lego-bricks/
+│   └── project-*.jpg
 ├── components/
-│   ├── StarshipBackground/      # New animated background component
-│   │   ├── index.tsx           # Main component export
-│   │   ├── StarshipModel.tsx   # Individual starship model component
-│   │   ├── useStarshipAnimation.tsx # Animation hooks
-│   │   └── starshipConfigs.ts  # Model configurations and positioning
-│   └── [existing components...]
-├── pages/
-│   ├── StarshipDemo.tsx        # New demo page for testing
-│   └── [existing pages...]
-└── assets/
-    └── 3d-model/
-        └── Lego glb models/    # Existing GLB files
-            ├── First Order Star Destroyer.glb
-            ├── Imperial Shuttle.glb
-            ├── Micro Millennium Falcon.glb
-            ├── small venator class star destroyer.glb
-            ├── Star Destroyer.glb
-            └── X-wing.glb
+│   ├── HeroSection.tsx
+│   ├── Navbar.tsx
+│   ├── LightsaberViewer/
+│   ├── BlueBrickViewer/
+│   ├── widgets/
+│   └── ui/
+├── features/
+│   └── proposta/
+├── hooks/
+├── contexts/
+└── styles/
+
+public/
+├── 3d-model/
+├── games/
+└── vendor/
 
 tests/
-└── components/
-    └── StarshipBackground/
-        └── StarshipBackground.test.tsx
+└── (Jest tests colocated under src/lib/__tests__)
 ```
 
-**Structure Decision**: Web application structure with new StarshipBackground component following the established component pattern from LightsaberViewer. Demo page created first for testing, then integration as background replacement.
+**Structure Decision**: Single Vite React frontend; all changes live under `src` with emphasis on `components`, `features/proposta`, and `assets`. `/public` hosts heavier 3D assets consumed by the viewer.
 
 ## Phase 0: Outline & Research
 
-1. **Extract unknowns from Technical Context** above:
+1. **Unknowns & research prompts**
 
-   - For each NEEDS CLARIFICATION → research task
-   - For each dependency → best practices task
-   - For each integration → patterns task
+   - Tone calibration for concise, personable copy across hero, section headers, and contact call-to-action.
+   - Accessible modal patterns for React + Tailwind when launching the Rubik's cube (focus trap, keyboard controls, scroll locking).
+   - Asset sourcing guidelines for official language/framework logos without licensing conflicts.
+   - Performance impact of background animations (floating lightsaber + Lego particles) alongside 3D viewer; identify optimisation tactics (e.g., memoised Three.js scenes, requestAnimationFrame throttling).
 
-2. **Generate and dispatch research agents**:
+2. **Dispatch research tasks** (documented in `research.md`):
 
-   ```
-   For each unknown in Technical Context:
-     Task: "Research {unknown} for {feature context}"
-   For each technology choice:
-     Task: "Find best practices for {tech} in {domain}"
-   ```
+   - "Research approachable microcopy examples for developer portfolios that avoid AI tone."
+   - "Review WAI-ARIA modal dialog requirements suitable for Radix/Dialog or headless Tailwind implementation."
+   - "Compile official SVG sources for HTML, CSS, JS, TS, React, Node, Tailwind, etc., including fallback icons for less common tools."
+   - "Investigate lightweight animation strategies for simultaneous floating lightsaber and Lego background without blocking the main thread."
 
-3. **Consolidate findings** in `research.md` using format:
-   - Decision: [what was chosen]
-   - Rationale: [why chosen]
-   - Alternatives considered: [what else evaluated]
-
-**Output**: research.md with all NEEDS CLARIFICATION resolved
+3. **Consolidate findings** → `C:\Users\hugov\OneDrive\Documentos\GitHub\evolution-path\specs\003-visualizar-objetos-3d\research.md` with Decision/Rationale/Alternatives for each topic. Confirm no outstanding clarifications remain before entering Phase 1.
 
 ## Phase 1: Design & Contracts
 
 _Prerequisites: research.md complete_
 
-1. **Extract entities from feature spec** → `data-model.md`:
+1. **Information architecture** → `data-model.md`:
 
-   - Entity name, fields, relationships
-   - Validation rules from requirements
-   - State transitions if applicable
+   - Define `PortfolioSection` ordering, `SkillCategory` with assets, `ExperienceEntry` variants (work, education, certificates), and modal state models for hero cube.
+   - Capture validation such as mandatory icon assets and copy length caps.
 
-2. **Generate API contracts** from functional requirements:
+2. **Interaction contracts** → `/contracts/`:
 
-   - For each user action → endpoint
-   - Use standard REST/GraphQL patterns
-   - Output OpenAPI/GraphQL schema to `/contracts/`
+   - Document UI contracts instead of network endpoints: navigation events, modal open/close behaviour, accessibility expectations.
+   - Provide component interface outline (props, expected assets) for hero modal trigger and skills grid tiles.
 
-3. **Generate contract tests** from contracts:
+3. **Test planning**:
 
-   - One test file per endpoint
-   - Assert request/response schemas
-   - Tests must fail (no implementation yet)
+   - Identify unit/integration tests verifying navigation order, modal accessibility, and 3D viewer controls interplay.
+   - Ensure at least one Jest test stub fails initially (e.g., snapshot or accessibility expectation) once implemented.
 
-4. **Extract test scenarios** from user stories:
+4. **Quickstart** → `quickstart.md` summarises how to preview the redesigned layout, toggle sections, and validate the cube modal.
 
-   - Each story → integration test scenario
-   - Quickstart test = story validation steps
+5. **Agent context update**: After drafting Phase 1 outputs, run `pwsh -File ./.specify/scripts/powershell/update-agent-context.ps1 -AgentType copilot` from repo root so `.github/copilot-instructions.md` stays current with new UI patterns and assets.
 
-5. **Update agent file incrementally** (O(1) operation):
-   - Run `.specify/scripts/powershell/update-agent-context.ps1 -AgentType copilot`
-     **IMPORTANT**: Execute it exactly as specified above. Do not add or remove any arguments.
-   - If exists: Add only NEW tech from current plan
-   - Preserve manual additions between markers
-   - Update recent changes (keep last 3)
-   - Keep under 150 lines for token efficiency
-   - Output to repository root
-
-**Output**: data-model.md, /contracts/\*, failing tests, quickstart.md, agent-specific file
+**Output**: `data-model.md`, `/contracts/` docs, placeholder failing test plan (to be codified during implementation), `quickstart.md`, refreshed agent instructions.
 
 ## Phase 2: Task Planning Approach
 
@@ -172,22 +166,18 @@ _This section describes what the /tasks command will do - DO NOT execute during 
 
 - Load `.specify/templates/tasks-template.md` as base
 - Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
-- StarshipBackground component creation [P]
-- StarshipModel individual component [P]
-- useStarshipAnimation custom hook [P]
-- Debug controls component [P]
-- Configuration management utilities [P]
-- Integration tests for animation behaviors
-- Demo page creation for testing
+- Each contract → contract test task [P]
+- Each entity → model creation task [P]
+- Each user story → integration test task
+- Implementation tasks to make tests pass
 
 **Ordering Strategy**:
 
-- TDD order: Component tests before implementation
-- Dependency order: Types → Hooks → Components → Pages
+- TDD order: Tests before implementation
+- Dependency order: Models before services before UI
 - Mark [P] for parallel execution (independent files)
-- Debug components can be developed separately
 
-**Estimated Output**: 15-20 numbered, ordered tasks in tasks.md
+**Estimated Output**: 20-25 numbered, ordered tasks in tasks.md (UI-focused scope with limited backend work)
 
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
@@ -216,8 +206,8 @@ _This checklist is updated during execution flow_
 
 - [x] Phase 0: Research complete (/plan command)
 - [x] Phase 1: Design complete (/plan command)
-- [x] Phase 2: Task planning complete (/plan command - describe approach only)
-- [x] Phase 3: Tasks generated (/tasks command)
+- [ ] Phase 2: Task planning complete (/plan command - describe approach only)
+- [ ] Phase 3: Tasks generated (/tasks command)
 - [ ] Phase 4: Implementation complete
 - [ ] Phase 5: Validation passed
 
@@ -226,7 +216,7 @@ _This checklist is updated during execution flow_
 - [x] Initial Constitution Check: PASS
 - [x] Post-Design Constitution Check: PASS
 - [x] All NEEDS CLARIFICATION resolved
-- [x] Complexity deviations documented (N/A - no violations)
+- [ ] Complexity deviations documented
 
 ---
 

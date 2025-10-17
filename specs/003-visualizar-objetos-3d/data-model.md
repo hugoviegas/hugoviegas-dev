@@ -1,218 +1,247 @@
-# Data Model: Star Wars Starship Background
+# Data Model: Portfolio Layout Simplification & Cube Modal
 
 ## Core Entities
 
-### StarshipConfig
+### PortfolioSection
 
-Defines configuration for individual starship models, including positioning, scaling, and animation behavior.
+Represents each top-level section rendered on the landing page in the requested order.
 
 ```typescript
-interface StarshipConfig {
-  id: string; // Unique identifier for the starship
-  name: string; // Display name (e.g., "X-wing", "Star Destroyer")
-  modelPath: string; // Path to GLB model file
-  scale: Vector3; // [x, y, z] scale factors
-  initialRotation: Vector3; // [x, y, z] rotation in radians
-  speed: SpeedConfig; // Movement speed configuration
-  trajectory: TrajectoryType; // Type of movement pattern
-  spawnZone: SpawnZone; // Where the starship can appear
-  materialOverrides?: MaterialConfig; // Optional material customizations
+interface PortfolioSection {
+  id: "me" | "experience" | "projects" | "about" | "contact" | "bricks";
+  title: string; // Display heading (≤ 3 words)
+  summary?: string; // Optional short paragraph (≤ 18 words)
+  anchor: string; // DOM id used for navbar links
+  order: number; // Numerical order for navigation + scroll spy
+  cta?: SectionCTA; // Optional button/link for section-specific action
+  blocks: ContentBlock[]; // Rich content items rendered inside section
 }
 ```
 
-### SpeedConfig
-
-Defines random speed variations for dynamic movement.
+### SectionCTA
 
 ```typescript
-interface SpeedConfig {
-  min: number; // Minimum movement speed
-  max: number; // Maximum movement speed
-  rotationSpeed?: number; // Optional rotation while moving
+interface SectionCTA {
+  label: string; // Short verb-first label (e.g., "Chat")
+  href?: string; // External or internal link
+  action?: "open-modal" | "download" | "navigate";
+  icon?: string; // Lucide icon name or asset path
+  target?: "_blank" | "_self";
 }
 ```
 
-### SpawnZone
+### ContentBlock
 
-Defines the area where starships can appear and their movement boundaries.
+Flexible structure for cards, lists, and grid items.
 
 ```typescript
-interface SpawnZone {
-  entry: Vector3; // Where starship enters the scene
-  exit: Vector3; // Where starship exits the scene
-  variation: number; // Random variation in spawn position
+type ContentBlock =
+  | SkillCategoryBlock
+  | ExperienceGroupBlock
+  | JourneyTimelineBlock
+  | ContactChannelBlock
+  | TextHighlightBlock;
+```
+
+### SkillCategoryBlock
+
+```typescript
+interface SkillCategoryBlock {
+  kind: "skills";
+  category: SkillCategory;
+  items: SkillTile[]; // Individual technologies/tools
+  layout: "grid"; // Grid enforced for new design
 }
 ```
 
-### TrajectoryType
-
-Enum defining available movement patterns.
+### SkillCategory
 
 ```typescript
-type TrajectoryType = "linear" | "curved" | "spiral" | "diagonal";
-```
-
-### AnimationState
-
-Runtime state for individual starship animations.
-
-```typescript
-interface AnimationState {
-  position: Vector3; // Current position
-  rotation: Vector3; // Current rotation
-  velocity: Vector3; // Current movement vector
-  progress: number; // Animation progress (0-1)
-  isVisible: boolean; // Whether starship is in view
-  lastUpdate: number; // Timestamp of last update
+interface SkillCategory {
+  id: string; // e.g., "frontend"
+  label: string; // e.g., "Frontend"
+  iconPath: string; // Absolute path under src/assets/skills/
+  description?: string; // Optional one-liner (≤ 10 words)
 }
 ```
 
-### StarshipInstance
-
-Runtime instance combining configuration and state.
+### SkillTile
 
 ```typescript
-interface StarshipInstance {
-  id: string; // Unique instance ID
-  config: StarshipConfig; // Configuration reference
-  state: AnimationState; // Current animation state
-  mesh?: THREE.Group; // Three.js mesh reference
+interface SkillTile {
+  id: string; // slug ("html")
+  name: string; // Display name
+  assetPath: string; // Official icon or fallback SVG path
+  categoryId: string; // Reference to SkillCategory.id
+  level?: "daily" | "comfortable" | "exploring"; // Optional tag badges
 }
 ```
 
-## Component Props
-
-### StarshipBackgroundProps
-
-Main component props for customization.
+### ExperienceGroupBlock
 
 ```typescript
-interface StarshipBackgroundProps {
-  configs?: StarshipConfig[]; // Custom starship configurations
-  maxConcurrent?: number; // Maximum concurrent animations
-  debugMode?: boolean; // Enable debug controls
-  backgroundOpacity?: number; // Background transparency
-  className?: string; // CSS class name
-  onStarshipClick?: (id: string) => void; // Click handler for debug mode
+interface ExperienceGroupBlock {
+  kind: "experience";
+  group: "work" | "education" | "certificates";
+  entries: ExperienceEntry[];
 }
 ```
 
-### StarshipModelProps
-
-Individual starship component props.
+### ExperienceEntry
 
 ```typescript
-interface StarshipModelProps {
-  config: StarshipConfig; // Starship configuration
-  animationState: AnimationState; // Current animation state
-  onLoaded?: () => void; // Model loaded callback
-  onError?: (error: Error) => void; // Error callback
-  debugMode?: boolean; // Show debug helpers
+interface ExperienceEntry {
+  id: string;
+  title: string; // Role or achievement
+  organization: string;
+  location?: string;
+  timeframe: Timeframe;
+  highlights: string[]; // Bullet list (max 3 items)
+  tags?: string[]; // Tech or themes (max 4 chips)
 }
 ```
 
-## Default Configurations
-
-### Starship Model Mappings
-
-Default configurations for the 6 available GLB models.
+### Timeframe
 
 ```typescript
-const DEFAULT_STARSHIP_CONFIGS: StarshipConfig[] = [
-  {
-    id: "xwing",
-    name: "X-wing Fighter",
-    modelPath: "/src/assets/3d-model/Lego glb models/X-wing.glb",
-    scale: [0.8, 0.8, 0.8],
-    initialRotation: [0, Math.PI / 4, 0],
-    speed: { min: 0.5, max: 1.2 },
-    trajectory: "linear",
-    spawnZone: {
-      entry: [-10, 2, 5],
-      exit: [10, -2, -5],
-      variation: 3,
-    },
-  },
-  {
-    id: "star-destroyer",
-    name: "Star Destroyer",
-    modelPath: "/src/assets/3d-model/Lego glb models/Star Destroyer.glb",
-    scale: [1.5, 1.5, 1.5],
-    initialRotation: [0, 0, 0],
-    speed: { min: 0.2, max: 0.6 },
-    trajectory: "linear",
-    spawnZone: {
-      entry: [12, 0, 8],
-      exit: [-12, 0, -8],
-      variation: 2,
-    },
-  },
-  // Additional configs for other models...
-];
-```
-
-## State Management
-
-### Animation Loop State
-
-Global state for managing the animation system.
-
-```typescript
-interface AnimationLoopState {
-  instances: StarshipInstance[]; // Active starship instances
-  lastSpawn: number; // Last spawn timestamp
-  frameRate: number; // Current FPS
-  isRunning: boolean; // Animation loop active
-  performanceMode: "high" | "medium" | "low"; // Performance level
+interface Timeframe {
+  start: string; // ISO date or "2022"
+  end?: string; // Same format; undefined = present
 }
 ```
 
-### Debug State
+### JourneyTimelineBlock
 
-State for debug mode controls.
+Used for "My Journey" sequence.
 
 ```typescript
-interface DebugState {
-  selectedStarship?: string; // Currently selected starship ID
-  showBoundingBoxes: boolean; // Show collision boxes
-  showTrajectories: boolean; // Show movement paths
-  showPerformanceStats: boolean; // Show FPS and memory usage
-  configOverrides: Partial<StarshipConfig>[]; // Runtime config changes
+interface JourneyTimelineBlock {
+  kind: "journey";
+  milestones: JourneyMilestone[];
+}
+
+interface JourneyMilestone {
+  id: string;
+  title: string;
+  description: string; // ≤ 16 words
+  year: string; // Display year or range
 }
 ```
+
+### ContactChannelBlock
+
+```typescript
+interface ContactChannelBlock {
+  kind: "contact";
+  channels: ContactChannel[];
+  availabilityNote?: string; // Single sentence about response time
+}
+
+interface ContactChannel {
+  id: "email" | "linkedin" | "github" | "calendly" | string;
+  label: string;
+  href: string;
+  iconPath: string; // Icon asset path (SVG/PNG)
+  secondaryText?: string; // e.g., username or timezone
+}
+```
+
+### TextHighlightBlock
+
+```typescript
+interface TextHighlightBlock {
+  kind: "text";
+  heading?: string;
+  body: string; // Supports inline emphasis; ≤ 240 characters
+  iconPath?: string;
+}
+```
+
+### HeroActionModel
+
+Defines hero buttons including the cube modal trigger.
+
+```typescript
+interface HeroActionModel {
+  id: "email" | "resume" | "cube";
+  label: string;
+  iconPath: string; // e.g., lego brick SVG for cube
+  intent: "mailto" | "download" | "open-modal";
+  href?: string; // For mailto/download
+}
+```
+
+### CubeModalState
+
+```typescript
+interface CubeModalState {
+  isOpen: boolean;
+  lastInteracted: number; // timestamp used to resume rotations
+  viewerPreset: CubeViewerPreset;
+}
+
+interface CubeViewerPreset {
+  autoRotate: boolean;
+  rotationSpeed: number; // radians per second
+  allowInteraction: boolean; // manual drag toggle
+}
+```
+
+### BricksViewerConfig
+
+Extends original spec for `/bricks` page.
+
+```typescript
+interface BricksViewerConfig {
+  modelPath: string; // Path to OBJ within src/assets/3d-model
+  fallbackGraphic: string; // SVG path shown on load failure
+  autoRotateSpeed: number; // Default rpm for idle rotation
+  interactionTimeoutMs: number; // Idle timeout (default 10000 per spec)
+  camera: {
+    position: [number, number, number];
+    fov: number;
+  };
+  controls: {
+    enableZoom: boolean;
+    enablePan: false;
+  };
+}
+```
+
+## Relationships
+
+- `PortfolioSection.blocks` references the different block types; UI components resolve on `kind`.
+- `SkillTile.categoryId` must map to an existing `SkillCategory.id`.
+- `ExperienceGroupBlock.entries` share `group` to feed tabbed/toggle UI.
+- `HeroActionModel` with `intent === "open-modal"` toggles `CubeModalState.isOpen` and pauses hero background animation while modal active.
+- `/bricks` route reuses `BricksViewerConfig` and shares interaction timeout with cube modal so behaviour stays consistent.
 
 ## Validation Rules
 
-### StarshipConfig Validation
+- Section order must follow numeric sequence without gaps (1..n) to keep nav consistent.
+- Skill categories require unique `iconPath`; missing official assets fallback to pre-approved SVG stored locally.
+- Experience highlights limited to three bullet items, each ≤ 120 characters to maintain compact layout.
+- Contact channels must include `href` with valid scheme (`mailto:`, `https://`).
+- Cube modal must enforce `rotationSpeed` between 0.2 and 1.5 radians/sec to avoid motion sickness.
+- Bricks viewer must reference OBJ/MTL pairs stored under `src/assets/3d-model` and provide placeholder fallback.
 
-- `scale` values must be positive numbers
-- `modelPath` must be a valid file path
-- `speed.min` must be less than `speed.max`
-- `spawnZone.variation` must be non-negative
+## State & UI Considerations
 
-### Performance Constraints
+- Navigation state tracks active `PortfolioSection.id` based on scroll. Debounce updates to avoid jitter when sections are shorter.
+- Hero background animation layer listens to `CubeModalState.isOpen`; when `true`, pause rotation and resume after `lastInteracted + 10000`ms.
+- Skills grid uses CSS grid with responsive columns (min 3 columns desktop, 2 on mobile) and ensures icons fit within 64px square tokens.
+- Experience tabs default to Work; user selection persisted in local component state but not stored globally.
+- Contact block uses `aria-label` built from `label` + `secondaryText` for screen readers.
 
-- Maximum 8 concurrent starship instances on desktop
-- Maximum 4 concurrent starship instances on mobile
-- Model file size should not exceed 2MB per GLB
-- Animation frame rate maintained above 30fps
+## Derived Data Helpers
 
-## Integration Points
+- `getOrderedSections(sections: PortfolioSection[]): PortfolioSection[]` sorts by `order` and filters disabled ones.
+- `groupExperience(entries: ExperienceEntry[]): Record<Group, ExperienceEntry[]>` for tab layout.
+- `getSkillAssets(categoryId)` resolves absolute icon paths for bundler imports.
+- `shouldResumeRotation(lastInteracted: number, now: number)` returns boolean used in hero and bricks viewers.
 
-### React Three Fiber Integration
+## Testing Hooks
 
-- Uses `useGLTF` for model loading
-- Integrates with `useFrame` for animation updates
-- Supports `Suspense` boundaries for loading states
-
-### Theme Integration
-
-- Respects current theme for debug UI
-- Background opacity adapts to light/dark mode
-- Debug controls use existing UI components
-
-### Responsive Behavior
-
-- Model count reduces on smaller screens
-- Touch controls for debug mode on mobile
-- Adaptive quality based on device performance
+- Snapshot test of `PortfolioSection` ordering to ensure nav updates when data changes.
+- Accessibility test verifying `CubeModalState` toggles focus trap and ESC close via simulation.
+- Unit test for `shouldResumeRotation` to match 10s timeout requirement from spec.

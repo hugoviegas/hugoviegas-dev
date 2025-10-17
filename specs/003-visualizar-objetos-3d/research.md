@@ -1,191 +1,75 @@
-# Research: Star Wars Starship Background Animation
+# Research: Portfolio Simplification & 3D Viewer Integration
 
 ## Overview
 
-Research findings for implementing an animated Star Wars starships background using GLB 3D models with React Three Fiber, following the established lightsaber implementation patterns.
+Findings supporting the redesigned portfolio layout, concise copywriting, updated skills presentation, modal-based cube interaction, and floating lightsaber background while preserving the `/bricks` 3D viewer requirements from the feature spec.
 
-## Technology Decisions
+## Topic: Conversational, Concise Portfolio Copy
 
-### 3D Rendering Framework
-
-**Decision**: React Three Fiber (@react-three/fiber) with @react-three/drei helpers  
+**Decision**: Write microcopy using "confident first-person" tone (short sentences, active verbs, light humor) with max 18 words per paragraph and 3 bullet limit per section.  
 **Rationale**:
 
-- Already established in project (used for lightsaber implementation)
-- Provides declarative React-style API for Three.js
-- Excellent performance for web 3D applications
-- Rich ecosystem with helper components
-- Good TypeScript support
+- Aligns with request for clear, short, non-AI-feeling text.
+- Supports quick visual scanning across the reordered sections.
+- Matches reference inspiration without duplicating layout.
+  **Alternatives considered**:
+- Formal resume-style phrasing → rejected; feels corporate and verbose.
+- Overly casual slang → risks professionalism and international comprehension.
 
-**Alternatives considered**:
+## Topic: Accessible Modal for Rubik's Cube Viewer
 
-- Vanilla Three.js: More verbose, not React-integrated
-- Babylon.js: Different API, would require learning curve
-- A-Frame: More web-component based, less React-friendly
-
-### Animation Approach
-
-**Decision**: Custom useStarshipAnimation hook with requestAnimationFrame  
+**Decision**: Use Radix UI `Dialog` (already in stack) with controlled open state, focus trap, ESC/overlay close, and `aria-labelledby`/`aria-describedby` tied to hero copy.  
 **Rationale**:
 
-- Follows React hooks pattern established in project
-- Allows for fine-grained control over each starship's movement
-- Can implement random trajectories and timing
-- Performance optimized with RAF
+- Radix provides accessible primitives out-of-the-box, reducing custom focus management.
+- Works seamlessly with Tailwind for styling and can host existing cube component using React portals.
+- Minimal bundle impact since Radix already shipped.  
+  **Alternatives considered**:
+- Build custom headless modal → more code, higher risk of accessibility regressions.
+- Use third-party modal (e.g., React Modal) → extra dependency, inconsistent styling.
 
-**Alternatives considered**:
+## Topic: Official Skill Icon Sourcing
 
-- CSS animations: Limited 3D control, less flexible
-- Three.js Tween: Additional dependency, overkill for simple movements
-- React Spring 3D: Good but adds complexity for random movements
-
-### Model Loading Strategy
-
-**Decision**: useGLTF hook from @react-three/drei with preloading  
+**Decision**: Pull SVG/PNG logos from vendor-neutral sources (Simple Icons CDN for common tech, official brand media kits for HTML/CSS/JS). Cache copies under `src/assets/skills/` with attribution tracked in README.  
 **Rationale**:
 
-- Consistent with existing 3D model loading patterns
-- Provides loading states and error handling
-- Supports preloading for better UX
-- Optimized caching and memory management
+- Ensures consistent sizing and licensing clarity.
+- Allows build-time optimization (SVGO) and offline availability.
+- Supports theming by applying Tailwind `fill-current` or background tokens as needed.  
+  **Alternatives considered**:
+- Hotlinking CDN icons → fragile and risks layout flicker offline.
+- Manually redrawing icons → unnecessary work, potential trademark issues.
 
-**Alternatives considered**:
+## Topic: Hero Background Performance (Lightsaber + Lego Particles)
 
-- Manual GLTFLoader: More verbose, reinventing the wheel
-- Asset pipeline with model optimization: Overkill for 6 models
-
-### Movement Patterns
-
-**Decision**: Configurable trajectory system with randomization  
+**Decision**: Keep lightsaber mesh inside `@react-three/fiber` scene with baked rotation animation while moving lego particles handled via CSS `@keyframes`/`transform` to offload from Three.js; throttle scene updates using `useFrame` with delta clamp (≤ 60fps) and pause when hero cube modal open.  
 **Rationale**:
 
-- Each starship needs individual configuration due to different orientations
-- Random start positions, speeds, and directions for variety
-- Looping trajectories that reset when off-screen
-- Debug mode for position/rotation tuning
+- Splits workload between GPU-accelerated CSS and Three.js, preventing main-thread blocking.
+- Reuses existing lightsaber component while disabling ground glow.
+- Allows automatic resume of rotation after inactivity aligning with 3D viewer spec (10s).  
+  **Alternatives considered**:
+- Fully Three.js particle system → heavier CPU cost for minimal benefit.
+- Pure CSS for saber → loses depth/lighting realism desired in background.
 
-**Design Pattern**:
+## Topic: Section Navigation & Scroll Order
 
-```typescript
-interface StarshipConfig {
-  modelPath: string;
-  scale: [number, number, number];
-  initialRotation: [number, number, number];
-  speed: { min: number; max: number };
-  trajectory: "linear" | "curved" | "spiral";
-}
-```
-
-## Performance Considerations
-
-### Model Optimization
-
-**Decision**: Use existing GLB models as-is, implement LOD if needed  
+**Decision**: Implement single-page layout with `section` IDs mapped to navbar anchors in new order (me, experience, projects, about, contact) and update scrollspy logic to match.  
 **Rationale**:
 
-- GLB format is already optimized for web
-- Models are Lego-themed, likely already low-poly
-- Can implement distance-based culling if performance issues arise
+- Maintains router simplicity (no extra routes) while delivering requested order.
+- Works with existing `AnimatedSection` intersection observer wrapper.
+- Allows quick cross-link updates from hero CTA buttons.  
+  **Alternatives considered**:
+- Split into multi-page navigation → adds loading overhead, breaks flow.
+- Keep old order but update nav text → contradicts requirement.
 
-### Animation Performance
+## Outstanding Questions
 
-**Decision**: Use Three.js object pooling and frustum culling  
-**Rationale**:
-
-- Reuse starship instances when they exit view
-- Only animate visible objects
-- Limit concurrent animations based on device performance
-
-### Memory Management
-
-**Decision**: Dispose of off-screen objects and reuse geometries  
-**Rationale**:
-
-- Prevent memory leaks with proper cleanup
-- Share geometries between instances
-- Lazy loading with suspense boundaries
-
-## Integration Strategy
-
-### Component Architecture
-
-**Decision**: Standalone StarshipBackground component with props for customization  
-**Rationale**:
-
-- Follows established component patterns in project
-- Reusable across different pages
-- Props-based configuration for flexibility
-- Can be easily integrated or replaced
-
-### Debug Mode
-
-**Decision**: Developer controls component for tuning positions/rotations  
-**Rationale**:
-
-- User requested debug functionality for each starship configuration
-- Allows real-time adjustment of scale, position, rotation
-- Export functionality to copy final configurations
-- Only rendered in development mode
-
-### Responsive Design
-
-**Decision**: Adaptive model count and complexity based on viewport size  
-**Rationale**:
-
-- Mobile devices get fewer concurrent models
-- Smaller models on mobile for better performance
-- Touch-friendly debug controls
-
-## Implementation Phases
-
-### Phase 1: Core Component
-
-1. Create StarshipBackground component structure
-2. Implement basic model loading with useGLTF
-3. Create individual StarshipModel component
-4. Basic linear movement animation
-
-### Phase 2: Advanced Animation
-
-1. Implement random trajectory generation
-2. Add configurable speed and direction
-3. Create looping off-screen reset logic
-4. Performance optimizations (culling, pooling)
-
-### Phase 3: Debug & Configuration
-
-1. Create debug overlay component
-2. Real-time position/rotation controls
-3. Configuration export functionality
-4. Per-model settings interface
-
-### Phase 4: Integration
-
-1. Create dedicated demo page (/starship-demo)
-2. Test all 6 starship models
-3. Responsive behavior validation
-4. Replace main page background
-
-## Risk Mitigation
-
-### Performance Risks
-
-- **Risk**: Too many concurrent 3D models causing frame drops
-- **Mitigation**: Adaptive model count, LOD system, performance monitoring
-
-### Loading Risks
-
-- **Risk**: Large GLB files causing slow initial load
-- **Mitigation**: Progressive loading, loading states, preloading strategy
-
-### Configuration Complexity
-
-- **Risk**: Each model needing manual configuration is time-consuming
-- **Mitigation**: Smart defaults, copy-from-reference system, batch configuration tools
+None. Requirements are actionable following these decisions.
 
 ## Next Steps
 
-1. Proceed to Phase 1: Design & Contracts
-2. Create data models for starship configurations
-3. Define component contracts and prop interfaces
-4. Generate integration tests for animation behaviors
+1. Translate decisions into data structures (`data-model.md`).
+2. Define UI interaction contracts (modal, navigation, skills grid) in `/contracts/`.
+3. Draft quickstart instructions for validating layout locally and smoke-checking viewer modal.
