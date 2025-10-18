@@ -39,6 +39,20 @@ const TMP_QUAT_B = new Quaternion();
 const TMP_QUAT_RESULT = new Quaternion();
 const TMP_MATRIX = new Matrix4();
 
+// Persistent in-memory cache for star/planet distributions across mounts
+// Stored on globalThis so HMR/remounts keep the same pattern during a dev session.
+declare global {
+  interface GlobalThis {
+    __XP_STAR_CACHE?: Record<string, unknown>;
+  }
+}
+
+const getGlobalCache = (): Record<string, unknown> => {
+  if (!globalThis.__XP_STAR_CACHE) globalThis.__XP_STAR_CACHE = {};
+  return globalThis.__XP_STAR_CACHE;
+};
+const STAR_CACHE = getGlobalCache();
+
 const randomInRange = (min: number, max: number) =>
   Math.random() * (max - min) + min;
 
@@ -474,7 +488,27 @@ const StarField: React.FC<StarFieldProps> = ({ show, depth, count = 220 }) => {
     amplitudes: Float32Array;
   } | null>(null);
 
+  const cacheKey = `stars:${Math.round(depth)}:${count}`;
+  const cached = STAR_CACHE[cacheKey] as
+    | {
+        positions: Float32Array;
+        colors: Float32Array;
+        meta: {
+          colors: Float32Array;
+          base: Float32Array;
+          phases: Float32Array;
+          speeds: Float32Array;
+          amplitudes: Float32Array;
+        };
+      }
+    | undefined;
+
   const { positions, colors } = useMemo(() => {
+    if (cached) {
+      metaRef.current = cached.meta;
+      return { positions: cached.positions, colors: cached.colors };
+    }
+
     const spreadX = (viewport.width || 18) * 1.55;
     const spreadY = (viewport.height || 10) * 1.45;
     const positions = new Float32Array(count * 3);
@@ -501,9 +535,11 @@ const StarField: React.FC<StarFieldProps> = ({ show, depth, count = 220 }) => {
       colors[idx + 2] = initial;
     }
 
-    metaRef.current = { colors, base, phases, speeds, amplitudes };
+    const meta = { colors, base, phases, speeds, amplitudes };
+    STAR_CACHE[cacheKey] = { positions, colors, meta };
+    metaRef.current = meta;
     return { positions, colors };
-  }, [count, depth, viewport.height, viewport.width]);
+  }, [count, depth, viewport.height, viewport.width, cacheKey, cached]);
 
   useFrame(({ clock }) => {
     if (!show) return;
@@ -581,10 +617,26 @@ const MiniPlanets: React.FC<MiniPlanetsProps> = ({
   const groupRef = useRef<Group | null>(null);
   const viewport = useViewportSizeAtDepth(depth);
   const planets = useMemo(() => {
+    const cacheKey = `planets:${Math.round(depth)}:${count}`;
+    const cached = STAR_CACHE[cacheKey] as
+      | Array<{
+          position: [number, number, number];
+          scale: number;
+          color: string;
+          emissive: string;
+          rotationSpeed: number;
+          bobAmplitude: number;
+          bobFrequency: number;
+          phase: number;
+        }>
+      | undefined;
+
+    if (cached) return cached;
+
     const spreadX = (viewport.width || 18) * 1.25;
     const spreadY = (viewport.height || 10) * 1.15;
 
-    return Array.from({ length: count }, () => {
+    const generated = Array.from({ length: count }, () => {
       const x = (Math.random() - 0.5) * spreadX;
       const y = (Math.random() - 0.5) * spreadY;
       const z = depth + randomInRange(-3.5, 2.5);
@@ -605,6 +657,9 @@ const MiniPlanets: React.FC<MiniPlanetsProps> = ({
         phase: Math.random() * Math.PI * 2,
       };
     });
+
+    STAR_CACHE[cacheKey] = generated;
+    return generated;
   }, [count, depth, viewport.height, viewport.width]);
 
   useFrame(({ clock }) => {
