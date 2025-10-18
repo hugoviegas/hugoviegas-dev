@@ -11,22 +11,23 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import SkillsSection from "@/components/SkillsSection";
 import redFront from "@/assets/lego-bricks/red-front.png";
 import yellowFront from "@/assets/lego-bricks/yellow-front.png";
 import blueFront from "@/assets/lego-bricks/blue-front.png";
 import whiteFront from "@/assets/lego-bricks/white-front.png";
+import StarWarsCrawlOverlay from "@/components/StarWarsCrawl";
 
 const AboutSection = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [isCrawlOpen, setIsCrawlOpen] = useState(false);
+  const episodeLabel = language === "PT" ? "Episódio I" : "Episode I";
+  const introText =
+    language === "PT"
+      ? "Há muito tempo, em uma galáxia não muito distante..."
+      : "A long time ago in a galaxy far, far away....";
   const highlights = [
     {
       icon: TrendingUp,
@@ -128,33 +129,14 @@ const AboutSection = () => {
                 </p>
               </div>
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="glass-strong border-primary/30 hover:bg-primary/5"
-                  >
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    {t("readFullStory")}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white dark:bg-neutral-800 rounded-3xl max-w-[min(900px,95vw)] max-h-[85vh] overflow-y-auto mx-2">
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-blue-500 mb-4">
-                      {t("fullStoryTitle")}
-                    </DialogTitle>
-                  </DialogHeader>
-                  <div className="mt-6 space-y-6 text-foreground leading-relaxed">
-                    {t("fullStory")
-                      .split("\n\n")
-                      .map((paragraph, index) => (
-                        <p key={index} className="text-base lg:text-lg">
-                          {paragraph}
-                        </p>
-                      ))}
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <Button
+                variant="outline"
+                className="glass-strong border-primary/30 hover:bg-primary/5"
+                onClick={() => setIsCrawlOpen(true)}
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                {t("readFullStory")}
+              </Button>
             </div>
 
             {/* Highlights Grid */}
@@ -231,6 +213,14 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
+      <StarWarsCrawlOverlay
+        open={isCrawlOpen}
+        onClose={() => setIsCrawlOpen(false)}
+        title={t("fullStoryTitle")}
+        story={t("fullStory")}
+        episodeLabel={episodeLabel}
+        introText={introText}
+      />
     </section>
   );
 };

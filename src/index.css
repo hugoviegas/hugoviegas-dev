@@ -3,6 +3,8 @@
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=News+Cycle:wght@700&display=swap");
 
 /* Import the complete design system */
 @import "./styles/index.css";
@@ -582,6 +584,336 @@
 .card-project {
   z-index: 5;
   position: relative;
+}
+
+/* Star Wars Crawl Overlay -------------------------------------------------- */
+.star-wars-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 4vw, 4rem);
+  background: #000;
+  color: #feda4a;
+  overflow: hidden;
+  font-family: "Pathway Gothic One", var(--font-family-primary), sans-serif;
+}
+
+.star-wars-starfield {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+  background-image: radial-gradient(
+      rgba(255, 255, 255, 0.85) 1px,
+      transparent 1px
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.55) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px);
+  background-size: 550px 550px, 320px 320px, 760px 760px;
+  animation: sw-starfield-one 120s linear infinite;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.star-wars-starfield::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+      rgba(255, 255, 255, 0.6) 1px,
+      transparent 1px
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 420px 420px, 680px 680px;
+  animation: sw-starfield-two 160s linear infinite;
+  opacity: 0.55;
+}
+
+.star-wars-close {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2.5rem);
+  right: clamp(1rem, 3vw, 2.5rem);
+  width: 46px;
+  height: 46px;
+  border-radius: 9999px;
+  border: 1px solid rgba(254, 218, 74, 0.35);
+  background: rgba(0, 0, 0, 0.65);
+  color: #feda4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.star-wars-close:hover {
+  transform: scale(1.05);
+  background: rgba(254, 218, 74, 0.28);
+  color: #fffdfa;
+}
+
+.star-wars-close svg {
+  width: 22px;
+  height: 22px;
+}
+
+.star-wars-controls {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2.5rem);
+  right: clamp(5.5rem, 10vw, 6.5rem);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 3;
+}
+
+.star-wars-control {
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  border: 1px solid rgba(254, 218, 74, 0.28);
+  background: rgba(0, 0, 0, 0.6);
+  color: #feda4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.star-wars-control:hover {
+  background: rgba(254, 218, 74, 0.16);
+}
+
+.star-wars-crawl-paused {
+  animation-play-state: paused !important;
+}
+
+.star-wars-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vh, 2.75rem);
+  width: min(1024px, 97vw);
+  min-height: 100vh;
+  padding-block: clamp(1.5rem, 4.5vh, 3.25rem);
+  pointer-events: none;
+}
+
+.star-wars-intro {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  letter-spacing: 0.22em;
+  color: #4bd5ee;
+  text-transform: uppercase;
+  text-align: center;
+  animation: sw-intro-fade 3.2s ease-out forwards;
+  margin-top: clamp(1.5rem, 6vh, 4rem);
+  pointer-events: none;
+}
+
+.star-wars-crawl-stage {
+  position: relative;
+  width: min(980px, 96vw);
+  height: clamp(76vh, 82vh, 88vh);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  perspective: 960px;
+  overflow: hidden;
+  padding-bottom: clamp(1rem, 3vh, 2rem);
+  pointer-events: none;
+}
+
+.star-wars-crawl {
+  width: 100%;
+  max-width: min(880px, 94vw);
+  font-family: "News Cycle", "Pathway Gothic One", var(--font-family-primary),
+    sans-serif;
+  font-size: clamp(1.34rem, 3.35vw, 2.42rem);
+  line-height: 1.6;
+  letter-spacing: 0.14em;
+  text-align: justify;
+  font-weight: 700;
+  transform-origin: 50% 100%;
+  transform: rotateX(22deg) translate3d(0, 108%, 0);
+  opacity: 0;
+  color: #feda4a;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.65);
+}
+
+.star-wars-crawl-active {
+  animation: sw-crawl 250s linear forwards;
+  opacity: 1;
+}
+
+.star-wars-crawl h2 {
+  font-size: clamp(2.05rem, 4.5vw, 3.35rem);
+  letter-spacing: 0.22em;
+  margin: 0 0 clamp(2.75rem, 4.5vh, 3.75rem);
+  text-align: center;
+}
+
+.star-wars-crawl p {
+  margin-bottom: clamp(1.8rem, 1.85vw, 2.1rem);
+}
+
+.star-wars-episode {
+  text-align: center;
+  margin-bottom: clamp(2rem, 3vh, 2.75rem);
+  font-size: clamp(1.4rem, 3vw, 2.05rem);
+  letter-spacing: 0.35em;
+}
+
+.star-wars-final {
+  position: relative;
+  width: min(900px, 94vw);
+  height: clamp(76vh, 82vh, 88vh);
+  overflow-y: auto;
+  padding: clamp(2.1rem, 3.2vw, 3rem);
+  border-radius: 26px;
+  border: 1px solid rgba(254, 218, 74, 0.38);
+  background: rgba(0, 0, 0, 0.82);
+  box-shadow: 0 2.75rem 4.75rem rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  transition: opacity 280ms ease;
+}
+
+.star-wars-final h2 {
+  font-family: "Pathway Gothic One", var(--font-family-primary), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-align: center;
+  color: #feda4a;
+  margin-bottom: 2rem;
+  font-size: clamp(1.8rem, 4.5vw, 2.7rem);
+}
+
+.star-wars-final p {
+  font-family: var(--font-family-primary);
+  font-size: clamp(1.05rem, 1.95vw, 1.25rem);
+  line-height: 1.72;
+  color: rgba(248, 248, 248, 0.96);
+  margin-bottom: 1.45rem;
+}
+
+.star-wars-final p:last-child {
+  margin-bottom: 0;
+}
+
+.star-wars-final::-webkit-scrollbar {
+  width: 10px;
+}
+
+.star-wars-final::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+
+.star-wars-final::-webkit-scrollbar-thumb {
+  background: rgba(254, 218, 74, 0.35);
+  border-radius: 999px;
+}
+
+.star-wars-final::-webkit-scrollbar-thumb:hover {
+  background: rgba(254, 218, 74, 0.5);
+}
+
+@keyframes sw-starfield-one {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-550px, 550px, 0);
+  }
+}
+
+@keyframes sw-starfield-two {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(520px, -520px, 0);
+  }
+}
+
+@keyframes sw-intro-fade {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sw-crawl {
+  0% {
+    transform: rotateX(22deg) translate3d(0, 108%, 0);
+  }
+  100% {
+    transform: rotateX(22deg) translate3d(0, -252%, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .star-wars-crawl-stage {
+    height: 64vh;
+    perspective: 720px;
+    padding-bottom: clamp(0.85rem, 3vh, 1.6rem);
+  }
+
+  .star-wars-close {
+    width: 42px;
+    height: 42px;
+  }
+
+  .star-wars-crawl {
+    max-width: 100%;
+    font-size: clamp(1.18rem, 3.7vw, 1.92rem);
+    letter-spacing: 0.12em;
+    line-height: 1.55;
+    font-weight: 700;
+  }
+
+  .star-wars-crawl h2 {
+    font-size: clamp(1.8rem, 5.8vw, 2.7rem);
+  }
+}
+
+@media (max-width: 520px) {
+  .star-wars-intro {
+    letter-spacing: 0.16em;
+  }
+
+  .star-wars-crawl-stage {
+    height: 54vh;
+    perspective: 620px;
+  }
+
+  .star-wars-final {
+    padding: clamp(1.6rem, 5.5vw, 2.3rem);
+    height: 68vh;
+  }
+
+  .star-wars-crawl {
+    font-size: clamp(1.05rem, 4.1vw, 1.58rem);
+    letter-spacing: 0.1em;
+    line-height: 1.52;
+  }
+
+  .star-wars-crawl h2 {
+    font-size: clamp(1.55rem, 6.2vw, 2.25rem);
+  }
 }
 
 @keyframes idle-sway {
