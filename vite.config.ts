@@ -18,10 +18,38 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    dedupe: ["three"],
   },
   test: {
     globals: true,
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          const normalizedId = id.replace(/\\/g, "/");
+          if (normalizedId.includes("/node_modules/")) {
+            if (
+              normalizedId.includes("three") ||
+              normalizedId.includes("@react-three/fiber") ||
+              normalizedId.includes("@react-three/drei")
+            ) {
+              return "vendor-r3f";
+            }
+            if (normalizedId.includes("lucide-react")) {
+              return "vendor-icons";
+            }
+          }
+
+          if (normalizedId.includes("/src/assets/3d-model/")) {
+            return "chunk-3d-models";
+          }
+
+          return undefined;
+        },
+      },
+    },
   },
 }));

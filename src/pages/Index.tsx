@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import DynamicSidebar from "@/components/DynamicSidebar";
 import AmbientDots from "@/components/AmbientDots";
 import TopBricksRow from "@/components/TopBricksRow";
+import BackgroundXWing from "@/components/background/BackgroundXWing";
 
 const Index = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -31,6 +32,7 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground relative">
       {/* Ambient dots shared across the site (subtle, randomized) */}
       <AmbientDots count={36} />
+      <BackgroundXWing />
       <TopControls />
       <DynamicSidebar show={showSidebar} />
       <TopBricksRow />

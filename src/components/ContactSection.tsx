@@ -18,7 +18,6 @@ import LegoButton from "./LegoButton";
 import FastTransparentCube from "@/components/FastTransparentCube";
 import WorldClocks from "@/components/WorldClocks";
 const MicroFalconViewer = lazy(() => import("@/components/MicroFalconViewer"));
-const XWingViewer = lazy(() => import("@/components/XWingViewer"));
 
 const ViewerSkeleton = ({ height }: { height: number }) => (
   <div
@@ -45,9 +44,7 @@ const ContactSection = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const { toast } = useToast();
   const falconContainerRef = useRef<HTMLDivElement | null>(null);
-  const xwingContainerRef = useRef<HTMLDivElement | null>(null);
   const [showFalconViewer, setShowFalconViewer] = useState(false);
-  const [showXWingViewer, setShowXWingViewer] = useState(false);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -198,30 +195,6 @@ const ContactSection = () => {
     observer.observe(node);
     return () => observer.disconnect();
   }, [showFalconViewer]);
-
-  useEffect(() => {
-    if (showXWingViewer) return;
-    const node = xwingContainerRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShowXWingViewer(true);
-            obs.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: "200px 0px",
-        threshold: 0.2,
-      }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [showXWingViewer]);
 
   const contactInfo = [
     {
@@ -545,19 +518,6 @@ const ContactSection = () => {
                   <MicroFalconViewer />
                 ) : (
                   <ViewerSkeleton height={360} />
-                )}
-              </Suspense>
-            </div>
-
-            <div
-              ref={xwingContainerRef}
-              className="glass-strong p-6 rounded-3xl"
-            >
-              <Suspense fallback={<ViewerSkeleton height={340} />}>
-                {showXWingViewer ? (
-                  <XWingViewer />
-                ) : (
-                  <ViewerSkeleton height={340} />
                 )}
               </Suspense>
             </div>
