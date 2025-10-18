@@ -15,8 +15,8 @@ type CrawlPhase = "intro" | "crawl" | "final";
 
 const EPISODE_FALLBACK = "Episode I";
 const INTRO_FALLBACK = "A long time ago in a galaxy far, far away....";
-const INTRO_DELAY_MS = 2000;
-const CRAWL_DURATION_MS = 85000;
+const INTRO_DELAY_MS = 1000;
+const CRAWL_DURATION_MS = 140_000;
 const FINAL_TRIGGER_RATIO = 0.98;
 
 const splitStory = (story: string) =>
@@ -40,35 +40,38 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
   const timersRef = useRef<{ intro?: number; final?: number }>({});
   const finalEndRef = useRef<number | null>(null);
   const remainingRef = useRef<number | null>(null);
+  const manualRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-  const manualRef = useRef<HTMLDivElement | null>(null);
     closeRef.current = onClose;
   }, [onClose]);
-
-  useEffect(() => {
 
   useEffect(() => {
     if (phase === "final" && manualRef.current) {
       manualRef.current.focus();
     }
   }, [phase]);
+
+  useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined") {
       return;
     }
 
     if (!open) {
       setPhase("intro");
+      setPaused(false);
       return;
     }
 
     setPhase("intro");
+    setPaused(false);
     const timers = timersRef.current;
     const introTimer = window.setTimeout(
       () => setPhase("crawl"),
       INTRO_DELAY_MS
     );
     timers.intro = introTimer;
+
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -99,9 +102,9 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       return;
     }
 
+    const timers = timersRef.current;
+
     if (phase !== "crawl") {
-      // leaving crawl: clear timing state
-      const timers = timersRef.current;
       if (timers.final) {
         window.clearTimeout(timers.final);
         timers.final = undefined;
@@ -112,15 +115,14 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       return;
     }
 
-    const timers = timersRef.current;
     const triggerDelay = Math.max(
       1200,
       CRAWL_DURATION_MS * FINAL_TRIGGER_RATIO
     );
-    // schedule final transition and store end timestamp so we can pause/resume
     const endAt = Date.now() + triggerDelay;
     finalEndRef.current = endAt;
     remainingRef.current = null;
+
     timers.final = window.setTimeout(() => {
       setPhase("final");
       const currentTimers = timersRef.current;
@@ -137,16 +139,17 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
     };
   }, [phase]);
 
-  // Pause / resume handlers
   const togglePause = () => {
-    if (phase !== "crawl") return;
+    if (phase !== "crawl") {
+      return;
+    }
+
     const timers = timersRef.current;
 
     if (!paused) {
-      // pause: compute remaining and clear timeout
       if (timers.final && finalEndRef.current) {
-        const rem = Math.max(0, finalEndRef.current - Date.now());
-        remainingRef.current = rem;
+        const remaining = Math.max(0, finalEndRef.current - Date.now());
+        remainingRef.current = remaining;
         window.clearTimeout(timers.final);
         timers.final = undefined;
       }
@@ -154,28 +157,25 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       return;
     }
 
-    // resume
     setPaused(false);
-    const rem = remainingRef.current ?? 0;
-    if (rem > 0) {
-      finalEndRef.current = Date.now() + rem;
+    const remaining = remainingRef.current ?? 0;
+    if (remaining > 0) {
+      finalEndRef.current = Date.now() + remaining;
       timers.final = window.setTimeout(() => {
         setPhase("final");
         const currentTimers = timersRef.current;
         currentTimers.final = undefined;
         finalEndRef.current = null;
         remainingRef.current = null;
-      }, rem);
+      }, remaining);
       remainingRef.current = null;
-    } else if (rem === 0) {
-      // nothing left
+    } else {
       setPhase("final");
     }
   };
 
-            disabled={phase !== "crawl"}
   const handleSkip = () => {
-            {paused ? "▶" : "⏸"}
+    const timers = timersRef.current;
     if (timers.intro) {
       window.clearTimeout(timers.intro);
       timers.intro = undefined;
@@ -184,7 +184,7 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       window.clearTimeout(timers.final);
       timers.final = undefined;
     }
-            ⏭
+    finalEndRef.current = null;
     remainingRef.current = null;
     setPaused(false);
     setPhase("final");
@@ -201,11 +201,11 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       <button
         type="button"
         className="star-wars-close"
-                  ? `star-wars-crawl star-wars-crawl-active ${paused ? "star-wars-crawl-paused" : ""}`
+        onClick={onClose}
         aria-label="Close story crawl"
       >
         <X />
-              style={paused ? { animationPlayState: "paused" as const } : undefined}
+      </button>
 
       <div className="star-wars-inner">
         <div className="star-wars-controls" style={{ pointerEvents: "auto" }}>
@@ -214,28 +214,9 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
             className="star-wars-control"
             onClick={togglePause}
             aria-label={paused ? "Resume" : "Pause"}
+            disabled={phase !== "crawl"}
           >
             {paused ? "▶" : "⏸"}
-        {phase === "final" && (
-          <div className="star-wars-crawl-stage star-wars-crawl-stage-manual" aria-hidden={false}>
-            <div
-              className="star-wars-crawl-manual-wrapper"
-              ref={manualRef}
-              tabIndex={0}
-              role="document"
-              aria-label={`${title} full story`}
-            >
-              <span className="star-wars-manual-hint">Use scroll or swipe to continue</span>
-              <p className="star-wars-episode">{episodeLabel}</p>
-              <h2>{title}</h2>
-              <div className="star-wars-crawl-manual">
-                {paragraphs.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
           </button>
 
           <button
@@ -247,6 +228,7 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
             ⏭
           </button>
         </div>
+
         {phase === "intro" && (
           <div className="star-wars-intro" aria-hidden={phase !== "intro"}>
             {introText}
@@ -281,11 +263,28 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
         )}
 
         {phase === "final" && (
-          <div className="star-wars-final" role="document">
-            <h2>{title}</h2>
-            {paragraphs.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+          <div
+            className="star-wars-crawl-stage star-wars-crawl-stage-manual"
+            aria-hidden={false}
+          >
+            <div
+              className="star-wars-crawl-manual-wrapper"
+              ref={manualRef}
+              tabIndex={0}
+              role="document"
+              aria-label={`${title} full story`}
+            >
+              <span className="star-wars-manual-hint">
+                Use scroll or swipe to continue
+              </span>
+              <p className="star-wars-episode">{episodeLabel}</p>
+              <h2>{title}</h2>
+              <div className="star-wars-crawl-manual">
+                {paragraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>

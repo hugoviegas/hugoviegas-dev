@@ -769,57 +769,79 @@
   letter-spacing: 0.35em;
 }
 
-.star-wars-final {
+.star-wars-crawl-stage-manual {
+  pointer-events: auto;
+  align-items: center;
+  padding-bottom: 0;
+}
+
+.star-wars-crawl-manual-wrapper {
   position: relative;
   width: min(900px, 94vw);
   height: clamp(76vh, 82vh, 88vh);
-  overflow-y: auto;
   padding: clamp(2.1rem, 3.2vw, 3rem);
   border-radius: 26px;
   border: 1px solid rgba(254, 218, 74, 0.38);
   background: rgba(0, 0, 0, 0.82);
   box-shadow: 0 2.75rem 4.75rem rgba(0, 0, 0, 0.5);
-  pointer-events: auto;
-  transition: opacity 280ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 2vw, 1.8rem);
+  overflow: hidden;
+  outline: none;
 }
 
-.star-wars-final h2 {
+.star-wars-manual-hint {
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  font-size: clamp(0.72rem, 1.65vw, 0.92rem);
+  text-align: center;
+  color: rgba(244, 244, 244, 0.64);
+}
+
+.star-wars-crawl-manual-wrapper h2 {
   font-family: "Pathway Gothic One", var(--font-family-primary), sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
   text-align: center;
   color: #feda4a;
-  margin-bottom: 2rem;
   font-size: clamp(1.8rem, 4.5vw, 2.7rem);
+  margin-bottom: clamp(1.2rem, 2vh, 1.8rem);
 }
 
-.star-wars-final p {
+.star-wars-crawl-manual {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: clamp(0.65rem, 1.5vw, 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 1.8vw, 1.6rem);
+}
+
+.star-wars-crawl-manual p {
   font-family: var(--font-family-primary);
   font-size: clamp(1.05rem, 1.95vw, 1.25rem);
   line-height: 1.72;
   color: rgba(248, 248, 248, 0.96);
-  margin-bottom: 1.45rem;
+  text-transform: none;
+  letter-spacing: 0.01em;
 }
 
-.star-wars-final p:last-child {
-  margin-bottom: 0;
-}
-
-.star-wars-final::-webkit-scrollbar {
+.star-wars-crawl-manual::-webkit-scrollbar {
   width: 10px;
 }
 
-.star-wars-final::-webkit-scrollbar-track {
+.star-wars-crawl-manual::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 999px;
 }
 
-.star-wars-final::-webkit-scrollbar-thumb {
+.star-wars-crawl-manual::-webkit-scrollbar-thumb {
   background: rgba(254, 218, 74, 0.35);
   border-radius: 999px;
 }
 
-.star-wars-final::-webkit-scrollbar-thumb:hover {
+.star-wars-crawl-manual::-webkit-scrollbar-thumb:hover {
   background: rgba(254, 218, 74, 0.5);
 }
 
