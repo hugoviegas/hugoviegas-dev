@@ -42,10 +42,17 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
   const remainingRef = useRef<number | null>(null);
 
   useEffect(() => {
+  const manualRef = useRef<HTMLDivElement | null>(null);
     closeRef.current = onClose;
   }, [onClose]);
 
   useEffect(() => {
+
+  useEffect(() => {
+    if (phase === "final" && manualRef.current) {
+      manualRef.current.focus();
+    }
+  }, [phase]);
     if (typeof window === "undefined" || typeof document === "undefined") {
       return;
     }
@@ -166,8 +173,9 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
     }
   };
 
+            disabled={phase !== "crawl"}
   const handleSkip = () => {
-    const timers = timersRef.current;
+            {paused ? "▶" : "⏸"}
     if (timers.intro) {
       window.clearTimeout(timers.intro);
       timers.intro = undefined;
@@ -176,7 +184,7 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       window.clearTimeout(timers.final);
       timers.final = undefined;
     }
-    finalEndRef.current = null;
+            ⏭
     remainingRef.current = null;
     setPaused(false);
     setPhase("final");
@@ -193,11 +201,11 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       <button
         type="button"
         className="star-wars-close"
-        onClick={onClose}
+                  ? `star-wars-crawl star-wars-crawl-active ${paused ? "star-wars-crawl-paused" : ""}`
         aria-label="Close story crawl"
       >
         <X />
-      </button>
+              style={paused ? { animationPlayState: "paused" as const } : undefined}
 
       <div className="star-wars-inner">
         <div className="star-wars-controls" style={{ pointerEvents: "auto" }}>
@@ -208,6 +216,26 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
             aria-label={paused ? "Resume" : "Pause"}
           >
             {paused ? "▶" : "⏸"}
+        {phase === "final" && (
+          <div className="star-wars-crawl-stage star-wars-crawl-stage-manual" aria-hidden={false}>
+            <div
+              className="star-wars-crawl-manual-wrapper"
+              ref={manualRef}
+              tabIndex={0}
+              role="document"
+              aria-label={`${title} full story`}
+            >
+              <span className="star-wars-manual-hint">Use scroll or swipe to continue</span>
+              <p className="star-wars-episode">{episodeLabel}</p>
+              <h2>{title}</h2>
+              <div className="star-wars-crawl-manual">
+                {paragraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
           </button>
 
           <button
