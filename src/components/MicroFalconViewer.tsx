@@ -1,26 +1,56 @@
-import { Suspense, useLayoutEffect, useMemo, useRef, useEffect } from "react";
+import {
+  Suspense,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useEffect,
+  useState,
+} from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
-import { Box3, Vector3, Color, WebGLRenderer } from "three";
+import { Box3, Vector3, Color, WebGLRenderer, Euler, Quaternion } from "three";
 import type { Group } from "three";
 import microFalconModel from "@/assets/3d-model/Lego-glb-models/Micro Millennium Falcon.glb";
 
 useGLTF.preload(microFalconModel);
 
-const FalconModel = () => {
+const FalconModel = ({ playArrival }: { playArrival: boolean }) => {
   const { scene } = useGLTF(microFalconModel);
+  const arrivalGroupRef = useRef<Group | null>(null);
   const rotationGroupRef = useRef<Group | null>(null);
   const pivotRef = useRef<Group | null>(null);
 
   // Clone the scene so multiple viewers can coexist without mutating the original graph
   const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
-  useFrame((_, delta) => {
-    // No automatic rotation by default; leave hook for future prop
-    // if (rotationGroupRef.current) {
-    //   rotationGroupRef.current.rotation.y += delta * 0.4;
-    // }
-  });
+  const startPosition = useMemo(() => new Vector3(3.4, -1.2, -12.5), []);
+  const endPosition = useMemo(() => new Vector3(0, 0, 0), []);
+  const startRotation = useMemo(() => new Euler(0.48, -0.9, 0.18), []);
+  const endRotation = useMemo(() => new Euler(0, 0, 0), []);
+  const startQuaternion = useMemo(
+    () => new Quaternion().setFromEuler(startRotation),
+    [startRotation]
+  );
+  const endQuaternion = useMemo(
+    () => new Quaternion().setFromEuler(endRotation),
+    [endRotation]
+  );
+  const tempQuaternion = useRef(new Quaternion());
+  const animationState = useRef<"idle" | "running" | "done">("idle");
+  const progressRef = useRef(0);
+  const arrivalDuration = 2.8; // seconds
+  const startScale = 0.55;
+  const endScale = 1;
+
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+  const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+
+  useLayoutEffect(() => {
+    if (!arrivalGroupRef.current) return;
+    arrivalGroupRef.current.position.copy(startPosition);
+    arrivalGroupRef.current.quaternion.copy(startQuaternion);
+    arrivalGroupRef.current.scale.setScalar(startScale);
+  }, [startPosition, startQuaternion]);
 
   useLayoutEffect(() => {
     if (!pivotRef.current || !rotationGroupRef.current) return;
@@ -39,10 +69,56 @@ const FalconModel = () => {
     rotationGroupRef.current.position.set(0, -0.15, 0);
   }, [clonedScene]);
 
+  useEffect(() => {
+    if (!playArrival || animationState.current !== "idle") return;
+    animationState.current = "running";
+    progressRef.current = 0;
+    if (arrivalGroupRef.current) {
+      arrivalGroupRef.current.position.copy(startPosition);
+      arrivalGroupRef.current.quaternion.copy(startQuaternion);
+      arrivalGroupRef.current.scale.setScalar(startScale);
+    }
+  }, [playArrival, startPosition, startQuaternion]);
+
+  useFrame((_, delta) => {
+    if (animationState.current !== "running" || !arrivalGroupRef.current)
+      return;
+
+    progressRef.current = Math.min(
+      progressRef.current + delta / arrivalDuration,
+      1
+    );
+
+    const easedTranslation = easeOutCubic(progressRef.current);
+    const easedScale = easeOutExpo(progressRef.current);
+    arrivalGroupRef.current.position.lerpVectors(
+      startPosition,
+      endPosition,
+      easedTranslation
+    );
+
+    const currentQuat = tempQuaternion.current;
+    currentQuat.copy(startQuaternion).slerp(endQuaternion, easedTranslation);
+    arrivalGroupRef.current.quaternion.copy(currentQuat);
+
+    const scaleValue =
+      startScale + (endScale - startScale) * Math.min(easedScale, 1);
+    arrivalGroupRef.current.scale.setScalar(scaleValue);
+
+    if (progressRef.current >= 1) {
+      animationState.current = "done";
+      arrivalGroupRef.current.position.copy(endPosition);
+      arrivalGroupRef.current.quaternion.copy(endQuaternion);
+      arrivalGroupRef.current.scale.setScalar(endScale);
+    }
+  });
+
   return (
-    <group ref={rotationGroupRef}>
-      <group ref={pivotRef}>
-        <primitive object={clonedScene} dispose={null} />
+    <group ref={arrivalGroupRef}>
+      <group ref={rotationGroupRef}>
+        <group ref={pivotRef}>
+          <primitive object={clonedScene} dispose={null} />
+        </group>
       </group>
     </group>
   );
@@ -50,6 +126,8 @@ const FalconModel = () => {
 
 const MicroFalconViewer = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [playArrival, setPlayArrival] = useState(false);
+  const hasTriggeredRef = useRef(false);
 
   // Compute and apply container background to the GL clear color
   const applyContainerBgToGL = (gl: WebGLRenderer) => {
@@ -108,6 +186,28 @@ const MicroFalconViewer = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node || hasTriggeredRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasTriggeredRef.current) {
+            hasTriggeredRef.current = true;
+            requestAnimationFrame(() => setPlayArrival(true));
+          }
+        });
+      },
+      {
+        threshold: 0.35,
+      }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -139,7 +239,7 @@ const MicroFalconViewer = () => {
         <directionalLight position={[-4, -3, -4]} intensity={0.5} />
 
         <Suspense fallback={null}>
-          <FalconModel />
+          <FalconModel playArrival={playArrival} />
           <Environment preset="city" />
         </Suspense>
 

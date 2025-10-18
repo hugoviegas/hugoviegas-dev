@@ -18,13 +18,26 @@ type Props = {
   autoPlay?: boolean;
   autoPlayInterval?: number;
   autoRotate?: boolean;
+  modelOptions?: Array<{
+    position?: [number, number, number];
+    rotation?: [number, number, number];
+    desiredSize?: number;
+  }>;
 };
 
 const ModelInstance: React.FC<{
   modelPath: string;
   desiredSize: number;
   autoRotate?: boolean;
-}> = ({ modelPath, desiredSize, autoRotate = false }) => {
+  initialPosition?: [number, number, number];
+  initialRotation?: [number, number, number];
+}> = ({
+  modelPath,
+  desiredSize,
+  autoRotate = false,
+  initialPosition,
+  initialRotation,
+}) => {
   const { scene } = useGLTF(modelPath);
   const rotationGroupRef = useRef<Group | null>(null);
   const pivotRef = useRef<Group | null>(null);
@@ -40,7 +53,19 @@ const ModelInstance: React.FC<{
     const scale = desiredSize / maxAxis;
     rotationGroupRef.current.scale.setScalar(scale);
     rotationGroupRef.current.position.set(0, -0.15, 0);
-  }, [clonedScene, desiredSize]);
+    if (initialPosition) {
+      rotationGroupRef.current.position.add(
+        new Vector3(initialPosition[0], initialPosition[1], initialPosition[2])
+      );
+    }
+    if (initialRotation) {
+      rotationGroupRef.current.rotation.set(
+        initialRotation[0],
+        initialRotation[1],
+        initialRotation[2]
+      );
+    }
+  }, [clonedScene, desiredSize, initialPosition, initialRotation]);
 
   useEffect(() => {
     if (!autoRotate) return;
@@ -69,6 +94,8 @@ const ModelCarousel: React.FC<Props> = ({
   desiredSize = 2.8,
   autoPlay = true,
   autoPlayInterval = 4000,
+  autoRotate = false,
+  modelOptions,
 }) => {
   const [index, setIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -145,14 +172,31 @@ const ModelCarousel: React.FC<Props> = ({
         <Suspense fallback={null}>
           <ModelInstance
             modelPath={modelPaths[index]}
-            desiredSize={desiredSize}
+            desiredSize={
+              (modelOptions &&
+                modelOptions[index] &&
+                modelOptions[index].desiredSize) ||
+              desiredSize
+            }
+            initialPosition={
+              (modelOptions &&
+                modelOptions[index] &&
+                modelOptions[index].position) ||
+              undefined
+            }
+            initialRotation={
+              (modelOptions &&
+                modelOptions[index] &&
+                modelOptions[index].rotation) ||
+              undefined
+            }
           />
           <Environment preset="city" />
         </Suspense>
 
         <OrbitControls
           enablePan={false}
-          autoRotate={false}
+          autoRotate={autoRotate}
           enableDamping
           dampingFactor={0.08}
           minDistance={3}

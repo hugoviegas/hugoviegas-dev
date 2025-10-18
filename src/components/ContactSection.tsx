@@ -487,8 +487,19 @@ const ContactSection = () => {
                 ]}
                 containerHeight={340}
                 desiredSize={2.6}
-                autoPlay
+                autoPlay={false}
                 autoPlayInterval={4000}
+                autoRotate={false}
+                modelOptions={[
+                  {
+                    // X-wing: slightly up and diagonal
+                    position: [0.15, 0.18, 0],
+                    rotation: [-0.4, 0.6, 0],
+                    desiredSize: 2.6,
+                  },
+                  {},
+                  {},
+                ]}
               />
             </div>
           </div>
