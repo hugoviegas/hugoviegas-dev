@@ -73,10 +73,7 @@ const AnimatedModel = ({
 
     if (stateRef.current === "running") {
       const duration = Math.max(animationConfig.duration, 0.1);
-      progressRef.current = Math.min(
-        progressRef.current + delta / duration,
-        1,
-      );
+      progressRef.current = Math.min(progressRef.current + delta / duration, 1);
 
       animationConfig.update(outerGroupRef.current, progressRef.current);
 

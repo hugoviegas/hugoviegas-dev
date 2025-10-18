@@ -1,6 +1,10 @@
 import { Euler, Quaternion, Vector3 } from "three";
 import AnimatedStarshipViewer from "./starships/AnimatedStarshipViewer";
-import { AnimationConfig, easeOutCubic, easeOutExpo } from "./starships/animationUtils";
+import {
+  AnimationConfig,
+  easeOutCubic,
+  easeOutExpo,
+} from "./starships/animationUtils";
 import microFalconModel from "@/assets/3d-model/Lego-glb-models/Micro Millennium Falcon.glb";
 
 const easeInOutCubic = (t: number) =>
@@ -11,7 +15,7 @@ const quadraticBezier = (
   p0: Vector3,
   cp: Vector3,
   p1: Vector3,
-  t: number,
+  t: number
 ) => {
   const u = 1 - t;
   out.set(0, 0, 0);
@@ -30,15 +34,17 @@ const createCinematicLoopAnimation = (): AnimationConfig => {
   const exitControl = new Vector3(-3.4, 1.6, 1.5);
 
   const sweepStartQuat = new Quaternion().setFromEuler(
-    new Euler(-0.16, Math.PI * 0.8, -0.18),
+    new Euler(-0.16, Math.PI * 0.8, -0.18)
   );
-  const backFacingQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI, 0));
+  const backFacingQuat = new Quaternion().setFromEuler(
+    new Euler(0, Math.PI, 0)
+  );
   const frontIdleQuat = new Quaternion().setFromEuler(new Euler(0.08, 0.08, 0));
   const frontEntryQuat = new Quaternion().setFromEuler(
-    new Euler(0.4, -0.95, 0.14),
+    new Euler(0.4, -0.95, 0.14)
   );
   const exitQuat = new Quaternion().setFromEuler(
-    new Euler(-0.08, Math.PI * 0.65, 0.22),
+    new Euler(-0.08, Math.PI * 0.65, 0.22)
   );
 
   const sweepDuration = 3.2;
@@ -47,7 +53,11 @@ const createCinematicLoopAnimation = (): AnimationConfig => {
   const holdDuration = 6.0;
   const exitDuration = 3.1;
   const totalDuration =
-    sweepDuration + transitDuration + returnDuration + holdDuration + exitDuration;
+    sweepDuration +
+    transitDuration +
+    returnDuration +
+    holdDuration +
+    exitDuration;
 
   const tempPos = new Vector3();
   const tempQuat = new Quaternion();
@@ -74,7 +84,9 @@ const createCinematicLoopAnimation = (): AnimationConfig => {
         tempPos.x -= 0.3 * (1 - Math.cos(localT * Math.PI * 0.55));
         group.position.copy(tempPos);
 
-        tempQuat.copy(sweepStartQuat).slerp(backFacingQuat, easeOutExpo(localT));
+        tempQuat
+          .copy(sweepStartQuat)
+          .slerp(backFacingQuat, easeOutExpo(localT));
         group.quaternion.copy(tempQuat);
 
         const scaleVal = startScale + (1.02 - startScale) * easeOutExpo(localT);
@@ -118,7 +130,7 @@ const createCinematicLoopAnimation = (): AnimationConfig => {
         const holdProgress = Math.min(
           (time - sweepDuration - transitDuration - returnDuration) /
             holdDuration,
-          1,
+          1
         );
         const hover = 0.05 * Math.sin(holdProgress * Math.PI * 2);
         tempPos.copy(restPos);
