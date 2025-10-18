@@ -13,6 +13,7 @@ import {
   Color,
   Group,
   MathUtils,
+  Matrix4,
   PerspectiveCamera,
   Quaternion,
   Vector3,
@@ -26,12 +27,14 @@ if (typeof useGLTF.preload === "function") {
   useGLTF.preload(XWING_ASSET_PATH);
 }
 
-const MODEL_FORWARD = new Vector3(-1, 0, 0);
+const WORLD_UP = new Vector3(0, 1, 0);
 const TMP_VEC_A = new Vector3();
 const TMP_VEC_B = new Vector3();
+const TMP_VEC_C = new Vector3();
 const TMP_QUAT_A = new Quaternion();
 const TMP_QUAT_B = new Quaternion();
 const TMP_QUAT_RESULT = new Quaternion();
+const TMP_MATRIX = new Matrix4();
 
 const randomInRange = (min: number, max: number) =>
   Math.random() * (max - min) + min;
@@ -119,7 +122,8 @@ type FlightRuntime = {
   phase: number;
   bank: number;
   spinAngle: number;
-  boost: number;
+  throttle: number;
+  throttleTarget: number;
   spin: {
     active: boolean;
     used: boolean;
@@ -127,6 +131,9 @@ type FlightRuntime = {
     duration: number;
     elapsed: number;
     rotations: number;
+    prepDuration: number;
+    cooldownDuration: number;
+    burstPower: number;
   };
 };
 const XWingFlight: React.FC<FlightConfig> = ({
@@ -148,6 +155,7 @@ const XWingFlight: React.FC<FlightConfig> = ({
     return null;
   }, [direction]);
   const wrapperRef = useRef<Group | null>(null);
+  const modelRef = useRef<Group | null>(null);
   const flightRef = useRef<FlightRuntime>({
     start: new Vector3(),
     delta: new Vector3(),
@@ -159,7 +167,8 @@ const XWingFlight: React.FC<FlightConfig> = ({
     phase: Math.random() * Math.PI * 2,
     bank: 0,
     spinAngle: 0,
-    boost: 1,
+    throttle: 1,
+    throttleTarget: 1,
     spin: {
       active: false,
       used: false,
@@ -167,6 +176,9 @@ const XWingFlight: React.FC<FlightConfig> = ({
       duration: 1.4,
       elapsed: 0,
       rotations: 2,
+      prepDuration: 0.25,
+      cooldownDuration: 0.6,
+      burstPower: 2,
     },
   });
   const margin = 2.1;
@@ -214,7 +226,8 @@ const XWingFlight: React.FC<FlightConfig> = ({
     flight.phase = Math.random() * Math.PI * 2;
     flight.bank = 0;
     flight.spinAngle = 0;
-    flight.boost = 1 + (Math.random() < 0.5 ? randomInRange(0.08, 0.22) : 0);
+    flight.throttle = 1;
+    flight.throttleTarget = 1;
     flight.spin = {
       active: false,
       used: false,
@@ -222,6 +235,9 @@ const XWingFlight: React.FC<FlightConfig> = ({
       duration: randomInRange(1.2, 1.8),
       elapsed: 0,
       rotations: 2 + (Math.random() < 0.45 ? 0.5 : 0),
+      prepDuration: randomInRange(0.22, 0.32),
+      cooldownDuration: randomInRange(0.55, 0.75),
+      burstPower: randomInRange(1.9, 2.4),
     };
 
     if (wrapperRef.current) {
@@ -240,15 +256,19 @@ const XWingFlight: React.FC<FlightConfig> = ({
   ]);
 
   useLayoutEffect(() => {
+    const modelGroup = modelRef.current;
+    if (!modelGroup) return;
+
     const bounds = new Box3().setFromObject(clonedScene);
     const size = TMP_VEC_A;
     bounds.getSize(size);
     const maxAxis = Math.max(size.x, size.y, size.z) || 1;
-    const scale = 1.05 / maxAxis;
-    clonedScene.scale.setScalar(scale);
-    const center = TMP_VEC_B.set(0, 0, 0);
+    const center = TMP_VEC_B;
     bounds.getCenter(center);
-    clonedScene.position.sub(center.multiplyScalar(scale));
+    clonedScene.position.sub(center);
+    modelGroup.scale.setScalar(1.4 / maxAxis);
+    modelGroup.rotation.set(0, Math.PI, 0);
+    clonedScene.updateMatrixWorld(true);
   }, [clonedScene]);
 
   useEffect(() => {
@@ -269,13 +289,80 @@ const XWingFlight: React.FC<FlightConfig> = ({
       return;
     }
 
-    if (flight.boost > 1) {
-      flight.boost = MathUtils.damp(flight.boost, 1, 1.5, delta);
+    if (!flight.spin.used && flight.progress >= flight.spin.trigger) {
+      flight.spin.active = true;
+      flight.spin.used = true;
+      flight.spin.elapsed = 0;
     }
 
-    const speedFactor = (flight.spin.active ? 1.35 : 1) * flight.boost;
+    if (flight.spin.active) {
+      flight.spin.elapsed += delta;
+    }
+
+    let targetThrottle = 1;
+
+    if (flight.spin.active) {
+      const { prepDuration, duration, cooldownDuration, burstPower } =
+        flight.spin;
+      const prepEnd = prepDuration;
+      const burstEnd = prepEnd + duration;
+      const totalEnd = burstEnd + cooldownDuration;
+
+      if (flight.spin.elapsed < prepEnd) {
+        const prepT = easeInOutQuad(
+          MathUtils.clamp(
+            flight.spin.elapsed / Math.max(prepDuration, 0.001),
+            0,
+            1
+          )
+        );
+        targetThrottle = MathUtils.lerp(1, 0.06, prepT);
+        flight.spinAngle = MathUtils.damp(flight.spinAngle, 0, 8, delta);
+      } else if (flight.spin.elapsed < burstEnd) {
+        const spinT = easeInOutQuad(
+          MathUtils.clamp(
+            (flight.spin.elapsed - prepEnd) / Math.max(duration, 0.001),
+            0,
+            1
+          )
+        );
+        targetThrottle = MathUtils.lerp(1.35, burstPower, spinT);
+        flight.spinAngle = MathUtils.lerp(
+          0,
+          flight.spin.rotations * Math.PI * 2,
+          spinT
+        );
+      } else if (flight.spin.elapsed < totalEnd) {
+        const coolT = easeInOutQuad(
+          MathUtils.clamp(
+            (flight.spin.elapsed - burstEnd) /
+              Math.max(cooldownDuration, 0.001),
+            0,
+            1
+          )
+        );
+        targetThrottle = MathUtils.lerp(burstPower, 1, coolT);
+        flight.spinAngle = MathUtils.damp(flight.spinAngle, 0, 10, delta);
+      } else {
+        flight.spin.active = false;
+        flight.spinAngle = MathUtils.damp(flight.spinAngle, 0, 10, delta);
+      }
+    } else {
+      targetThrottle = 1;
+      flight.spinAngle = MathUtils.damp(flight.spinAngle, 0, 6, delta);
+    }
+
+    flight.throttleTarget = targetThrottle;
+    const throttleLerp = targetThrottle > flight.throttle ? 8 : 5;
+    flight.throttle = MathUtils.damp(
+      flight.throttle,
+      targetThrottle,
+      throttleLerp,
+      delta
+    );
+
     flight.progress +=
-      delta * ((flight.speedScalar * speedFactor) / flight.distance);
+      delta * ((flight.speedScalar * flight.throttle) / flight.distance);
 
     if (flight.progress >= 1.05) {
       resetFlight();
@@ -296,39 +383,31 @@ const XWingFlight: React.FC<FlightConfig> = ({
       flight.position.z
     );
 
-    if (!flight.spin.used && flight.progress >= flight.spin.trigger) {
-      flight.spin.active = true;
-      flight.spin.used = true;
-      flight.spin.elapsed = 0;
-    }
-
-    if (flight.spin.active) {
-      flight.spin.elapsed += delta;
-      const t = Math.min(flight.spin.elapsed / flight.spin.duration, 1);
-      const eased = easeInOutQuad(MathUtils.clamp(t, 0, 1));
-      flight.spinAngle = MathUtils.lerp(
-        0,
-        flight.spin.rotations * Math.PI * 2,
-        eased
-      );
-      if (t >= 1) {
-        flight.spin.active = false;
-      }
-    } else {
-      flight.spinAngle = MathUtils.damp(flight.spinAngle, 0, 6, delta);
-    }
-
     const wobble =
       Math.sin(state.clock.elapsedTime * 0.8 + flight.phase) * 0.05;
+    const verticality = Math.abs(flight.direction.dot(WORLD_UP));
+    const bankAttenuation = MathUtils.lerp(1, 0.35, verticality);
     const targetBank =
-      -flight.direction.x * 0.35 + flight.direction.y * 0.2 + wobble;
+      (-flight.direction.x * 0.35 + flight.direction.y * 0.2 + wobble) *
+      bankAttenuation;
     flight.bank = MathUtils.damp(flight.bank, targetBank, 4.5, delta);
 
-    TMP_QUAT_A.setFromUnitVectors(MODEL_FORWARD, flight.direction);
-    TMP_QUAT_B.setFromAxisAngle(
-      flight.direction,
-      flight.bank + flight.spinAngle
-    );
+    const forward = TMP_VEC_A.copy(flight.direction).normalize();
+    const upVec = TMP_VEC_C.copy(WORLD_UP);
+    if (Math.abs(forward.dot(upVec)) > 0.96) {
+      upVec.set(0, 0, 1);
+    }
+    const right = TMP_VEC_B.copy(upVec).cross(forward);
+    if (right.lengthSq() < 1e-4) {
+      right.set(0, 1, 0);
+    } else {
+      right.normalize();
+    }
+    upVec.copy(forward).cross(right).normalize();
+
+    TMP_MATRIX.makeBasis(forward, upVec, right);
+    TMP_QUAT_A.setFromRotationMatrix(TMP_MATRIX);
+    TMP_QUAT_B.setFromAxisAngle(forward, flight.bank + flight.spinAngle);
     TMP_QUAT_RESULT.copy(TMP_QUAT_A).multiply(TMP_QUAT_B);
 
     wrapper.quaternion.slerp(TMP_QUAT_RESULT, 1 - Math.exp(-delta * 10));
@@ -336,7 +415,9 @@ const XWingFlight: React.FC<FlightConfig> = ({
 
   return (
     <group ref={wrapperRef}>
-      <primitive object={clonedScene} />
+      <group ref={modelRef}>
+        <primitive object={clonedScene} />
+      </group>
     </group>
   );
 };
