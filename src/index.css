@@ -725,10 +725,14 @@
   perspective: 960px;
   overflow: hidden;
   padding-bottom: clamp(1rem, 3vh, 2rem);
-  pointer-events: none;
+  pointer-events: auto;
+  touch-action: pan-y;
+  user-select: none;
 }
 
 .star-wars-crawl {
+  display: flex;
+  justify-content: center;
   width: 100%;
   max-width: min(880px, 94vw);
   font-family: "News Cycle", "Pathway Gothic One", var(--font-family-primary),
@@ -744,6 +748,26 @@
   color: #feda4a;
   text-transform: uppercase;
   text-shadow: 0 0 12px rgba(0, 0, 0, 0.65);
+}
+
+.star-wars-crawl-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  cursor: grab;
+}
+
+.star-wars-crawl-content-active {
+  cursor: grabbing;
+}
+
+.star-wars-crawl-stage-interactive {
+  cursor: grab;
+}
+
+.star-wars-crawl-stage-interacting {
+  cursor: grabbing;
 }
 
 .star-wars-crawl-active {
@@ -922,7 +946,7 @@
     perspective: 620px;
   }
 
-  .star-wars-final {
+  .star-wars-crawl-manual-wrapper {
     padding: clamp(1.6rem, 5.5vw, 2.3rem);
     height: 68vh;
   }

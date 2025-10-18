@@ -12,12 +12,21 @@ export type StarWarsCrawlOverlayProps = {
 };
 
 type CrawlPhase = "intro" | "crawl" | "final";
+type PauseReason = "none" | "control" | "interaction";
 
 const EPISODE_FALLBACK = "Episode I";
 const INTRO_FALLBACK = "A long time ago in a galaxy far, far away....";
 const INTRO_DELAY_MS = 1000;
 const CRAWL_DURATION_MS = 140_000;
 const FINAL_TRIGGER_RATIO = 0.98;
+const OFFSET_MIN = -2600;
+const OFFSET_MAX = 2600;
+const DRAG_SENSITIVITY = 1;
+const WHEEL_SENSITIVITY = 0.6;
+const WHEEL_RESUME_DELAY_MS = 360;
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
 
 const splitStory = (story: string) =>
   story
@@ -34,13 +43,30 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
   introText = INTRO_FALLBACK,
 }) => {
   const [phase, setPhase] = useState<CrawlPhase>("intro");
-  const [paused, setPaused] = useState(false);
+  const [pauseReasonState, setPauseReasonState] = useState<PauseReason>("none");
+  const [manualOffset, setManualOffset] = useState(0);
+  const [isInteracting, setIsInteracting] = useState(false);
   const paragraphs = useMemo(() => splitStory(story), [story]);
+
   const closeRef = useRef(onClose);
   const timersRef = useRef<{ intro?: number; final?: number }>({});
   const finalEndRef = useRef<number | null>(null);
   const remainingRef = useRef<number | null>(null);
   const manualRef = useRef<HTMLDivElement | null>(null);
+  const pauseReasonRef = useRef<PauseReason>("none");
+  const pointerRef = useRef<{
+    active: boolean;
+    pointerId: number | null;
+    lastY: number;
+  }>({ active: false, pointerId: null, lastY: 0 });
+  const wheelTimeoutRef = useRef<number | null>(null);
+
+  const paused = pauseReasonState !== "none";
+
+  const syncPauseReason = (reason: PauseReason) => {
+    pauseReasonRef.current = reason;
+    setPauseReasonState(reason);
+  };
 
   useEffect(() => {
     closeRef.current = onClose;
@@ -53,18 +79,34 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
   }, [phase]);
 
   useEffect(() => {
+    return () => {
+      if (wheelTimeoutRef.current) {
+        window.clearTimeout(wheelTimeoutRef.current);
+        wheelTimeoutRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined") {
       return;
     }
 
     if (!open) {
       setPhase("intro");
-      setPaused(false);
+      syncPauseReason("none");
+      setManualOffset(0);
+      setIsInteracting(false);
+      pointerRef.current = { active: false, pointerId: null, lastY: 0 };
       return;
     }
 
     setPhase("intro");
-    setPaused(false);
+    syncPauseReason("none");
+    setManualOffset(0);
+    setIsInteracting(false);
+    pointerRef.current = { active: false, pointerId: null, lastY: 0 };
+
     const timers = timersRef.current;
     const introTimer = window.setTimeout(
       () => setPhase("crawl"),
@@ -92,6 +134,10 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
         window.clearTimeout(timers.final);
         timers.final = undefined;
       }
+      if (wheelTimeoutRef.current) {
+        window.clearTimeout(wheelTimeoutRef.current);
+        wheelTimeoutRef.current = null;
+      }
       window.removeEventListener("keydown", handleKeydown);
       document.body.style.overflow = previousOverflow;
     };
@@ -111,7 +157,12 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       }
       remainingRef.current = null;
       finalEndRef.current = null;
-      setPaused(false);
+      if (pauseReasonRef.current !== "none") {
+        syncPauseReason("none");
+      }
+      setManualOffset(0);
+      setIsInteracting(false);
+      pointerRef.current = { active: false, pointerId: null, lastY: 0 };
       return;
     }
 
@@ -129,6 +180,7 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       currentTimers.final = undefined;
       finalEndRef.current = null;
       remainingRef.current = null;
+      syncPauseReason("none");
     }, triggerDelay);
 
     return () => {
@@ -139,26 +191,48 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
     };
   }, [phase]);
 
-  const togglePause = () => {
-    if (phase !== "crawl") {
+  const beginPause = (reason: PauseReason) => {
+    if (reason === "none" || phase !== "crawl") {
+      if (reason !== "none") {
+        syncPauseReason(reason);
+      }
       return;
     }
 
-    const timers = timersRef.current;
+    if (pauseReasonRef.current === "control" && reason === "interaction") {
+      return;
+    }
 
-    if (!paused) {
+    if (pauseReasonRef.current === reason) {
+      return;
+    }
+
+    if (pauseReasonRef.current === "none") {
+      const timers = timersRef.current;
       if (timers.final && finalEndRef.current) {
         const remaining = Math.max(0, finalEndRef.current - Date.now());
         remainingRef.current = remaining;
         window.clearTimeout(timers.final);
         timers.final = undefined;
       }
-      setPaused(true);
+    }
+
+    syncPauseReason(reason);
+  };
+
+  const resumeCrawl = (force = false) => {
+    if (!force && pauseReasonRef.current === "control") {
       return;
     }
 
-    setPaused(false);
+    if (phase !== "crawl") {
+      syncPauseReason("none");
+      return;
+    }
+
+    const timers = timersRef.current;
     const remaining = remainingRef.current ?? 0;
+
     if (remaining > 0) {
       finalEndRef.current = Date.now() + remaining;
       timers.final = window.setTimeout(() => {
@@ -167,11 +241,29 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
         currentTimers.final = undefined;
         finalEndRef.current = null;
         remainingRef.current = null;
+        syncPauseReason("none");
       }, remaining);
       remainingRef.current = null;
-    } else {
+    } else if (!timers.final) {
       setPhase("final");
+      syncPauseReason("none");
+      return;
     }
+
+    syncPauseReason("none");
+  };
+
+  const togglePause = () => {
+    if (phase !== "crawl") {
+      return;
+    }
+
+    if (pauseReasonRef.current === "control") {
+      resumeCrawl(true);
+      return;
+    }
+
+    beginPause("control");
   };
 
   const handleSkip = () => {
@@ -184,15 +276,122 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       window.clearTimeout(timers.final);
       timers.final = undefined;
     }
+    if (wheelTimeoutRef.current) {
+      window.clearTimeout(wheelTimeoutRef.current);
+      wheelTimeoutRef.current = null;
+    }
     finalEndRef.current = null;
     remainingRef.current = null;
-    setPaused(false);
+    syncPauseReason("none");
+    setManualOffset(0);
+    setIsInteracting(false);
+    pointerRef.current = { active: false, pointerId: null, lastY: 0 };
     setPhase("final");
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (phase !== "crawl") {
+      return;
+    }
+
+    pointerRef.current = {
+      active: true,
+      pointerId: event.pointerId,
+      lastY: event.clientY,
+    };
+    setIsInteracting(true);
+
+    if (pauseReasonRef.current !== "control") {
+      beginPause("interaction");
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!pointerRef.current.active) {
+      return;
+    }
+
+    event.preventDefault();
+    const delta = (event.clientY - pointerRef.current.lastY) * DRAG_SENSITIVITY;
+    pointerRef.current.lastY = event.clientY;
+    setManualOffset((prev) => clamp(prev + delta, OFFSET_MIN, OFFSET_MAX));
+  };
+
+  const finishPointerInteraction = (
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    if (pointerRef.current.pointerId !== null) {
+      try {
+        event.currentTarget.releasePointerCapture(pointerRef.current.pointerId);
+      } catch {
+        // ignore release errors when pointer capture is already cleared
+      }
+    }
+    pointerRef.current = { active: false, pointerId: null, lastY: 0 };
+    setIsInteracting(false);
+
+    if (pauseReasonRef.current === "interaction") {
+      resumeCrawl();
+    }
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!pointerRef.current.active) {
+      return;
+    }
+    finishPointerInteraction(event);
+  };
+
+  const handlePointerCancel = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!pointerRef.current.active) {
+      return;
+    }
+    finishPointerInteraction(event);
+  };
+
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    if (phase !== "crawl") {
+      return;
+    }
+
+    event.preventDefault();
+    setIsInteracting(true);
+    setManualOffset((prev) =>
+      clamp(prev + event.deltaY * WHEEL_SENSITIVITY, OFFSET_MIN, OFFSET_MAX)
+    );
+
+    if (pauseReasonRef.current !== "control") {
+      beginPause("interaction");
+    }
+
+    if (wheelTimeoutRef.current) {
+      window.clearTimeout(wheelTimeoutRef.current);
+    }
+
+    wheelTimeoutRef.current = window.setTimeout(() => {
+      setIsInteracting(false);
+      if (pointerRef.current.active) {
+        return;
+      }
+      if (pauseReasonRef.current === "interaction") {
+        resumeCrawl();
+      }
+    }, WHEEL_RESUME_DELAY_MS);
   };
 
   if (typeof document === "undefined" || !open) {
     return null;
   }
+
+  const crawlStageClass = [
+    "star-wars-crawl-stage",
+    phase === "crawl" ? "star-wars-crawl-stage-interactive" : "",
+    isInteracting ? "star-wars-crawl-stage-interacting" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return createPortal(
     <div className="star-wars-overlay" role="dialog" aria-modal="true">
@@ -237,8 +436,14 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
 
         {phase !== "final" && (
           <div
-            className="star-wars-crawl-stage"
+            className={crawlStageClass}
             aria-hidden={phase !== "crawl"}
+            style={{ pointerEvents: "auto" }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
+            onWheel={handleWheel}
           >
             <div
               className={
@@ -253,11 +458,23 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
                 paused ? { animationPlayState: "paused" as const } : undefined
               }
             >
-              <p className="star-wars-episode">{episodeLabel}</p>
-              <h2>{title}</h2>
-              {paragraphs.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
+              <div
+                className={`star-wars-crawl-content${
+                  isInteracting ? " star-wars-crawl-content-active" : ""
+                }`}
+                style={{
+                  transform: `translateY(${manualOffset}px)`,
+                  transition: isInteracting
+                    ? "none"
+                    : "transform 180ms ease-out",
+                }}
+              >
+                <p className="star-wars-episode">{episodeLabel}</p>
+                <h2>{title}</h2>
+                {paragraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
             </div>
           </div>
         )}
