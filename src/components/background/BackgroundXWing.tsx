@@ -515,8 +515,7 @@ const StarField: React.FC<StarFieldProps> = ({ show, depth, count = 220 }) => {
 
     for (let i = 0; i < count; i += 1) {
       const twinkle =
-        base[i] +
-        Math.sin(time * speeds[i] + phases[i]) * amplitudes[i];
+        base[i] + Math.sin(time * speeds[i] + phases[i]) * amplitudes[i];
       const intensity = MathUtils.clamp(twinkle, 0.05, 1.0);
       const idx = i * 3;
       colors[idx] = intensity;
