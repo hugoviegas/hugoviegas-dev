@@ -27,7 +27,7 @@ export default function StarshipDemo() {
   };
 
   const resetToDefaults = () => {
-  setMaxConcurrent(3);
+    setMaxConcurrent(3);
     setDebugMode(false);
     setBackgroundOpacity(0.3);
     setCustomConfigs(undefined);
