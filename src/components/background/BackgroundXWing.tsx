@@ -124,6 +124,7 @@ type FlightRuntime = {
   spinAngle: number;
   throttle: number;
   throttleTarget: number;
+  isRightToLeft: boolean;
   spin: {
     active: boolean;
     used: boolean;
@@ -169,6 +170,7 @@ const XWingFlight: React.FC<FlightConfig> = ({
     spinAngle: 0,
     throttle: 1,
     throttleTarget: 1,
+    isRightToLeft: false,
     spin: {
       active: false,
       used: false,
@@ -186,6 +188,7 @@ const XWingFlight: React.FC<FlightConfig> = ({
   const resetFlight = useCallback(() => {
     const horizontalReach = (viewport.width || 16) / 2 + margin;
     const verticalReach = Math.max((viewport.height || 9) / 2 - 0.4, 1.5);
+    const centralReach = Math.max(verticalReach * 0.52, 1);
     const overshoot = randomInRange(1.2, 2.6);
     const randomSign = Math.random() > 0.5 ? 1 : -1;
     const dirSign =
@@ -196,17 +199,17 @@ const XWingFlight: React.FC<FlightConfig> = ({
     const startX = -dirSign * (horizontalReach + overshoot);
     const endX = dirSign * (horizontalReach + overshoot);
 
-    const startYOffset = randomInRange(-0.45, 0.45) * verticalReach;
-    const diagonalSwing = randomInRange(-0.9, 0.9) * verticalReach;
+    const startYOffset = randomInRange(-0.9, 0.9) * centralReach;
+    const diagonalSwing = randomInRange(-0.75, 0.75) * centralReach;
     const startY = MathUtils.clamp(
       baseAltitude + startYOffset,
-      -verticalReach,
-      verticalReach
+      -centralReach,
+      centralReach
     );
     const endY = MathUtils.clamp(
       startY + diagonalSwing,
-      -verticalReach,
-      verticalReach
+      -centralReach,
+      centralReach
     );
 
     const baseZ = zDepth + randomInRange(-1.2, 0.8);
@@ -217,6 +220,7 @@ const XWingFlight: React.FC<FlightConfig> = ({
     flight.delta.set(endX - startX, endY - startY, endZ - baseZ);
     flight.distance = Math.max(flight.delta.length(), 0.5);
     flight.direction.copy(flight.delta).normalize();
+    flight.isRightToLeft = flight.direction.x < 0;
     flight.position.copy(flight.start);
     flight.progress = 0;
     flight.speedScalar = Math.max(
@@ -267,7 +271,7 @@ const XWingFlight: React.FC<FlightConfig> = ({
     bounds.getCenter(center);
     clonedScene.position.sub(center);
     modelGroup.scale.setScalar(1.4 / maxAxis);
-    modelGroup.rotation.set(0, Math.PI, 0);
+    modelGroup.rotation.set(0, 0, 0);
     clonedScene.updateMatrixWorld(true);
   }, [clonedScene]);
 
@@ -411,6 +415,10 @@ const XWingFlight: React.FC<FlightConfig> = ({
     TMP_QUAT_RESULT.copy(TMP_QUAT_A).multiply(TMP_QUAT_B);
 
     wrapper.quaternion.slerp(TMP_QUAT_RESULT, 1 - Math.exp(-delta * 10));
+
+    if (modelRef.current) {
+      modelRef.current.rotation.y = flight.isRightToLeft ? 0 : Math.PI;
+    }
   });
 
   return (
