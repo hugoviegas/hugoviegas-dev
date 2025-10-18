@@ -5,6 +5,7 @@ import React, {
   useLayoutEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
@@ -18,7 +19,9 @@ import {
   Quaternion,
   Vector3,
   WebGLRenderer,
+  AdditiveBlending,
 } from "three";
+import type { BufferAttribute, Points } from "three";
 import xwingModelUrl from "@/assets/3d-model/Lego-glb-models/X-wing.glb?url";
 
 const XWING_ASSET_PATH = xwingModelUrl;
@@ -55,11 +58,18 @@ export type BackgroundXWingProps = {
   pauseWhenHidden?: boolean;
 };
 
-const applyClearColorFromElement = (
-  gl: WebGLRenderer,
+type BackgroundColorInfo = {
+  color: Color;
+  alpha: number;
+  luminance: number;
+};
+
+const getBackgroundColorInfo = (
   el: HTMLElement | null,
   fallback: Color
-) => {
+): BackgroundColorInfo => {
+  const baseColor = fallback.clone();
+  let alpha = 0;
   try {
     const style = el ? window.getComputedStyle(el) : null;
     const bg = style?.backgroundColor || style?.background || "transparent";
@@ -72,18 +82,35 @@ const applyClearColorFromElement = (
         Number(rgbaMatch[2]) / 255,
         Number(rgbaMatch[3]) / 255
       );
-      gl.setClearColor(color, Number(rgbaMatch[4] ?? 0));
-      return;
+      alpha = Number(rgbaMatch[4] ?? 0);
+      const luminance = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+      return { color, alpha, luminance };
     }
     const hexMatch = bg.match(/#([0-9a-f]{3,8})/i);
     if (hexMatch) {
-      gl.setClearColor(new Color(hexMatch[0]), 0);
-      return;
+      const color = new Color(hexMatch[0]);
+      const luminance = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+      return { color, alpha, luminance };
     }
   } catch (error) {
     // ignore parse issues and fall back below
   }
-  gl.setClearColor(fallback, 0);
+  return {
+    color: baseColor,
+    alpha,
+    luminance:
+      0.2126 * baseColor.r + 0.7152 * baseColor.g + 0.0722 * baseColor.b,
+  };
+};
+
+const applyClearColorFromElement = (
+  gl: WebGLRenderer,
+  el: HTMLElement | null,
+  fallback: Color
+): BackgroundColorInfo => {
+  const info = getBackgroundColorInfo(el, fallback);
+  gl.setClearColor(info.color, info.alpha);
+  return info;
 };
 
 const useViewportSizeAtDepth = (depth: number) => {
@@ -430,6 +457,201 @@ const XWingFlight: React.FC<FlightConfig> = ({
   );
 };
 
+type StarFieldProps = {
+  show: boolean;
+  depth: number;
+  count?: number;
+};
+
+const StarField: React.FC<StarFieldProps> = ({ show, depth, count = 220 }) => {
+  const pointsRef = useRef<Points | null>(null);
+  const viewport = useViewportSizeAtDepth(depth);
+  const metaRef = useRef<{
+    colors: Float32Array;
+    base: Float32Array;
+    phases: Float32Array;
+    speeds: Float32Array;
+    amplitudes: Float32Array;
+  } | null>(null);
+
+  const { positions, colors } = useMemo(() => {
+    const spreadX = (viewport.width || 18) * 1.55;
+    const spreadY = (viewport.height || 10) * 1.45;
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const base = new Float32Array(count);
+    const phases = new Float32Array(count);
+    const speeds = new Float32Array(count);
+    const amplitudes = new Float32Array(count);
+
+    for (let i = 0; i < count; i += 1) {
+      const idx = i * 3;
+      positions[idx] = (Math.random() - 0.5) * spreadX;
+      positions[idx + 1] = (Math.random() - 0.5) * spreadY;
+      positions[idx + 2] = depth + randomInRange(-6, 4);
+
+      base[i] = randomInRange(0.35, 0.85);
+      phases[i] = Math.random() * Math.PI * 2;
+      speeds[i] = randomInRange(0.45, 1.4);
+      amplitudes[i] = randomInRange(0.18, 0.45);
+
+      const initial = base[i];
+      colors[idx] = initial;
+      colors[idx + 1] = initial;
+      colors[idx + 2] = initial;
+    }
+
+    metaRef.current = { colors, base, phases, speeds, amplitudes };
+    return { positions, colors };
+  }, [count, depth, viewport.height, viewport.width]);
+
+  useFrame(({ clock }) => {
+    if (!show) return;
+    const points = pointsRef.current;
+    const meta = metaRef.current;
+    if (!points || !meta) return;
+    const { colors, base, phases, speeds, amplitudes } = meta;
+    const time = clock.elapsedTime;
+
+    for (let i = 0; i < count; i += 1) {
+      const twinkle =
+        base[i] +
+        Math.sin(time * speeds[i] + phases[i]) * amplitudes[i];
+      const intensity = MathUtils.clamp(twinkle, 0.05, 1.0);
+      const idx = i * 3;
+      colors[idx] = intensity;
+      colors[idx + 1] = intensity;
+      colors[idx + 2] = intensity;
+    }
+
+    const colorAttr = points.geometry.getAttribute("color") as
+      | BufferAttribute
+      | undefined;
+    if (colorAttr) {
+      colorAttr.needsUpdate = true;
+    }
+  });
+
+  return (
+    <points ref={pointsRef} visible={show} frustumCulled={false}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          array={positions}
+          count={count}
+          itemSize={3}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          array={colors}
+          count={count}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.07}
+        sizeAttenuation
+        transparent
+        depthWrite={false}
+        vertexColors
+        blending={AdditiveBlending}
+      />
+    </points>
+  );
+};
+
+type MiniPlanetsProps = {
+  show: boolean;
+  depth: number;
+  count?: number;
+};
+
+type PlanetUserData = {
+  rotationSpeed: number;
+  bobAmplitude: number;
+  bobFrequency: number;
+  phase: number;
+  baseY: number;
+};
+
+const MiniPlanets: React.FC<MiniPlanetsProps> = ({
+  show,
+  depth,
+  count = 5,
+}) => {
+  const groupRef = useRef<Group | null>(null);
+  const viewport = useViewportSizeAtDepth(depth);
+  const planets = useMemo(() => {
+    const spreadX = (viewport.width || 18) * 1.25;
+    const spreadY = (viewport.height || 10) * 1.15;
+
+    return Array.from({ length: count }, () => {
+      const x = (Math.random() - 0.5) * spreadX;
+      const y = (Math.random() - 0.5) * spreadY;
+      const z = depth + randomInRange(-3.5, 2.5);
+      const scale = randomInRange(0.09, 0.18);
+      const hue = randomInRange(0.55, 0.72);
+      const saturation = randomInRange(0.35, 0.58);
+      const lightness = randomInRange(0.32, 0.52);
+      const color = new Color().setHSL(hue, saturation, lightness);
+      const emissive = color.clone().multiplyScalar(0.35);
+      return {
+        position: [x, y, z] as [number, number, number],
+        scale,
+        color: `#${color.getHexString()}`,
+        emissive: `#${emissive.getHexString()}`,
+        rotationSpeed: randomInRange(0.12, 0.28),
+        bobAmplitude: randomInRange(0.05, 0.11),
+        bobFrequency: randomInRange(0.2, 0.45),
+        phase: Math.random() * Math.PI * 2,
+      };
+    });
+  }, [count, depth, viewport.height, viewport.width]);
+
+  useFrame(({ clock }) => {
+    if (!show) return;
+    const group = groupRef.current;
+    if (!group) return;
+    const t = clock.elapsedTime;
+    for (const child of group.children) {
+      const data = child.userData as PlanetUserData | undefined;
+      if (!data) continue;
+      child.rotation.y = t * data.rotationSpeed;
+      child.position.y =
+        data.baseY +
+        Math.sin(t * data.bobFrequency + data.phase) * data.bobAmplitude;
+    }
+  });
+
+  return (
+    <group ref={groupRef} visible={show} frustumCulled={false}>
+      {planets.map((planet, index) => (
+        <mesh
+          key={index}
+          position={planet.position}
+          scale={planet.scale}
+          userData={{
+            rotationSpeed: planet.rotationSpeed,
+            bobAmplitude: planet.bobAmplitude,
+            bobFrequency: planet.bobFrequency,
+            phase: planet.phase,
+            baseY: planet.position[1],
+          }}
+        >
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial
+            color={planet.color}
+            emissive={planet.emissive}
+            emissiveIntensity={0.8}
+            roughness={0.55}
+            metalness={0.15}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+};
+
 const BackgroundCanvas: React.FC<BackgroundXWingProps> = ({
   direction,
   baseAltitude = 0.35,
@@ -443,15 +665,19 @@ const BackgroundCanvas: React.FC<BackgroundXWingProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<WebGLRenderer | null>(null);
   const fallbackColor = useMemo(() => new Color("#000000"), []);
+  const [showStars, setShowStars] = useState(true);
 
   useEffect(() => {
-    if (!rendererRef.current) return;
-    const sync = () =>
-      applyClearColorFromElement(
-        rendererRef.current as WebGLRenderer,
+    const sync = () => {
+      const gl = rendererRef.current;
+      if (!gl) return;
+      const info = applyClearColorFromElement(
+        gl,
         containerRef.current,
         fallbackColor
       );
+      setShowStars(info.luminance < 0.32);
+    };
 
     sync();
 
@@ -484,16 +710,19 @@ const BackgroundCanvas: React.FC<BackgroundXWingProps> = ({
         onCreated={({ gl, events }) => {
           rendererRef.current = gl as WebGLRenderer;
           events.disconnect?.();
-          applyClearColorFromElement(
+          const info = applyClearColorFromElement(
             rendererRef.current,
             containerRef.current,
             fallbackColor
           );
+          setShowStars(info.luminance < 0.32);
         }}
       >
         <ambientLight intensity={0.55} />
         <directionalLight position={[6, 8, 4]} intensity={0.85} />
         <Suspense fallback={null}>
+          <StarField show={showStars} depth={zDepth - 4} />
+          <MiniPlanets show={showStars} depth={zDepth - 5} />
           <XWingFlight
             direction={direction}
             baseAltitude={baseAltitude}
