@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, useEffect, useRef, useState, lazy } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,9 +17,19 @@ import { useToast } from "@/hooks/use-toast";
 import LegoButton from "./LegoButton";
 import FastTransparentCube from "@/components/FastTransparentCube";
 import WorldClocks from "@/components/WorldClocks";
-import MicroFalconViewer from "@/components/MicroFalconViewer";
-import ModelViewer from "@/components/ModelViewer";
-import ModelCarousel from "@/components/ModelCarousel";
+const MicroFalconViewer = lazy(() => import("@/components/MicroFalconViewer"));
+const XWingViewer = lazy(() => import("@/components/XWingViewer"));
+
+const ViewerSkeleton = ({ height }: { height: number }) => (
+  <div
+    className="w-full rounded-3xl border border-muted/20 bg-muted/10 flex items-center justify-center animate-pulse"
+    style={{ minHeight: height }}
+  >
+    <span className="text-sm text-muted-foreground/70">
+      Loading 3D experience…
+    </span>
+  </div>
+);
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -34,6 +44,10 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const { toast } = useToast();
+  const falconContainerRef = useRef<HTMLDivElement | null>(null);
+  const xwingContainerRef = useRef<HTMLDivElement | null>(null);
+  const [showFalconViewer, setShowFalconViewer] = useState(false);
+  const [showXWingViewer, setShowXWingViewer] = useState(false);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -160,6 +174,54 @@ const ContactSection = () => {
       }));
     }
   };
+
+  useEffect(() => {
+    if (showFalconViewer) return;
+    const node = falconContainerRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShowFalconViewer(true);
+            obs.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: "200px 0px",
+        threshold: 0.2,
+      }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [showFalconViewer]);
+
+  useEffect(() => {
+    if (showXWingViewer) return;
+    const node = xwingContainerRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShowXWingViewer(true);
+            obs.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: "200px 0px",
+        threshold: 0.2,
+      }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [showXWingViewer]);
 
   const contactInfo = [
     {
@@ -474,33 +536,30 @@ const ContactSection = () => {
               <FastTransparentCube width={240} height={240} enableExpand />
             </div>
 
-            <div className="glass-strong p-6 rounded-3xl">
-              <MicroFalconViewer />
+            <div
+              ref={falconContainerRef}
+              className="glass-strong p-6 rounded-3xl"
+            >
+              <Suspense fallback={<ViewerSkeleton height={360} />}>
+                {showFalconViewer ? (
+                  <MicroFalconViewer />
+                ) : (
+                  <ViewerSkeleton height={360} />
+                )}
+              </Suspense>
             </div>
 
-            <div className="glass-strong p-4 rounded-2xl">
-              <ModelCarousel
-                modelPaths={[
-                  "/src/assets/3d-model/Lego-glb-models/X-wing.glb",
-                  "/src/assets/3d-model/Lego-glb-models/Star Destroyer.glb",
-                  "/src/assets/3d-model/Lego-glb-models/Imperial Shuttle.glb",
-                ]}
-                containerHeight={340}
-                desiredSize={2.6}
-                autoPlay={false}
-                autoPlayInterval={4000}
-                autoRotate={false}
-                modelOptions={[
-                  {
-                    // X-wing: slightly up and diagonal
-                    position: [0.15, 0.18, 0],
-                    rotation: [-0.4, 0.6, 0],
-                    desiredSize: 2.6,
-                  },
-                  {},
-                  {},
-                ]}
-              />
+            <div
+              ref={xwingContainerRef}
+              className="glass-strong p-6 rounded-3xl"
+            >
+              <Suspense fallback={<ViewerSkeleton height={340} />}>
+                {showXWingViewer ? (
+                  <XWingViewer />
+                ) : (
+                  <ViewerSkeleton height={340} />
+                )}
+              </Suspense>
             </div>
           </div>
         </div>
