@@ -25,11 +25,11 @@ export const StarshipModel: React.FC<StarshipModelProps> = ({
   const material = useMemo(() => {
     return new THREE.MeshBasicMaterial({
       color:
-        config.id === "fighter"
-          ? 0xff4444
-          : config.id === "cruiser"
-          ? 0x4444ff
-          : 0x44ff44,
+        config.id === "x-wing"
+          ? 0xff5733
+          : config.id === "micro-falcon"
+          ? 0x5ac8fa
+          : 0x9b59b6,
       transparent: true,
       opacity: 0.9,
     });

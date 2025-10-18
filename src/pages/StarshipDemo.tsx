@@ -7,7 +7,7 @@ import type { StarshipConfig } from "../components/StarshipBackground/types";
  * Provides controls for testing different configurations and debug features.
  */
 export default function StarshipDemo() {
-  const [maxConcurrent, setMaxConcurrent] = useState(3); // Reduced from 6
+  const [maxConcurrent, setMaxConcurrent] = useState(3);
   const [debugMode, setDebugMode] = useState(false);
   const [backgroundOpacity, setBackgroundOpacity] = useState(0.3);
   const [customConfigs, setCustomConfigs] = useState<
@@ -27,7 +27,7 @@ export default function StarshipDemo() {
   };
 
   const resetToDefaults = () => {
-    setMaxConcurrent(6);
+  setMaxConcurrent(3);
     setDebugMode(false);
     setBackgroundOpacity(0.3);
     setCustomConfigs(undefined);
@@ -132,12 +132,12 @@ export default function StarshipDemo() {
             </h3>
             <div className="text-gray-300 text-sm space-y-1">
               <p>
-                • Features 6 different Star Wars starship models with unique
-                configurations
+                • Features the hero duo: the Micro Millennium Falcon and the
+                classic X-wing
               </p>
               <p>
-                • Models include X-wing, Star Destroyer, Imperial Shuttle, and
-                more
+                • Demonstrates how the two models react to different flight
+                paths and speeds
               </p>
               <p>
                 • Each starship follows randomized flight patterns and speeds
