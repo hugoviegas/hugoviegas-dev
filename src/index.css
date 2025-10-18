@@ -747,7 +747,7 @@
 }
 
 .star-wars-crawl-active {
-  animation: sw-crawl 250s linear forwards;
+  animation: sw-crawl 200s linear forwards;
   opacity: 1;
 }
 
