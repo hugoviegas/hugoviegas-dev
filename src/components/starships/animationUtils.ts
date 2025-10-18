@@ -6,6 +6,8 @@ export type AnimationConfig = {
   setup: (group: Group) => void;
   update: (group: Group, progress: number) => void;
   finalize?: (group: Group) => void;
+  autoLoop?: boolean;
+  loopDelay?: number;
 };
 
 export const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);

@@ -33,7 +33,8 @@ const AnimatedModel = ({
   const pivotRef = useRef<Group | null>(null);
   const clonedScene = useMemo(() => scene.clone(true), [scene]);
   const progressRef = useRef(0);
-  const stateRef = useRef<"idle" | "running">("idle");
+  const stateRef = useRef<"idle" | "running" | "waiting">("idle");
+  const loopTimerRef = useRef(0);
 
   useLayoutEffect(() => {
     if (!outerGroupRef.current) return;
@@ -61,22 +62,49 @@ const AnimatedModel = ({
     if (!outerGroupRef.current) return;
     progressRef.current = 0;
     stateRef.current = "running";
+    loopTimerRef.current = 0;
     animationConfig.setup(outerGroupRef.current);
   }, [animationConfig, trigger]);
 
   useGLTF.preload(modelPath);
 
   useFrame((_, delta) => {
-    if (stateRef.current !== "running" || !outerGroupRef.current) return;
+    if (!outerGroupRef.current) return;
 
-    const duration = Math.max(animationConfig.duration, 0.1);
-    progressRef.current = Math.min(progressRef.current + delta / duration, 1);
+    if (stateRef.current === "running") {
+      const duration = Math.max(animationConfig.duration, 0.1);
+      progressRef.current = Math.min(
+        progressRef.current + delta / duration,
+        1,
+      );
 
-    animationConfig.update(outerGroupRef.current, progressRef.current);
+      animationConfig.update(outerGroupRef.current, progressRef.current);
 
-    if (progressRef.current >= 1) {
-      stateRef.current = "idle";
-      animationConfig.finalize?.(outerGroupRef.current);
+      if (progressRef.current >= 1) {
+        animationConfig.finalize?.(outerGroupRef.current);
+        if (animationConfig.autoLoop) {
+          stateRef.current = "waiting";
+          loopTimerRef.current = 0;
+        } else {
+          stateRef.current = "idle";
+        }
+      }
+      return;
+    }
+
+    if (
+      stateRef.current === "waiting" &&
+      animationConfig.autoLoop &&
+      outerGroupRef.current
+    ) {
+      loopTimerRef.current += delta;
+      const delay = Math.max(animationConfig.loopDelay ?? 0, 0);
+      if (loopTimerRef.current >= delay) {
+        progressRef.current = 0;
+        loopTimerRef.current = 0;
+        stateRef.current = "running";
+        animationConfig.setup(outerGroupRef.current);
+      }
     }
   });
 
