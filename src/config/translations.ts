@@ -329,6 +329,33 @@ Veio a Irlanda — um ano de economia financiou a mudança, buscando mais oportu
 
 Em paralelo, um desafio prático veio do restaurante onde trabalhava: construir o site do D'Arcy McGee's. Com ferramentas de IA, estudo de design/UX e engenharia mão na massa, saiu um site rápido e funcional — prova de que entregar valor depressa é uma habilidade repetível. Hoje, a meta é uma vaga front‑end ou full‑stack que valorize exatamente esse conjunto: curiosidade, senso de produto e capacidade de transformar processos complexos em soluções elegantes e mensuráveis. A energia é a mesma daquele garoto de onze anos na mesa de robótica: aprender rápido, construir bem e seguir em frente.`,
   },
+
+  // Chatbot
+  "chatbot.title": { EN: "Ask me about Hugo", PT: "Pergunte sobre Hugo" },
+  "chatbot.placeholder": {
+    EN: "Ask about Hugo's skills, projects, experience...",
+    PT: "Pergunte sobre habilidades, projetos, experiência...",
+  },
+  "chatbot.send": { EN: "Send", PT: "Enviar" },
+  "chatbot.close": { EN: "Close", PT: "Fechar" },
+  "chatbot.clear": { EN: "Clear chat", PT: "Limpar chat" },
+  "chatbot.welcome": {
+    EN: "👋 Hi! I'm Hugo's AI assistant. Ask me anything about his skills, projects, experience, or background!",
+    PT: "👋 Olá! Sou o assistente de IA do Hugo. Pergunte sobre suas habilidades, projetos, experiência ou trajetória!",
+  },
+  "chatbot.rateLimit.minute": {
+    EN: "Questions left this minute",
+    PT: "Perguntas restantes neste minuto",
+  },
+  "chatbot.rateLimit.day": {
+    EN: "Questions left today",
+    PT: "Perguntas restantes hoje",
+  },
+  "chatbot.loading": { EN: "Thinking...", PT: "Pensando..." },
+  "chatbot.error": {
+    EN: "Something went wrong. Please try again.",
+    PT: "Algo deu errado. Por favor, tente novamente.",
+  },
 };
 
 export const getTranslation = (key: string, language: LanguageCode): string => {
