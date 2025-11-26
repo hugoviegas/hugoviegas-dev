@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { generateSystemPrompt } from "@/config/chatbot-context";
 import { useLanguage } from "@/hooks/useLanguage";
 
@@ -208,30 +208,30 @@ export function useChatbot(): UseChatbotReturn {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [rateLimit, setRateLimit] = useState(() => checkRateLimit());
   const { language } = useLanguage();
-  const rateLimitRef = useRef(checkRateLimit());
 
-  // Update rate limit info periodically
+  // Update rate limit info periodically (every 15 seconds)
   useEffect(() => {
     const interval = setInterval(() => {
-      rateLimitRef.current = checkRateLimit();
-    }, 1000);
+      setRateLimit(checkRateLimit());
+    }, 15000);
     return () => clearInterval(interval);
   }, []);
 
   const sendMessage = useCallback(
     async (message: string) => {
       // Check rate limit
-      const rateLimit = checkRateLimit();
-      rateLimitRef.current = rateLimit;
+      const currentRateLimit = checkRateLimit();
+      setRateLimit(currentRateLimit);
 
-      if (!rateLimit.allowed) {
+      if (!currentRateLimit.allowed) {
         const errorMsg =
           language === "PT"
-            ? rateLimit.remainingDay === 0
+            ? currentRateLimit.remainingDay === 0
               ? "Você atingiu o limite diário de perguntas. Tente novamente amanhã."
               : "Por favor, aguarde um momento antes de enviar outra pergunta."
-            : rateLimit.remainingDay === 0
+            : currentRateLimit.remainingDay === 0
               ? "You have reached the daily question limit. Please try again tomorrow."
               : "Please wait a moment before sending another question.";
         setError(errorMsg);
@@ -248,6 +248,9 @@ export function useChatbot(): UseChatbotReturn {
 
       // Record the request for rate limiting
       recordRequest();
+      
+      // Update rate limit after recording request
+      setRateLimit(checkRateLimit());
 
       setIsLoading(true);
 
@@ -270,7 +273,7 @@ export function useChatbot(): UseChatbotReturn {
         setError(errorMessage);
       } finally {
         setIsLoading(false);
-        rateLimitRef.current = checkRateLimit();
+        setRateLimit(checkRateLimit());
       }
     },
     [messages, language]
@@ -280,8 +283,6 @@ export function useChatbot(): UseChatbotReturn {
     setMessages([]);
     setError(null);
   }, []);
-
-  const rateLimit = checkRateLimit();
 
   return {
     messages,
