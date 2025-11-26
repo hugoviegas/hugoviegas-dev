@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import DynamicSidebar from "@/components/DynamicSidebar";
 import AmbientDots from "@/components/AmbientDots";
 import TopBricksRow from "@/components/TopBricksRow";
+import Chatbot from "@/components/Chatbot";
 
 const Index = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -50,6 +51,8 @@ const Index = () => {
         <ContactSection />
       </section>
       <Footer />
+      {/* AI Chatbot floating button and dialog */}
+      <Chatbot />
     </div>
   );
 };
