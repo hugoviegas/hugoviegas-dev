@@ -15,7 +15,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [rateInfo, setRateInfo] = useState({ minuteRemaining: 20, dayRemaining: 150 });
+  const [rateInfo, setRateInfo] = useState({ minuteRemaining: 15, dayRemaining: 100 });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
@@ -219,9 +219,9 @@ const ChatBot = () => {
           
           {/* Rate limit info */}
           <div className="px-4 py-1.5 text-xs text-neutral-500 border-t border-neutral-800/50 bg-neutral-900/50">
-            <span>{rateInfo.dayRemaining}/150 perguntas restantes hoje</span>
+            <span>{rateInfo.dayRemaining}/100 perguntas restantes hoje</span>
             <span className="mx-2">•</span>
-            <span>{rateInfo.minuteRemaining}/20 por minuto</span>
+            <span>{rateInfo.minuteRemaining}/15 por minuto</span>
           </div>
           
           {/* Input Area */}

@@ -2,15 +2,18 @@
  * Chatbot Service for Hugo Viegas Portfolio
  * 
  * Uses multiple Google Gemini models with rotation for higher availability.
- * Models used: gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-flash-lite
- * Rate limits: 20 questions/minute, 150 questions/day per user.
+ * Models used: gemini-2.0-flash, gemini-1.5-flash, gemini-1.5-flash-8b
+ * Rate limits: 15 questions/minute, 100 questions/day per user.
  */
 
-// Available Gemini models for rotation
+// Available Gemini models for rotation (all free tier with good rate limits)
+// - gemini-2.0-flash: Latest flash model, 15 RPM, 1500 RPD
+// - gemini-1.5-flash: Stable flash model, 15 RPM, 1500 RPD  
+// - gemini-1.5-flash-8b: Lightweight model, 15 RPM, 1500 RPD
 const GEMINI_MODELS = [
   'gemini-2.0-flash',
-  'gemini-2.5-flash', 
-  'gemini-2.5-flash-lite'
+  'gemini-1.5-flash', 
+  'gemini-1.5-flash-8b'
 ] as const;
 
 // Track which model to use next (rotates through models)
@@ -135,12 +138,12 @@ Remember to keep responses SHORT and ENGAGING. Always be helpful even on general
 const RATE_LIMIT_MINUTE_KEY = 'chatbot_rate_minute';
 const RATE_LIMIT_DAY_KEY = 'chatbot_rate_day';
 
-// Rate limits - increased thanks to multi-model rotation
-// Each model has: 30 RPM, 1M TPM, 200 RPD (for gemini-2.0-flash)
-// With 3 models rotation, effective limits are ~90 RPM, ~600 RPD
-// Using conservative limits: 20 RPM, 150 RPD to stay safe
-const RATE_LIMIT_PER_MINUTE = 20;
-const RATE_LIMIT_PER_DAY = 150;
+// Rate limits - increased thanks to multi-model rotation with fallback
+// Each model has approximately: 15 RPM, 1500 RPD (free tier)
+// With 3 models and fallback, effective availability is higher
+// Using conservative limits: 15 RPM, 100 RPD to stay well within API limits
+const RATE_LIMIT_PER_MINUTE = 15;
+const RATE_LIMIT_PER_DAY = 100;
 
 interface RateLimitData {
   count: number;
