@@ -207,8 +207,7 @@ export function ExperienceSection(props) {
   return (
     <section
       id="experience"
-      className="py-20 bg-muted/3 relative"
-      style={{ minWidth: "480px" }}
+      className="py-20 bg-muted/3 relative w-full"
     >
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
         <div className="mb-16 fade-in">

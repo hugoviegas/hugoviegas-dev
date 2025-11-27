@@ -233,8 +233,7 @@ const ProjectsSection = () => {
   return (
     <section
       id="projects"
-      className="py-20 relative"
-      style={{ minWidth: "480px" }}
+      className="py-20 relative w-full"
     >
       <div className="container mx-auto px-6 lg:px-8 wide-container">
         <div className="text-center mb-12 fade-in">
