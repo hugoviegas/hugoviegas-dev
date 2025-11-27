@@ -331,10 +331,10 @@ async function tryModelRequest(
       }
     ],
     generationConfig: {
-      temperature: 0.8,
+      temperature: 0.7,
       topK: 40,
       topP: 0.95,
-      maxOutputTokens: 512, // Reduced for more concise responses
+      maxOutputTokens: 800, // Balanced for concise but complete responses
     },
     safetySettings: [
       {
