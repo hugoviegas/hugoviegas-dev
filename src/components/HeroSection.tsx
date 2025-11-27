@@ -223,13 +223,13 @@ const HeroSection = () => {
                 </DialogTrigger>
                 <DialogContent className="max-w-[min(1400px,95vw)] w-full h-[85vh] sm:h-[90vh] p-0">
                   <DialogHeader className="p-4 sm:p-6 pb-0">
-                    <DialogTitle className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <DialogTitle className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2">
                       <span className="text-sm sm:text-base">Hugo Viegas - CV 2025</span>
                       <Button
                         asChild
                         variant="outline"
                         size="sm"
-                        className="ml-4"
+                        className="sm:ml-4"
                       >
                         <a
                           href={resumeUrl}
@@ -269,8 +269,9 @@ const HeroSection = () => {
                   <HeroBrickExplosion />
                 </div>
 
-                {/* Glassmorphism Frame - single rounded square that the image fills */}
-                <div className="glass-strong rounded-3xl relative overflow-hidden lg:flex-shrink-0 aspect-square w-[70vw] max-w-[320px] sm:w-72 md:w-80 lg:w-96 lg:max-w-[420px] mx-auto transition-all duration-300">
+                {/* Glassmorphism Frame - responsive square container for profile image
+                    Uses clamp() for fluid sizing: min 200px, preferred 70vw, max 384px */}
+                <div className="hero-profile-frame glass-strong rounded-3xl relative overflow-hidden aspect-square mx-auto transition-all duration-300">
                   {/* subtle gradient overlay for depth */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none"></div>
 

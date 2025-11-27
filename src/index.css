@@ -1478,6 +1478,20 @@
   position: relative;
 }
 
+/* Hero Profile Frame - Fluid responsive sizing using clamp() */
+.hero-profile-frame {
+  /* Fluid width: min 200px, preferred 70vw, max 384px (lg:w-96) */
+  width: clamp(200px, 70vw, 384px);
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .hero-profile-frame {
+    /* On large screens, allow slightly larger max */
+    width: clamp(320px, 30vw, 420px);
+  }
+}
+
 .hero-brick-explosion-layer {
   /* positioned to cover area around the hero image */
   position: absolute;
@@ -1579,7 +1593,9 @@ body,
     padding-right: 0.75rem;
   }
 
-  /* Scale down LegoButtons for tiny screens */
+  /* Scale down LegoButtons for tiny screens (320px)
+     140px is approximately 44% of 320px viewport width, ensuring
+     the button fits comfortably with padding while remaining touch-friendly */
   .btn-lego {
     min-width: 140px;
     min-height: 48px;
@@ -1621,22 +1637,25 @@ body,
     gap: 0.75rem;
   }
 
-  /* Reduce glass panel padding */
-  .glass,
-  .glass-strong {
+  /* Reduce glass panel padding on hero and about sections for tiny screens.
+     More specific selectors to avoid overriding component-specific padding */
+  #hero .glass,
+  #hero .glass-strong,
+  #about .glass,
+  #about .glass-strong {
     padding: 1rem;
   }
 
   /* Adjust experience timeline */
-  .relative.pl-16 {
+  #experience .relative.pl-16 {
     padding-left: 2.5rem;
   }
 
-  .absolute.left-5 {
+  #experience .absolute.left-5 {
     left: 0.5rem;
   }
 
-  .absolute.left-6 {
+  #experience .absolute.left-6 {
     left: 0.75rem;
   }
 }
