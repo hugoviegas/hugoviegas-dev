@@ -10,6 +10,7 @@ import DynamicSidebar from "@/components/DynamicSidebar";
 import AmbientDots from "@/components/AmbientDots";
 import TopBricksRow from "@/components/TopBricksRow";
 import BackgroundXWing from "@/components/background/BackgroundXWing";
+import ChatBot from "@/components/ChatBot";
 
 const Index = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -36,6 +37,8 @@ const Index = () => {
       <TopControls />
       <DynamicSidebar show={showSidebar} />
       <TopBricksRow />
+      {/* AI Chatbot */}
+      <ChatBot />
       {/* Main content positioned above background */}
       <div className="relative z-10">
         <section id="hero">
