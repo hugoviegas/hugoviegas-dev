@@ -15,7 +15,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [rateInfo, setRateInfo] = useState({ minuteRemaining: 4, dayRemaining: 30 });
+  const [rateInfo, setRateInfo] = useState({ minuteRemaining: 20, dayRemaining: 150 });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
@@ -140,7 +140,7 @@ const ChatBot = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-white text-sm">Hugo's Assistant</h3>
-                <p className="text-xs text-neutral-400">Pergunte sobre meu portfólio</p>
+                <p className="text-xs text-neutral-400">hugoviegas.dev</p>
               </div>
             </div>
             <Button
@@ -166,10 +166,10 @@ const ChatBot = () => {
                 </div>
                 <h4 className="font-medium text-white mb-2">Olá! 👋</h4>
                 <p className="text-sm text-neutral-400 mb-4">
-                  Sou o assistente do Hugo. Pergunte-me sobre suas habilidades, experiência, projetos ou qualquer coisa do portfólio!
+                  Sou o assistente do Hugo em hugoviegas.dev. Pergunte sobre tecnologia, projetos, habilidades ou o que quiser!
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {['Quais suas habilidades?', 'Me fale dos projetos', 'Qual sua experiência?'].map((suggestion) => (
+                  {['Me fale sobre o Hugo', 'Quais tecnologias você usa?', 'Como foi feito este site?'].map((suggestion) => (
                     <button
                       key={suggestion}
                       onClick={() => {
@@ -219,9 +219,9 @@ const ChatBot = () => {
           
           {/* Rate limit info */}
           <div className="px-4 py-1.5 text-xs text-neutral-500 border-t border-neutral-800/50 bg-neutral-900/50">
-            <span>{rateInfo.dayRemaining}/30 perguntas restantes hoje</span>
+            <span>{rateInfo.dayRemaining}/150 perguntas restantes hoje</span>
             <span className="mx-2">•</span>
-            <span>{rateInfo.minuteRemaining}/4 por minuto</span>
+            <span>{rateInfo.minuteRemaining}/20 por minuto</span>
           </div>
           
           {/* Input Area */}
