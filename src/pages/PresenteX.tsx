@@ -19,9 +19,7 @@ const MapLevel = ({
   onClick: () => void;
 }) => {
   return (
-    <div
-      className={`relative presenta-x-level presente-x-animate-in`}
-    >
+    <div className={`relative presenta-x-level presente-x-animate-in`}>
       <button
         onClick={onClick}
         disabled={locked}

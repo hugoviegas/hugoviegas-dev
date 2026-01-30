@@ -1,5 +1,9 @@
 import { supabase } from "@/features/presente-x/services/supabase";
-import { PresenteUser, getUserById, updateUserCoins } from "@/features/presente-x/services/userService";
+import {
+  PresenteUser,
+  getUserById,
+  updateUserCoins,
+} from "@/features/presente-x/services/userService";
 
 export interface Reward {
   id: number;
