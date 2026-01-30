@@ -1478,6 +1478,20 @@
   position: relative;
 }
 
+/* Hero Profile Frame - Fluid responsive sizing using clamp() */
+.hero-profile-frame {
+  /* Fluid width: min 200px, preferred 70vw, max 384px (lg:w-96) */
+  width: clamp(200px, 70vw, 384px);
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .hero-profile-frame {
+    /* On large screens, allow slightly larger max */
+    width: clamp(320px, 30vw, 420px);
+  }
+}
+
 .hero-brick-explosion-layer {
   /* positioned to cover area around the hero image */
   position: absolute;
@@ -1554,5 +1568,146 @@
     right: -35%;
     top: -30%;
     bottom: -18%;
+  }
+}
+
+/* ===========================================
+   MOBILE RESPONSIVE FIXES
+   Ensure proper scaling on smaller mobile devices
+   =========================================== */
+
+/* Force full viewport width on all containers - no minimum width */
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Very small mobile screens (320px - 400px) */
+@media (max-width: 400px) {
+  /* Reduce container padding */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Scale down LegoButtons for tiny screens (320px)
+     140px is approximately 44% of 320px viewport width, ensuring
+     the button fits comfortably with padding while remaining touch-friendly */
+  .btn-lego {
+    min-width: 140px;
+    min-height: 48px;
+    font-size: 12px;
+    padding-top: 6px !important;
+  }
+
+  /* Adjust heading sizes for very small screens */
+  .heading-hero {
+    font-size: var(--font-size-4xl);
+  }
+
+  .heading-section {
+    font-size: var(--font-size-2xl);
+  }
+
+  /* Reduce typing area height */
+  .h-24 {
+    height: 5rem;
+  }
+
+  /* Make social links wrap better */
+  .flex.space-x-6 {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Adjust dialog content for tiny screens */
+  .DialogContent {
+    max-width: 95vw;
+    padding: 1rem;
+  }
+
+  /* Make CTA buttons stack on very small screens */
+  .flex.flex-wrap.gap-4 {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Reduce glass panel padding on hero and about sections for tiny screens.
+     More specific selectors to avoid overriding component-specific padding */
+  #hero .glass,
+  #hero .glass-strong,
+  #about .glass,
+  #about .glass-strong {
+    padding: 1rem;
+  }
+
+  /* Adjust experience timeline */
+  #experience .relative.pl-16 {
+    padding-left: 2.5rem;
+  }
+
+  #experience .absolute.left-5 {
+    left: 0.5rem;
+  }
+
+  #experience .absolute.left-6 {
+    left: 0.75rem;
+  }
+}
+
+/* Small mobile screens (400px - 480px) */
+@media (max-width: 480px) {
+  /* Reduce hero image size */
+  .aspect-square.w-11\/12 {
+    width: 85%;
+  }
+
+  /* Adjust grid gaps */
+  .gap-12 {
+    gap: 2rem;
+  }
+
+  .gap-8 {
+    gap: 1.5rem;
+  }
+
+  /* Scale world clocks for mobile */
+  .WorldClocks {
+    font-size: 0.875rem;
+  }
+
+  /* Adjust footer layout */
+  footer .flex.flex-col.md\\:flex-row {
+    text-align: center;
+  }
+}
+
+/* Standard mobile (480px - 640px) */
+@media (max-width: 640px) {
+  /* Ensure container doesn't overflow */
+  .wide-container {
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Reduce section padding */
+  .py-20 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Make project cards stack properly - using Tailwind at-apply or direct style override */
+  /* Grid responsiveness is handled by Tailwind md: prefixes in components */
+
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }
