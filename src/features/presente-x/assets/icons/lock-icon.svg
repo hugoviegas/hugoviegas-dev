@@ -1,0 +1,14 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Lock body -->
+  <rect x="16" y="32" width="32" height="24" rx="2" fill="#C8A67C" stroke="#9B8968" stroke-width="1.5"/>
+  
+  <!-- Lock shackle -->
+  <path d="M 24 32 Q 24 16 32 14 Q 40 16 40 32" fill="none" stroke="#B8956F" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Keyhole -->
+  <circle cx="32" cy="40" r="2.5" fill="#6B5D52" stroke="#9B8968" stroke-width="1"/>
+  <rect x="30" y="43" width="4" height="5" fill="#6B5D52"/>
+  
+  <!-- Decorative shine -->
+  <ellipse cx="20" cy="36" rx="2" ry="3" fill="#E8D4C4" opacity="0.6"/>
+</svg>

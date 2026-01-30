@@ -1,0 +1,22 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Gift box body -->
+  <rect x="14" y="24" width="36" height="28" rx="2" fill="#D4A574" stroke="#9B8968" stroke-width="1.5"/>
+  
+  <!-- Top flap left -->
+  <path d="M 14 24 Q 14 12 22 10 L 22 24 Z" fill="#C89860" stroke="#9B8968" stroke-width="1.5"/>
+  
+  <!-- Top flap right -->
+  <path d="M 50 24 Q 50 12 42 10 L 42 24 Z" fill="#C89860" stroke="#9B8968" stroke-width="1.5"/>
+  
+  <!-- Ribbon vertical -->
+  <rect x="29" y="10" width="6" height="40" fill="#E8B4A0" stroke="#C89860" stroke-width="1"/>
+  
+  <!-- Ribbon horizontal -->
+  <rect x="14" y="26" width="36" height="4" fill="#E8B4A0" stroke="#C89860" stroke-width="1"/>
+  
+  <!-- Bow -->
+  <circle cx="32" cy="14" r="5" fill="#F5D5C8"/>
+  <circle cx="26" cy="12" r="3.5" fill="#E8B4A0"/>
+  <circle cx="38" cy="12" r="3.5" fill="#E8B4A0"/>
+  <circle cx="32" cy="16" r="2" fill="#D4A574"/>
+</svg>

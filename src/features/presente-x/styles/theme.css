@@ -1,0 +1,365 @@
+/* Presente X - Modern Rustic Theme */
+
+:root {
+  --px-warm-tan: #d4a574;
+  --px-light-cream: #f5e6d3;
+  --px-soft-rose: #e8b4a0;
+  --px-dusty-green: #a8b8a0;
+  --px-warm-brown: #9b8968;
+  --px-dark-slate: #6b5d52;
+  --px-accent-peach: #e8d4c4;
+  --px-bg-primary: #faf7f2;
+  --px-shadow-light: rgba(107, 93, 82, 0.08);
+  --px-shadow-medium: rgba(107, 93, 82, 0.15);
+}
+
+/* Main layout */
+.presente-x-container {
+  background: linear-gradient(135deg, #faf7f2 0%, #f5e6d3 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-image:
+    url("/presente-x/background.png"),
+    linear-gradient(135deg, #faf7f2 0%, #f5e6d3 100%);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.presente-x-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 247, 242, 0.7);
+  backdrop-filter: blur(2px);
+  z-index: 0;
+}
+
+/* Animated background elements */
+.presente-x-bg-decoration {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-1 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(232, 180, 160, 0.1);
+  border-radius: 45% 55% 52% 48% / 48% 45% 55% 52%;
+  top: -100px;
+  right: -100px;
+  animation: float 15s ease-in-out infinite;
+}
+
+.blob-2 {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: rgba(168, 184, 160, 0.08);
+  border-radius: 42% 58% 55% 45% / 45% 52% 48% 55%;
+  bottom: -80px;
+  left: -80px;
+  animation: float 20s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(30px, -30px) rotate(180deg);
+  }
+}
+
+/* Typography */
+.presente-x-heading {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--px-dark-slate);
+}
+
+.presente-x-text {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: var(--px-warm-brown);
+  font-weight: 400;
+}
+
+/* Card and container styling */
+.presente-x-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 180, 160, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--px-shadow-light);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.presente-x-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px var(--px-shadow-medium);
+  border-color: rgba(212, 165, 116, 0.3);
+}
+
+/* Day level button */
+.presente-x-level {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.presente-x-level:hover:not(:disabled) {
+  transform: scale(1.1);
+  filter: drop-shadow(0 8px 16px var(--px-shadow-medium));
+}
+
+.presente-x-level:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.presente-x-level-button {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 16px var(--px-shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.presente-x-level-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    135% 135% at 100% 0%,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
+  pointer-events: none;
+}
+
+/* Active level */
+.presente-x-level-button.active {
+  background: linear-gradient(
+    135deg,
+    var(--px-warm-tan) 0%,
+    var(--px-soft-rose) 100%
+  );
+  color: white;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Locked level */
+.presente-x-level-button.locked {
+  background: rgba(155, 137, 104, 0.15);
+  color: var(--px-warm-brown);
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: rgba(155, 137, 104, 0.3);
+}
+
+/* Unlocked level */
+.presente-x-level-button.unlocked {
+  background: linear-gradient(
+    135deg,
+    var(--px-accent-peach) 0%,
+    var(--px-light-cream) 100%
+  );
+  color: var(--px-dark-slate);
+}
+
+/* Points badge */
+.presente-x-points-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #f5d5c8 0%, #e8b4a0 100%);
+  color: var(--px-dark-slate);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px var(--px-shadow-medium);
+}
+
+/* Smooth glass header */
+.presente-x-header {
+  background: rgba(250, 247, 242, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(232, 180, 160, 0.2);
+  box-shadow: 0 2px 12px var(--px-shadow-light);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.presente-x-calendar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .presente-x-calendar {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+  }
+}
+
+/* Button styles */
+.presente-x-btn {
+  background: linear-gradient(
+    135deg,
+    var(--px-warm-tan) 0%,
+    var(--px-soft-rose) 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.presente-x-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.presente-x-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+}
+
+.presente-x-btn:hover::before {
+  left: 100%;
+}
+
+.presente-x-btn:active {
+  transform: translateY(0);
+}
+
+.presente-x-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Input styles */
+.presente-x-input {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid rgba(212, 165, 116, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: inherit;
+  color: var(--px-dark-slate);
+  transition: all 0.3s ease;
+}
+
+.presente-x-input:focus {
+  outline: none;
+  border-color: var(--px-warm-tan);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+}
+
+.presente-x-input::placeholder {
+  color: rgba(155, 137, 104, 0.5);
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.presente-x-animate-in {
+  animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .presente-x-level-button {
+    width: 60px;
+    height: 60px;
+    font-size: 1.25rem;
+  }
+
+  .presente-x-header {
+    backdrop-filter: blur(10px);
+  }
+
+  .presente-x-heading {
+    font-size: 1.75rem;
+  }
+
+  .blob-1,
+  .blob-2 {
+    opacity: 0.5;
+  }
+}
