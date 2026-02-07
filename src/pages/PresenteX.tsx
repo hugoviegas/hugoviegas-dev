@@ -1,33 +1,45 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { PasswordGate } from "@/features/presente-x/components/PasswordGate";
 import { supabase, PresenteDay } from "@/features/presente-x/services/supabase";
-import { Gift, Sparkles, Trophy } from "lucide-react";
+import { CheckCircle, Gift, Sparkles, Trophy } from "lucide-react";
 import { toast } from "sonner";
 import { isAfter, parseISO } from "date-fns";
 import "@/features/presente-x/styles/theme.css";
 import { usePresenterUser } from "@/features/presente-x/contexts/UserContext";
-import { touchDailyVisit } from "@/features/presente-x/services/userService";
+import {
+  getUserProgress,
+  touchDailyVisit,
+} from "@/features/presente-x/services/userService";
 import { useNavigate } from "react-router-dom";
+import { Day01 } from "@/features/presente-x/days/Dia01";
 
 const MapLevel = ({
   day,
   locked,
+  completed,
   onClick,
 }: {
   day: PresenteDay;
   locked: boolean;
+  completed: boolean;
   onClick: () => void;
 }) => {
   return (
-    <div className={`relative presenta-x-level presente-x-animate-in`}>
+    <div className={`relative presente-x-level presente-x-animate-in`}>
       <button
         onClick={onClick}
         disabled={locked}
         className={`presente-x-level-button ${locked ? "locked" : "unlocked"} ${!locked && day.day_number === new Date().getDate() ? "active" : ""}`}
       >
         <span>{day.day_number}</span>
-        {!locked && day.points_reward > 0 && (
-          <span className="presente-x-points-badge">{day.points_reward}</span>
+        {!locked && (
+          <span className="presente-x-status-badge">
+            {completed ? (
+              <CheckCircle className="w-4 h-4" />
+            ) : (
+              <span className="dot" />
+            )}
+          </span>
         )}
       </button>
     </div>
@@ -38,6 +50,8 @@ const PresenteX = () => {
   const [days, setDays] = useState<PresenteDay[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPoints, setTotalPoints] = useState(0);
+  const [activeDay, setActiveDay] = useState<PresenteDay | null>(null);
+  const [completedDays, setCompletedDays] = useState<Set<number>>(new Set());
   const { currentUser, setCurrentUser } = usePresenterUser();
   const navigate = useNavigate();
 
@@ -79,6 +93,20 @@ const PresenteX = () => {
     };
     updateStreak();
   }, [currentUser, setCurrentUser]);
+
+  useEffect(() => {
+    const loadProgress = async () => {
+      if (!currentUser) {
+        setCompletedDays(new Set());
+        return;
+      }
+      const progress = await getUserProgress(currentUser.id);
+      const completed = new Set(progress.map((p) => p.day_number));
+      setCompletedDays(completed);
+    };
+
+    loadProgress();
+  }, [currentUser]);
 
   const fetchDays = async () => {
     try {
@@ -131,8 +159,7 @@ const PresenteX = () => {
       return;
     }
 
-    toast.success(`🎉 Abrindo dia ${day.day_number}!`, { duration: 2000 });
-    // TODO: Open Modal with Video/Content
+    setActiveDay(day);
   };
 
   return (
@@ -165,14 +192,15 @@ const PresenteX = () => {
                   <p className="text-[11px] text-[#9B8968] uppercase tracking-wide">
                     {firstName || "Visitante"}
                   </p>
-                  <p className="font-mono text-sm font-bold text-[#D4A574]">
-                    {currentUser?.total_points ?? totalPoints} pts
-                  </p>
                 </div>
               </div>
-              <div className="text-right text-[11px] text-[#9B8968] leading-tight">
-                <div>🔥 {currentUser?.current_streak ?? 0}</div>
-                <div>💰 {currentUser?.coins_balance ?? 0}</div>
+              <div className="text-right text-[12px] text-[#9B8968] leading-tight">
+                <div className="font-mono text-base font-bold text-[#D4A574]">
+                  🔥 {currentUser?.current_streak ?? 0}
+                </div>
+                <div className="font-mono text-base font-bold text-[#D4A574]">
+                  💰 {currentUser?.coins_balance ?? 0}
+                </div>
               </div>
             </div>
           </div>
@@ -190,7 +218,7 @@ const PresenteX = () => {
             </h2>
             <p className="presente-x-text text-lg md:text-xl max-w-lg mx-auto">
               Uma surpresa a cada dia do mês. Descubra, desbloqueie e ganhe
-              pontos ao longo da jornada.
+              moedas ao longo da jornada.
             </p>
           </div>
 
@@ -234,11 +262,13 @@ const PresenteX = () => {
               {/* Levels */}
               {days.map((day) => {
                 const isLocked = isAfter(parseISO(day.unlock_date), new Date());
+                const isCompleted = completedDays.has(day.day_number);
                 return (
                   <MapLevel
                     key={day.id}
                     day={day}
                     locked={isLocked}
+                    completed={isCompleted}
                     onClick={() => handleDayClick(day)}
                   />
                 );
@@ -259,6 +289,38 @@ const PresenteX = () => {
             </button>
           </div>
         </main>
+
+        {activeDay && (
+          <div className="presente-x-modal-backdrop">
+            <div className="presente-x-modal">
+              {activeDay.day_number === 1 ? (
+                <Day01 onClose={() => setActiveDay(null)} />
+              ) : (
+                <div className="presente-x-modal-content">
+                  <div className="presente-x-modal-header">
+                    <div>
+                      <p className="presente-x-heading text-2xl">
+                        Dia {activeDay.day_number}
+                      </p>
+                      <p className="presente-x-text text-sm">Em breve...</p>
+                    </div>
+                    <button
+                      className="presente-x-btn"
+                      onClick={() => setActiveDay(null)}
+                    >
+                      Fechar
+                    </button>
+                  </div>
+                  <div className="presente-x-card p-6">
+                    <p className="presente-x-text">
+                      Estamos preparando algo especial para esse dia.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Floating elements (decorative) */}
         <div className="fixed bottom-4 right-4 pointer-events-none opacity-30 animate-bounce">

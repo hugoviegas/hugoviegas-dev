@@ -36,6 +36,12 @@
   z-index: 0;
 }
 
+/* When a page wants the background to be clear (e.g. storefront), add 'no-blur' */
+.presente-x-container.no-blur::before {
+  background: transparent;
+  backdrop-filter: none;
+}
+
 /* Animated background elements */
 .presente-x-bg-decoration {
   position: fixed;
@@ -142,7 +148,6 @@
   transition: all 0.3s ease;
   box-shadow: 0 6px 16px var(--px-shadow-medium);
   position: relative;
-  overflow: hidden;
 }
 
 .presente-x-level-button::before {
@@ -200,19 +205,40 @@
   color: var(--px-dark-slate);
 }
 
-/* Points badge */
-.presente-x-points-badge {
+/* Status badge (available / completed) */
+.presente-x-status-badge {
   position: absolute;
   top: -8px;
   right: -8px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, #f5d5c8 0%, #e8b4a0 100%);
   color: var(--px-dark-slate);
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 0;
+  border-radius: 8px;
   border: 2px solid white;
   box-shadow: 0 2px 8px var(--px-shadow-medium);
+}
+
+/* Small gold dot inside the badge */
+.presente-x-status-badge .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--px-warm-tan);
+  display: inline-block;
+}
+
+/* Completed icon sizing */
+.presente-x-status-badge svg {
+  width: 16px;
+  height: 16px;
+  color: var(--px-dark-slate);
 }
 
 /* Smooth glass header */
@@ -226,17 +252,348 @@
   z-index: 40;
 }
 
-.presente-x-calendar {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem 1.25rem;
+/* Storefront / Vitrine */
+.presente-x-store-hero {
+  background: linear-gradient(135deg, #fff5ea 0%, #fce8d5 100%);
+  border: 1px solid rgba(212, 165, 116, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(107, 93, 82, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-@media (min-width: 768px) {
+.presente-x-store-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.presente-x-store-card {
+  position: relative;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(232, 180, 160, 0.25);
+  box-shadow: 0 8px 20px rgba(107, 93, 82, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 220px;
+}
+
+.presente-x-store-card.is-disabled {
+  opacity: 0.55;
+  filter: grayscale(0.1);
+}
+
+.presente-x-store-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
+}
+
+.presente-x-store-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f5d5c8 0%, #e8b4a0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--px-dark-slate);
+  box-shadow: 0 6px 16px rgba(107, 93, 82, 0.15);
+  opacity: 1;
+}
+
+.presente-x-store-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(212, 165, 116, 0.15);
+  color: var(--px-dark-slate);
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+}
+
+.presente-x-store-price {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  font-weight: 700;
+  color: var(--px-warm-tan);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.presente-x-store-actions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.presente-x-cart-button {
+  background: white;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 600;
+  color: var(--px-dark-slate);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.presente-x-saldo-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 1px solid rgba(212, 165, 116, 0.25);
+  border-radius: 18px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 20px rgba(107, 93, 82, 0.1);
+}
+
+.presente-x-saldo-box .saldo-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.presente-x-cart-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 12, 10, 0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 70;
+  padding: 20px;
+}
+
+.presente-x-cart-panel {
+  width: min(720px, 100%);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(107, 93, 82, 0.2);
+  border: 1px solid rgba(232, 180, 160, 0.3);
+}
+
+.presente-x-cart-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.presente-x-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.presente-x-qty button {
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  color: var(--px-dark-slate);
+  cursor: pointer;
+}
+
+.presente-x-qty span {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--px-dark-slate);
+  font-size: 0.95rem;
+}
+
+.presente-x-reveal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  background: rgba(15, 12, 10, 0.4);
+  backdrop-filter: blur(6px);
+  padding: 20px;
+}
+
+.presente-x-reveal-card {
+  width: min(520px, 100%);
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  padding: 28px;
+  text-align: center;
+  border: 1px solid rgba(232, 180, 160, 0.35);
+  box-shadow: 0 20px 60px rgba(107, 93, 82, 0.2);
+  animation: fadeInScale 0.4s ease;
+}
+
+.presente-x-calendar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+@media (min-width: 640px) {
   .presente-x-calendar {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 2rem 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    gap: 1.25rem;
   }
+}
+
+@media (min-width: 1024px) {
+  .presente-x-calendar {
+    grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Modal */
+.presente-x-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 12, 10, 0.45);
+  backdrop-filter: blur(6px);
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80px 16px 40px;
+  overflow-y: auto;
+}
+
+.presente-x-modal {
+  width: min(960px, 100%);
+}
+
+.presente-x-modal-content {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(107, 93, 82, 0.2);
+  border: 1px solid rgba(232, 180, 160, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.presente-x-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.presente-x-modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.presente-x-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(107, 93, 82, 0.15);
+}
+
+.presente-x-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Quiz */
+.presente-x-quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.presente-x-quiz-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.presente-x-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.presente-x-option {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  color: var(--px-dark-slate);
+  transition: all 0.2s ease;
+}
+
+.presente-x-option:hover {
+  border-color: rgba(212, 165, 116, 0.6);
+  transform: translateY(-1px);
+}
+
+.presente-x-option.selected {
+  background: linear-gradient(135deg, #f5d5c8 0%, #e8b4a0 100%);
+  color: #5a4b44;
+  border-color: rgba(232, 180, 160, 0.6);
+}
+
+.presente-x-timer {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(232, 180, 160, 0.2);
+  color: #a25b4b;
+  font-weight: 700;
+  font-size: 0.9rem;
+  width: fit-content;
+}
+
+.presente-x-quiz-result {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(232, 180, 160, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.presente-x-share-preview img {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 165, 116, 0.2);
 }
 
 /* Button styles */
@@ -356,6 +713,14 @@
 
   .presente-x-heading {
     font-size: 1.75rem;
+  }
+
+  .presente-x-modal-backdrop {
+    padding-top: 70px;
+  }
+
+  .presente-x-modal-content {
+    padding: 18px;
   }
 
   .blob-1,

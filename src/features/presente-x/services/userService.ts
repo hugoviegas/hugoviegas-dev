@@ -19,7 +19,11 @@ export interface UserProgress {
   day_number: number;
   points_earned: number;
   completed_at: string;
+  answers?: Record<string, string> | null;
 }
+
+// Simple in-memory cache to avoid hammering the public worldtime API
+let brazilTimeCache: { date: Date; fetchedAt: number } | null = null;
 
 const normalizeName = (value: string) => value.toLowerCase().trim();
 
@@ -154,27 +158,119 @@ export async function updateUserCoins(
   userId: number,
   coinsBalance: number,
 ): Promise<boolean> {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("presente_users")
     .update({ coins_balance: coinsBalance })
-    .eq("id", userId);
+    .eq("id", userId)
+    .select("*")
+    .maybeSingle();
 
-  return !error;
+  if (error) {
+    // Log structured details to help diagnose 400/403/other errors from Supabase
+    try {
+      const structuredError = error as {
+        message?: string;
+        status?: number;
+        details?: string;
+        hint?: string;
+      };
+      console.error("Error updating user coins", {
+        userId,
+        coinsBalance,
+        message: structuredError.message,
+        status: structuredError.status,
+        details: structuredError.details,
+        hint: structuredError.hint,
+        full: error,
+      });
+    } catch (e) {
+      console.error(
+        "Error updating user coins (unable to stringify error)",
+        error,
+      );
+    }
+    return false;
+  }
+
+  if (!data) {
+    console.warn("updateUserCoins: no row returned after update", {
+      userId,
+      coinsBalance,
+    });
+  }
+
+  return true;
 }
 
+// Dedup concurrent fetches to avoid multiple errors when the endpoint is down
+let brazilTimePromise: Promise<Date> | null = null;
+
 async function getBrazilNow(): Promise<Date> {
+  // reuse recent value for 60 seconds to reduce external requests
   try {
-    const response = await fetch(
-      "https://worldtimeapi.org/api/timezone/America/Sao_Paulo",
-    );
-    const data = await response.json();
-    if (data?.datetime) {
-      return new Date(data.datetime);
+    const now = Date.now();
+    if (brazilTimeCache && now - brazilTimeCache.fetchedAt < 60_000) {
+      return new Date(brazilTimeCache.date);
     }
-  } catch (error) {
-    console.error("Fallback to local time; could not fetch Brazil time", error);
+
+    // If a fetch is already in progress, reuse that promise
+    if (brazilTimePromise) {
+      return brazilTimePromise;
+    }
+
+    brazilTimePromise = (async () => {
+      try {
+        const response = await fetch(
+          "https://worldtimeapi.org/api/timezone/America/Sao_Paulo",
+        );
+
+        // If the API returns an error status (429 etc), don't try to parse JSON
+        if (!response.ok) {
+          const text = await response.text().catch(() => "");
+          console.warn(
+            `WorldTimeAPI returned status ${response.status}: ${text}`,
+          );
+          // cache a fallback local time briefly to avoid tight error loops
+          brazilTimeCache = { date: new Date(), fetchedAt: Date.now() };
+          return new Date();
+        }
+
+        const contentType = response.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          const text = await response.text().catch(() => "");
+          console.warn("WorldTimeAPI returned non-JSON response:", text);
+          brazilTimeCache = { date: new Date(), fetchedAt: Date.now() };
+          return new Date();
+        }
+
+        const data = await response.json();
+        if (data?.datetime) {
+          const dt = new Date(data.datetime);
+          brazilTimeCache = { date: dt, fetchedAt: Date.now() };
+          return dt;
+        }
+      } catch (error) {
+        // network errors are common when remote is unreachable; log as warn
+        console.warn(
+          "Fallback to local time; could not fetch Brazil time",
+          error,
+        );
+      } finally {
+        // clear the in-flight promise so future calls can attempt again after cache expiry
+        brazilTimePromise = null;
+      }
+
+      // final fallback
+      brazilTimeCache = { date: new Date(), fetchedAt: Date.now() };
+      return new Date();
+    })();
+
+    return brazilTimePromise;
+  } catch (err) {
+    // unexpected error - return local date
+    console.warn("Unexpected error in getBrazilNow", err);
+    return new Date();
   }
-  return new Date();
 }
 
 export async function touchDailyVisit(
@@ -233,4 +329,53 @@ export async function getUserProgress(userId: number): Promise<UserProgress[]> {
   }
 
   return (data || []) as UserProgress[];
+}
+
+export async function getDayProgress(
+  userId: number,
+  dayNumber: number,
+): Promise<UserProgress | null> {
+  const { data, error } = await supabase
+    .from("presente_user_progress")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("day_number", dayNumber)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error fetching day progress:", error);
+    return null;
+  }
+
+  return (data as UserProgress) || null;
+}
+
+export async function recordDayProgress(
+  userId: number,
+  dayNumber: number,
+  coinsEarned: number,
+  answers?: Record<string, string> | null,
+): Promise<UserProgress | null> {
+  const insertObj: any = {
+    user_id: userId,
+    day_number: dayNumber,
+    points_earned: coinsEarned,
+  };
+
+  if (answers !== undefined) {
+    insertObj.answers = answers;
+  }
+
+  const { data, error } = await supabase
+    .from("presente_user_progress")
+    .insert(insertObj)
+    .select("*")
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error recording day progress:", error);
+    return null;
+  }
+
+  return (data as UserProgress) || null;
 }
