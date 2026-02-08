@@ -590,6 +590,83 @@
   gap: 12px;
 }
 
+/* Word search */
+.presente-x-wordsearch {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.presente-x-wordsearch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.presente-x-wordsearch-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.presente-x-wordsearch-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.presente-x-wordsearch-cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+  color: var(--px-dark-slate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.presente-x-wordsearch-cell:hover {
+  border-color: rgba(212, 165, 116, 0.6);
+  transform: translateY(-1px);
+}
+
+.presente-x-wordsearch-cell.found {
+  background: linear-gradient(135deg, #f5d5c8 0%, #e8b4a0 100%);
+  color: #5a4b44;
+  border-color: rgba(232, 180, 160, 0.6);
+}
+
+.presente-x-wordsearch-cell.start {
+  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.25);
+}
+
+.presente-x-wordsearch-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.presente-x-word {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  font-size: 0.85rem;
+  color: var(--px-dark-slate);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.presente-x-word.found {
+  text-decoration: line-through;
+  background: rgba(232, 180, 160, 0.3);
+  border-color: rgba(232, 180, 160, 0.6);
+}
+
 .presente-x-share-preview img {
   width: 100%;
   border-radius: 12px;
