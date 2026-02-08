@@ -24,6 +24,9 @@ export interface UserProgress {
 
 // Simple in-memory cache to avoid hammering the public worldtime API
 let brazilTimeCache: { date: Date; fetchedAt: number } | null = null;
+let warnedBrazilTimeApiDown = false;
+
+const BRAZIL_OFFSET_HOURS = -3; // São Paulo standard time (UTC-3) - used as safe fallback
 
 const normalizeName = (value: string) => value.toLowerCase().trim();
 
@@ -227,20 +230,36 @@ async function getBrazilNow(): Promise<Date> {
         // If the API returns an error status (429 etc), don't try to parse JSON
         if (!response.ok) {
           const text = await response.text().catch(() => "");
-          console.warn(
-            `WorldTimeAPI returned status ${response.status}: ${text}`,
-          );
-          // cache a fallback local time briefly to avoid tight error loops
-          brazilTimeCache = { date: new Date(), fetchedAt: Date.now() };
-          return new Date();
+          if (!warnedBrazilTimeApiDown) {
+            console.warn(
+              `WorldTimeAPI returned status ${response.status}: ${text} — falling back to computed São Paulo time. Consider checking the network or migrating to a more reliable time source.`,
+            );
+            warnedBrazilTimeApiDown = true;
+          }
+
+          // cache a fallback time for 5 minutes to avoid tight error loops
+          brazilTimeCache = {
+            date: new Date(Date.now() + BRAZIL_OFFSET_HOURS * 3600_000),
+            fetchedAt: Date.now(),
+          };
+          return new Date(brazilTimeCache.date);
         }
 
         const contentType = response.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) {
           const text = await response.text().catch(() => "");
-          console.warn("WorldTimeAPI returned non-JSON response:", text);
-          brazilTimeCache = { date: new Date(), fetchedAt: Date.now() };
-          return new Date();
+          if (!warnedBrazilTimeApiDown) {
+            console.warn(
+              "WorldTimeAPI returned non-JSON response — falling back to computed São Paulo time:",
+              text,
+            );
+            warnedBrazilTimeApiDown = true;
+          }
+          brazilTimeCache = {
+            date: new Date(Date.now() + BRAZIL_OFFSET_HOURS * 3600_000),
+            fetchedAt: Date.now(),
+          };
+          return new Date(brazilTimeCache.date);
         }
 
         const data = await response.json();
@@ -250,26 +269,42 @@ async function getBrazilNow(): Promise<Date> {
           return dt;
         }
       } catch (error) {
-        // network errors are common when remote is unreachable; log as warn
-        console.warn(
-          "Fallback to local time; could not fetch Brazil time",
-          error,
-        );
+        // network errors are common when remote is unreachable; log once and fallback
+        if (!warnedBrazilTimeApiDown) {
+          console.warn(
+            "Fallback to computed São Paulo time; could not fetch Brazil time",
+            error,
+          );
+          warnedBrazilTimeApiDown = true;
+        }
+
+        // Cache a computed São Paulo time for 5 minutes to avoid repeated network attempts
+        brazilTimeCache = {
+          date: new Date(Date.now() + BRAZIL_OFFSET_HOURS * 3600_000),
+          fetchedAt: Date.now(),
+        };
+        return new Date(brazilTimeCache.date);
       } finally {
         // clear the in-flight promise so future calls can attempt again after cache expiry
         brazilTimePromise = null;
       }
 
-      // final fallback
-      brazilTimeCache = { date: new Date(), fetchedAt: Date.now() };
-      return new Date();
+      // final fallback (shouldn't be reached normally)
+      brazilTimeCache = {
+        date: new Date(Date.now() + BRAZIL_OFFSET_HOURS * 3600_000),
+        fetchedAt: Date.now(),
+      };
+      return new Date(brazilTimeCache.date);
     })();
 
     return brazilTimePromise;
   } catch (err) {
-    // unexpected error - return local date
-    console.warn("Unexpected error in getBrazilNow", err);
-    return new Date();
+    // unexpected error - return computed São Paulo date
+    console.warn(
+      "Unexpected error in getBrazilNow; falling back to computed São Paulo time",
+      err,
+    );
+    return new Date(Date.now() + BRAZIL_OFFSET_HOURS * 3600_000);
   }
 }
 
@@ -350,6 +385,32 @@ export async function getDayProgress(
   return (data as UserProgress) || null;
 }
 
+/**
+ * Fetch the most recently updated progress for the given day across all users.
+ * This lets multiple participants view/continue the same shared story.
+ */
+let warnedMissingUpdatedAt = false;
+
+export async function getSharedDayProgress(
+  dayNumber: number,
+): Promise<UserProgress | null> {
+  // Use 'id' descending as a proxy for recency to avoid 400 errors on missing 'updated_at'
+  const { data, error } = await supabase
+    .from("presente_user_progress")
+    .select("*")
+    .eq("day_number", dayNumber)
+    .order("id", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error fetching shared day progress:", error);
+    return null;
+  }
+
+  return (data as UserProgress) || null;
+}
+
 export async function recordDayProgress(
   userId: number,
   dayNumber: number,
@@ -374,6 +435,46 @@ export async function recordDayProgress(
 
   if (error) {
     console.error("Error recording day progress:", error);
+    return null;
+  }
+
+  return (data as UserProgress) || null;
+}
+
+export async function upsertDayProgress(
+  userId: number,
+  dayNumber: number,
+  coinsEarned: number,
+  answers?: Record<string, unknown> | null,
+  // When provided, will write/update the progress under this target user's row
+  // This allows multiple participants to collaboratively edit one canonical story row
+  targetUserId?: number,
+): Promise<UserProgress | null> {
+  type UpsertProgressPayload = {
+    user_id: number;
+    day_number: number;
+    points_earned: number;
+    answers?: Record<string, unknown> | null;
+  };
+
+  const payload: UpsertProgressPayload = {
+    user_id: targetUserId ?? userId,
+    day_number: dayNumber,
+    points_earned: coinsEarned,
+  };
+
+  if (answers !== undefined) {
+    payload.answers = answers;
+  }
+
+  const { data, error } = await supabase
+    .from("presente_user_progress")
+    .upsert(payload, { onConflict: "user_id,day_number" })
+    .select("*")
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error upserting day progress:", error);
     return null;
   }
 

@@ -13,6 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Day01 } from "@/features/presente-x/days/Dia01";
 import { Day02 } from "@/features/presente-x/days/Dia02";
+import { Day03 } from "@/features/presente-x/days/Dia03";
 
 const MapLevel = ({
   day,
@@ -298,6 +299,8 @@ const PresenteX = () => {
                 <Day01 onClose={() => setActiveDay(null)} />
               ) : activeDay.day_number === 2 ? (
                 <Day02 onClose={() => setActiveDay(null)} />
+              ) : activeDay.day_number === 3 ? (
+                <Day03 onClose={() => setActiveDay(null)} />
               ) : (
                 <div className="presente-x-modal-content">
                   <div className="presente-x-modal-header">
