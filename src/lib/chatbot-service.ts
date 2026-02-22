@@ -1,20 +1,15 @@
 /**
  * Chatbot Service for Hugo Viegas Portfolio
- * 
+ *
  * Uses multiple Google Gemini models with rotation for higher availability.
- * Models used: gemini-2.0-flash, gemini-1.5-flash, gemini-1.5-flash-8b
+ * Models used: gemini-2.5-flash, gemini-2.0-flash
  * Rate limits: 15 questions/minute, 100 questions/day per user.
  */
 
 // Available Gemini models for rotation (all free tier with good rate limits)
-// - gemini-2.0-flash: Latest flash model, 15 RPM, 1500 RPD
-// - gemini-1.5-flash: Stable flash model, 15 RPM, 1500 RPD  
-// - gemini-1.5-flash-8b: Lightweight model, 15 RPM, 1500 RPD
-const GEMINI_MODELS = [
-  'gemini-2.0-flash',
-  'gemini-1.5-flash', 
-  'gemini-1.5-flash-8b'
-] as const;
+// - gemini-2.5-flash: Latest flash model, best quality
+// - gemini-2.0-flash: Stable flash model, fallback
+const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"] as const;
 
 // Track which model to use next (rotates through models)
 let currentModelIndex = 0;
@@ -135,12 +130,12 @@ Remember to keep responses SHORT and ENGAGING. Always be helpful even on general
 `;
 
 // Rate limiting storage keys
-const RATE_LIMIT_MINUTE_KEY = 'chatbot_rate_minute';
-const RATE_LIMIT_DAY_KEY = 'chatbot_rate_day';
+const RATE_LIMIT_MINUTE_KEY = "chatbot_rate_minute";
+const RATE_LIMIT_DAY_KEY = "chatbot_rate_day";
 
-// Rate limits - increased thanks to multi-model rotation with fallback
+// Rate limits - with multi-model rotation and fallback
 // Each model has approximately: 15 RPM, 1500 RPD (free tier)
-// With 3 models and fallback, effective availability is higher
+// With 2 models and fallback, effective availability is higher
 // Using conservative limits: 15 RPM, 100 RPD to stay well within API limits
 const RATE_LIMIT_PER_MINUTE = 15;
 const RATE_LIMIT_PER_DAY = 100;
@@ -154,9 +149,9 @@ interface RateLimitData {
  * Check if user has exceeded rate limits
  * @returns Object with allowed status and remaining counts
  */
-export function checkRateLimit(): { 
-  allowed: boolean; 
-  minuteRemaining: number; 
+export function checkRateLimit(): {
+  allowed: boolean;
+  minuteRemaining: number;
   dayRemaining: number;
   resetMinute: number;
   resetDay: number;
@@ -164,40 +159,46 @@ export function checkRateLimit(): {
   const now = Date.now();
   const oneMinute = 60 * 1000;
   const oneDay = 24 * 60 * 60 * 1000;
-  
+
   // Get minute rate data
   const minuteDataStr = localStorage.getItem(RATE_LIMIT_MINUTE_KEY);
-  let minuteData: RateLimitData = minuteDataStr 
-    ? JSON.parse(minuteDataStr) 
+  let minuteData: RateLimitData = minuteDataStr
+    ? JSON.parse(minuteDataStr)
     : { count: 0, timestamp: now };
-  
+
   // Reset minute counter if more than a minute has passed
   if (now - minuteData.timestamp > oneMinute) {
     minuteData = { count: 0, timestamp: now };
   }
-  
+
   // Get day rate data
   const dayDataStr = localStorage.getItem(RATE_LIMIT_DAY_KEY);
-  let dayData: RateLimitData = dayDataStr 
-    ? JSON.parse(dayDataStr) 
+  let dayData: RateLimitData = dayDataStr
+    ? JSON.parse(dayDataStr)
     : { count: 0, timestamp: now };
-  
+
   // Reset day counter if more than a day has passed
   if (now - dayData.timestamp > oneDay) {
     dayData = { count: 0, timestamp: now };
   }
-  
+
   const minuteRemaining = Math.max(0, RATE_LIMIT_PER_MINUTE - minuteData.count);
   const dayRemaining = Math.max(0, RATE_LIMIT_PER_DAY - dayData.count);
-  const resetMinute = Math.max(0, Math.ceil((oneMinute - (now - minuteData.timestamp)) / 1000));
-  const resetDay = Math.max(0, Math.ceil((oneDay - (now - dayData.timestamp)) / 3600000)); // hours
-  
+  const resetMinute = Math.max(
+    0,
+    Math.ceil((oneMinute - (now - minuteData.timestamp)) / 1000),
+  );
+  const resetDay = Math.max(
+    0,
+    Math.ceil((oneDay - (now - dayData.timestamp)) / 3600000),
+  ); // hours
+
   return {
     allowed: minuteRemaining > 0 && dayRemaining > 0,
     minuteRemaining,
     dayRemaining,
     resetMinute,
-    resetDay
+    resetDay,
   };
 }
 
@@ -208,26 +209,26 @@ export function incrementRateLimit(): void {
   const now = Date.now();
   const oneMinute = 60 * 1000;
   const oneDay = 24 * 60 * 60 * 1000;
-  
+
   // Update minute counter
   const minuteDataStr = localStorage.getItem(RATE_LIMIT_MINUTE_KEY);
-  let minuteData: RateLimitData = minuteDataStr 
-    ? JSON.parse(minuteDataStr) 
+  let minuteData: RateLimitData = minuteDataStr
+    ? JSON.parse(minuteDataStr)
     : { count: 0, timestamp: now };
-  
+
   if (now - minuteData.timestamp > oneMinute) {
     minuteData = { count: 1, timestamp: now };
   } else {
     minuteData.count++;
   }
   localStorage.setItem(RATE_LIMIT_MINUTE_KEY, JSON.stringify(minuteData));
-  
+
   // Update day counter
   const dayDataStr = localStorage.getItem(RATE_LIMIT_DAY_KEY);
-  let dayData: RateLimitData = dayDataStr 
-    ? JSON.parse(dayDataStr) 
+  let dayData: RateLimitData = dayDataStr
+    ? JSON.parse(dayDataStr)
     : { count: 0, timestamp: now };
-  
+
   if (now - dayData.timestamp > oneDay) {
     dayData = { count: 1, timestamp: now };
   } else {
@@ -237,7 +238,7 @@ export function incrementRateLimit(): void {
 }
 
 export interface ChatMessage {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: number;
 }
@@ -250,15 +251,15 @@ export interface ChatMessage {
  * @returns AI response
  */
 export async function sendChatMessage(
-  message: string, 
-  history: ChatMessage[] = []
+  message: string,
+  history: ChatMessage[] = [],
 ): Promise<string> {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  
-  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
-    return 'O chatbot não está configurado. Por favor, configure a API key do Gemini. / The chatbot is not configured. Please set up the Gemini API key.';
+
+  if (!apiKey || apiKey === "your_gemini_api_key_here") {
+    return "O chatbot não está configurado. Por favor, configure a API key do Gemini. / The chatbot is not configured. Please set up the Gemini API key.";
   }
-  
+
   // Check rate limits
   const rateLimit = checkRateLimit();
   if (!rateLimit.allowed) {
@@ -267,18 +268,20 @@ export async function sendChatMessage(
     }
     return `Você atingiu o limite diário de ${RATE_LIMIT_PER_DAY} perguntas. O limite será resetado em aproximadamente ${rateLimit.resetDay} horas. / You've reached the daily limit of ${RATE_LIMIT_PER_DAY} questions. The limit will reset in approximately ${rateLimit.resetDay} hours.`;
   }
-  
+
   // Try each model in rotation, with fallback to next if one fails
   const modelsToTry = [...GEMINI_MODELS];
   const startModel = getNextModel();
-  const startIndex = modelsToTry.indexOf(startModel as typeof GEMINI_MODELS[number]);
-  
+  const startIndex = modelsToTry.indexOf(
+    startModel as (typeof GEMINI_MODELS)[number],
+  );
+
   // Reorder to start from current rotation position
   const orderedModels = [
     ...modelsToTry.slice(startIndex),
-    ...modelsToTry.slice(0, startIndex)
+    ...modelsToTry.slice(0, startIndex),
   ];
-  
+
   for (const model of orderedModels) {
     try {
       const response = await tryModelRequest(apiKey, model, message, history);
@@ -292,8 +295,8 @@ export async function sendChatMessage(
       continue;
     }
   }
-  
-  return 'Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente. / Sorry, an error occurred while processing your message. Please try again.';
+
+  return "Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente. / Sorry, an error occurred while processing your message. Please try again.";
 }
 
 /**
@@ -303,32 +306,36 @@ async function tryModelRequest(
   apiKey: string,
   model: string,
   message: string,
-  history: ChatMessage[]
+  history: ChatMessage[],
 ): Promise<string | null> {
   // Build conversation context
-  const conversationHistory = history.map(msg => ({
-    role: msg.role === 'user' ? 'user' : 'model',
-    parts: [{ text: msg.content }]
+  const conversationHistory = history.map((msg) => ({
+    role: msg.role === "user" ? "user" : "model",
+    parts: [{ text: msg.content }],
   }));
-  
+
   const requestBody = {
     contents: [
       // System context as first message
       {
-        role: 'user',
-        parts: [{ text: PORTFOLIO_CONTEXT }]
+        role: "user",
+        parts: [{ text: PORTFOLIO_CONTEXT }],
       },
       {
-        role: 'model',
-        parts: [{ text: 'Olá! Sou o assistente do Hugo no site hugoviegas.dev. Posso te ajudar com informações sobre o portfólio, habilidades técnicas, ou conversar sobre tecnologia em geral. Como posso ajudar? / Hi! I\'m Hugo\'s assistant at hugoviegas.dev. I can help you with portfolio info, technical skills, or chat about tech in general. How can I help?' }]
+        role: "model",
+        parts: [
+          {
+            text: "Olá! Sou o assistente do Hugo no site hugoviegas.dev. Posso te ajudar com informações sobre o portfólio, habilidades técnicas, ou conversar sobre tecnologia em geral. Como posso ajudar? / Hi! I'm Hugo's assistant at hugoviegas.dev. I can help you with portfolio info, technical skills, or chat about tech in general. How can I help?",
+          },
+        ],
       },
       // Previous conversation history
       ...conversationHistory,
       // Current message
       {
-        role: 'user',
-        parts: [{ text: message }]
-      }
+        role: "user",
+        parts: [{ text: message }],
+      },
     ],
     generationConfig: {
       temperature: 0.7,
@@ -338,49 +345,49 @@ async function tryModelRequest(
     },
     safetySettings: [
       {
-        category: 'HARM_CATEGORY_HARASSMENT',
-        threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+        category: "HARM_CATEGORY_HARASSMENT",
+        threshold: "BLOCK_MEDIUM_AND_ABOVE",
       },
       {
-        category: 'HARM_CATEGORY_HATE_SPEECH',
-        threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+        category: "HARM_CATEGORY_HATE_SPEECH",
+        threshold: "BLOCK_MEDIUM_AND_ABOVE",
       },
       {
-        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-        threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+        category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        threshold: "BLOCK_MEDIUM_AND_ABOVE",
       },
       {
-        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-        threshold: 'BLOCK_MEDIUM_AND_ABOVE'
-      }
-    ]
+        category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+        threshold: "BLOCK_MEDIUM_AND_ABOVE",
+      },
+    ],
   };
-  
+
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(requestBody)
-    }
+      body: JSON.stringify(requestBody),
+    },
   );
-  
+
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     console.error(`Gemini API error (${model}):`, errorData);
     throw new Error(`API error: ${response.status}`);
   }
-  
+
   const data = await response.json();
-  
+
   // Extract response text
   const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  
+
   if (!responseText) {
-    throw new Error('No response from API');
+    throw new Error("No response from API");
   }
-  
+
   return responseText;
 }

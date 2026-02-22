@@ -31,7 +31,6 @@ import {
 } from "@/components/ui/dialog";
 import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.jpg";
-import HeroLightsaber from "./HeroLightsaber";
 import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
@@ -47,6 +46,16 @@ const HeroSection = () => {
     const greeting = getCurrentGreeting();
     setCurrentGreeting(greeting.text[language]);
   }, [language]);
+
+  // Reset typewriter when language changes (fullText changes)
+  useEffect(() => {
+    setDisplayText("");
+    setCurrentIndex(0);
+    const blink = document.querySelector(".type-cursor");
+    if (blink) {
+      blink.classList.remove("blink-after");
+    }
+  }, [fullText]);
 
   useEffect(() => {
     if (currentIndex < fullText.length) {
@@ -142,9 +151,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0 w-full"
-    >
+    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0 w-full">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20" aria-hidden="true">
         <div className="absolute top-20 left-20 w-40 h-40 bg-primary rounded-full blur-3xl subtle-pulse"></div>
@@ -224,7 +231,9 @@ const HeroSection = () => {
                 <DialogContent className="max-w-[min(1400px,95vw)] w-full h-[85vh] sm:h-[90vh] p-0">
                   <DialogHeader className="p-4 sm:p-6 pb-0">
                     <DialogTitle className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2">
-                      <span className="text-sm sm:text-base">Hugo Viegas - CV 2025</span>
+                      <span className="text-sm sm:text-base">
+                        Hugo Viegas - CV 2025
+                      </span>
                       <Button
                         asChild
                         variant="outline"
@@ -284,13 +293,6 @@ const HeroSection = () => {
                       placeholder="Loading profile..."
                     />
                   </div>
-                </div>
-              </div>
-
-              {/* Interactive Lightsaber under profile image (bigger, no box) */}
-              <div className="mt-4 sm:mt-6 flex justify-center">
-                <div className="w-full lg:max-w-[680px] h-[150px] sm:h-[180px] lg:h-[200px] rounded-none overflow-visible">
-                  <HeroLightsaber />
                 </div>
               </div>
             </div>

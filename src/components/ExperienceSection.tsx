@@ -19,7 +19,7 @@ export function ExperienceSection(props) {
       company: "Erin College, Dublin",
       location: "Dublin, Ireland",
       description:
-        "Provide hands-on technical support and system administration to maintain IT infrastructure for educational staff and students. Manage Google Workspace enterprise environment including user accounts, access controls, security groups, and organizational units.",
+        "Responsible for IT infrastructure and system administration at an educational institution in Dublin, supporting daily operations and maintaining enterprise environments.",
       achievements: [
         "Provide hands-on technical support and system administration to 120+ users",
         "Manage Google Workspace enterprise environment with user accounts and access controls",
@@ -35,7 +35,7 @@ export function ExperienceSection(props) {
       company: "ETAL Prestação de Serviços LTDA",
       location: "Belo Horizonte, Brazil",
       description:
-        "Provided technical support and system administration for Windows Server environment supporting 50+ employees. Managed user accounts, permissions, and access controls ensuring secure authentication and proper resource access.",
+        "Managed IT systems and developed automation solutions for a services company in Brazil, combining technical support with software development to streamline operations.",
       achievements: [
         "Provided technical support for Windows Server environment supporting 50+ employees",
         "Managed user accounts, permissions, and access controls",
@@ -52,7 +52,7 @@ export function ExperienceSection(props) {
       company: "DabliumMusic",
       location: "Betim, Brazil",
       description:
-        "Designed and developed business websites using HTML, CSS, and JavaScript. Created visual identities and digital marketing materials supporting brand development.",
+        "Handled web development and digital branding for a creative studio, delivering client-facing websites and marketing materials.",
       achievements: [
         "Designed and developed business websites using HTML, CSS, and JavaScript",
         "Created visual identities and digital marketing materials",
@@ -113,7 +113,7 @@ export function ExperienceSection(props) {
 
   const { t } = useLanguage();
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>(
-    {}
+    {},
   );
 
   const toggleCard = (key: string) => {
@@ -160,13 +160,13 @@ export function ExperienceSection(props) {
             </Badge>
           </div>
 
-          <h4 className="text-lg font-semibold text-gradient mb-1">
+          <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-1">
             {exp.title}
           </h4>
           <h5 className="text-sm text-primary font-semibold mb-2">
             {exp.company}
           </h5>
-          <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+          <p className="text-sm text-muted-foreground mb-3 leading-relaxed text-left">
             {exp.description}
           </p>
 
@@ -205,10 +205,7 @@ export function ExperienceSection(props) {
   };
 
   return (
-    <section
-      id="experience"
-      className="py-20 bg-muted/3 relative w-full"
-    >
+    <section id="experience" className="py-20 bg-muted/3 relative w-full">
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
         <div className="mb-16 fade-in">
           <h2 className="heading-section mb-6 text-center">
@@ -233,7 +230,7 @@ export function ExperienceSection(props) {
             </div>
 
             <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500 to-blue-500/20"></div>
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-blue-500/30"></div>
               <div className="space-y-0">
                 {workExperiences.map((exp, index) => {
                   const cardKey = `work-${index}`;
@@ -263,7 +260,7 @@ export function ExperienceSection(props) {
             </div>
 
             <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-purple-500 to-purple-500/20"></div>
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-blue-500/30"></div>
               <div className="space-y-0">
                 {education.map((edu, index) => {
                   const cardKey = `edu-${index}`;
@@ -289,9 +286,10 @@ export function ExperienceSection(props) {
   );
 }
 
-// Skills & Certifications Component with Auto-Expand Both
+// Skills & Certifications Component with independent expand/collapse
 function SkillsSection({ certifications, t }) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isCertsExpanded, setIsCertsExpanded] = useState(true);
+  const [isFocusExpanded, setIsFocusExpanded] = useState(true);
 
   return (
     <div className="mt-12">
@@ -299,7 +297,7 @@ function SkillsSection({ certifications, t }) {
         {/* Certifications - Collapsible */}
         <div className="glass-strong rounded-lg p-4 slide-up">
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={() => setIsCertsExpanded(!isCertsExpanded)}
             className="w-full flex items-center justify-between mb-0 hover:opacity-80 transition-opacity"
           >
             <div className="flex items-center gap-3">
@@ -314,12 +312,12 @@ function SkillsSection({ certifications, t }) {
               src={coinIcon}
               alt="Toggle skills"
               className={`w-4 h-4 object-contain transition-transform duration-300 ${
-                isExpanded ? "rotate-180" : ""
+                isCertsExpanded ? "rotate-180" : ""
               }`}
             />
           </button>
 
-          {isExpanded && (
+          {isCertsExpanded && (
             <div className="grid grid-cols-1 gap-1 mt-3 animate-in fade-in duration-300">
               {certifications.map((cert, index) => (
                 <div
@@ -337,7 +335,7 @@ function SkillsSection({ certifications, t }) {
         {/* Current Focus - Collapsible */}
         <div className="glass-strong rounded-lg p-4 slide-up delay-150">
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={() => setIsFocusExpanded(!isFocusExpanded)}
             className="w-full flex items-center justify-between mb-0 hover:opacity-80 transition-opacity"
           >
             <div className="flex items-center gap-3">
@@ -352,16 +350,15 @@ function SkillsSection({ certifications, t }) {
               src={coinIcon}
               alt="Toggle focus"
               className={`w-4 h-4 object-contain transition-transform duration-300 ${
-                isExpanded ? "rotate-180" : ""
+                isFocusExpanded ? "rotate-180" : ""
               }`}
             />
           </button>
 
-          {isExpanded && (
+          {isFocusExpanded && (
             <div className="mt-3 animate-in fade-in duration-300">
-              <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
-                {t("currentFocusText") ||
-                  "Expert in Active Directory administration, user account management, and technical troubleshooting across Windows and Linux environments. Skilled in Google Workspace administration, system automation, and implementing technical solutions that optimize workflows and enhance system reliability."}
+              <p className="text-xs text-muted-foreground mb-3 leading-relaxed text-left">
+                {t("currentFocusText")}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {[

@@ -356,6 +356,34 @@ Veio então a Irlanda. Um ano de economias tornou a mudança possível, em busca
 
 Paralelamente, um desafio prático do restaurante onde trabalhava levou à construção do site do D'Arcy McGee's. Com ferramentas de IA, estudo de UX e engenharia prática, saiu um site rápido e funcional — prova de que entregar valor com rapidez é uma habilidade repetível (quase um sabre de luz em pixels). Hoje procuro uma vaga front‑end ou full‑stack que valorize essa combinação de curiosidade, senso de produto e capacidade de transformar processos complexos em soluções elegantes e mensuráveis. A motivação é a mesma daquele garoto de onze anos na mesa de robótica: aprender rápido, construir bem e seguir em frente.`,
   },
+
+  // Contact info labels
+  contactEmailLabel: { EN: "Email", PT: "Email" },
+  contactLocationLabel: { EN: "Location", PT: "Localização" },
+  contactLocationValue: { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  contactResponseLabel: { EN: "Response Time", PT: "Tempo de Resposta" },
+  contactResponseValue: { EN: "Within 24 hours", PT: "Em até 24 horas" },
+
+  // Spoken languages
+  portuguese: { EN: "Portuguese", PT: "Português" },
+  english: { EN: "English", PT: "Inglês" },
+
+  // Fun Stuff / Widgets section
+  funStuffTitle: { EN: "Fun Stuff", PT: "Fun Stuff" },
+  funStuffDescription: {
+    EN: "Some experiments and interactive toys I've built.",
+    PT: "Alguns experimentos e brinquedos interativos que eu criei.",
+  },
+
+  // Programming Skills section
+  programmingSkillsTitle: {
+    EN: "Programming Languages & Tools",
+    PT: "Linguagens de Programação & Ferramentas",
+  },
+  itSkillsTitle: {
+    EN: "IT & Infrastructure",
+    PT: "TI & Infraestrutura",
+  },
 };
 
 export const getTranslation = (key: string, language: LanguageCode): string => {

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState, lazy } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,20 +15,6 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LegoButton from "./LegoButton";
-import FastTransparentCube from "@/components/FastTransparentCube";
-import WorldClocks from "@/components/WorldClocks";
-const MicroFalconViewer = lazy(() => import("@/components/MicroFalconViewer"));
-
-const ViewerSkeleton = ({ height }: { height: number }) => (
-  <div
-    className="w-full rounded-3xl border border-muted/20 bg-muted/10 flex items-center justify-center animate-pulse"
-    style={{ minHeight: height }}
-  >
-    <span className="text-sm text-muted-foreground/70">
-      Loading 3D experience…
-    </span>
-  </div>
-);
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -43,8 +29,6 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const { toast } = useToast();
-  const falconContainerRef = useRef<HTMLDivElement | null>(null);
-  const [showFalconViewer, setShowFalconViewer] = useState(false);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -108,7 +92,7 @@ const ContactSection = () => {
       const formDataToSend = new FormData();
       formDataToSend.append(
         "access_key",
-        "c40cf7dd-eb73-4c03-9a22-30647387e501"
+        "c40cf7dd-eb73-4c03-9a22-30647387e501",
       );
       formDataToSend.append("name", formData.name.trim());
       formDataToSend.append("email", formData.email.trim());
@@ -155,7 +139,7 @@ const ContactSection = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -172,47 +156,23 @@ const ContactSection = () => {
     }
   };
 
-  useEffect(() => {
-    if (showFalconViewer) return;
-    const node = falconContainerRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShowFalconViewer(true);
-            obs.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: "200px 0px",
-        threshold: 0.2,
-      }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [showFalconViewer]);
-
   const contactInfo = [
     {
       icon: Mail,
-      label: "Email",
+      labelKey: "contactEmailLabel",
       value: "hugoviegas3.1@gmail.com",
       link: "mailto:hugoviegas3.1@gmail.com",
     },
     {
       icon: MapPin,
-      label: "Location",
-      value: "Dublin, Ireland",
+      labelKey: "contactLocationLabel",
+      valueKey: "contactLocationValue",
       link: null,
     },
     {
       icon: Clock,
-      label: "Response Time",
-      value: "Within 24 hours",
+      labelKey: "contactResponseLabel",
+      valueKey: "contactResponseValue",
       link: null,
     },
   ];
@@ -418,7 +378,7 @@ const ContactSection = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-8 slide-up delay-300">
+          <div className="space-y-6 slide-up delay-300">
             <div>
               <h3 className="text-3xl font-bold text-gradient mb-4">
                 {t("getInTouch")}
@@ -439,18 +399,18 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground">
-                        {info.label}
+                        {t(info.labelKey)}
                       </div>
                       {info.link ? (
                         <a
                           href={info.link}
                           className="text-lg font-semibold text-foreground hover:text-primary transition-colors"
                         >
-                          {info.value}
+                          {info.valueKey ? t(info.valueKey) : info.value}
                         </a>
                       ) : (
                         <div className="text-lg font-semibold text-foreground">
-                          {info.value}
+                          {info.valueKey ? t(info.valueKey) : info.value}
                         </div>
                       )}
                     </div>
@@ -479,7 +439,7 @@ const ContactSection = () => {
                       >,
                       {
                         className: `w-5 h-5 ${social.color} group-hover:scale-110 transition-transform`,
-                      }
+                      },
                     )}
                     <span className="text-muted-foreground group-hover:text-primary transition-colors">
                       {social.label}
@@ -500,26 +460,6 @@ const ContactSection = () => {
               <p className="text-sm text-muted-foreground">
                 {t("availabilityText")}
               </p>
-            </div>
-
-            {/* World Clocks (rendered directly so only inner card is shown) */}
-            <WorldClocks />
-
-            <div className="glass-strong p-6 rounded-3xl flex justify-center">
-              <FastTransparentCube width={240} height={240} enableExpand />
-            </div>
-
-            <div
-              ref={falconContainerRef}
-              className="glass-strong p-6 rounded-3xl"
-            >
-              <Suspense fallback={<ViewerSkeleton height={360} />}>
-                {showFalconViewer ? (
-                  <MicroFalconViewer />
-                ) : (
-                  <ViewerSkeleton height={360} />
-                )}
-              </Suspense>
             </div>
           </div>
         </div>

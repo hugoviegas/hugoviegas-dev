@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import TopControls from "@/components/TopControls";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -7,10 +7,14 @@ import ExperienceSection from "@/components/ExperienceSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import DynamicSidebar from "@/components/DynamicSidebar";
-import AmbientDots from "@/components/AmbientDots";
 import TopBricksRow from "@/components/TopBricksRow";
-import BackgroundXWing from "@/components/background/BackgroundXWing";
-import ChatBot from "@/components/ChatBot";
+
+const AmbientDots = lazy(() => import("@/components/AmbientDots"));
+const BackgroundXWing = lazy(
+  () => import("@/components/background/BackgroundXWing"),
+);
+const ChatBot = lazy(() => import("@/components/ChatBot"));
+const WidgetsSection = lazy(() => import("@/components/WidgetsSection"));
 
 const Index = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -32,13 +36,17 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground relative">
       {/* Ambient dots shared across the site (subtle, randomized) */}
-      <AmbientDots count={36} />
-      <BackgroundXWing />
+      <Suspense fallback={null}>
+        <AmbientDots count={18} />
+        <BackgroundXWing />
+      </Suspense>
       <TopControls />
       <DynamicSidebar show={showSidebar} />
       <TopBricksRow />
       {/* AI Chatbot */}
-      <ChatBot />
+      <Suspense fallback={null}>
+        <ChatBot />
+      </Suspense>
       {/* Main content positioned above background */}
       <div className="relative z-10">
         <section id="hero">
@@ -56,6 +64,9 @@ const Index = () => {
         <section id="contact" className="pt-16">
           <ContactSection />
         </section>
+        <Suspense fallback={null}>
+          <WidgetsSection />
+        </Suspense>
         <Footer />
       </div>
     </div>
