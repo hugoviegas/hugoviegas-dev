@@ -14,6 +14,7 @@ declare global {
 }
 import { Button } from "@/components/ui/button";
 import { X, Maximize } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function FastTransparentCube({
   width = 250,
@@ -24,6 +25,7 @@ export default function FastTransparentCube({
   height?: number;
   enableExpand?: boolean;
 }) {
+  const { t } = useLanguage();
   const hasInitialized = useRef(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const cubeRef = useRef<HTMLDivElement | null>(null);
@@ -316,9 +318,10 @@ export default function FastTransparentCube({
 
         {enableExpand && !isAnimating && (
           <Button
-            size="sm"
+            size="icon"
             variant="outline"
-            className="!p-3 backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all"
+            aria-label={t("expandCube")}
+            className="h-11 w-11 rounded-full border-border bg-card/70 backdrop-blur-sm hover:bg-accent/20 transition-colors"
             onClick={flipToExpanded}
             style={{ zIndex: 91, touchAction: "manipulation" }}
           >
@@ -353,21 +356,22 @@ export default function FastTransparentCube({
                 }}
               >
                 <Button
-                  size="sm"
+                  size="icon"
                   variant="outline"
-                  className="!p-3 backdrop-blur-sm bg-white/20 hover:bg-white/30 border-white/30"
+                  aria-label={t("closeCube")}
+                  className="h-11 w-11 rounded-full border-white/30 bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
                   onClick={!isAnimating ? flipToOriginal : undefined}
                 >
-                  <X className="w-6 h-6 text-white" />
+                  <X className="w-6 h-6" />
                 </Button>
 
                 <Button
-                  size="sm"
+                  size="icon"
                   variant="outline"
-                  className="!p-3 backdrop-blur-sm bg-white/15 hover:bg-white/25 border-white/30"
+                  className="h-11 w-11 rounded-full border-white/30 bg-white/15 text-white backdrop-blur-sm hover:bg-white/25"
                   onClick={() => playSequence("R U R' U'")}
                   disabled={isAnimating}
-                  aria-label="Play cube moves"
+                  aria-label={t("playCubeMoves")}
                 >
                   ▶
                 </Button>

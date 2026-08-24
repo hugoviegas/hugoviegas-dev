@@ -19,152 +19,6 @@ body {
 }
 
 /* ===========================================
-   FONT SIZE UTILITIES
-   =========================================== */
-
-.text-xs {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-normal);
-}
-.text-sm {
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
-}
-.text-base {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-relaxed);
-}
-.text-lg {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-relaxed);
-}
-.text-xl {
-  font-size: var(--font-size-xl);
-  line-height: var(--line-height-relaxed);
-}
-.text-2xl {
-  font-size: var(--font-size-2xl);
-  line-height: var(--line-height-relaxed);
-}
-.text-3xl {
-  font-size: var(--font-size-3xl);
-  line-height: var(--line-height-snug);
-}
-.text-4xl {
-  font-size: var(--font-size-4xl);
-  line-height: var(--line-height-snug);
-}
-.text-5xl {
-  font-size: var(--font-size-5xl);
-  line-height: var(--line-height-tight);
-}
-.text-6xl {
-  font-size: var(--font-size-6xl);
-  line-height: var(--line-height-tight);
-}
-.text-7xl {
-  font-size: var(--font-size-7xl);
-  line-height: var(--line-height-tight);
-}
-.text-8xl {
-  font-size: var(--font-size-8xl);
-  line-height: var(--line-height-tight);
-}
-.text-9xl {
-  font-size: var(--font-size-9xl);
-  line-height: var(--line-height-tight);
-}
-
-/* ===========================================
-   FONT WEIGHT UTILITIES
-   =========================================== */
-
-.font-thin {
-  font-weight: var(--font-weight-thin);
-}
-.font-light {
-  font-weight: var(--font-weight-light);
-}
-.font-normal {
-  font-weight: var(--font-weight-normal);
-}
-.font-medium {
-  font-weight: var(--font-weight-medium);
-}
-.font-semibold {
-  font-weight: var(--font-weight-semibold);
-}
-.font-bold {
-  font-weight: var(--font-weight-bold);
-}
-.font-extrabold {
-  font-weight: var(--font-weight-extrabold);
-}
-.font-black {
-  font-weight: var(--font-weight-black);
-}
-
-/* ===========================================
-   LINE HEIGHT UTILITIES
-   =========================================== */
-
-.leading-tight {
-  line-height: var(--line-height-tight);
-}
-.leading-snug {
-  line-height: var(--line-height-snug);
-}
-.leading-normal {
-  line-height: var(--line-height-normal);
-}
-.leading-relaxed {
-  line-height: var(--line-height-relaxed);
-}
-.leading-loose {
-  line-height: var(--line-height-loose);
-}
-
-/* ===========================================
-   LETTER SPACING UTILITIES
-   =========================================== */
-
-.tracking-tighter {
-  letter-spacing: var(--letter-spacing-tighter);
-}
-.tracking-tight {
-  letter-spacing: var(--letter-spacing-tight);
-}
-.tracking-normal {
-  letter-spacing: var(--letter-spacing-normal);
-}
-.tracking-wide {
-  letter-spacing: var(--letter-spacing-wide);
-}
-.tracking-wider {
-  letter-spacing: var(--letter-spacing-wider);
-}
-.tracking-widest {
-  letter-spacing: var(--letter-spacing-widest);
-}
-
-/* ===========================================
-   TEXT ALIGNMENT UTILITIES
-   =========================================== */
-
-.text-left {
-  text-align: left;
-}
-.text-center {
-  text-align: center;
-}
-.text-right {
-  text-align: right;
-}
-.text-justify {
-  text-align: justify;
-}
-
-/* ===========================================
    TEXT TRANSFORM UTILITIES
    =========================================== */
 
@@ -439,61 +293,6 @@ body {
 }
 
 /* ===========================================
-   LEGACY COMPATIBILITY CLASSES
-   =========================================== */
-
-/* Map existing classes to new typography system */
-.heading-hero {
-  font-size: var(--font-size-5xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  background: var(--color-gradient-primary);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-@media (min-width: 768px) {
-  .heading-hero {
-    font-size: var(--font-size-6xl);
-  }
-}
-
-@media (min-width: 1024px) {
-  .heading-hero {
-    font-size: var(--font-size-7xl);
-  }
-}
-
-.heading-section {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  color: hsl(var(--color-text-primary));
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-@media (min-width: 768px) {
-  .heading-section {
-    font-size: var(--font-size-4xl);
-  }
-}
-
-@media (min-width: 1024px) {
-  .heading-section {
-    font-size: var(--font-size-5xl);
-  }
-}
-
-.text-gradient {
-  background: var(--color-gradient-primary);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* ===========================================
    TEXT UTILITY CLASSES
    =========================================== */
 
@@ -595,7 +394,7 @@ body {
 }
 
 .text-link:focus {
-  outline: 2px solid hsl(var(--color-interactive-focus));
+  outline: 2px solid hsl(var(--color-interactive-focus) / var(--color-interactive-focus-alpha));
   outline-offset: 2px;
 }
 
@@ -617,35 +416,7 @@ body {
 
 /* Focus indicators for keyboard navigation */
 .text-focus:focus {
-  outline: 2px solid hsl(var(--color-interactive-focus));
+  outline: 2px solid hsl(var(--color-interactive-focus) / var(--color-interactive-focus-alpha));
   outline-offset: 2px;
   border-radius: var(--radius-sm);
-}
-
-/* Screen reader utilities */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.sr-only:focus {
-  position: static;
-  width: auto;
-  height: auto;
-  padding: var(--space-2);
-  margin: 0;
-  overflow: visible;
-  clip: auto;
-  white-space: normal;
-  background: hsl(var(--color-bg-surface));
-  border: 2px solid hsl(var(--color-interactive-focus));
-  border-radius: var(--radius-md);
-  z-index: var(--z-index-tooltip);
 }

@@ -69,7 +69,7 @@
 .nav-item.active::after {
   background: linear-gradient(
     180deg,
-    hsl(var(--color-glass-bg)),
+    hsl(var(--color-glass-bg) / var(--color-glass-alpha)),
     rgba(255, 255, 255, 0.03)
   );
   box-shadow: var(--shadow-glass);

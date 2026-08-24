@@ -140,35 +140,33 @@ export function ExperienceSection(props) {
       : exp.achievements.slice(0, 3);
 
     return (
-      <div className="relative pl-16 pb-8 last:pb-0">
-        <div className="absolute left-5 w-3 h-3 bg-primary rounded-full border-2 border-background shadow-lg"></div>
-        <div className="glass p-4 rounded-lg hover:glass-strong transition-all duration-300">
+      <div className="relative pl-12 md:pl-16 pb-8 last:pb-0">
+        <div className="absolute left-[18px] md:left-5 w-3 h-3 rounded-full bg-primary border-2 border-background shadow-lg"></div>
+        <div className="glass-card glass-card-hover p-6">
           <div className="flex flex-wrap gap-1.5 mb-2">
             <Badge
               variant="outline"
-              className="text-primary border-primary/50 text-xs px-2 py-0"
+              className="border border-primary/40 text-primary text-xs px-2 py-0.5"
             >
               <Calendar className="w-2.5 h-2.5 mr-1" />
               {exp.period}
             </Badge>
             <Badge
               variant="outline"
-              className="text-secondary border-secondary/50 text-xs px-2 py-0"
+              className="border border-secondary/40 text-secondary text-xs px-2 py-0.5"
             >
               <MapPin className="w-2.5 h-2.5 mr-1" />
               {exp.location}
             </Badge>
           </div>
 
-          <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-1">
+          <h4 className="mb-1 text-lg font-semibold text-foreground">
             {exp.title}
           </h4>
-          <h5 className="text-sm text-primary font-semibold mb-2">
+          <h5 className="mb-2 text-sm font-semibold text-primary">
             {exp.company}
           </h5>
-          <p className="text-sm text-muted-foreground mb-3 leading-relaxed text-left">
-            {exp.description}
-          </p>
+          <p className="caption-text mb-3 text-left">{exp.description}</p>
 
           <div className="space-y-1.5">
             {visibleAchievements.map((achievement, achIndex) => (
@@ -176,10 +174,8 @@ export function ExperienceSection(props) {
                 key={`${cardKey}-ach-${achIndex}`}
                 className="flex items-start gap-2"
               >
-                <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <span className="text-sm text-muted-foreground">
-                  {achievement}
-                </span>
+                <div className="mt-2 w-1.5 h-1.5 shrink-0 rounded-full bg-accent"></div>
+                <span className="caption-text">{achievement}</span>
               </div>
             ))}
           </div>
@@ -188,11 +184,12 @@ export function ExperienceSection(props) {
             type="button"
             onClick={onToggle}
             aria-expanded={isExpanded}
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
           >
             <img
               src={coinIcon}
-              alt="Toggle details"
+              alt=""
+              aria-hidden="true"
               className={`w-4 h-4 object-contain transition-transform duration-300 ${
                 isExpanded ? "rotate-180" : ""
               }`}
@@ -205,32 +202,29 @@ export function ExperienceSection(props) {
   };
 
   return (
-    <section id="experience" className="py-20 bg-muted/3 relative w-full">
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="mb-16 fade-in">
-          <h2 className="heading-section mb-6 text-center">
-            {t("experienceTitle")}
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-center leading-relaxed">
-            {t("experienceIntro")}
-          </p>
+    <section
+      id="experience"
+      className="section-y relative w-full bg-muted/20"
+    >
+      <div className="section-wrapper relative z-10">
+        <div className="section-header fade-in">
+          <h2 className="heading-section mb-4">{t("experienceTitle")}</h2>
+          <p className="body-text mx-auto max-w-3xl">{t("experienceIntro")}</p>
         </div>
 
         {/* Work Experience & Education - Side by Side */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid lg:grid-cols-2 gap-8 mb-8">
           {/* Work Experience Section */}
           <div>
             <div className="flex items-center gap-2 mb-6 slide-up">
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
-                <Briefcase className="w-4 h-4 text-white" />
+              <div className="w-10 h-10 shrink-0 rounded-full bg-primary flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-primary-foreground" />
               </div>
-              <h3 className="text-xl lg:text-2xl font-bold text-blue-500">
-                {t("workExperienceTitle")}
-              </h3>
+              <h3 className="heading-card">{t("workExperienceTitle")}</h3>
             </div>
 
             <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-blue-500/30"></div>
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-border"></div>
               <div className="space-y-0">
                 {workExperiences.map((exp, index) => {
                   const cardKey = `work-${index}`;
@@ -251,16 +245,14 @@ export function ExperienceSection(props) {
           {/* Education Section */}
           <div>
             <div className="flex items-center gap-2 mb-6 slide-up">
-              <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
-                <GraduationCap className="w-4 h-4 text-white" />
+              <div className="w-10 h-10 shrink-0 rounded-full bg-secondary flex items-center justify-center">
+                <GraduationCap className="w-5 h-5 text-secondary-foreground" />
               </div>
-              <h3 className="text-xl lg:text-2xl font-bold text-purple-500">
-                {t("educationTitle")}
-              </h3>
+              <h3 className="heading-card">{t("educationTitle")}</h3>
             </div>
 
             <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-blue-500/30"></div>
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-border"></div>
               <div className="space-y-0">
                 {education.map((edu, index) => {
                   const cardKey = `edu-${index}`;
@@ -293,24 +285,23 @@ function SkillsSection({ certifications, t }) {
 
   return (
     <div className="mt-12">
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-2 gap-6">
         {/* Certifications - Collapsible */}
-        <div className="glass-strong rounded-lg p-4 slide-up">
+        <div className="glass-card p-6 slide-up">
           <button
             onClick={() => setIsCertsExpanded(!isCertsExpanded)}
-            className="w-full flex items-center justify-between mb-0 hover:opacity-80 transition-opacity"
+            className="flex min-h-11 w-full items-center justify-between hover:opacity-80 transition-opacity"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
-                <Award className="w-4 h-4 text-white" />
+              <div className="w-10 h-10 shrink-0 rounded-full bg-accent flex items-center justify-center">
+                <Award className="w-5 h-5 text-accent-foreground" />
               </div>
-              <h3 className="text-base lg:text-lg font-bold text-green-500">
-                {t("certificationsTitle")}
-              </h3>
+              <h3 className="heading-card">{t("certificationsTitle")}</h3>
             </div>
             <img
               src={coinIcon}
-              alt="Toggle skills"
+              alt=""
+              aria-hidden="true"
               className={`w-4 h-4 object-contain transition-transform duration-300 ${
                 isCertsExpanded ? "rotate-180" : ""
               }`}
@@ -322,10 +313,10 @@ function SkillsSection({ certifications, t }) {
               {certifications.map((cert, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-2 p-1.5 rounded hover:bg-muted/20 transition-colors"
+                  className="flex items-center gap-2 p-2 rounded-md hover:bg-muted/40 transition-colors"
                 >
-                  <div className="w-1 h-1 bg-green-500 rounded-full"></div>
-                  <span className="text-xs text-muted-foreground">{cert}</span>
+                  <div className="w-1.5 h-1.5 shrink-0 rounded-full bg-accent"></div>
+                  <span className="caption-text">{cert}</span>
                 </div>
               ))}
             </div>
@@ -333,22 +324,21 @@ function SkillsSection({ certifications, t }) {
         </div>
 
         {/* Current Focus - Collapsible */}
-        <div className="glass-strong rounded-lg p-4 slide-up delay-150">
+        <div className="glass-card p-6 slide-up delay-150">
           <button
             onClick={() => setIsFocusExpanded(!isFocusExpanded)}
-            className="w-full flex items-center justify-between mb-0 hover:opacity-80 transition-opacity"
+            className="flex min-h-11 w-full items-center justify-between hover:opacity-80 transition-opacity"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
-                <BookOpen className="w-4 h-4 text-white" />
+              <div className="w-10 h-10 shrink-0 rounded-full bg-secondary flex items-center justify-center">
+                <BookOpen className="w-5 h-5 text-secondary-foreground" />
               </div>
-              <h3 className="text-base lg:text-lg font-bold text-orange-500">
-                {t("currentFocusLabel")}
-              </h3>
+              <h3 className="heading-card">{t("currentFocusLabel")}</h3>
             </div>
             <img
               src={coinIcon}
-              alt="Toggle focus"
+              alt=""
+              aria-hidden="true"
               className={`w-4 h-4 object-contain transition-transform duration-300 ${
                 isFocusExpanded ? "rotate-180" : ""
               }`}
@@ -357,7 +347,7 @@ function SkillsSection({ certifications, t }) {
 
           {isFocusExpanded && (
             <div className="mt-3 animate-in fade-in duration-300">
-              <p className="text-xs text-muted-foreground mb-3 leading-relaxed text-left">
+              <p className="caption-text mb-3 text-left">
                 {t("currentFocusText")}
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -371,7 +361,7 @@ function SkillsSection({ certifications, t }) {
                 ].map((focus, index) => (
                   <Badge
                     key={index}
-                    className="bg-orange-500/10 text-orange-400 border-orange-500/30 text-xs px-2 py-0.5"
+                    className="bg-secondary/15 text-secondary border border-secondary/30 text-xs px-2 py-0.5"
                   >
                     {focus}
                   </Badge>

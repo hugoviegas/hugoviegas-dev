@@ -15,13 +15,103 @@
 @tailwind utilities;
 
 @layer base {
+  /* ===========================================
+     SHADCN / TAILWIND SEMANTIC TOKENS
+     Bridges the design-token layer to every
+     Tailwind color + radius utility.
+     Dark is the default (:root / .dark);
+     .light holds the light-theme overrides.
+     =========================================== */
+  :root,
+  .dark {
+    --background: 220 13% 10%;
+    --foreground: 210 40% 98%;
+
+    --card: 220 13% 13%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 221 39% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 174 100% 42%;
+    --primary-foreground: 221 39% 11%;
+    --primary-rgb: 0, 214, 178;
+
+    --secondary: 262 83% 67%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 18% 68%;
+
+    --accent: 120 100% 60%;
+    --accent-foreground: 221 39% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 25% 27%;
+    --input: 215 25% 27%;
+    --ring: 174 100% 42%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 13% 13%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 174 100% 42%;
+    --sidebar-primary-foreground: 221 39% 11%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 25% 27%;
+    --sidebar-ring: 174 100% 42%;
+  }
+
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 221 39% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 221 39% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 39% 11%;
+
+    --primary: 174 100% 28%;
+    --primary-foreground: 0 0% 100%;
+    --primary-rgb: 0, 143, 119;
+
+    --secondary: 262 70% 52%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 40%;
+
+    --accent: 142 72% 30%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 52%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 174 100% 28%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 221 39% 11%;
+    --sidebar-primary: 174 100% 28%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 221 39% 11%;
+    --sidebar-border: 214 32% 88%;
+    --sidebar-ring: 174 100% 28%;
+  }
+
   * {
     box-sizing: border-box;
   }
 
   body {
-    background: hsl(var(--color-bg-primary));
-    color: hsl(var(--color-text-primary));
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
     font-family: var(--font-family-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -29,41 +119,136 @@
 }
 
 @layer components {
-  /* Glassmorphism Components */
+  /* ===========================================
+     LAYOUT PRIMITIVES
+     One wrapper + one vertical rhythm for every
+     top-level section of the site.
+     =========================================== */
+  .section-wrapper {
+    @apply w-full max-w-6xl mx-auto px-6 md:px-12;
+  }
+
+  /* Vertical rhythm for a full-page section */
+  .section-y {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+
+  /* Standard header block above a section's content */
+  .section-header {
+    @apply mb-10 md:mb-14 text-center;
+  }
+
+  /* ===========================================
+     TYPOGRAPHY SCALE
+     One heading / body / caption pattern used
+     across every section.
+     =========================================== */
+  .heading-hero {
+    @apply text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight;
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+
+  .heading-section {
+    @apply text-3xl md:text-4xl font-bold tracking-tight text-foreground;
+  }
+
+  .heading-card {
+    @apply text-xl md:text-2xl font-semibold tracking-tight text-foreground;
+  }
+
+  .body-text {
+    @apply text-base md:text-lg text-muted-foreground leading-relaxed;
+  }
+
+  .caption-text {
+    @apply text-sm text-muted-foreground leading-relaxed;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+
+  /* ===========================================
+     SURFACES
+     glass-card is the single card pattern; its
+     colors come from theme tokens so one class
+     works in light and dark.
+     =========================================== */
   .glass {
-    background: var(--color-glass-bg);
+    background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--color-glass-border);
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
     box-shadow: var(--shadow-glass);
   }
 
   .glass-strong {
-    background: hsl(var(--color-glass-bg) / 0.9);
+    background: hsl(var(--color-glass-bg) / var(--color-glass-strong-alpha));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--color-glass-border) / 0.8);
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-strong-alpha));
     box-shadow: var(--shadow-glass);
   }
 
-  /* Reusable glass pill used by TopControls and Navbar to ensure consistent blur/opacity */
+  /* Unified card: rounded-2xl + border + backdrop blur + shadow */
+  .glass-card {
+    @apply rounded-2xl shadow-lg;
+    background: hsl(var(--color-glass-bg) / var(--color-glass-strong-alpha));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-strong-alpha));
+  }
+
+  /* Interactive variant of glass-card */
+  .glass-card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  /* Standard inner padding for cards */
+  .card-padding {
+    @apply p-6 md:p-8;
+  }
+
+  /* Reusable glass pill used by TopControls and Navbar */
   .pill-glass {
-    background: var(--color-glass-bg);
+    background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--color-glass-border);
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
     box-shadow: var(--shadow-glass);
   }
 
   /* Centered rounded glass used in navbar desktop */
   .center-glass {
-    background: var(--color-glass-bg);
+    @apply rounded-lg px-4 py-2;
+    background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-radius: var(--radius-lg);
-    padding: var(--space-2) var(--space-4);
-    border: 1px solid var(--color-glass-border);
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
     box-shadow: var(--shadow-glass);
+  }
+
+  /* Circular icon button used for social / scroll affordances */
+  .icon-pill {
+    @apply inline-flex items-center justify-center rounded-full;
+    @apply h-11 w-11 sm:h-12 sm:w-12;
+    @apply transition-all duration-300 hover:scale-110 hover:neon-glow;
+    background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* Pill with a label next to the icon (auto width, same height) */
+  .icon-pill-wide {
+    @apply w-auto gap-2 px-4;
   }
 
   /* Neon Glow Effects */
@@ -72,18 +257,14 @@
   }
 
   .neon-text {
-    text-shadow: 0 0 10px hsl(var(--color-brand-primary)),
-      0 0 20px hsl(var(--color-brand-primary)),
-      0 0 30px hsl(var(--color-brand-primary));
+    text-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)),
+      0 0 30px hsl(var(--primary));
   }
 
   /* Button Variants */
   .btn-hero {
+    @apply rounded-lg px-8 py-4 font-semibold text-primary-foreground;
     background: var(--color-gradient-primary);
-    color: hsl(var(--color-text-inverse));
-    font-weight: var(--font-weight-semibold);
-    padding: var(--space-4) var(--space-8);
-    border-radius: var(--radius-lg);
     transition: var(--transition-transform), var(--transition-base);
   }
 
@@ -93,23 +274,21 @@
   }
 
   .btn-ghost {
-    border: 1px solid hsl(var(--color-border-primary));
-    color: hsl(var(--color-brand-primary));
-    background: transparent;
+    @apply border border-primary/40 bg-transparent text-primary;
     transition: var(--transition-colors);
   }
 
   .btn-ghost:hover {
-    background: hsl(var(--color-brand-primary) / 0.1);
-    border-color: hsl(var(--color-brand-primary));
+    @apply border-primary bg-primary/10;
   }
 
   /* Card Variants */
   .card-project {
-    background: var(--color-glass-bg);
+    background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--color-glass-border);
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
     box-shadow: var(--shadow-glass);
     transition: var(--transition-transform), var(--transition-base);
     cursor: pointer;
@@ -121,66 +300,22 @@
   }
 
   .card-skill {
-    background: var(--color-glass-bg);
+    @apply rounded-2xl p-6 text-center;
+    background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    padding: var(--space-6);
-    text-align: center;
-    border-radius: var(--radius-lg);
     transition: var(--transition-colors), var(--transition-transform);
   }
 
   .card-skill:hover {
-    background: hsl(var(--color-brand-primary) / 0.05);
-    border: 1px solid hsl(var(--color-glass-border));
+    @apply bg-primary/5;
+    border: 1px solid
+      hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
   }
 
-  /* Typography */
-  .heading-hero {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-5xl);
-    line-height: var(--line-height-tight);
-    background: var(--color-gradient-primary);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  @media (min-width: 768px) {
-    .heading-hero {
-      font-size: var(--font-size-6xl);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .heading-hero {
-      font-size: var(--font-size-7xl);
-    }
-  }
-
-  .heading-section {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-3xl);
-    color: hsl(var(--color-text-primary));
-  }
-
-  @media (min-width: 768px) {
-    .heading-section {
-      font-size: var(--font-size-4xl);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .heading-section {
-      font-size: var(--font-size-5xl);
-    }
-  }
-
-  .text-gradient {
-    background: var(--color-gradient-primary);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  /* Typewriter caret used by the hero role text */
+  .type-cursor {
+    animation: type-cursor-blink 1s steps(1, end) infinite;
   }
 
   /* Animations */
@@ -190,6 +325,18 @@
 
   .slide-up {
     animation: slide-up var(--duration-slow) var(--ease-out) both;
+  }
+}
+
+
+@keyframes type-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
   }
 }
 
@@ -397,10 +544,10 @@
 
 .lego-contrast {
   /* Use existing glass variables for consistent contrast with theme */
-  background: var(--color-glass-bg);
+  background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid hsl(var(--color-glass-border) / 0.9);
+  border: 1px solid hsl(var(--color-glass-border) / var(--color-glass-border-strong-alpha));
 }
 
 .lego-content {
@@ -469,14 +616,11 @@
   opacity: 1;
 }
 
-/* Prevent the decorative brick explosion from expanding the page width on
-   small devices. Allow bricks to appear outside the card by keeping
-   overflow visible on the .project-wrapper, but clip anything that would
-   overflow the projects container (viewport-scoped). This keeps the effect
-   intact while avoiding layout shifts / horizontal scroll on mobile. */
-#projects .container,
-#projects .wide-container {
-  overflow-x: hidden;
+/* Clip the decorative brick explosion at the section edge so it can never
+   widen the page. Scoped to the section (not the inner wrapper) so the
+   standardized .section-wrapper keeps its max-width and alignment. */
+#projects {
+  overflow-x: clip;
 }
 
 .brick-explosion-item {
@@ -567,17 +711,6 @@
   max-height: var(--brick-item-max-size);
   width: auto !important; /* allow max-width to take precedence */
   height: auto !important;
-}
-
-/* Make the projects container full-viewport width but keep the inner layout centered
-   so bricks that exceed the card can be clipped to the viewport without shifting it. */
-#projects .container,
-#projects .wide-container {
-  overflow-x: hidden;
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
 }
 
 /* Ensure the project card renders above the explosion layer */
@@ -1095,15 +1228,15 @@
 
 /* Enhanced glassmorphism effect for all sidebar variants */
 .sidebar-glass {
-  background: var(--color-glass-bg);
+  background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--color-glass-border);
+  border: 1px solid hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
   box-shadow: var(--shadow-glass);
 }
 
 .sidebar-glass-hover {
-  background: hsl(var(--color-glass-bg) / 0.9);
+  background: hsl(var(--color-glass-bg) / var(--color-glass-strong-alpha));
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   box-shadow: var(--shadow-lg);
@@ -1573,10 +1706,13 @@
 
 /* ===========================================
    MOBILE RESPONSIVE FIXES
-   Ensure proper scaling on smaller mobile devices
+   Only rules that Tailwind utilities cannot express
+   (component-owned classes and decorative elements).
+   Layout/spacing/typography is handled by the
+   responsive utilities on the components themselves.
    =========================================== */
 
-/* Force full viewport width on all containers - no minimum width */
+/* Never allow a decorative layer to widen the page */
 html,
 body,
 #root {
@@ -1585,17 +1721,11 @@ body,
   overflow-x: hidden;
 }
 
-/* Very small mobile screens (320px - 400px) */
+/* Very small mobile screens (<= 400px) */
 @media (max-width: 400px) {
-  /* Reduce container padding */
-  .container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-  }
-
-  /* Scale down LegoButtons for tiny screens (320px)
-     140px is approximately 44% of 320px viewport width, ensuring
-     the button fits comfortably with padding while remaining touch-friendly */
+  /* Scale down LegoButtons for tiny screens (320px).
+     140px is ~44% of a 320px viewport, so the button still fits
+     with padding while staying above the 48px touch target. */
   .btn-lego {
     min-width: 140px;
     min-height: 48px;
@@ -1603,109 +1733,27 @@ body,
     padding-top: 6px !important;
   }
 
-  /* Adjust heading sizes for very small screens */
-  .heading-hero {
-    font-size: var(--font-size-4xl);
-  }
-
-  .heading-section {
-    font-size: var(--font-size-2xl);
-  }
-
-  /* Reduce typing area height */
-  .h-24 {
-    height: 5rem;
-  }
-
-  /* Make social links wrap better */
-  .flex.space-x-6 {
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  /* Adjust dialog content for tiny screens */
-  .DialogContent {
-    max-width: 95vw;
-    padding: 1rem;
-  }
-
-  /* Make CTA buttons stack on very small screens */
-  .flex.flex-wrap.gap-4 {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  /* Reduce glass panel padding on hero and about sections for tiny screens.
-     More specific selectors to avoid overriding component-specific padding */
+  /* Tighten glass panel padding in the two densest sections */
   #hero .glass,
   #hero .glass-strong,
+  #hero .glass-card,
   #about .glass,
-  #about .glass-strong {
+  #about .glass-strong,
+  #about .glass-card {
     padding: 1rem;
-  }
-
-  /* Adjust experience timeline */
-  #experience .relative.pl-16 {
-    padding-left: 2.5rem;
-  }
-
-  #experience .absolute.left-5 {
-    left: 0.5rem;
-  }
-
-  #experience .absolute.left-6 {
-    left: 0.75rem;
   }
 }
 
-/* Small mobile screens (400px - 480px) */
+/* Small mobile screens (<= 480px) */
 @media (max-width: 480px) {
-  /* Reduce hero image size */
-  .aspect-square.w-11\/12 {
-    width: 85%;
-  }
-
-  /* Adjust grid gaps */
-  .gap-12 {
-    gap: 2rem;
-  }
-
-  .gap-8 {
-    gap: 1.5rem;
-  }
-
-  /* Scale world clocks for mobile */
+  /* WorldClocks is a component-owned class, not a utility */
   .WorldClocks {
     font-size: 0.875rem;
   }
-
-  /* Adjust footer layout */
-  footer .flex.flex-col.md\\:flex-row {
-    text-align: center;
-  }
 }
 
-/* Standard mobile (480px - 640px) */
+/* Standard mobile (<= 640px) */
 @media (max-width: 640px) {
-  /* Ensure container doesn't overflow */
-  .wide-container {
-    max-width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  /* Reduce section padding */
-  .py-20 {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-
-  /* Make project cards stack properly - using Tailwind at-apply or direct style override */
-  /* Grid responsiveness is handled by Tailwind md: prefixes in components */
-
-  /* Ensure images don't overflow */
   img {
     max-width: 100%;
     height: auto;

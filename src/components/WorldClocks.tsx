@@ -12,7 +12,7 @@ const WorldClocks: React.FC = () => {
   // Prefer page lang attribute per requirement; fallback to app language
   const pageLang =
     typeof document !== "undefined" ? document.documentElement.lang : undefined;
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const isPt = (pageLang && pageLang.startsWith("pt")) || language === "PT";
 
   const locale = isPt ? "pt-BR" : "en-GB";
@@ -100,66 +100,44 @@ const WorldClocks: React.FC = () => {
     .map((z) => times[z.id]?.offsetLabel || "")
     .join(" / ");
 
-  // Styles using CSS variables for high-contrast tokens
-  const containerStyle: React.CSSProperties = {
-    // CSS custom props for high-contrast tokens
-    // TS requires a cast when using custom property names
-    ...(Object.fromEntries([
-      ["--wc-accent-start", "#06b6d4"],
-      ["--wc-accent-end", "#7c3aed"],
-      ["--wc-text", "#0f172a"],
-      ["--wc-bg", "var(--card)"],
-    ]) as React.CSSProperties),
-  };
-
   return (
-    <div aria-live="off" style={containerStyle} className="w-full">
-      <div
-        className="rounded-xl overflow-hidden w-full"
-        style={{
-          background:
-            "linear-gradient(90deg,var(--wc-accent-start),var(--wc-accent-end))",
-        }}
-      >
+    <div aria-live="off" className="WorldClocks w-full">
+      <div className="w-full overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-secondary">
         <div className="p-6 text-white">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-semibold">
-              {isPt ? "Hora atual" : "Current time"}
-            </h3>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold">{t("worldClocksTitle")}</h3>
             {offsetBadge && (
               <span
-                className="text-xs bg-white/20 px-2 py-1 rounded"
+                className="rounded-md bg-white/20 px-2 py-1 text-xs"
                 aria-hidden
               >
-                {isPt ? "Fuso agora:" : "Offset now:"} {offsetBadge}
+                {t("worldClocksOffset")} {offsetBadge}
               </span>
             )}
           </div>
 
-          <div className="text-center" style={{ color: "#e6f7ff" }}>
-            <div className="flex gap-4 items-stretch">
-              {zones.map((z) => (
-                <div
-                  key={z.id}
-                  className="flex-1 min-w-0 px-3 py-4 flex flex-col items-center justify-center"
+          <div className="flex items-stretch gap-4 text-center">
+            {zones.map((z) => (
+              <div
+                key={z.id}
+                className="flex min-w-0 flex-1 flex-col items-center justify-center px-3 py-4"
+              >
+                <time
+                  dateTime={times[z.id]?.iso}
+                  aria-label={`${z.label} ${times[z.id]?.display}`}
+                  className="block font-mono text-lg md:text-xl lg:text-2xl leading-tight"
                 >
-                  <time
-                    dateTime={times[z.id]?.iso}
-                    aria-label={`${z.label} ${times[z.id]?.display}`}
-                    className="block text-lg md:text-xl lg:text-2xl font-mono leading-tight"
-                  >
-                    {times[z.id]?.display || "--:--:--"}
-                  </time>
+                  {times[z.id]?.display || "--:--:--"}
+                </time>
 
-                  <div className="mt-2 text-xs text-white/80 flex items-center gap-2">
-                    <span aria-hidden className="text-base">
-                      {z.flag}
-                    </span>
-                    <span className="font-medium truncate">{z.label}</span>
-                  </div>
+                <div className="mt-2 flex items-center gap-2 text-xs text-white/80">
+                  <span aria-hidden className="text-base">
+                    {z.flag}
+                  </span>
+                  <span className="truncate font-medium">{z.label}</span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

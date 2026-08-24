@@ -11,12 +11,20 @@ export default {
   ],
   prefix: "",
   theme: {
+    // Kept in sync with the `.section-wrapper` component class so `container`
+    // and `section-wrapper` never produce two different content widths.
     container: {
       center: true,
-      padding: "2rem",
+      padding: {
+        DEFAULT: "1.5rem",
+        md: "3rem",
+      },
       screens: {
-        "2xl": "1600px",
-        "3xl": "1920px",
+        sm: "100%",
+        md: "100%",
+        lg: "72rem",
+        xl: "72rem",
+        "2xl": "72rem",
       },
     },
     extend: {

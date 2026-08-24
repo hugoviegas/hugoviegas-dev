@@ -393,12 +393,12 @@ const SkillCard = ({ skill }: { skill: Skill }) => {
   const Icon = skill.icon;
   return (
     <div
-      className={`glass rounded-xl p-4 flex flex-col items-center gap-2
-                  hover:scale-105 transition-transform duration-200
+      className={`glass-card flex flex-col items-center justify-center gap-2 p-4
+                  transition-transform duration-200 hover:scale-105
                   ${skill.tint}`}
     >
       <Icon className="w-10 h-10" />
-      <span className="text-sm font-medium text-foreground text-center leading-tight">
+      <span className="text-center text-sm font-medium leading-tight text-foreground">
         {skill.name}
       </span>
     </div>
