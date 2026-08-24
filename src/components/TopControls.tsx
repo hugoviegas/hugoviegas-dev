@@ -41,15 +41,15 @@ const TopControls = memo(() => {
   };
 
   return (
-    <div className="fixed top-3 left-0 right-0 z-[60] flex justify-end items-center px-6 lg:px-8 pointer-events-none md:px-4 sm:px-2">
-      <div className="pointer-events-auto sidebar-glass rounded-full px-3 py-2 shadow-lg border border-border/20 flex items-center gap-3 md:gap-2 sm:gap-1 z-[70]">
+    <div className="fixed top-3 left-0 right-0 z-[60] flex justify-end items-center px-3 sm:px-4 md:px-6 lg:px-8 pointer-events-none">
+      <div className="pointer-events-auto sidebar-glass rounded-full px-2 sm:px-3 py-1.5 sm:py-2 shadow-lg border border-border/20 flex items-center gap-1.5 sm:gap-2 md:gap-3 z-[70]">
         <ThemeToggle />
         <Button
           variant="ghost"
           size="sm"
           onClick={handleToggle}
           disabled={isToggling}
-          className={`flex items-center gap-2 rounded-full hover:bg-accent/20 transition-transform duration-200 md:gap-3 lg:gap-3 px-3 py-2 lg:px-4 lg:py-2 ${
+          className={`flex items-center gap-1.5 sm:gap-2 rounded-full hover:bg-accent/20 transition-transform duration-200 px-2 py-1.5 sm:px-3 sm:py-2 lg:px-4 lg:py-2 ${
             isToggling ? "opacity-85" : ""
           }`}
           aria-label={`Switch to ${
@@ -72,7 +72,7 @@ const TopControls = memo(() => {
               height={16}
             />
           </span>
-          <span className="text-sm font-medium md:text-sm lg:text-base sm:text-[10px] min-w-[24px]">
+          <span className="text-xs sm:text-sm font-medium lg:text-base min-w-[20px] sm:min-w-[24px]">
             {language}
           </span>
         </Button>

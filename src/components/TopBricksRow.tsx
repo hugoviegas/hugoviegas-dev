@@ -34,17 +34,20 @@ const TopBricksRow: React.FC = () => {
   }, [bricksNeeded]);
 
   // Inline styles to force zero lateral spacing and exact widths
-  const rowStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    gap: 0,
-    padding: 0,
-    margin: 0,
-    width: "100%",
-    boxSizing: "border-box",
-    pointerEvents: "none",
-  };
+  const rowStyle: React.CSSProperties = useMemo(
+    () => ({
+      display: "flex",
+      flexDirection: "row",
+      flexWrap: "nowrap",
+      gap: 0,
+      padding: 0,
+      margin: 0,
+      width: isMobile ? "260%" : "150%",
+      boxSizing: "border-box",
+      pointerEvents: "none",
+    }),
+    [isMobile]
+  );
 
   // Compute padding-bottom in vw to provide vertical space for the falling animation.
   // Using brickPercent (which is percent of viewport width) as an approximation for brick height.

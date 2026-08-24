@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LegoButton from "./LegoButton";
-import WorldClocks from "@/components/WorldClocks";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -93,7 +92,7 @@ const ContactSection = () => {
       const formDataToSend = new FormData();
       formDataToSend.append(
         "access_key",
-        "c40cf7dd-eb73-4c03-9a22-30647387e501"
+        "c40cf7dd-eb73-4c03-9a22-30647387e501",
       );
       formDataToSend.append("name", formData.name.trim());
       formDataToSend.append("email", formData.email.trim());
@@ -140,7 +139,7 @@ const ContactSection = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -160,20 +159,20 @@ const ContactSection = () => {
   const contactInfo = [
     {
       icon: Mail,
-      label: "Email",
+      labelKey: "contactEmailLabel",
       value: "hugoviegas3.1@gmail.com",
       link: "mailto:hugoviegas3.1@gmail.com",
     },
     {
       icon: MapPin,
-      label: "Location",
-      value: "Dublin, Ireland",
+      labelKey: "contactLocationLabel",
+      valueKey: "contactLocationValue",
       link: null,
     },
     {
       icon: Clock,
-      label: "Response Time",
-      value: "Within 24 hours",
+      labelKey: "contactResponseLabel",
+      valueKey: "contactResponseValue",
       link: null,
     },
   ];
@@ -263,7 +262,7 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="py-20 w-full">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
           <h2 className="heading-section mb-6">{t("contactTitle")}</h2>
@@ -379,7 +378,7 @@ const ContactSection = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-8 slide-up delay-300">
+          <div className="space-y-6 slide-up delay-300">
             <div>
               <h3 className="text-3xl font-bold text-gradient mb-4">
                 {t("getInTouch")}
@@ -400,18 +399,18 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground">
-                        {info.label}
+                        {t(info.labelKey)}
                       </div>
                       {info.link ? (
                         <a
                           href={info.link}
                           className="text-lg font-semibold text-foreground hover:text-primary transition-colors"
                         >
-                          {info.value}
+                          {info.valueKey ? t(info.valueKey) : info.value}
                         </a>
                       ) : (
                         <div className="text-lg font-semibold text-foreground">
-                          {info.value}
+                          {info.valueKey ? t(info.valueKey) : info.value}
                         </div>
                       )}
                     </div>
@@ -440,7 +439,7 @@ const ContactSection = () => {
                       >,
                       {
                         className: `w-5 h-5 ${social.color} group-hover:scale-110 transition-transform`,
-                      }
+                      },
                     )}
                     <span className="text-muted-foreground group-hover:text-primary transition-colors">
                       {social.label}
@@ -462,9 +461,6 @@ const ContactSection = () => {
                 {t("availabilityText")}
               </p>
             </div>
-
-            {/* World Clocks (rendered directly so only inner card is shown) */}
-            <WorldClocks />
           </div>
         </div>
       </div>

@@ -27,8 +27,8 @@ export const translations: Translations = {
     PT: "Especialista em TI → Desenvolvedor Full-Stack",
   },
   description: {
-    EN: "IT professional in Dublin with experience in technical support, automation, and web development. Combines fast diagnosis, clear documentation, and outcome focus—such as 90% operational time reductions—to ship secure, scalable, and easy-to-use solutions.",
-    PT: "Profissional de TI em Dublin com experiência em suporte técnico, automação e desenvolvimento web. Combina diagnóstico rápido, documentação clara e foco em resultados—como reduções de 90% no tempo operacional—para entregar soluções seguras, escaláveis e fáceis de usar.",
+    EN: "IT professional with 4+ years of experience in technical support, system administration, and infrastructure management. Expert in Active Directory administration, user account management, and technical troubleshooting across Windows and Linux environments. Currently supporting IT operations for 120+ users in Dublin educational institution.",
+    PT: "Profissional de TI com 4+ anos de experiência em suporte técnico, administração de sistemas e gestão de infraestrutura. Especialista em administração de Active Directory, gestão de contas de usuários e resolução de problemas técnicos em ambientes Windows e Linux. Atualmente suportando operações de TI para 120+ usuários em instituição educacional em Dublin.",
   },
   viewProjects: { EN: "View My Projects", PT: "Ver Meus Projetos" },
   getInTouch: { EN: "Get In Touch", PT: "Entre em Contato" },
@@ -37,12 +37,12 @@ export const translations: Translations = {
 
   // About Section
   journeySummary1: {
-    EN: "My path began with early curiosity—tinkering with phones at eight, winning robotics championships at eleven, and pursuing formal training in Analysis and Systems Development at eighteen. This foundation led to IT work where I discovered the power of automation, creating solutions that reduced processes by 90% and streamlined operations for hundreds of employees.",
-    PT: "Meu caminho começou com curiosidade precoce—brincando com celulares aos oito anos, vencendo campeonatos de robótica aos onze e cursando Análise e Desenvolvimento de Sistemas aos dezoito. Essa base me levou ao trabalho em TI onde descobri o poder da automação, criando soluções que reduziram processos em 90% e otimizaram operações para centenas de funcionários.",
+    EN: "IT professional with 4+ years of progressive experience in technical support and system administration. Started my IT career with ETAL in 2020, where I managed Windows Server environments for 50+ employees and developed a custom JavaScript automation solution using Node.js, Express.js, and Google Workspace APIs that reduced administrative processing time by 90%. This success demonstrated the power of combining technical expertise with process optimization to deliver measurable business impact.",
+    PT: "Profissional de TI com 4+ anos de experiência progressiva em suporte técnico e administração de sistemas. Iniciei minha carreira em TI na ETAL em 2020, onde gerenciei ambientes Windows Server para 50+ funcionários e desenvolvi uma solução de automação personalizada em JavaScript usando Node.js, Express.js e APIs do Google Workspace que reduziu o tempo de processamento administrativo em 90%. Esse sucesso demonstrou o poder de combinar expertise técnica com otimização de processos para gerar impacto comercial mensurável.",
   },
   journeySummary2: {
-    EN: "Moving to Ireland in 2022 opened new horizons—balancing hospitality work with English immersion while saving for better opportunities. In 2024, I began studying Computer Science at CCT College and started as an IT Support Specialist at Erin College, achieving First-Class academic results while automating departmental processes and building websites that deliver real value.",
-    PT: "Mudar para a Irlanda em 2022 abriu novos horizontes—equilibrando trabalho na hospitalidade com imersão no inglês enquanto economizava para melhores oportunidades. Em 2024, comecei a estudar Ciência da Computação na CCT College e iniciei como Especialista em Suporte de TI na Erin College, alcançando resultados acadêmicos de Primeira Classe enquanto automatizava processos departamentais e construía sites que entregam valor real.",
+    EN: "In September 2024, I joined Erin College as an IT Support Specialist and System Administrator, where I provide hands-on technical support and system administration for an educational institution with 120+ users. I manage Google Workspace enterprise environments, administer Active Directory user accounts and Group Policy configurations, and implement security policies following information security best practices. Concurrently, I'm pursuing a Bachelor of Science (Honours) in Computing - Software Engineering at CCT College Dublin, combining professional practice with academic study to deepen my technical expertise and career development.",
+    PT: "Em setembro de 2024, me juntei ao Erin College como Especialista em Suporte de TI e Administrador de Sistemas, onde forneço suporte técnico prático e administração de sistemas para uma instituição educacional com 120+ usuários. Gerencio ambientes empresariais do Google Workspace, administro contas de usuários do Active Directory e configurações de Group Policy, e implemento políticas de segurança seguindo as melhores práticas de segurança da informação. Simultaneamente, estou cursando um Bacharelado em Computação - Engenharia de Software (Honras) no CCT College Dublin, combinando prática profissional com estudo acadêmico para aprofundar minha expertise técnica e desenvolvimento de carreira.",
   },
   readFullStory: { EN: "Read Full Story", PT: "Ler História Completa" },
   fullStoryTitle: { EN: "My Complete Journey", PT: "Minha Jornada Completa" },
@@ -84,37 +84,40 @@ export const translations: Translations = {
   // Additional UI strings
   aboutTitle: { EN: "About Me", PT: "Sobre Mim" },
   aboutSummary: {
-    EN: "Brazilian in Dublin with a path that started in design and social media, deepened in technical support, and is evolving into full-stack development. The blend of product mindset, routine automation, and clear documentation helps teams work better and faster.",
-    PT: "Brasileiro em Dublin com um caminho que começou em design e social media, aprofundou-se em suporte técnico e está evoluindo para desenvolvimento full-stack. A combinação de visão de produto, automação de rotinas e documentação clara ajuda times a trabalhar melhor e mais rápido.",
+    EN: "IT professional with 4+ years of hands-on experience in technical support, system administration, and infrastructure management across enterprise and educational environments. Proven expertise in Active Directory administration, user account management, and technical troubleshooting in Windows and Linux server environments. Currently supporting IT operations for 120+ users in Dublin.",
+    PT: "Profissional de TI com 4+ anos de experiência prática em suporte técnico, administração de sistemas e gestão de infraestrutura em ambientes corporativos e educacionais. Expertise comprovada em administração de Active Directory, gestão de contas de usuários e resolução de problemas técnicos em ambientes de servidores Windows e Linux. Atualmente suportando operações de TI para 120+ usuários em Dublin.",
   },
-  myJourney: { EN: "My Journey", PT: "Minha Jornada" },
+  myJourney: { EN: "Professional Background", PT: "Histórico Profissional" },
 
   // Highlights
   highlight1Title: {
+    EN: "4+ Years Experience",
+    PT: "4+ Anos de Experiência",
+  },
+  highlight1Desc: {
+    EN: "Technical support, system administration, and infrastructure management",
+    PT: "Suporte técnico, administração de sistemas e gestão de infraestrutura",
+  },
+  highlight2Title: {
     EN: "90% Process Reduction",
     PT: "Redução de 90% nos Processos",
   },
-  highlight1Desc: {
-    EN: "JavaScript + Google Workspace automation solution",
-    PT: "Solução de automação com JavaScript e Google Workspace",
-  },
-  highlight2Title: {
-    EN: "International Experience",
-    PT: "Experiência Internacional",
-  },
   highlight2Desc: {
-    EN: "Working in Dublin while maintaining Brazilian roots and perspectives",
-    PT: "Trabalhando em Dublin mantendo raízes e perspectivas brasileiras",
+    EN: "JavaScript automation solution with Node.js, Express.js, and Google Workspace",
+    PT: "Solução de automação JavaScript com Node.js, Express.js e Google Workspace",
   },
-  highlight3Title: { EN: "Structured Training", PT: "Formação Estruturada" },
+  highlight3Title: {
+    EN: "Active Directory & Google Workspace",
+    PT: "Active Directory & Google Workspace",
+  },
   highlight3Desc: {
-    EN: "Improved first-contact resolution through clear documentation",
-    PT: "Melhoria no atendimento de primeiro contato através de documentação clara",
+    EN: "Expert in user account management, permissions, and hybrid IT infrastructure",
+    PT: "Especialista em gestão de contas de usuários, permissões e infraestrutura de TI híbrida",
   },
   highlight4Title: { EN: "Continuous Learning", PT: "Aprendizado Contínuo" },
   highlight4Desc: {
-    EN: "Currently pursuing Computer Science degree at CCT College Dublin",
-    PT: "Atualmente cursando Ciência da Computação no CCT College Dublin",
+    EN: "Currently pursuing Computer Science degree (Honours) at CCT College Dublin",
+    PT: "Cursando Bacharelado em Ciência da Computação (Honras) no CCT College Dublin",
   },
 
   technicalSkills: { EN: "Technical Skills", PT: "Habilidades Técnicas" },
@@ -285,8 +288,8 @@ export const translations: Translations = {
     PT: "Redução do Tempo de Processo",
   },
   "stats.viewsGrowth": {
-    EN: "Views Growth",
-    PT: "Crescimento de Visualizações",
+    EN: "Users Supported",
+    PT: "Usuários Suportados",
   },
   "stats.yearsExperience": {
     EN: "Years Experience",
@@ -296,38 +299,90 @@ export const translations: Translations = {
 
   // Experience
   experienceIntro: {
-    EN: "A journey of continuous learning and innovation, from IT support excellence to full-stack development mastery.",
-    PT: "Uma jornada de aprendizado contínuo e inovação, da excelência em suporte de TI à maestria em desenvolvimento full-stack.",
+    EN: "A professional journey spanning technical support, system administration, and infrastructure management across Brazil and Ireland, with expertise in Active Directory, Google Workspace, and process automation.",
+    PT: "Uma jornada profissional abrangendo suporte técnico, administração de sistemas e gestão de infraestrutura no Brasil e Irlanda, com expertise em Active Directory, Google Workspace e automação de processos.",
   },
   timelineTitle: {
     EN: "Professional Timeline",
     PT: "Linha do Tempo Profissional",
   },
-  currentFocusLabel: { EN: "Current Focus", PT: "Foco Atual" },
+  currentFocusLabel: { EN: "Professional Focus", PT: "Foco Profissional" },
+  currentFocusText: {
+    EN: "Expert in Active Directory administration, user account management, and technical troubleshooting across Windows and Linux environments. Skilled in Google Workspace administration, system automation, and implementing technical solutions that optimize workflows and enhance system reliability.",
+    PT: "Especialista em administração de Active Directory, gestão de contas de usuários e resolução de problemas técnicos em ambientes Windows e Linux. Hábil em administração do Google Workspace, automação de sistemas e implementação de soluções técnicas que otimizam fluxos de trabalho e aumentam confiabilidade dos sistemas.",
+  },
   certificationsTitle: {
     EN: "Skills & Certifications",
     PT: "Habilidades & Certificações",
   },
+  experienceShowMore: {
+    EN: "Show more",
+    PT: "Ver mais",
+  },
+  experienceShowLess: {
+    EN: "Show less",
+    PT: "Ver menos",
+  },
+
+  // Work Experience and Education
+  workExperienceTitle: {
+    EN: "Work Experience",
+    PT: "Experiência Profissional",
+  },
+  educationTitle: {
+    EN: "Education",
+    PT: "Educação",
+  },
 
   fullStory: {
-    EN: `The first spark came early. At eight, a first phone opened a door to a world of tinkering—downloading .jar games, changing settings, and personalizing everything became a playground for curiosity. At eleven, that curiosity met purpose: a Lego robotics championship at school. Building and programming a robot with a drag‑and‑drop language, the team won regionals and reached nationals. Resources were limited, but the lesson was profound: technology wasn't just interesting—it was a path worth pursuing and mastering.
+    EN: `A long time ago I found a spark. At eight years old, a first phone became my training droid — downloading .jar games, tweaking settings and customizing things were my first experiments with systems (my tiny training droid did more beeps than features). At eleven, curiosity became a mission: a Lego robotics championship at school. We built and programmed a robot with a drag‑and‑drop language, won regionals and reached nationals. Tools were humble, but the lesson was clear: like a young Padawan, I had found a path worth mastering (no robes required).
 
-A few years later, at seventeen, after a first job as a young apprentice in a supermarket, the savings went into a first laptop. That purchase unlocked image and video editing, PC formatting, and a deeper dive into how things work under the hood. At eighteen, formal training followed: a degree in Analysis and Systems Development brought programming logic, math, databases, and web development into focus. The foundation for building real systems was set.
+Years later, at seventeen, a first job as a supermarket apprentice funded my first laptop (my first cockpit). With it came image and video editing, system restores, and an obsession with how things work under the hood. At eighteen, formal training in Analysis and Systems Development gave structure to that curiosity — programming logic, mathematics, databases and web development became the foundation for building real systems.
 
-In 2021, with a friend and an older brother, a videomaker and social media venture took shape. It sharpened design sensibility and content skills, but it also made something clear: the real passion was solving operational problems with code. That opportunity arrived in IT, at a services company where the official remit was basic support and file organization. In the free hours, an underused tool—AppSheet over Google Sheets—became the engine for an internal app that simplified daily processes. To design it well, HR and finance workflows were learned end‑to‑end. The result: the timesheet close for 400+ employees dropped from four days to about one. Curiosity met impact, and the satisfaction of turning messy workflows into simple tools turned into a signature.
+In 2021 a small venture took shape with a friend and my older brother: a videomaker and social media studio (my brother the wise co‑pilot). It sharpened storytelling and design, but it also revealed a deeper calling — solving operational problems with code. In IT at a services company, in stolen hours, AppSheet on top of Google Sheets became the engine for an internal app that simplified daily processes (a small rebellion against slow processes). I learned HR and finance workflows end‑to‑end to design it properly. The result: the timesheet close for 400+ employees fell from four days to about one. Curiosity met impact; making messy workflows simple became my signature.
 
-Ireland came next—a year of saving made the move possible for better opportunities and English immersion. Two years working in hospitality accelerated fluency and cultural understanding. In September 2024, the focus doubled down: a Higher Diploma in Science of Computing at CCT College and an IT role at Erin College began in the same month. The academic effort paid off with First‑Class results. On the job, spreadsheet automation skills leveled up with AI prompting and programming logic—projects across departments were streamlined, and each week revealed a new layer of automation possible within Google's ecosystem.
+Ireland came next. A year of saving made the move possible for better opportunities and full English immersion. Two years in hospitality accelerated fluency and cultural understanding. In September 2024, the path doubled down: a Higher Diploma in Science of Computing at CCT College and an IT role at Erin College began the same month. The academic effort paid off with First‑Class results. At work, spreadsheet automation evolved with AI prompting and sharper programming logic — projects across departments were streamlined and each week revealed another layer of automation possible within Google's ecosystem.
 
-Alongside this, a practical challenge arrived from the restaurant job: build the D'Arcy McGee's website. With AI tooling, design/UX study, and hands‑on engineering, a fast, functional site came together—proof that shipping value quickly is a repeatable skill, not a one‑off. Today, the search is for a front‑end or full‑stack role that rewards exactly this mix: curiosity, product sense, and the ability to turn complex processes into elegant, measurable solutions. The drive remains the same as that eleven‑year‑old at the robotics table: learn fast, build well, and keep moving.`,
-    PT: `A primeira faísca veio cedo. Aos oito anos, um primeiro celular abriu a porta para um mundo de experimentação — baixar joguinhos em formato .jar, mexer em configurações e personalizar tudo virou um parque de diversões para a curiosidade. Aos onze, essa curiosidade encontrou propósito: um campeonato escolar de robótica Lego. Construindo e programando um robô com uma linguagem de arrastar e soltar, a equipe venceu a etapa regional e chegou ao nacional. Faltaram recursos, mas sobrou lição: tecnologia não era só interessante — era um caminho a ser perseguido e dominado.
+Alongside this, a practical challenge from the restaurant job led to building the D'Arcy McGee's website. With AI tooling, UX study and hands‑on engineering, a fast, functional site shipped — proof that delivering quick, reliable value is a repeatable skill (almost a pixel‑perfect lightsaber, but not quite). Today I seek a front‑end or full‑stack role that values curiosity, product sense and the ability to turn complex processes into elegant, measurable solutions. The drive is the same as that eleven‑year‑old at the robotics table: learn fast, build well, and keep moving.
+`,
 
-Alguns anos depois, aos dezessete, após o primeiro emprego como jovem aprendiz em supermercado, as economias viraram o primeiro notebook. Essa compra destravou edição de imagens e vídeo, formatação de PCs e um mergulho mais profundo em como as coisas funcionam por baixo do capô. Aos dezoito, veio a formação formal: Análise e Desenvolvimento de Sistemas trouxe lógica de programação, matemática, bancos de dados e desenvolvimento web. A base para construir sistemas reais estava lançada.
+    PT: `Há muito tempo encontrei uma faísca. Aos oito anos, um primeiro celular virou meu pequeno droide de treino — baixar joguinhos .jar, mexer em configurações e personalizar tudo foram meus primeiros experimentos com sistemas (meu droide fazia mais bipes que milagres). Aos onze, a curiosidade virou missão: um campeonato escolar de robótica Lego. Construímos e programamos um robô com uma linguagem de arrastar e soltar, vencemos a etapa regional e chegamos ao nacional. As ferramentas eram simples, mas a lição ficou clara: como um jovem Padawan, encontrei um caminho a ser dominado (sem túnicas, por enquanto).
 
-Em 2021, com um amigo e o irmão mais velho, nasceu um estúdio de videomaker e social media. A sensibilidade de design e conteúdo evoluiu, mas outra certeza cresceu: a verdadeira paixão era resolver problemas operacionais com código. A chance apareceu em TI, numa empresa de prestação de serviços onde o escopo oficial era suporte básico e organização de arquivos. Nas horas vagas, uma ferramenta pouco explorada — AppSheet sobre Google Sheets — virou o motor de um app interno para simplificar rotinas diárias. Para desenhá-lo bem, foi preciso aprender ponta a ponta os fluxos de RH e financeiro. O resultado: o fechamento de ponto de mais de 400 colaboradores caiu de quatro dias para cerca de um. Curiosidade virou impacto — e transformar fluxos caóticos em ferramentas simples virou marca registrada.
+Anos depois, aos dezessete, o primeiro emprego como aprendiz de supermercado financiou meu primeiro notebook (meu primeiro cockpit). Com ele vieram edição de imagem e vídeo, restaurações de sistema e a obsessão por entender como as coisas funcionam por baixo do capô. Aos dezoito, a formação em Análise e Desenvolvimento de Sistemas deu estrutura a essa curiosidade — lógica de programação, matemática, bancos de dados e desenvolvimento web tornaram‑se a base para construir sistemas reais.
 
-Veio a Irlanda — um ano de economia financiou a mudança, buscando mais oportunidades e imersão no inglês. Dois anos na hospitalidade aceleraram a fluência e o entendimento cultural. Em setembro de 2024, o foco dobrou: um Higher Diploma em Science of Computing na CCT College e um cargo de TI na Erin College começaram no mesmo mês. O esforço acadêmico rendeu resultado de First‑Class. No trabalho, as automações em planilhas subiram de nível com uso de IA e lógica de programação — processos de diversas áreas foram otimizados, e a cada semana surgia uma nova camada de automação possível dentro do ecossistema Google.
+Em 2021, com um amigo e meu irmão mais velho, nasceu um pequeno estúdio de videomaker e social media (meu irmão, o co‑piloto sábio). Isso aprimorou a narrativa e o design, mas também revelou um chamado mais profundo — resolver problemas operacionais com código. Em TI, numa empresa de prestação de serviços, nas horas vagas o AppSheet sobre Google Sheets virou o motor de um app interno que simplificou processos diários (uma pequena rebelião contra processos lentos). Aprendi os fluxos de RH e financeiro ponta a ponta para desenhá‑lo bem. O resultado: o fechamento de ponto de mais de 400 colaboradores caiu de quatro dias para cerca de um. Curiosidade virou impacto; transformar processos caóticos em soluções simples virou minha marca.
 
-Em paralelo, um desafio prático veio do restaurante onde trabalhava: construir o site do D'Arcy McGee's. Com ferramentas de IA, estudo de design/UX e engenharia mão na massa, saiu um site rápido e funcional — prova de que entregar valor depressa é uma habilidade repetível. Hoje, a meta é uma vaga front‑end ou full‑stack que valorize exatamente esse conjunto: curiosidade, senso de produto e capacidade de transformar processos complexos em soluções elegantes e mensuráveis. A energia é a mesma daquele garoto de onze anos na mesa de robótica: aprender rápido, construir bem e seguir em frente.`,
+Veio então a Irlanda. Um ano de economias tornou a mudança possível, em busca de melhores oportunidades e imersão no inglês. Dois anos na hospitalidade aceleraram a fluência e o entendimento cultural. Em setembro de 2024, a jornada se intensificou: um Higher Diploma em Science of Computing no CCT College e um cargo de TI no Erin College começaram no mesmo mês. O esforço acadêmico rendeu First‑Class. No trabalho, as automações em planilhas evoluíram com prompting de IA e lógica de programação mais robusta — projetos em vários departamentos foram otimizados e, a cada semana, surgia uma nova camada de automação possível dentro do ecossistema Google.
+
+Paralelamente, um desafio prático do restaurante onde trabalhava levou à construção do site do D'Arcy McGee's. Com ferramentas de IA, estudo de UX e engenharia prática, saiu um site rápido e funcional — prova de que entregar valor com rapidez é uma habilidade repetível (quase um sabre de luz em pixels). Hoje procuro uma vaga front‑end ou full‑stack que valorize essa combinação de curiosidade, senso de produto e capacidade de transformar processos complexos em soluções elegantes e mensuráveis. A motivação é a mesma daquele garoto de onze anos na mesa de robótica: aprender rápido, construir bem e seguir em frente.`,
+  },
+
+  // Contact info labels
+  contactEmailLabel: { EN: "Email", PT: "Email" },
+  contactLocationLabel: { EN: "Location", PT: "Localização" },
+  contactLocationValue: { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  contactResponseLabel: { EN: "Response Time", PT: "Tempo de Resposta" },
+  contactResponseValue: { EN: "Within 24 hours", PT: "Em até 24 horas" },
+
+  // Spoken languages
+  portuguese: { EN: "Portuguese", PT: "Português" },
+  english: { EN: "English", PT: "Inglês" },
+
+  // Fun Stuff / Widgets section
+  funStuffTitle: { EN: "Fun Stuff", PT: "Fun Stuff" },
+  funStuffDescription: {
+    EN: "Some experiments and interactive toys I've built.",
+    PT: "Alguns experimentos e brinquedos interativos que eu criei.",
+  },
+
+  // Programming Skills section
+  programmingSkillsTitle: {
+    EN: "Programming Languages & Tools",
+    PT: "Linguagens de Programação & Ferramentas",
+  },
+  itSkillsTitle: {
+    EN: "IT & Infrastructure",
+    PT: "TI & Infraestrutura",
   },
 };
 

@@ -58,9 +58,9 @@ const StatsSection = () => {
       icon: <Zap className="mx-auto text-orange-400" size={32} />,
     },
     {
-      value: 20,
+      value: 120,
       label: t("stats.viewsGrowth"),
-      suffix: "%",
+      suffix: "+",
       icon: <TrendingUp className="mx-auto text-blue-400" size={32} />,
     },
     {

@@ -87,9 +87,9 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
       label: getCurrentLanguage() === "PT" ? "Eu" : "Me",
       isHome: true,
     },
+    { id: "experience", label: t("experience") },
     { id: "about", label: t("about") },
     { id: "projects", label: t("projects") },
-    { id: "experience", label: t("experience") },
     { id: "contact", label: t("contact") },
   ];
 
@@ -98,7 +98,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
 
-      const sections = ["hero", "about", "projects", "experience", "contact"];
+      const sections = ["hero", "experience", "about", "projects", "contact"];
       const sectionElements = sections.map((id) => document.getElementById(id));
 
       let current = "hero";
@@ -248,7 +248,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
     <>
       {/* Mobile floating menu button */}
       <div
-        className={`fixed left-4 top-4 z-50 md:hidden transition-all duration-500 ease-out ${
+        className={`fixed left-2 sm:left-4 top-3 sm:top-4 z-50 md:hidden transition-all duration-500 ease-out ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
         }`}
       >
@@ -256,15 +256,15 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
           variant="ghost"
           size="icon"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className={`w-12 h-12 rounded-full sidebar-glass border border-border/30 shadow-lg transition-all duration-300 ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full sidebar-glass border border-border/30 shadow-lg transition-all duration-300 ${
             isMobileMenuOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
           }`}
           aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
         >
           {isMobileMenuOpen ? (
-            <X className="w-5 h-5 text-foreground" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
           ) : (
-            <Menu className="w-5 h-5 text-foreground" />
+            <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
           )}
         </Button>
 
@@ -276,14 +276,14 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
 
       {/* Mobile floating sidebar */}
       <div
-        className={`fixed left-4 top-20 z-40 md:hidden transition-all duration-500 ease-out ${
+        className={`fixed left-2 sm:left-4 top-16 sm:top-20 z-40 md:hidden transition-all duration-500 ease-out ${
           isMobileMenuOpen
             ? "opacity-100 translate-x-0 scale-100"
             : "opacity-0 -translate-x-full scale-95"
         }`}
       >
-        <div className="w-64 sidebar-glass rounded-2xl p-4 shadow-2xl border border-border/30">
-          <div className="flex flex-col gap-2">
+        <div className="w-56 sm:w-64 sidebar-glass rounded-2xl p-3 sm:p-4 shadow-2xl border border-border/30">
+          <div className="flex flex-col gap-1.5 sm:gap-2">
             {navItems.map((item, index) => {
               const isActive = currentSection === item.id;
               const isHome = item.isHome;

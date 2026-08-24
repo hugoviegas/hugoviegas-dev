@@ -287,12 +287,14 @@ export default function FastTransparentCube({
   const wrapperStyle = {
     width: "100%",
     maxWidth: `${width}px`,
-    height: `${height}px`,
-    overflow: "hidden",
+    height: `${enableExpand ? height + 56 : height}px`,
+    overflow: "visible",
     background: "transparent",
     display: "flex",
+    flexDirection: "column" as const,
     alignItems: "center",
     justifyContent: "center",
+    gap: enableExpand ? 12 : 0,
     position: "relative" as const,
   };
 
@@ -305,7 +307,7 @@ export default function FastTransparentCube({
           id="cube-embed"
           style={{
             width: "100%",
-            height: "100%",
+            height: expandedOpen ? "100%" : `${height}px`,
             borderRadius: 12,
             overflow: "hidden",
             touchAction: "none",
@@ -313,25 +315,15 @@ export default function FastTransparentCube({
         />
 
         {enableExpand && !isAnimating && (
-          <div
-            style={{
-              position: "absolute",
-              right: 8,
-              bottom: 8,
-              zIndex: 90,
-              pointerEvents: "auto" as const,
-            }}
+          <Button
+            size="sm"
+            variant="outline"
+            className="!p-3 backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all"
+            onClick={flipToExpanded}
+            style={{ zIndex: 91, touchAction: "manipulation" }}
           >
-            <Button
-              size="sm"
-              variant="outline"
-              className="!p-3 backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all"
-              onClick={flipToExpanded}
-              style={{ zIndex: 91, touchAction: "manipulation" }}
-            >
-              <Maximize className="w-4 h-4" />
-            </Button>
-          </div>
+            <Maximize className="w-4 h-4" />
+          </Button>
         )}
       </div>
 

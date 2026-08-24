@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowDown,
@@ -31,12 +31,14 @@ import {
 } from "@/components/ui/dialog";
 import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.jpg";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentGreeting, setCurrentGreeting] = useState("");
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const fullText = t("role");
 
   // Update greeting when component mounts or language changes
@@ -44,6 +46,16 @@ const HeroSection = () => {
     const greeting = getCurrentGreeting();
     setCurrentGreeting(greeting.text[language]);
   }, [language]);
+
+  // Reset typewriter when language changes (fullText changes)
+  useEffect(() => {
+    setDisplayText("");
+    setCurrentIndex(0);
+    const blink = document.querySelector(".type-cursor");
+    if (blink) {
+      blink.classList.remove("blink-after");
+    }
+  }, [fullText]);
 
   useEffect(() => {
     if (currentIndex < fullText.length) {
@@ -72,32 +84,13 @@ const HeroSection = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const goToProposal = useCallback(() => {
+    navigate("/proposta-etal");
+  }, [navigate]);
+
   // Resume URL from Vercel Storage
   const resumeUrl =
-    "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20CV%202025.pdf";
-
-  // Suppress noisy console errors originating from the Spotify embed while component is mounted
-  useEffect(() => {
-    const origConsoleError = console.error as (...args: unknown[]) => void;
-    console.error = (...args: unknown[]) => {
-      try {
-        const msg = String(args[0] || "");
-        // Filter known spotify embed noisy messages
-        if (
-          msg.includes("Refused to display") ||
-          msg.includes("Blocked a frame with origin")
-        ) {
-          return;
-        }
-      } catch (e) {
-        // ignore
-      }
-      origConsoleError(...args);
-    };
-    return () => {
-      console.error = origConsoleError as Console["error"];
-    };
-  }, []);
+    "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
 
   // Hero Brick Explosion component
   const HERO_BRICK_IMAGES = [
@@ -114,8 +107,8 @@ const HeroSection = () => {
   ];
 
   const HeroBrickExplosion = () => {
-    // Create 20 bricks with randomized sizes/angles/positions around the hero image
-    const count = 20;
+    // Reduce the number of bricks for both mobile and desktop
+    const count = 10; // Adjusted from 20 to 10
     return (
       <>
         {Array.from({ length: count }).map((_, i) => {
@@ -123,15 +116,13 @@ const HeroSection = () => {
             HERO_BRICK_IMAGES[
               Math.floor(Math.random() * HERO_BRICK_IMAGES.length)
             ];
-          const size = 16 + Math.floor(Math.random() * 24); // 16-40px
-          // random starting position within the explosion layer
+          const size = 12 + Math.floor(Math.random() * 20); // Adjusted size range
           const left = Math.random() * 100; // percent
           const top = Math.random() * 100; // percent
           const rotate = -30 + Math.random() * 60; // degrees
           const delay = Math.random() * 300; // ms stagger
-          // movement vector for the hover explosion (px)
-          const moveX = Math.round(-80 + Math.random() * 160); // -80 .. +80
-          const moveY = Math.round(-100 + Math.random() * 60); // -100 .. -40 (prefer upward)
+          const moveX = Math.round(-60 + Math.random() * 120); // Adjusted movement range
+          const moveY = Math.round(-80 + Math.random() * 40); // Adjusted movement range
 
           return (
             <img
@@ -160,7 +151,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0">
+    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0 w-full">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20" aria-hidden="true">
         <div className="absolute top-20 left-20 w-40 h-40 bg-primary rounded-full blur-3xl subtle-pulse"></div>
@@ -168,28 +159,28 @@ const HeroSection = () => {
         <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-accent rounded-full blur-xl subtle-pulse delay-2000"></div>
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 relative z-10 wide-container">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 wide-container">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Content Column */}
           <div className="space-y-8 fade-in">
             <div className="space-y-4">
-              <div className="text-primary font-mono text-lg">
+              <div className="text-primary font-mono text-sm sm:text-base lg:text-lg">
                 {currentGreeting}
               </div>
               <h1 className="heading-hero leading-tight mb-2">Hugo Viegas</h1>
-              <div className="h-24 flex items-center">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
+              <div className="h-16 sm:h-20 lg:h-24 flex items-center">
+                <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
                   {displayText}
-                  <span className="type-cursor inline-block w-1 h-8 bg-primary ml-2"></span>
+                  <span className="type-cursor inline-block w-1 h-5 sm:h-6 lg:h-8 bg-primary ml-1 sm:ml-2"></span>
                 </h2>
               </div>
-              <p className="text-xl text-muted-foreground max-w-[min(960px,92vw)] leading-relaxed mt-4">
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-[min(960px,92vw)] leading-relaxed mt-4">
                 {t("description")}
               </p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center items-center">
               <LegoButton onClick={scrollToProjects}>
                 {t("viewProjects")}
               </LegoButton>
@@ -199,53 +190,55 @@ const HeroSection = () => {
             </div>
 
             {/* Social Links */}
-            <div className="flex space-x-6">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:space-x-6 lg:gap-0">
               <a
                 href="https://github.com/hugoviegas/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
               >
-                <Github className="w-6 h-6 text-primary" />
+                <Github className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               </a>
               <a
                 href="https://www.linkedin.com/in/hviegas/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
               >
-                <Linkedin className="w-6 h-6 text-primary" />
+                <Linkedin className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               </a>
               <a
                 href="mailto:hugoviegas3.1@gmail.com"
-                className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
               >
-                <Mail className="w-6 h-6 text-primary" />
+                <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               </a>
 
               {/* Resume Dialog Button */}
               <Dialog>
                 <DialogTrigger asChild>
                   <button
-                    className="flex items-center gap-2 px-4 py-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                    className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
                     aria-label={t("seeResume")}
                     title={t("seeResume")}
                   >
-                    <FileText className="w-6 h-6 text-primary" />
-                    <span className="text-primary font-medium">
+                    <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                    <span className="text-primary font-medium text-sm sm:text-base">
                       {t("seeResume")}
                     </span>
                   </button>
                 </DialogTrigger>
-                <DialogContent className="max-w-[min(1400px,92vw)] w-full h-[90vh] p-0">
-                  <DialogHeader className="p-6 pb-0">
-                    <DialogTitle className="flex items-center justify-between">
-                      <span>Hugo Viegas - CV 2025</span>
+                <DialogContent className="max-w-[min(1400px,95vw)] w-full h-[85vh] sm:h-[90vh] p-0">
+                  <DialogHeader className="p-4 sm:p-6 pb-0">
+                    <DialogTitle className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2">
+                      <span className="text-sm sm:text-base">
+                        Hugo Viegas - CV 2025
+                      </span>
                       <Button
                         asChild
                         variant="outline"
                         size="sm"
-                        className="ml-4"
+                        className="sm:ml-4"
                       >
                         <a
                           href={resumeUrl}
@@ -285,8 +278,9 @@ const HeroSection = () => {
                   <HeroBrickExplosion />
                 </div>
 
-                {/* Glassmorphism Frame - single rounded square that the image fills */}
-                <div className="glass-strong rounded-3xl relative overflow-hidden lg:flex-shrink-0 aspect-square w-11/12 max-w-[420px] sm:w-80 md:w-96 lg:w-96 mx-auto transition-all duration-300">
+                {/* Glassmorphism Frame - responsive square container for profile image
+                    Uses clamp() for fluid sizing: min 200px, preferred 70vw, max 384px */}
+                <div className="hero-profile-frame glass-strong rounded-3xl relative overflow-hidden aspect-square mx-auto transition-all duration-300">
                   {/* subtle gradient overlay for depth */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none"></div>
 
@@ -301,35 +295,18 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-              {/* Compact Spotify embed under profile image */}
-              <div className="mt-6 flex justify-center">
-                <div className="w-full max-w-[396px]">
-                  <iframe
-                    data-testid="embed-iframe"
-                    title="Spotify Playlist Compact"
-                    style={{ borderRadius: 12 }}
-                    src="https://open.spotify.com/embed/playlist/1Xi9HL4NA9vFhDUY9wjJtB?utm_source=generator&theme=0"
-                    width="100%"
-                    height="152"
-                    frameBorder="0"
-                    allowFullScreen
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
         {/* Section footer: scroll indicator placed here to avoid overlapping mobile content */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-6 sm:mt-8 flex justify-center">
           <button
             onClick={scrollToAbout}
             aria-label="Scroll to about section"
             className="animate-bounce p-2 rounded-full glass hover:scale-110 transition-transform"
           >
-            <ArrowDown className="w-6 h-6 text-primary" />
+            <ArrowDown className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
           </button>
         </div>
       </div>

@@ -3,6 +3,8 @@
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=News+Cycle:wght@700&display=swap");
 
 /* Import the complete design system */
 @import "./styles/index.css";
@@ -584,6 +586,382 @@
   position: relative;
 }
 
+/* Star Wars Crawl Overlay -------------------------------------------------- */
+.star-wars-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 4vw, 4rem);
+  background: #000;
+  color: #feda4a;
+  overflow: hidden;
+  font-family: "Pathway Gothic One", var(--font-family-primary), sans-serif;
+}
+
+.star-wars-starfield {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+  background-image: radial-gradient(
+      rgba(255, 255, 255, 0.85) 1px,
+      transparent 1px
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.55) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px);
+  background-size: 550px 550px, 320px 320px, 760px 760px;
+  animation: sw-starfield-one 120s linear infinite;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.star-wars-starfield::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+      rgba(255, 255, 255, 0.6) 1px,
+      transparent 1px
+    ),
+    radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 420px 420px, 680px 680px;
+  animation: sw-starfield-two 160s linear infinite;
+  opacity: 0.55;
+}
+
+.star-wars-close {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2.5rem);
+  right: clamp(1rem, 3vw, 2.5rem);
+  width: 46px;
+  height: 46px;
+  border-radius: 9999px;
+  border: 1px solid rgba(254, 218, 74, 0.35);
+  background: rgba(0, 0, 0, 0.65);
+  color: #feda4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.star-wars-close:hover {
+  transform: scale(1.05);
+  background: rgba(254, 218, 74, 0.28);
+  color: #fffdfa;
+}
+
+.star-wars-close svg {
+  width: 22px;
+  height: 22px;
+}
+
+.star-wars-controls {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2.5rem);
+  right: clamp(5.5rem, 10vw, 6.5rem);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 3;
+}
+
+.star-wars-control {
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  border: 1px solid rgba(254, 218, 74, 0.28);
+  background: rgba(0, 0, 0, 0.6);
+  color: #feda4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.star-wars-control:hover {
+  background: rgba(254, 218, 74, 0.16);
+}
+
+.star-wars-crawl-paused {
+  animation-play-state: paused !important;
+}
+
+.star-wars-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vh, 2.75rem);
+  width: min(1024px, 97vw);
+  min-height: 100vh;
+  padding-block: clamp(1.5rem, 4.5vh, 3.25rem);
+  pointer-events: none;
+}
+
+.star-wars-intro {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  letter-spacing: 0.22em;
+  color: #4bd5ee;
+  text-transform: uppercase;
+  text-align: center;
+  animation: sw-intro-fade 3.2s ease-out forwards;
+  margin-top: clamp(1.5rem, 6vh, 4rem);
+  pointer-events: none;
+}
+
+.star-wars-crawl-stage {
+  position: relative;
+  width: min(980px, 96vw);
+  height: clamp(76vh, 82vh, 88vh);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  perspective: 960px;
+  overflow: hidden;
+  padding-bottom: clamp(1rem, 3vh, 2rem);
+  pointer-events: auto;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.star-wars-crawl {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: min(880px, 94vw);
+  font-family: "News Cycle", "Pathway Gothic One", var(--font-family-primary),
+    sans-serif;
+  font-size: clamp(1.34rem, 3.35vw, 2.42rem);
+  line-height: 1.6;
+  letter-spacing: 0.14em;
+  text-align: justify;
+  font-weight: 700;
+  transform-origin: 50% 100%;
+  transform: rotateX(22deg) translate3d(0, 108%, 0);
+  opacity: 0;
+  color: #feda4a;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.65);
+}
+
+.star-wars-crawl-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  cursor: grab;
+}
+
+.star-wars-crawl-content-active {
+  cursor: grabbing;
+}
+
+.star-wars-crawl-stage-interactive {
+  cursor: grab;
+}
+
+.star-wars-crawl-stage-interacting {
+  cursor: grabbing;
+}
+
+.star-wars-crawl-active {
+  animation: sw-crawl 200s linear forwards;
+  opacity: 1;
+}
+
+.star-wars-crawl h2 {
+  font-size: clamp(2.05rem, 4.5vw, 3.35rem);
+  letter-spacing: 0.22em;
+  margin: 0 0 clamp(2.75rem, 4.5vh, 3.75rem);
+  text-align: center;
+}
+
+.star-wars-crawl p {
+  margin-bottom: clamp(1.8rem, 1.85vw, 2.1rem);
+}
+
+.star-wars-episode {
+  text-align: center;
+  margin-bottom: clamp(2rem, 3vh, 2.75rem);
+  font-size: clamp(1.4rem, 3vw, 2.05rem);
+  letter-spacing: 0.35em;
+}
+
+.star-wars-crawl-stage-manual {
+  pointer-events: auto;
+  align-items: center;
+  padding-bottom: 0;
+}
+
+.star-wars-crawl-manual-wrapper {
+  position: relative;
+  width: min(900px, 94vw);
+  height: clamp(76vh, 82vh, 88vh);
+  padding: clamp(2.1rem, 3.2vw, 3rem);
+  border-radius: 26px;
+  border: 1px solid rgba(254, 218, 74, 0.38);
+  background: rgba(0, 0, 0, 0.82);
+  box-shadow: 0 2.75rem 4.75rem rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 2vw, 1.8rem);
+  overflow: hidden;
+  outline: none;
+}
+
+.star-wars-manual-hint {
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  font-size: clamp(0.72rem, 1.65vw, 0.92rem);
+  text-align: center;
+  color: rgba(244, 244, 244, 0.64);
+}
+
+.star-wars-crawl-manual-wrapper h2 {
+  font-family: "Pathway Gothic One", var(--font-family-primary), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  text-align: center;
+  color: #feda4a;
+  font-size: clamp(1.8rem, 4.5vw, 2.7rem);
+  margin-bottom: clamp(1.2rem, 2vh, 1.8rem);
+}
+
+.star-wars-crawl-manual {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: clamp(0.65rem, 1.5vw, 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 1.8vw, 1.6rem);
+}
+
+.star-wars-crawl-manual p {
+  font-family: var(--font-family-primary);
+  font-size: clamp(1.05rem, 1.95vw, 1.25rem);
+  line-height: 1.72;
+  color: rgba(248, 248, 248, 0.96);
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+.star-wars-crawl-manual::-webkit-scrollbar {
+  width: 10px;
+}
+
+.star-wars-crawl-manual::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+
+.star-wars-crawl-manual::-webkit-scrollbar-thumb {
+  background: rgba(254, 218, 74, 0.35);
+  border-radius: 999px;
+}
+
+.star-wars-crawl-manual::-webkit-scrollbar-thumb:hover {
+  background: rgba(254, 218, 74, 0.5);
+}
+
+@keyframes sw-starfield-one {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-550px, 550px, 0);
+  }
+}
+
+@keyframes sw-starfield-two {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(520px, -520px, 0);
+  }
+}
+
+@keyframes sw-intro-fade {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sw-crawl {
+  0% {
+    transform: rotateX(22deg) translate3d(0, 108%, 0);
+  }
+  100% {
+    transform: rotateX(22deg) translate3d(0, -252%, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .star-wars-crawl-stage {
+    height: 64vh;
+    perspective: 720px;
+    padding-bottom: clamp(0.85rem, 3vh, 1.6rem);
+  }
+
+  .star-wars-close {
+    width: 42px;
+    height: 42px;
+  }
+
+  .star-wars-crawl {
+    max-width: 100%;
+    font-size: clamp(1.18rem, 3.7vw, 1.92rem);
+    letter-spacing: 0.12em;
+    line-height: 1.55;
+    font-weight: 700;
+  }
+
+  .star-wars-crawl h2 {
+    font-size: clamp(1.8rem, 5.8vw, 2.7rem);
+  }
+}
+
+@media (max-width: 520px) {
+  .star-wars-intro {
+    letter-spacing: 0.16em;
+  }
+
+  .star-wars-crawl-stage {
+    height: 54vh;
+    perspective: 620px;
+  }
+
+  .star-wars-crawl-manual-wrapper {
+    padding: clamp(1.6rem, 5.5vw, 2.3rem);
+    height: 68vh;
+  }
+
+  .star-wars-crawl {
+    font-size: clamp(1.05rem, 4.1vw, 1.58rem);
+    letter-spacing: 0.1em;
+    line-height: 1.52;
+  }
+
+  .star-wars-crawl h2 {
+    font-size: clamp(1.55rem, 6.2vw, 2.25rem);
+  }
+}
+
 @keyframes idle-sway {
   0% {
     transform: rotate(var(--rot, 0deg)) translateY(0);
@@ -1100,6 +1478,20 @@
   position: relative;
 }
 
+/* Hero Profile Frame - Fluid responsive sizing using clamp() */
+.hero-profile-frame {
+  /* Fluid width: min 200px, preferred 70vw, max 384px (lg:w-96) */
+  width: clamp(200px, 70vw, 384px);
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .hero-profile-frame {
+    /* On large screens, allow slightly larger max */
+    width: clamp(320px, 30vw, 420px);
+  }
+}
+
 .hero-brick-explosion-layer {
   /* positioned to cover area around the hero image */
   position: absolute;
@@ -1176,5 +1568,146 @@
     right: -35%;
     top: -30%;
     bottom: -18%;
+  }
+}
+
+/* ===========================================
+   MOBILE RESPONSIVE FIXES
+   Ensure proper scaling on smaller mobile devices
+   =========================================== */
+
+/* Force full viewport width on all containers - no minimum width */
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Very small mobile screens (320px - 400px) */
+@media (max-width: 400px) {
+  /* Reduce container padding */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Scale down LegoButtons for tiny screens (320px)
+     140px is approximately 44% of 320px viewport width, ensuring
+     the button fits comfortably with padding while remaining touch-friendly */
+  .btn-lego {
+    min-width: 140px;
+    min-height: 48px;
+    font-size: 12px;
+    padding-top: 6px !important;
+  }
+
+  /* Adjust heading sizes for very small screens */
+  .heading-hero {
+    font-size: var(--font-size-4xl);
+  }
+
+  .heading-section {
+    font-size: var(--font-size-2xl);
+  }
+
+  /* Reduce typing area height */
+  .h-24 {
+    height: 5rem;
+  }
+
+  /* Make social links wrap better */
+  .flex.space-x-6 {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Adjust dialog content for tiny screens */
+  .DialogContent {
+    max-width: 95vw;
+    padding: 1rem;
+  }
+
+  /* Make CTA buttons stack on very small screens */
+  .flex.flex-wrap.gap-4 {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Reduce glass panel padding on hero and about sections for tiny screens.
+     More specific selectors to avoid overriding component-specific padding */
+  #hero .glass,
+  #hero .glass-strong,
+  #about .glass,
+  #about .glass-strong {
+    padding: 1rem;
+  }
+
+  /* Adjust experience timeline */
+  #experience .relative.pl-16 {
+    padding-left: 2.5rem;
+  }
+
+  #experience .absolute.left-5 {
+    left: 0.5rem;
+  }
+
+  #experience .absolute.left-6 {
+    left: 0.75rem;
+  }
+}
+
+/* Small mobile screens (400px - 480px) */
+@media (max-width: 480px) {
+  /* Reduce hero image size */
+  .aspect-square.w-11\/12 {
+    width: 85%;
+  }
+
+  /* Adjust grid gaps */
+  .gap-12 {
+    gap: 2rem;
+  }
+
+  .gap-8 {
+    gap: 1.5rem;
+  }
+
+  /* Scale world clocks for mobile */
+  .WorldClocks {
+    font-size: 0.875rem;
+  }
+
+  /* Adjust footer layout */
+  footer .flex.flex-col.md\\:flex-row {
+    text-align: center;
+  }
+}
+
+/* Standard mobile (480px - 640px) */
+@media (max-width: 640px) {
+  /* Ensure container doesn't overflow */
+  .wide-container {
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Reduce section padding */
+  .py-20 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Make project cards stack properly - using Tailwind at-apply or direct style override */
+  /* Grid responsiveness is handled by Tailwind md: prefixes in components */
+
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }

@@ -23,25 +23,28 @@ const ProjectsSection = () => {
   const [selectedFilter] = useState("All");
   const { t } = useLanguage();
 
+  // TODO: Future plans for this section:
+  // - Social media post-inspired card design
+  // - Backend integration with MongoDB or Supabase for project management
+  // - CRUD admin interface for adding/editing projects
+
   const projects = [
     {
       id: 1,
-      title: "D'Arcy McGee's Irish Pub Website",
-      description:
-        "Professional restaurant website for D'Arcy McGee's Irish Pub featuring modern responsive design, interactive menu system, event listings, and seamless user experience.",
+      titleKey: "project.1.title",
+      descriptionKey: "project.1.description",
       image: darcyMcgeesProject,
       technologies: ["HTML5", "CSS3", "ReactJs", "Responsive Design"],
       category: "Web Development",
       featured: true,
       liveUrl: "https://www.darcymcgeespub.com/",
       githubUrl: "https://github.com/hugoviegas/mcgees-irish-pub-online",
-      metrics: "Live Client Website",
+      metricsKey: "project.1.metrics",
     },
     {
       id: 2,
-      title: "Business Process Automation System",
-      description:
-        "Custom JavaScript solution integrated with Google Sheets and AppSheet that reduced critical business processes by 90%.",
+      titleKey: "project.2.title",
+      descriptionKey: "project.2.description",
       image: automationProject,
       technologies: [
         "JavaScript",
@@ -53,33 +56,31 @@ const ProjectsSection = () => {
       featured: true,
       liveUrl: "#",
       githubUrl: "#",
-      metrics: "90% time reduction",
+      metricsKey: "project.2.metrics",
     },
     {
       id: 3,
-      title: "Modern E-Commerce Platform",
-      description:
-        "Full-stack e-commerce solution built with React and Node.js. Features include user authentication, payment processing, inventory management, and admin dashboard.",
+      titleKey: "project.3.title",
+      descriptionKey: "project.3.description",
       image: ecommerceProject,
       technologies: ["React", "Node.js", "Express", "SQL", "Stripe"],
       category: "Web Development",
       featured: false,
       liveUrl: "#",
       githubUrl: "#",
-      metrics: "Full-stack solution",
+      metricsKey: "project.3.metrics",
     },
     {
       id: 4,
-      title: "Project Management Dashboard",
-      description:
-        "Collaborative task management application with real-time updates, team collaboration features, and project analytics.",
+      titleKey: "project.4.title",
+      descriptionKey: "project.4.description",
       image: taskManagerProject,
       technologies: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
       category: "Web Development",
       featured: false,
       liveUrl: "#",
       githubUrl: "#",
-      metrics: "Team collaboration",
+      metricsKey: "project.4.metrics",
     },
   ];
 
@@ -108,7 +109,7 @@ const ProjectsSection = () => {
         <div className="w-full h-44 md:h-56 overflow-hidden">
           <img
             src={project.image}
-            alt={project.title}
+            alt={t(project.titleKey)}
             className="w-full h-full object-cover"
           />
         </div>
@@ -117,10 +118,10 @@ const ProjectsSection = () => {
         <div className="p-6 flex-1 flex flex-col justify-between">
           <div>
             <h3 className="text-lg font-bold mb-1 text-foreground">
-              {project.title}
+              {t(project.titleKey)}
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
-              {project.description}
+              {t(project.descriptionKey)}
             </p>
           </div>
 
@@ -231,7 +232,7 @@ const ProjectsSection = () => {
   };
 
   return (
-    <section id="projects" className="py-20 relative">
+    <section id="projects" className="py-20 relative w-full">
       <div className="container mx-auto px-6 lg:px-8 wide-container">
         <div className="text-center mb-12 fade-in">
           <h2 className="heading-section mb-4">{t("projectsTitle")}</h2>
@@ -245,7 +246,7 @@ const ProjectsSection = () => {
           {([projects[0], projects[1], projects[3]] as Project[]).map(
             (p, i) => (
               <ProjectTile key={p.id} project={p} index={i} />
-            )
+            ),
           )}
         </div>
 

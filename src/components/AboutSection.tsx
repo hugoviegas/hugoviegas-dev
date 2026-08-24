@@ -1,74 +1,52 @@
-import { useState } from "react";
 import {
   Code,
   Globe,
-  Users,
-  Zap,
   BookOpen,
   TrendingUp,
-  Award,
   Target,
   Brain,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
-import StatsSection from "@/components/StatsSection";
 import SkillsSection from "@/components/SkillsSection";
-import FastTransparentCube from "@/components/FastTransparentCube";
 import redFront from "@/assets/lego-bricks/red-front.png";
 import yellowFront from "@/assets/lego-bricks/yellow-front.png";
 import blueFront from "@/assets/lego-bricks/blue-front.png";
 import whiteFront from "@/assets/lego-bricks/white-front.png";
+import StarWarsCrawlOverlay from "@/components/StarWarsCrawl";
 
 const AboutSection = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [isCrawlOpen, setIsCrawlOpen] = useState(false);
+  const episodeLabel = language === "PT" ? "Episódio I" : "Episode I";
+  const introText =
+    language === "PT"
+      ? "Há muito tempo, em uma galáxia não muito distante..."
+      : "A long time ago in a galaxy far, far away....";
   const highlights = [
     {
       icon: TrendingUp,
-      title: "90% Process Reduction",
-      description: "JavaScript + Google Workspace automation solution",
       color: "text-green-400",
       bgColor: "bg-green-400/10",
     },
     {
       icon: Globe,
-      title: "International Experience",
-      description:
-        "Working in Dublin while maintaining Brazilian roots and perspectives",
       color: "text-blue-400",
       bgColor: "bg-blue-400/10",
     },
     {
       icon: Target,
-      title: "Structured Training",
-      description:
-        "Improved first-contact resolution through clear documentation",
       color: "text-purple-400",
       bgColor: "bg-purple-400/10",
     },
     {
       icon: Brain,
-      title: "Continuous Learning",
-      description:
-        "Currently pursuing Computer Science degree at CCT College Dublin",
       color: "text-orange-400",
       bgColor: "bg-orange-400/10",
     },
   ];
-
-  const [startSolved, setStartSolved] = useState(false);
-
-  const widgetSrc = `https://ruwix.com/widget/3d/?flags=showalg${
-    startSolved ? "%20startsolved" : ""
-  }`;
 
   // Decorative LEGO bricks component
   const DecoLegoBricks = () => {
@@ -103,50 +81,15 @@ const AboutSection = () => {
   };
 
   return (
-    <section id="about" className="py-20 bg-muted/3 relative">
+    <section id="about" className="py-20 bg-muted/3 relative w-full">
       <DecoLegoBricks />
 
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="mb-16 fade-in">
-          <h2 className="heading-section mb-8 text-center">
-            {t("aboutTitle")}
-          </h2>
-
-          {/* Intro section with better spacing */}
-          <div className="glass-strong rounded-3xl p-8 lg:p-12 mb-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
-                <p className="text-xl text-foreground/90 leading-relaxed">
-                  {t("aboutSummary")}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Badge variant="secondary" className="px-4 py-2 text-sm">
-                    <Code className="w-4 h-4 mr-2" />
-                    Full-Stack Developer
-                  </Badge>
-                  <Badge variant="secondary" className="px-4 py-2 text-sm">
-                    <Globe className="w-4 h-4 mr-2" />
-                    Dublin, Ireland
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="flex justify-center lg:justify-end">
-                {/* Cube with better responsive sizing */}
-                <div className="relative">
-                  <FastTransparentCube width={280} height={280} enableExpand />
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="mb-12 text-center fade-in">
+          <h2 className="heading-section">{t("aboutTitle")}</h2>
         </div>
 
-        {/* Stats Section */}
-        <div className="mb-20">
-          <StatsSection />
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-2 gap-8">
           {/* Journey Column */}
           <div className="space-y-8 slide-up">
             <div className="glass-strong rounded-3xl p-8 lg:p-10 space-y-6">
@@ -168,41 +111,22 @@ const AboutSection = () => {
                 </p>
               </div>
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="glass-strong border-primary/30 hover:bg-primary/5"
-                  >
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    {t("readFullStory")}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white dark:bg-neutral-800 rounded-3xl max-w-[min(900px,95vw)] max-h-[85vh] overflow-y-auto mx-2">
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-blue-500 mb-4">
-                      {t("fullStoryTitle")}
-                    </DialogTitle>
-                  </DialogHeader>
-                  <div className="mt-6 space-y-6 text-foreground leading-relaxed">
-                    {t("fullStory")
-                      .split("\n\n")
-                      .map((paragraph, index) => (
-                        <p key={index} className="text-base lg:text-lg">
-                          {paragraph}
-                        </p>
-                      ))}
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <Button
+                variant="outline"
+                className="glass-strong border-primary/30 hover:bg-primary/5"
+                onClick={() => setIsCrawlOpen(true)}
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                {t("readFullStory")}
+              </Button>
             </div>
 
             {/* Highlights Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {highlights.map((highlight, index) => (
                 <div
                   key={index}
-                  className="glass-strong rounded-2xl p-6 hover:scale-105 transition-all duration-300 hover:shadow-lg group"
+                  className="glass-strong rounded-2xl p-6 transition-all duration-300 hover:shadow-lg group"
                 >
                   <div
                     className={`w-12 h-12 rounded-xl ${highlight.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
@@ -210,10 +134,10 @@ const AboutSection = () => {
                     <highlight.icon className={`w-6 h-6 ${highlight.color}`} />
                   </div>
                   <h4 className="font-semibold text-lg mb-2 text-foreground">
-                    {t(`highlight${index + 1}Title`) || highlight.title}
+                    {t(`highlight${index + 1}Title`)}
                   </h4>
                   <p className="text-sm text-foreground/70 leading-relaxed">
-                    {t(`highlight${index + 1}Desc`) || highlight.description}
+                    {t(`highlight${index + 1}Desc`)}
                   </p>
                 </div>
               ))}
@@ -228,7 +152,7 @@ const AboutSection = () => {
                   <Code className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-2xl lg:text-3xl font-bold text-blue-500">
-                  Technical Skills
+                  {t("technicalSkills")}
                 </h3>
               </div>
 
@@ -242,28 +166,30 @@ const AboutSection = () => {
                   <Globe className="w-5 h-5 text-white" />
                 </div>
                 <h4 className="text-xl font-semibold text-foreground">
-                  Languages
+                  {t("languagesTitle")}
                 </h4>
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-4 rounded-xl bg-muted/30">
                   <span className="font-medium text-foreground">
-                    Portuguese
+                    {t("portuguese")}
                   </span>
                   <Badge
                     variant="secondary"
                     className="bg-green-500/10 text-green-400 border-green-500/30"
                   >
-                    Native
+                    {t("native")}
                   </Badge>
                 </div>
                 <div className="flex justify-between items-center p-4 rounded-xl bg-muted/30">
-                  <span className="font-medium text-foreground">English</span>
+                  <span className="font-medium text-foreground">
+                    {t("english")}
+                  </span>
                   <Badge
                     variant="secondary"
                     className="bg-blue-500/10 text-blue-400 border-blue-500/30"
                   >
-                    C1 Proficiency
+                    {t("c1Proficiency")}
                   </Badge>
                 </div>
               </div>
@@ -271,6 +197,14 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
+      <StarWarsCrawlOverlay
+        open={isCrawlOpen}
+        onClose={() => setIsCrawlOpen(false)}
+        title={t("fullStoryTitle")}
+        story={t("fullStory")}
+        episodeLabel={episodeLabel}
+        introText={introText}
+      />
     </section>
   );
 };
