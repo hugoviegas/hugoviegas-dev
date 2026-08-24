@@ -24,30 +24,24 @@ const Footer = () => {
   ];
 
   return (
-    <footer
-      className="bg-muted/5 border-t border-white/10 w-full"
-    >
-      <div className="container mx-auto px-6 lg:px-8 py-12 wide-container">
+    <footer className="w-full border-t border-border bg-muted/20">
+      <div className="section-wrapper py-12 md:py-16">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           {/* Brand */}
           <div className="text-center md:text-left">
-            <h3 className="text-2xl font-bold text-gradient mb-2">
-              Hugo Viegas
-            </h3>
-            <p className="text-muted-foreground">
-              IT Support Specialist | System Administrator
-            </p>
+            <h3 className="heading-card text-gradient mb-2">Hugo Viegas</h3>
+            <p className="body-text">{t("footerTagline")}</p>
           </div>
 
           {/* Social Links */}
-          <div className="flex items-center gap-6">
-            {socialLinks.map((social, index) => (
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {socialLinks.map((social) => (
               <a
-                key={index}
+                key={social.label}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:glass-strong hover:scale-110 hover:neon-glow transition-all duration-300 group"
+                className="icon-pill group"
                 aria-label={social.label}
               >
                 <social.icon className="w-5 h-5 text-primary group-hover:text-accent transition-colors" />
@@ -56,10 +50,15 @@ const Footer = () => {
             {/* Link to the Formula D assistant game page */}
             <a
               href="/formula-d"
-              className="p-3 glass rounded-full hover:glass-strong hover:scale-110 transition-all duration-300 flex items-center"
-              aria-label="Assistente Formula D"
+              className="icon-pill"
+              aria-label={t("footerGameLabel")}
             >
-              <img src="/gold-coin-top.png" alt="Game" className="w-5 h-5" />
+              <img
+                src="/gold-coin-top.png"
+                alt=""
+                aria-hidden="true"
+                className="w-5 h-5"
+              />
             </a>
           </div>
         </div>
@@ -68,24 +67,21 @@ const Footer = () => {
         <div className="my-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
 
         {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span>© {currentYear} Hugo Viegas. All rights reserved.</span>
-          </div>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="caption-text">
+            © {currentYear} Hugo Viegas. {t("footerRights")}
+          </p>
 
-          <div className="flex items-center gap-2">
-            <span>Made with</span>
-            <Heart className="w-4 h-4 text-red-500 animate-pulse" />
-            <span>in Dublin, Ireland</span>
-          </div>
+          <p className="caption-text flex items-center gap-2">
+            <span>{t("footerMadeWith")}</span>
+            <Heart className="w-4 h-4 text-destructive animate-pulse" />
+            <span>{t("footerLocation")}</span>
+          </p>
         </div>
 
         {/* Additional Info */}
         <div className="mt-6 text-center">
-          <p className="text-xs text-muted-foreground">
-            Available for freelance work and full-time opportunities • Fluent in
-            Portuguese & English • Open to remote and hybrid arrangements
-          </p>
+          <p className="caption-text text-xs">{t("footerAvailability")}</p>
         </div>
       </div>
     </footer>

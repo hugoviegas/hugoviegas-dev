@@ -36,13 +36,13 @@ const StatItem = ({
   }, [value, duration]);
 
   return (
-    <div className="text-center p-6 glass rounded-xl hover:glass-strong transition-all duration-300">
+    <div className="glass-card glass-card-hover p-6 text-center">
       {icon && <div className="text-3xl mb-2">{icon}</div>}
       <div className="text-4xl font-bold text-primary mb-2">
         {count}
         {suffix}
       </div>
-      <div className="text-muted-foreground">{label}</div>
+      <div className="caption-text">{label}</div>
     </div>
   );
 };
@@ -55,19 +55,19 @@ const StatsSection = () => {
       value: 90,
       label: t("stats.processReduction"),
       suffix: "%",
-      icon: <Zap className="mx-auto text-orange-400" size={32} />,
+      icon: <Zap className="mx-auto text-secondary" size={32} />,
     },
     {
       value: 120,
       label: t("stats.viewsGrowth"),
       suffix: "+",
-      icon: <TrendingUp className="mx-auto text-blue-400" size={32} />,
+      icon: <TrendingUp className="mx-auto text-primary" size={32} />,
     },
     {
       value: 4,
       label: t("stats.yearsExperience"),
       suffix: "+",
-      icon: <Calendar className="mx-auto text-green-400" size={32} />,
+      icon: <Calendar className="mx-auto text-accent" size={32} />,
     },
     {
       value: 2,

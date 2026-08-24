@@ -151,7 +151,10 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0 w-full">
+    <section
+      id="hero"
+      className="relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-24 lg:pt-0"
+    >
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20" aria-hidden="true">
         <div className="absolute top-20 left-20 w-40 h-40 bg-primary rounded-full blur-3xl subtle-pulse"></div>
@@ -159,28 +162,26 @@ const HeroSection = () => {
         <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-accent rounded-full blur-xl subtle-pulse delay-2000"></div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 wide-container">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div className="section-wrapper relative z-10">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
           {/* Content Column */}
           <div className="space-y-8 fade-in">
             <div className="space-y-4">
-              <div className="text-primary font-mono text-sm sm:text-base lg:text-lg">
+              <div className="font-mono text-sm md:text-base text-primary">
                 {currentGreeting}
               </div>
-              <h1 className="heading-hero leading-tight mb-2">Hugo Viegas</h1>
-              <div className="h-16 sm:h-20 lg:h-24 flex items-center">
-                <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
+              <h1 className="heading-hero mb-2">Hugo Viegas</h1>
+              <div className="min-h-16 md:min-h-20 flex items-center">
+                <h2 className="heading-card font-mono text-muted-foreground">
                   {displayText}
-                  <span className="type-cursor inline-block w-1 h-5 sm:h-6 lg:h-8 bg-primary ml-1 sm:ml-2"></span>
+                  <span className="type-cursor inline-block w-1 h-5 md:h-6 bg-primary ml-2"></span>
                 </h2>
               </div>
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-[min(960px,92vw)] leading-relaxed mt-4">
-                {t("description")}
-              </p>
+              <p className="body-text mt-4">{t("description")}</p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4">
               <LegoButton onClick={scrollToProjects}>
                 {t("viewProjects")}
               </LegoButton>
@@ -190,48 +191,51 @@ const HeroSection = () => {
             </div>
 
             {/* Social Links */}
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:space-x-6 lg:gap-0">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
               <a
                 href="https://github.com/hugoviegas/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                className="icon-pill"
+                aria-label="GitHub"
               >
-                <Github className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                <Github className="w-5 h-5 text-primary" />
               </a>
               <a
                 href="https://www.linkedin.com/in/hviegas/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                className="icon-pill"
+                aria-label="LinkedIn"
               >
-                <Linkedin className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                <Linkedin className="w-5 h-5 text-primary" />
               </a>
               <a
                 href="mailto:hugoviegas3.1@gmail.com"
-                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                className="icon-pill"
+                aria-label="Email"
               >
-                <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                <Mail className="w-5 h-5 text-primary" />
               </a>
 
               {/* Resume Dialog Button */}
               <Dialog>
                 <DialogTrigger asChild>
                   <button
-                    className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                    className="icon-pill icon-pill-wide"
                     aria-label={t("seeResume")}
                     title={t("seeResume")}
                   >
-                    <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-                    <span className="text-primary font-medium text-sm sm:text-base">
+                    <FileText className="w-5 h-5 text-primary" />
+                    <span className="text-sm font-medium text-primary">
                       {t("seeResume")}
                     </span>
                   </button>
                 </DialogTrigger>
                 <DialogContent className="max-w-[min(1400px,95vw)] w-full h-[85vh] sm:h-[90vh] p-0">
-                  <DialogHeader className="p-4 sm:p-6 pb-0">
+                  <DialogHeader className="p-4 md:p-6 pb-0">
                     <DialogTitle className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2">
-                      <span className="text-sm sm:text-base">
+                      <span className="text-base font-semibold">
                         Hugo Viegas - CV 2025
                       </span>
                       <Button
@@ -255,12 +259,11 @@ const HeroSection = () => {
                   </DialogHeader>
 
                   {/* PDF Viewer */}
-                  <div className="flex-1 p-6 pt-0">
+                  <div className="flex-1 p-4 md:p-6 pt-0">
                     <iframe
                       src={`${resumeUrl}#toolbar=1&navpanes=0&scrollbar=1`}
-                      className="w-full h-full rounded-lg border"
+                      className="w-full h-full min-h-[600px] rounded-lg border border-border"
                       title="Hugo Viegas CV 2025"
-                      style={{ minHeight: "600px" }}
                     />
                   </div>
                 </DialogContent>
@@ -300,13 +303,13 @@ const HeroSection = () => {
         </div>
 
         {/* Section footer: scroll indicator placed here to avoid overlapping mobile content */}
-        <div className="mt-6 sm:mt-8 flex justify-center">
+        <div className="mt-10 md:mt-14 flex justify-center">
           <button
             onClick={scrollToAbout}
-            aria-label="Scroll to about section"
-            className="animate-bounce p-2 rounded-full glass hover:scale-110 transition-transform"
+            aria-label={t("scrollToAbout")}
+            className="icon-pill animate-bounce"
           >
-            <ArrowDown className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+            <ArrowDown className="w-5 h-5 text-primary" />
           </button>
         </div>
       </div>

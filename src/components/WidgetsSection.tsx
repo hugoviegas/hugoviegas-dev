@@ -6,14 +6,17 @@ import FastTransparentCube from "@/components/FastTransparentCube";
 const MicroFalconViewer = lazy(() => import("@/components/MicroFalconViewer"));
 const HeroLightsaber = lazy(() => import("@/components/HeroLightsaber"));
 
-const ViewerSkeleton = ({ height }: { height: number }) => (
+const ViewerSkeleton = ({
+  minHeightClass,
+  label,
+}: {
+  minHeightClass: string;
+  label: string;
+}) => (
   <div
-    className="w-full rounded-3xl border border-muted/20 bg-muted/10 flex items-center justify-center animate-pulse"
-    style={{ minHeight: height }}
+    className={`w-full rounded-2xl border border-border bg-muted/30 flex items-center justify-center animate-pulse ${minHeightClass}`}
   >
-    <span className="text-sm text-muted-foreground/70">
-      Loading 3D experience...
-    </span>
+    <span className="caption-text">{label}</span>
   </div>
 );
 
@@ -77,36 +80,43 @@ const WidgetsSection = () => {
   }, [showLightsaber]);
 
   return (
-    <section className="py-20 w-full">
-      <div className="container mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">{t("funStuffTitle")}</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+    <section id="fun-stuff" className="section-y w-full">
+      <div className="section-wrapper">
+        <div className="section-header fade-in">
+          <h2 className="heading-section mb-4">{t("funStuffTitle")}</h2>
+          <p className="body-text mx-auto max-w-3xl">
             {t("funStuffDescription")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Card 1: World Clocks */}
-          <div className="glass-strong rounded-2xl p-6">
+          <div className="glass-card p-6">
             <WorldClocks />
           </div>
 
           {/* Card 2: Rubik's Cube */}
-          <div className="glass-strong rounded-2xl p-6 flex justify-center">
+          <div className="glass-card p-6 flex justify-center">
             <FastTransparentCube width={240} height={240} enableExpand />
           </div>
 
           {/* Card 3: Millennium Falcon */}
-          <div
-            ref={falconContainerRef}
-            className="glass-strong rounded-2xl p-6"
-          >
-            <Suspense fallback={<ViewerSkeleton height={360} />}>
+          <div ref={falconContainerRef} className="glass-card p-6">
+            <Suspense
+              fallback={
+                <ViewerSkeleton
+                  minHeightClass="min-h-[360px]"
+                  label={t("loading3d")}
+                />
+              }
+            >
               {showFalconViewer ? (
                 <MicroFalconViewer />
               ) : (
-                <ViewerSkeleton height={360} />
+                <ViewerSkeleton
+                  minHeightClass="min-h-[360px]"
+                  label={t("loading3d")}
+                />
               )}
             </Suspense>
           </div>
@@ -114,14 +124,23 @@ const WidgetsSection = () => {
           {/* Card 4: Lightsaber */}
           <div
             ref={lightsaberContainerRef}
-            className="glass-strong rounded-2xl p-6"
-            style={{ minHeight: 200 }}
+            className="glass-card p-6 min-h-[200px]"
           >
-            <Suspense fallback={<ViewerSkeleton height={200} />}>
+            <Suspense
+              fallback={
+                <ViewerSkeleton
+                  minHeightClass="min-h-[200px]"
+                  label={t("loading3d")}
+                />
+              }
+            >
               {showLightsaber ? (
                 <HeroLightsaber />
               ) : (
-                <ViewerSkeleton height={200} />
+                <ViewerSkeleton
+                  minHeightClass="min-h-[200px]"
+                  label={t("loading3d")}
+                />
               )}
             </Suspense>
           </div>

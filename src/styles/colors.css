@@ -9,62 +9,6 @@
    SEMANTIC COLOR UTILITIES
    =========================================== */
 
-/* Text Colors */
-.text-primary {
-  color: hsl(var(--color-text-primary));
-}
-.text-secondary {
-  color: hsl(var(--color-text-secondary));
-}
-.text-muted {
-  color: hsl(var(--color-text-muted));
-}
-.text-inverse {
-  color: hsl(var(--color-text-inverse));
-}
-
-/* Background Colors */
-.bg-primary {
-  background-color: hsl(var(--color-bg-primary));
-}
-.bg-secondary {
-  background-color: hsl(var(--color-bg-secondary));
-}
-.bg-tertiary {
-  background-color: hsl(var(--color-bg-tertiary));
-}
-.bg-surface {
-  background-color: hsl(var(--color-bg-surface));
-}
-.bg-overlay {
-  background-color: hsl(var(--color-bg-overlay));
-}
-
-/* Border Colors */
-.border-primary {
-  border-color: hsl(var(--color-border-primary));
-}
-.border-secondary {
-  border-color: hsl(var(--color-border-secondary));
-}
-.border-focus {
-  border-color: hsl(var(--color-border-focus));
-}
-.border-error {
-  border-color: hsl(var(--color-border-error));
-}
-
-/* Interactive States */
-.bg-hover {
-  background-color: hsl(var(--color-interactive-hover));
-}
-.bg-active {
-  background-color: hsl(var(--color-interactive-active));
-}
-.bg-focus {
-  background-color: hsl(var(--color-interactive-focus));
-}
-
 /* ===========================================
    BRAND COLOR UTILITIES
    =========================================== */
@@ -100,37 +44,6 @@
   border-color: hsl(var(--color-brand-accent));
 }
 
-/* Status Colors */
-.text-success {
-  color: hsl(var(--color-brand-success));
-}
-.bg-success {
-  background-color: hsl(var(--color-brand-success));
-}
-.border-success {
-  border-color: hsl(var(--color-brand-success));
-}
-
-.text-warning {
-  color: hsl(var(--color-brand-warning));
-}
-.bg-warning {
-  background-color: hsl(var(--color-brand-warning));
-}
-.border-warning {
-  border-color: hsl(var(--color-brand-warning));
-}
-
-.text-error {
-  color: hsl(var(--color-brand-error));
-}
-.bg-error {
-  background-color: hsl(var(--color-brand-error));
-}
-.border-error {
-  border-color: hsl(var(--color-brand-error));
-}
-
 /* ===========================================
    GRADIENT UTILITIES
    =========================================== */
@@ -164,29 +77,13 @@
    =========================================== */
 
 .glass-bg {
-  background: var(--color-glass-bg);
+  background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
 }
 .glass-border {
-  border-color: var(--color-glass-border);
+  border-color: hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
 }
 .glass-shadow {
   box-shadow: var(--shadow-glass);
-}
-
-.glass {
-  background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.glass-strong {
-  background: hsl(var(--color-glass-bg) / 0.9);
-  border: 1px solid hsl(var(--color-glass-border) / 0.8);
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 /* ===========================================
@@ -262,17 +159,6 @@
   box-shadow: var(--shadow-neon-accent);
 }
 
-.btn-ghost {
-  background: transparent;
-  color: hsl(var(--color-brand-primary));
-  border: 1px solid hsl(var(--color-brand-primary) / 0.5);
-}
-
-.btn-ghost:hover {
-  background: hsl(var(--color-brand-primary) / 0.1);
-  border-color: hsl(var(--color-brand-primary));
-}
-
 .btn-outline {
   background: transparent;
   color: hsl(var(--color-text-primary));
@@ -280,7 +166,7 @@
 }
 
 .btn-outline:hover {
-  background: hsl(var(--color-interactive-hover));
+  background: hsl(var(--color-interactive-hover) / var(--color-interactive-hover-alpha));
   border-color: hsl(var(--color-brand-primary));
   color: hsl(var(--color-brand-primary));
 }
@@ -293,8 +179,8 @@
 }
 
 .card-glass {
-  background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
+  background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
+  border: 1px solid hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
   box-shadow: var(--shadow-glass);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -319,8 +205,8 @@
 }
 
 .input-glass {
-  background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
+  background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
+  border: 1px solid hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
   color: hsl(var(--color-text-primary));
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -378,112 +264,25 @@
    =========================================== */
 
 .light .glass-bg {
-  background: hsl(var(--color-glass-bg));
+  background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
 }
 .light .glass-border {
-  border-color: hsl(var(--color-glass-border));
+  border-color: hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
 }
 .light .glass-shadow {
   box-shadow: var(--shadow-glass-light);
 }
 
 .light .glass {
-  background: hsl(var(--color-glass-bg));
-  border: 1px solid hsl(var(--color-glass-border));
+  background: hsl(var(--color-glass-bg) / var(--color-glass-alpha));
+  border: 1px solid hsl(var(--color-glass-border) / var(--color-glass-border-alpha));
   box-shadow: var(--shadow-glass-light);
 }
 
 .light .glass-strong {
-  background: hsl(var(--color-glass-bg) / 0.9);
-  border: 1px solid hsl(var(--color-glass-border) / 0.8);
+  background: hsl(var(--color-glass-bg) / var(--color-glass-strong-alpha));
+  border: 1px solid hsl(var(--color-glass-border) / var(--color-glass-border-strong-alpha));
   box-shadow: var(--shadow-glass-light);
-}
-
-/* ===========================================
-   LEGACY COMPATIBILITY CLASSES
-   =========================================== */
-
-/* Map existing classes to new system for gradual migration */
-.btn-hero {
-  background: var(--color-gradient-primary);
-  color: hsl(var(--color-text-inverse));
-  border: 1px solid hsl(var(--color-brand-primary));
-  transition: all var(--duration-base) var(--ease-out);
-}
-
-.btn-hero:hover {
-  background: var(--color-gradient-primary);
-  box-shadow: var(--shadow-neon-primary);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: hsl(var(--color-brand-primary));
-  border: 1px solid hsl(var(--color-brand-primary) / 0.5);
-  transition: all var(--duration-base) var(--ease-out);
-}
-
-.btn-ghost:hover {
-  background: hsl(var(--color-brand-primary) / 0.1);
-  border-color: hsl(var(--color-brand-primary));
-}
-
-.card-project {
-  background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: transform var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out);
-}
-
-.card-project:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-lg);
-}
-
-.card-skill {
-  background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: var(--space-6);
-  text-align: center;
-  transition: background-color var(--duration-base) var(--ease-out),
-    border-color var(--duration-base) var(--ease-out),
-    transform var(--duration-base) var(--ease-out);
-}
-
-.card-skill:hover {
-  background: hsl(var(--color-brand-primary) / 0.05);
-  border-color: hsl(var(--color-brand-primary) / 0.3);
-  transform: translateY(-2px);
-}
-
-.heading-hero {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-5xl);
-  line-height: var(--line-height-tight);
-  background: var(--color-gradient-primary);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.heading-section {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-3xl);
-  color: hsl(var(--color-text-primary));
-  line-height: var(--line-height-tight);
-}
-
-.text-gradient {
-  background: var(--color-gradient-primary);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* ===========================================
@@ -497,7 +296,7 @@
 
 .focus-ring:focus {
   outline: none;
-  box-shadow: 0 0 0 2px hsl(var(--color-interactive-focus));
+  box-shadow: 0 0 0 2px hsl(var(--color-interactive-focus) / var(--color-interactive-focus-alpha));
 }
 
 /* Hover States */

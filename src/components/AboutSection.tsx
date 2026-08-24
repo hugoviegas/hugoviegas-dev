@@ -28,13 +28,13 @@ const AboutSection = () => {
   const highlights = [
     {
       icon: TrendingUp,
-      color: "text-green-400",
-      bgColor: "bg-green-400/10",
+      color: "text-accent",
+      bgColor: "bg-accent/10",
     },
     {
       icon: Globe,
-      color: "text-blue-400",
-      bgColor: "bg-blue-400/10",
+      color: "text-primary",
+      bgColor: "bg-primary/10",
     },
     {
       icon: Target,
@@ -43,8 +43,8 @@ const AboutSection = () => {
     },
     {
       icon: Brain,
-      color: "text-orange-400",
-      bgColor: "bg-orange-400/10",
+      color: "text-secondary",
+      bgColor: "bg-secondary/10",
     },
   ];
 
@@ -81,39 +81,33 @@ const AboutSection = () => {
   };
 
   return (
-    <section id="about" className="py-20 bg-muted/3 relative w-full">
+    <section id="about" className="section-y relative w-full bg-muted/20">
       <DecoLegoBricks />
 
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="mb-12 text-center fade-in">
+      <div className="section-wrapper relative z-10">
+        <div className="section-header fade-in">
           <h2 className="heading-section">{t("aboutTitle")}</h2>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Journey Column */}
           <div className="space-y-8 slide-up">
-            <div className="glass-strong rounded-3xl p-8 lg:p-10 space-y-6">
+            <div className="glass-card card-padding space-y-6">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 shrink-0 rounded-full bg-primary flex items-center justify-center">
+                  <BookOpen className="w-6 h-6 text-primary-foreground" />
                 </div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-blue-500">
-                  {t("myJourney")}
-                </h3>
+                <h3 className="heading-card">{t("myJourney")}</h3>
               </div>
 
               <div className="space-y-4">
-                <p className="text-base lg:text-lg text-foreground/80 leading-relaxed">
-                  {t("journeySummary1")}
-                </p>
-                <p className="text-base lg:text-lg text-foreground/80 leading-relaxed">
-                  {t("journeySummary2")}
-                </p>
+                <p className="body-text">{t("journeySummary1")}</p>
+                <p className="body-text">{t("journeySummary2")}</p>
               </div>
 
               <Button
                 variant="outline"
-                className="glass-strong border-primary/30 hover:bg-primary/5"
+                className="border-primary/40 hover:bg-primary/10"
                 onClick={() => setIsCrawlOpen(true)}
               >
                 <BookOpen className="w-4 h-4 mr-2" />
@@ -122,21 +116,21 @@ const AboutSection = () => {
             </div>
 
             {/* Highlights Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {highlights.map((highlight, index) => (
                 <div
                   key={index}
-                  className="glass-strong rounded-2xl p-6 transition-all duration-300 hover:shadow-lg group"
+                  className="glass-card glass-card-hover p-6 group"
                 >
                   <div
                     className={`w-12 h-12 rounded-xl ${highlight.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
                   >
                     <highlight.icon className={`w-6 h-6 ${highlight.color}`} />
                   </div>
-                  <h4 className="font-semibold text-lg mb-2 text-foreground">
+                  <h4 className="mb-2 text-lg font-semibold text-foreground">
                     {t(`highlight${index + 1}Title`)}
                   </h4>
-                  <p className="text-sm text-foreground/70 leading-relaxed">
+                  <p className="caption-text">
                     {t(`highlight${index + 1}Desc`)}
                   </p>
                 </div>
@@ -146,48 +140,44 @@ const AboutSection = () => {
 
           {/* Skills Column */}
           <div className="space-y-8 slide-up delay-300">
-            <div className="glass-strong rounded-3xl p-8 lg:p-10">
+            <div className="glass-card card-padding">
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-                  <Code className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 shrink-0 rounded-full bg-primary flex items-center justify-center">
+                  <Code className="w-6 h-6 text-primary-foreground" />
                 </div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-blue-500">
-                  {t("technicalSkills")}
-                </h3>
+                <h3 className="heading-card">{t("technicalSkills")}</h3>
               </div>
 
               <SkillsSection />
             </div>
 
             {/* Languages Card */}
-            <div className="glass-strong rounded-3xl p-8">
+            <div className="glass-card card-padding">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                  <Globe className="w-5 h-5 text-white" />
+                <div className="w-12 h-12 shrink-0 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                  <Globe className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <h4 className="text-xl font-semibold text-foreground">
-                  {t("languagesTitle")}
-                </h4>
+                <h3 className="heading-card">{t("languagesTitle")}</h3>
               </div>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 rounded-xl bg-muted/30">
+                <div className="flex justify-between items-center gap-4 p-4 rounded-xl bg-muted/40">
                   <span className="font-medium text-foreground">
                     {t("portuguese")}
                   </span>
                   <Badge
                     variant="secondary"
-                    className="bg-green-500/10 text-green-400 border-green-500/30"
+                    className="bg-accent/15 text-accent border border-accent/30"
                   >
                     {t("native")}
                   </Badge>
                 </div>
-                <div className="flex justify-between items-center p-4 rounded-xl bg-muted/30">
+                <div className="flex justify-between items-center gap-4 p-4 rounded-xl bg-muted/40">
                   <span className="font-medium text-foreground">
                     {t("english")}
                   </span>
                   <Badge
                     variant="secondary"
-                    className="bg-blue-500/10 text-blue-400 border-blue-500/30"
+                    className="bg-primary/15 text-primary border border-primary/30"
                   >
                     {t("c1Proficiency")}
                   </Badge>

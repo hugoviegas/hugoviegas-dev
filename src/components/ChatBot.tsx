@@ -9,8 +9,10 @@ import {
   type ChatMessage 
 } from '@/lib/chatbot-service';
 import redFront from '@/assets/lego-bricks/red-front.png';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const ChatBot = () => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -81,7 +83,7 @@ const ChatBot = () => {
       console.error('Failed to get response:', error);
       const errorMessage: ChatMessage = {
         role: 'assistant',
-        content: 'Desculpe, ocorreu um erro. Por favor, tente novamente. / Sorry, an error occurred. Please try again.',
+        content: t('chatError'),
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -100,14 +102,15 @@ const ChatBot = () => {
       <button
         onClick={toggleChat}
         className="fixed bottom-6 right-6 z-50 group"
-        aria-label={isOpen ? 'Fechar chat' : 'Abrir chat'}
+        aria-label={isOpen ? t('chatClose') : t('chatOpen')}
       >
         <div className="relative w-16 h-16 flex items-center justify-center transition-transform duration-300 hover:scale-110">
           {/* Lego brick background with glow */}
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-red-500/20 to-red-600/20 blur-lg group-hover:blur-xl transition-all" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-destructive/20 to-destructive/30 blur-lg group-hover:blur-xl transition-all" />
           <img
             src={redFront}
-            alt="Chat"
+            alt=""
+            aria-hidden="true"
             className="w-14 h-14 object-contain relative z-10 drop-shadow-lg"
           />
           {/* Chat icon overlay */}
@@ -127,27 +130,31 @@ const ChatBot = () => {
       
       {/* Chat Panel */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-120px)] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-neutral-700/50 bg-neutral-900/95 backdrop-blur-lg animate-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-24 right-6 z-50 flex h-[500px] max-h-[calc(100vh-120px)] w-[360px] max-w-[calc(100vw-48px)] flex-col overflow-hidden rounded-2xl border border-border bg-popover/95 shadow-2xl backdrop-blur-lg animate-in slide-in-from-bottom-5 duration-300">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-700/50 bg-neutral-800/50">
+          <div className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                 <img
                   src={redFront}
-                  alt="Hugo's Assistant"
+                  alt=""
+                  aria-hidden="true"
                   className="w-7 h-7 object-contain"
                 />
               </div>
               <div>
-                <h3 className="font-semibold text-white text-sm">Hugo's Assistant</h3>
-                <p className="text-xs text-neutral-400">hugoviegas.dev</p>
+                <h3 className="text-sm font-semibold text-foreground">
+                  {t('chatAssistantName')}
+                </h3>
+                <p className="text-xs text-muted-foreground">hugoviegas.dev</p>
               </div>
             </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleChat}
-              className="text-neutral-400 hover:text-white hover:bg-neutral-700/50"
+              aria-label={t('chatClose')}
+              className="text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -164,19 +171,21 @@ const ChatBot = () => {
                     className="w-10 h-10 object-contain"
                   />
                 </div>
-                <h4 className="font-medium text-white mb-2">Olá! 👋</h4>
-                <p className="text-sm text-neutral-400 mb-4">
-                  Sou o assistente do Hugo em hugoviegas.dev. Pergunte sobre tecnologia, projetos, habilidades ou o que quiser!
+                <h4 className="mb-2 font-medium text-foreground">
+                  {t('chatGreeting')}
+                </h4>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  {t('chatIntro')}
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {['Me fale sobre o Hugo', 'Quais tecnologias você usa?', 'Como foi feito este site?'].map((suggestion) => (
+                  {[t('chatSuggestion1'), t('chatSuggestion2'), t('chatSuggestion3')].map((suggestion) => (
                     <button
                       key={suggestion}
                       onClick={() => {
                         setInput(suggestion);
                         inputRef.current?.focus();
                       }}
-                      className="text-xs px-3 py-1.5 rounded-full bg-neutral-800 text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors"
+                      className="rounded-full bg-muted px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground"
                     >
                       {suggestion}
                     </button>
@@ -194,7 +203,7 @@ const ChatBot = () => {
                       className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                         msg.role === 'user'
                           ? 'bg-primary text-primary-foreground rounded-br-sm'
-                          : 'bg-neutral-800 text-neutral-100 rounded-bl-sm'
+                          : 'bg-muted text-foreground rounded-bl-sm'
                       }`}
                     >
                       {msg.content}
@@ -203,11 +212,11 @@ const ChatBot = () => {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-neutral-800 text-neutral-100 px-4 py-2.5 rounded-2xl rounded-bl-sm">
+                    <div className="rounded-2xl rounded-bl-sm bg-muted px-4 py-2.5 text-foreground">
                       <div className="flex gap-1">
-                        <span className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-2 h-2 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
                       </div>
                     </div>
                   </div>
@@ -218,28 +227,34 @@ const ChatBot = () => {
           </ScrollArea>
           
           {/* Rate limit info */}
-          <div className="px-4 py-1.5 text-xs text-neutral-500 border-t border-neutral-800/50 bg-neutral-900/50">
-            <span>{rateInfo.dayRemaining}/100 perguntas restantes hoje</span>
+          <div className="border-t border-border bg-muted/30 px-4 py-1.5 text-xs text-muted-foreground">
+            <span>
+              {rateInfo.dayRemaining}/100 {t('chatQuotaDay')}
+            </span>
             <span className="mx-2">•</span>
-            <span>{rateInfo.minuteRemaining}/15 por minuto</span>
+            <span>
+              {rateInfo.minuteRemaining}/15 {t('chatQuotaMinute')}
+            </span>
           </div>
           
           {/* Input Area */}
-          <form onSubmit={handleSendMessage} className="p-3 border-t border-neutral-700/50 bg-neutral-800/30">
+          <form onSubmit={handleSendMessage} className="border-t border-border bg-muted/20 p-3">
             <div className="flex gap-2">
               <Input
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Digite sua pergunta..."
+                placeholder={t('chatPlaceholder')}
                 disabled={isLoading}
-                className="flex-1 bg-neutral-800/50 border-neutral-700 text-white placeholder:text-neutral-500 focus:border-primary"
+                aria-label={t('chatPlaceholder')}
+                className="flex-1 border-border bg-card text-foreground focus:border-primary"
               />
               <Button
                 type="submit"
                 size="icon"
                 disabled={isLoading || !input.trim()}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                aria-label={t('chatSend')}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Send className="w-4 h-4" />
               </Button>

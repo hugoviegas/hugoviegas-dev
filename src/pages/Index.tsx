@@ -47,23 +47,15 @@ const Index = () => {
       <Suspense fallback={null}>
         <ChatBot />
       </Suspense>
-      {/* Main content positioned above background */}
+      {/* Main content positioned above background.
+          Each section owns its own id + vertical rhythm (.section-y),
+          so no extra wrapper padding is added here. */}
       <div className="relative z-10">
-        <section id="hero">
-          <HeroSection />
-        </section>
-        <section id="experience" className="pt-16">
-          <ExperienceSection />
-        </section>
-        <section id="about" className="pt-16">
-          <AboutSection />
-        </section>
-        <section id="projects" className="pt-16">
-          <ProjectsSection />
-        </section>
-        <section id="contact" className="pt-16">
-          <ContactSection />
-        </section>
+        <HeroSection />
+        <ExperienceSection />
+        <AboutSection />
+        <ProjectsSection />
+        <ContactSection />
         <Suspense fallback={null}>
           <WidgetsSection />
         </Suspense>

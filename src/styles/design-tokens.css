@@ -49,21 +49,29 @@
   ); /* deepest surface for cards */
   --color-bg-tertiary: var(--color-neutral-900);
   --color-bg-surface: var(--color-neutral-900);
-  --color-bg-overlay: var(--color-neutral-900) / 0.8;
+  --color-bg-overlay: var(--color-neutral-900);
+  --color-bg-overlay-alpha: 0.8;
 
   --color-border-primary: var(--color-neutral-700);
   --color-border-secondary: var(--color-neutral-600);
   --color-border-focus: var(--color-brand-primary);
   --color-border-error: var(--color-brand-error);
 
-  /* Interactive States */
-  --color-interactive-hover: var(--color-brand-primary) / 0.1;
-  --color-interactive-active: var(--color-brand-primary) / 0.2;
-  --color-interactive-focus: var(--color-brand-primary) / 0.5;
+  /* Interactive States (pure HSL triples - alpha applied at use site) */
+  --color-interactive-hover: var(--color-brand-primary);
+  --color-interactive-hover-alpha: 0.1;
+  --color-interactive-active: var(--color-brand-primary);
+  --color-interactive-active-alpha: 0.2;
+  --color-interactive-focus: var(--color-brand-primary);
+  --color-interactive-focus-alpha: 0.5;
 
-  /* Glassmorphism */
-  --color-glass-bg: var(--color-neutral-800) / 0.8;
-  --color-glass-border: var(--color-neutral-50) / 0.1;
+  /* Glassmorphism (pure HSL triples - alpha applied at use site) */
+  --color-glass-bg: var(--color-neutral-800);
+  --color-glass-alpha: 0.72;
+  --color-glass-strong-alpha: 0.88;
+  --color-glass-border: var(--color-neutral-50);
+  --color-glass-border-alpha: 0.12;
+  --color-glass-border-strong-alpha: 0.18;
   --color-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 
   /* Gradients */
@@ -95,13 +103,17 @@
   --color-bg-secondary: var(--color-neutral-50);
   --color-bg-tertiary: var(--color-neutral-100);
   --color-bg-surface: var(--color-neutral-100);
-  --color-bg-overlay: var(--color-neutral-50) / 0.8;
+  --color-bg-overlay: var(--color-neutral-50);
 
   --color-border-primary: var(--color-neutral-200);
   --color-border-secondary: var(--color-neutral-300);
 
-  --color-glass-bg: var(--color-base-white) / 0.8;
-  --color-glass-border: var(--color-neutral-200) / 0.5;
+  --color-glass-bg: var(--color-base-white);
+  --color-glass-alpha: 0.7;
+  --color-glass-strong-alpha: 0.86;
+  --color-glass-border: var(--color-neutral-400);
+  --color-glass-border-alpha: 0.35;
+  --color-glass-border-strong-alpha: 0.45;
   --color-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
   --color-gradient-subtle: linear-gradient(

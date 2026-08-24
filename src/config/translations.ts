@@ -384,6 +384,75 @@ Paralelamente, um desafio prático do restaurante onde trabalhava levou à const
     EN: "IT & Infrastructure",
     PT: "TI & Infraestrutura",
   },
+
+  // Shared UI labels
+  scrollToAbout: {
+    EN: "Scroll to the about section",
+    PT: "Rolar para a seção sobre",
+  },
+  loading3d: {
+    EN: "Loading 3D experience...",
+    PT: "Carregando experiência 3D...",
+  },
+  funStuffLabel: { EN: "Fun Stuff", PT: "Fun Stuff" },
+
+  // Footer
+  footerTagline: {
+    EN: "IT Support Specialist | System Administrator",
+    PT: "Especialista em Suporte de TI | Administrador de Sistemas",
+  },
+  footerRights: { EN: "All rights reserved.", PT: "Todos os direitos reservados." },
+  footerMadeWith: { EN: "Made with", PT: "Feito com" },
+  footerLocation: { EN: "in Dublin, Ireland", PT: "em Dublin, Irlanda" },
+  footerAvailability: {
+    EN: "Available for freelance work and full-time opportunities • Fluent in Portuguese & English • Open to remote and hybrid arrangements",
+    PT: "Disponível para trabalhos freelance e oportunidades em tempo integral • Fluente em Português e Inglês • Aberto a modelos remoto e híbrido",
+  },
+  footerGameLabel: {
+    EN: "Formula D assistant",
+    PT: "Assistente Formula D",
+  },
+
+  toggleTheme: { EN: "Toggle theme", PT: "Alternar tema" },
+  openMenu: { EN: "Open menu", PT: "Abrir menu" },
+  closeMenu: { EN: "Close menu", PT: "Fechar menu" },
+  expandCube: { EN: "Expand the cube", PT: "Expandir o cubo" },
+  closeCube: { EN: "Close the cube", PT: "Fechar o cubo" },
+  playCubeMoves: { EN: "Play cube moves", PT: "Executar movimentos do cubo" },
+
+  // Chatbot
+  chatOpen: { EN: "Open chat", PT: "Abrir chat" },
+  chatClose: { EN: "Close chat", PT: "Fechar chat" },
+  chatSend: { EN: "Send message", PT: "Enviar mensagem" },
+  chatAssistantName: { EN: "Hugo's Assistant", PT: "Assistente do Hugo" },
+  chatGreeting: { EN: "Hi there! 👋", PT: "Olá! 👋" },
+  chatIntro: {
+    EN: "I'm Hugo's assistant on hugoviegas.dev. Ask me about technology, projects, skills or anything else!",
+    PT: "Sou o assistente do Hugo em hugoviegas.dev. Pergunte sobre tecnologia, projetos, habilidades ou o que quiser!",
+  },
+  chatSuggestion1: { EN: "Tell me about Hugo", PT: "Me fale sobre o Hugo" },
+  chatSuggestion2: {
+    EN: "Which technologies do you use?",
+    PT: "Quais tecnologias você usa?",
+  },
+  chatSuggestion3: {
+    EN: "How was this site built?",
+    PT: "Como foi feito este site?",
+  },
+  chatPlaceholder: {
+    EN: "Type your question...",
+    PT: "Digite sua pergunta...",
+  },
+  chatQuotaDay: { EN: "questions left today", PT: "perguntas restantes hoje" },
+  chatQuotaMinute: { EN: "per minute", PT: "por minuto" },
+  chatError: {
+    EN: "Sorry, something went wrong. Please try again.",
+    PT: "Desculpe, ocorreu um erro. Por favor, tente novamente.",
+  },
+
+  // World clocks widget
+  worldClocksTitle: { EN: "Current time", PT: "Hora atual" },
+  worldClocksOffset: { EN: "Offset now:", PT: "Fuso agora:" },
 };
 
 export const getTranslation = (key: string, language: LanguageCode): string => {
