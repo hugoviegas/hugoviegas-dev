@@ -1,0 +1,24 @@
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/HugoViegas/Documentos/hugoviegas-dev[39m
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/App.top-bar-global.test.tsx
+WARNING: Multiple instances of Three.js being imported.
+
+stderr | src/App.top-bar-global.test.tsx > global application header > renders the shared Navbar and TopControls once on /
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/App.top-bar-global.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 6946[2mms[22m[39m
+   [33m[2m✓[22m[39m global application header[2m > [22mrenders the shared Navbar and TopControls once on / [33m555[2mms[22m[39m
+   [33m[2m✓[22m[39m global application header[2m > [22mcloses the Projects submenu with the Escape key [33m371[2mms[22m[39m
+   [33m[2m✓[22m[39m global application header[2m > [22mswitches the shared navigation labels between English and Portuguese [33m416[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 20:20:02
+[2m   Duration [22m 11.71s[2m (transform 1.50s, setup 368ms, collect 398ms, tests 6.95s, environment 2.20s, prepare 397ms)[22m
+

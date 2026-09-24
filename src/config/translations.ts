@@ -905,6 +905,10 @@ export const translations: Translations = {
   },
   "aria.switchToEn": { EN: "Switch to English", PT: "Mudar para inglês" },
   "aria.toggleTheme": { EN: "Toggle theme", PT: "Alternar tema" },
+  "aria.mainNavigation": {
+    EN: "Main navigation",
+    PT: "Navegação principal",
+  },
   "aria.openMenu": { EN: "Open menu", PT: "Abrir menu" },
   "aria.closeMenu": { EN: "Close menu", PT: "Fechar menu" },
   "aria.navigateTo": { EN: "Navigate to", PT: "Ir para" },

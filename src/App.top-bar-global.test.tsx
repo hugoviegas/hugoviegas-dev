@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
@@ -24,6 +24,7 @@ describe("global application header", () => {
 
     const { unmount } = render(<App />);
 
+    expect(screen.getAllByRole("navigation")).toHaveLength(1);
     expect(screen.getAllByRole("button", { name: /switch to/i })).toHaveLength(1);
     expect(screen.getAllByLabelText(/^Projects$/i)).toHaveLength(1);
 
@@ -38,9 +39,29 @@ describe("global application header", () => {
 
     await user.click(screen.getByLabelText(/^Projects$/i));
 
-    expect(screen.getByRole("link", { name: /D'Arcy McGee's/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /^Big Bang Duel$/i })).toBeInTheDocument();
+    const projectsMenu = screen.getByRole("menu", { name: /^Projects$/i });
+
+    expect(projectsMenu).toBeInTheDocument();
+    expect(within(projectsMenu).getByRole("menuitem", { name: /D'Arcy McGee's/i })).toBeInTheDocument();
+    expect(within(projectsMenu).getByRole("menuitem", { name: /^Big Bang Duel$/i })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /story/i })).not.toBeInTheDocument();
+  });
+
+  it("closes the Projects submenu with the Escape key", async () => {
+    const user = userEvent.setup();
+    window.history.pushState({}, "", "/");
+
+    render(<App />);
+
+    const trigger = screen.getByLabelText(/^Projects$/i);
+    await user.click(trigger);
+
+    const projectsMenu = screen.getByRole("menu", { name: /^Projects$/i });
+    expect(within(projectsMenu).getByRole("menuitem", { name: /D'Arcy McGee's/i })).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+
+    expect(screen.queryByRole("menu", { name: /^Projects$/i })).not.toBeInTheDocument();
   });
 
   it("switches the shared navigation labels between English and Portuguese", async () => {

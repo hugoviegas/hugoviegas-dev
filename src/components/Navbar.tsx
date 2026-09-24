@@ -12,6 +12,7 @@ const Navbar = ({ show }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isProjectsOpen, setIsProjectsOpen] = useState(false);
+  const projectMenuId = "projects-menu";
 
   const { t } = useLanguage();
 
@@ -33,6 +34,18 @@ const Navbar = ({ show }: NavbarProps) => {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsProjectsOpen(false);
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
   }, []);
 
   if (!show) {
@@ -80,7 +93,7 @@ const Navbar = ({ show }: NavbarProps) => {
   }, [navItems]);
 
   return (
-    <>
+    <nav aria-label={t("aria.mainNavigation")} className="contents">
       <div
         className={`fixed left-4 top-4 z-50 md:hidden transition-transform transition-opacity duration-500 ease-out ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
@@ -118,7 +131,17 @@ const Navbar = ({ show }: NavbarProps) => {
                 item.id === "projects" ? (
                   <div key={item.id} className="flex flex-col gap-2">
                     <button
+                      type="button"
                       onClick={() => setIsProjectsOpen((prev) => !prev)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape") {
+                          setIsProjectsOpen(false);
+                          event.preventDefault();
+                        }
+                      }}
+                      aria-haspopup="menu"
+                      aria-controls={projectMenuId}
+                      aria-expanded={isProjectsOpen}
                       className={`nav-item w-full rounded-lg px-4 py-3 text-left text-muted-foreground transition-colors hover:bg-accent hover:text-primary ${
                         activeSection === item.id ? "active" : ""
                       }`}
@@ -131,11 +154,17 @@ const Navbar = ({ show }: NavbarProps) => {
                       </span>
                     </button>
                     {isProjectsOpen && (
-                      <div className="ml-3 flex flex-col gap-1 border-l border-border pl-3">
+                      <div
+                        id={projectMenuId}
+                        role="menu"
+                        aria-label={t("projectsMenuTitle")}
+                        className="ml-3 flex flex-col gap-1 border-l border-border pl-3"
+                      >
                         {projectLinks.map((link) => (
                           <Link
                             key={link.href}
                             to={link.href}
+                            role="menuitem"
                             onClick={() => {
                               setIsMobileMenuOpen(false);
                               setIsProjectsOpen(false);
@@ -151,6 +180,7 @@ const Navbar = ({ show }: NavbarProps) => {
                 ) : (
                   <button
                     key={item.id}
+                    type="button"
                     onClick={() => scrollToSection(item.id)}
                     className={`nav-item w-full rounded-lg px-4 py-3 text-left text-muted-foreground transition-colors hover:bg-accent hover:text-primary ${
                       activeSection === item.id ? "active" : ""
@@ -206,11 +236,20 @@ const Navbar = ({ show }: NavbarProps) => {
               ) : item.id === "projects" ? (
                 <div key={item.id} className="relative">
                   <button
+                    type="button"
                     onClick={() => setIsProjectsOpen((prev) => !prev)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") {
+                        setIsProjectsOpen(false);
+                        event.preventDefault();
+                      }
+                    }}
                     className={`nav-item flex min-w-[60px] items-center gap-2 px-3 py-2 text-muted-foreground transition-colors hover:text-primary lg:min-w-[76px] lg:px-4 ${
                       activeSection === item.id ? "active" : ""
                     }`}
                     aria-expanded={isProjectsOpen}
+                    aria-haspopup="menu"
+                    aria-controls={projectMenuId}
                     aria-label={t("projectsMenuTitle")}
                   >
                     <span>{item.label}</span>
@@ -219,11 +258,17 @@ const Navbar = ({ show }: NavbarProps) => {
                     />
                   </button>
                   {isProjectsOpen && (
-                    <div className="absolute left-0 top-full mt-3 min-w-[220px] rounded-2xl border border-border bg-card/95 p-2 shadow-xl backdrop-blur-sm">
+                    <div
+                      id={projectMenuId}
+                      role="menu"
+                      aria-label={t("projectsMenuTitle")}
+                      className="absolute left-0 top-full mt-3 min-w-[220px] rounded-2xl border border-border bg-card/95 p-2 shadow-xl backdrop-blur-sm"
+                    >
                       {projectLinks.map((link) => (
                         <Link
                           key={link.href}
                           to={link.href}
+                          role="menuitem"
                           onClick={() => setIsProjectsOpen(false)}
                           className="block rounded-xl px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-primary"
                         >
@@ -249,7 +294,7 @@ const Navbar = ({ show }: NavbarProps) => {
           </div>
         </div>
       </div>
-    </>
+    </nav>
   );
 };
 
