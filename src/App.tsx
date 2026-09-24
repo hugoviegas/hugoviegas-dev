@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
 import DarcyProject from "./pages/DarcyProject";
 import BigBangDuelProject from "./pages/BigBangDuelProject";
+import BigBangDuelStoryPage from "./pages/BigBangDuelStoryPage";
 import LightsaberViewerMV from "./pages/LightsaberViewerMV";
 import LightsaberDemo from "./pages/LightsaberDemo";
 import StarshipDemo from "./pages/StarshipDemo";
@@ -53,6 +54,7 @@ const App = () => {
                 <Route path="/formula-d" element={<FormulaD />} />
                 <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
                 <Route path="/projects/big-bang-duel" element={<BigBangDuelProject />} />
+                <Route path="/projects/big-bang-duel/story" element={<BigBangDuelStoryPage />} />
 
                 {/* Presente X Routes */}
                 <Route path="/presente-x" element={<PresenteX />} />

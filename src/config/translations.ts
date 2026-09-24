@@ -310,7 +310,25 @@ export const translations: Translations = {
   },
   bigBangStack: { EN: "Stack", PT: "Tecnologias" },
   bigBangOpenFull: { EN: "Play full game", PT: "Jogar jogo completo" },
+  bigBangReadStory: { EN: "Read full story", PT: "Ler história completa" },
   bigBangBack: { EN: "Back to Projects", PT: "Voltar aos Projetos" },
+  bigBangBackToProject: { EN: "Back to project", PT: "Voltar ao projeto" },
+  bigBangStoryTitle: {
+    EN: "The story behind Big Bang Duel",
+    PT: "A história por trás do Big Bang Duel",
+  },
+  bigBangStoryIntro: {
+    EN: "A guest-first game concept that turns a quick browser session into a full strategic duel experience.",
+    PT: "Um conceito de jogo pensado para começar rapidamente em navegador e evoluir para uma experiência de duelo estratégico completa.",
+  },
+  bigBangStoryLoading: {
+    EN: "Loading story...",
+    PT: "A carregar a história...",
+  },
+  bigBangStoryError: {
+    EN: "The story could not be loaded right now. Please try again later.",
+    PT: "A história não pôde ser carregada agora. Tente novamente mais tarde.",
+  },
   bigBangDemoButton: { EN: "Live game preview", PT: "Prévia ao vivo do jogo" },
   bigBangDemoNote: {
     EN: "A live preview of the public game experience.",

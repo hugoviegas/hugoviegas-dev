@@ -1,14 +1,15 @@
 import { useState, useEffect, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { ChevronDown, X } from "lucide-react";
+import { ArrowLeft, ChevronDown, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/useLanguage";
 
 interface NavbarProps {
   show: boolean;
+  showProjectBackLink?: boolean;
 }
 
-const Navbar = ({ show }: NavbarProps) => {
+const Navbar = ({ show, showProjectBackLink = false }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isProjectsOpen, setIsProjectsOpen] = useState(false);
@@ -77,8 +78,21 @@ const Navbar = ({ show }: NavbarProps) => {
 
   return (
     <>
+      {showProjectBackLink && (
+        <div className="fixed left-4 top-4 z-[60] md:left-6 md:top-5">
+          <Link
+            to="/#projects"
+            className="pill-glass inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
+            aria-label={t("bigBangBack")}
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            <span>{t("bigBangBack")}</span>
+          </Link>
+        </div>
+      )}
+
       <div
-        className={`fixed left-4 top-4 z-50 md:hidden transition-transform transition-opacity duration-500 ease-out ${
+        className={`fixed ${showProjectBackLink ? "left-4 top-20" : "left-4 top-4"} z-50 md:hidden transition-transform transition-opacity duration-500 ease-out ${
           mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
         }`}
         style={{ willChange: "transform, opacity" }}

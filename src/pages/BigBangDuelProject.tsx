@@ -229,6 +229,11 @@ const BigBangDuelProject = () => {
               </a>
             </Button>
             <Button asChild variant="outline">
+              <Link to="/projects/big-bang-duel/story">
+                {t("bigBangReadStory")}
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
               <Link to="/#projects">
                 <ArrowLeft aria-hidden="true" className="mr-2 h-4 w-4" />
                 {t("bigBangBack")}
