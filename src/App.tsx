@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { useEffect } from "react";
+import Navbar from "@/components/Navbar";
+import TopControls from "@/components/TopControls";
 import { UserProvider } from "@/features/presente-x/contexts/UserContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -44,6 +46,8 @@ const App = () => {
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <Navbar show={true} />
+              <TopControls />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/lightsaber" element={<LightsaberViewerMV />} />

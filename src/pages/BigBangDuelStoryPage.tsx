@@ -3,7 +3,6 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
-import TopControls from "@/components/TopControls";
 import { useLanguage } from "@/hooks/useLanguage";
 
 const DEMO_URL =
@@ -144,8 +143,6 @@ const BigBangDuelStoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <TopControls />
-
       <div className="fixed left-4 top-16 z-[60] md:left-6 md:top-5">
         <Link
           to="/projects/big-bang-duel"

@@ -1,5 +1,4 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import TopControls from "@/components/TopControls";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
@@ -40,7 +39,6 @@ const Index = () => {
         <AmbientDots count={18} />
         <BackgroundXWing />
       </Suspense>
-      <TopControls />
       <DynamicSidebar show={showSidebar} />
       <TopBricksRow />
       {/* AI Chatbot */}

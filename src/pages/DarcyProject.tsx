@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
-import TopControls from "@/components/TopControls";
 import ChatBot from "@/components/ChatBot";
 
 const DEMO_URL =
@@ -36,7 +35,6 @@ const DarcyProject = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <TopControls />
       <main className="section-wrapper py-24">
         <div className="mx-auto max-w-6xl">
           <header className="mb-10 max-w-3xl">
