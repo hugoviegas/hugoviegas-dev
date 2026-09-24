@@ -1,11 +1,10 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import DynamicSidebar from "@/components/DynamicSidebar";
 import TopBricksRow from "@/components/TopBricksRow";
 
 const AmbientDots = lazy(() => import("@/components/AmbientDots"));
@@ -16,22 +15,6 @@ const ChatBot = lazy(() => import("@/components/ChatBot"));
 const WidgetsSection = lazy(() => import("@/components/WidgetsSection"));
 
 const Index = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Mostrar sidebar após passar da primeira seção (hero)
-      const heroSection = document.getElementById("hero");
-      if (heroSection) {
-        const heroHeight = heroSection.offsetHeight;
-        setShowSidebar(window.scrollY > heroHeight * 0.3);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-background text-foreground relative">
       {/* Ambient dots shared across the site (subtle, randomized) */}
@@ -39,7 +22,6 @@ const Index = () => {
         <AmbientDots count={18} />
         <BackgroundXWing />
       </Suspense>
-      <DynamicSidebar show={showSidebar} />
       <TopBricksRow />
       {/* AI Chatbot */}
       <Suspense fallback={null}>
