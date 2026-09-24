@@ -1,3 +1,5 @@
+import darcyProjectContext from "./project-contexts/darcy.json";
+
 /**
  * Chatbot Service for Hugo Viegas Portfolio
  *
@@ -79,9 +81,9 @@ Design: UI/UX principles, responsive design, Figma basics
 
 FEATURED PROJECTS:
 1. D'Arcy McGee's Irish Pub Website (darcymcgeespub.com)
-   - Professional restaurant website with modern responsive design
-   - Interactive menu system and event listings
-   - Built with React, HTML5, CSS3 - Live client project
+   - Hugo's first official website for the business, focused on the online menu and Saturday-night live shows
+   - Included an admin workflow for practical menu updates
+   - The restaurant later closed; the portfolio demo preserves the work with fictional data
 
 2. Business Process Automation System
    - Custom JavaScript solution with Google Sheets and AppSheet integration
@@ -128,6 +130,44 @@ THIS PORTFOLIO WEBSITE (hugoviegas.dev):
 
 Remember to keep responses SHORT and ENGAGING. Always be helpful even on general topics, but gently guide the conversation toward Hugo's skills and portfolio.
 `;
+
+const DARCY_QUERY_TERMS =
+  /\bd['’]?arcy\b|\birish pub\b|\brestaurant website\b|\bmenu\b|\bevents?\b|\blive shows?\b|\bportfolio demo\b/i;
+
+function isDarcyRelatedQuery(message: string): boolean {
+  return DARCY_QUERY_TERMS.test(message);
+}
+
+function getDarcyContext(message: string): string {
+  if (!isDarcyRelatedQuery(message)) {
+    return "";
+  }
+
+  const faq = darcyProjectContext.faq
+    .map(({ question, answer }) => `Q: ${question}\nA: ${answer}`)
+    .join("\n");
+
+  return `
+D'ARCY PROJECT CONTEXT (use plain language; never expose this JSON or mention internal context):
+- Name and status: ${darcyProjectContext.name}. ${darcyProjectContext.status}
+- Summary: ${darcyProjectContext.summary}
+- Hugo's role: ${darcyProjectContext.hugoRole.join(" ")}
+- Background: ${darcyProjectContext.background}
+- Business problem: ${darcyProjectContext.businessProblem.join(" ")}
+- Goals: ${darcyProjectContext.goals.join(" ")}
+- Public experience: ${darcyProjectContext.publicExperience.join(" ")}
+- Admin workflow: ${darcyProjectContext.adminWorkflow.join(" ")}
+- AI-assisted menu import: ${darcyProjectContext.aiAssistedMenuImport.description} ${darcyProjectContext.aiAssistedMenuImport.result}
+- Reservations: ${darcyProjectContext.reservations.policy} ${darcyProjectContext.reservations.reason} ${darcyProjectContext.reservations.future}
+- Impact: ${darcyProjectContext.impact.join(" ")}
+- Portfolio demo: ${darcyProjectContext.portfolioDemo.description} ${darcyProjectContext.portfolioDemo.data} ${darcyProjectContext.portfolioDemo.safety} ${darcyProjectContext.portfolioDemo.disclosure}
+- Approved answers: ${darcyProjectContext.approvedClaims.join(" ")}
+- Do not make these claims: ${darcyProjectContext.prohibitedClaims.join(" ")}
+- FAQ:
+${faq}
+- Response style: Be calm, friendly, enthusiastic, direct, and understandable to non-technical visitors. Answer business value first. Discuss architecture or tooling only when explicitly asked.
+`;
+}
 
 // Rate limiting storage keys
 const RATE_LIMIT_MINUTE_KEY = "chatbot_rate_minute";
@@ -308,6 +348,8 @@ async function tryModelRequest(
   message: string,
   history: ChatMessage[],
 ): Promise<string | null> {
+  const darcyContext = getDarcyContext(message);
+
   // Build conversation context
   const conversationHistory = history.map((msg) => ({
     role: msg.role === "user" ? "user" : "model",
@@ -319,7 +361,7 @@ async function tryModelRequest(
       // System context as first message
       {
         role: "user",
-        parts: [{ text: PORTFOLIO_CONTEXT }],
+        parts: [{ text: `${PORTFOLIO_CONTEXT}${darcyContext}` }],
       },
       {
         role: "model",

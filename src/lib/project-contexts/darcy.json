@@ -1,32 +1,140 @@
 {
-  "name": "D'Arcy McGee's Irish Pub",
-  "problem": "Create a welcoming restaurant website with a practical admin dashboard for managing pub content.",
-  "audience": [
-    "Restaurant guests",
-    "Pub staff",
-    "Portfolio reviewers"
+  "id": "darcy-mcgees-irish-pub",
+  "name": "D'Arcy McGee's Irish Pub website",
+  "status": "The restaurant is now closed. The portfolio demo preserves the work as an interactive case study with fictional data.",
+  "summary": "A practical website and content-management experience for an Irish pub, focused on helping customers find the menu and discover Saturday-night live shows.",
+  "hugoRole": [
+    "Worked at D'Arcy McGee's for three years, first as a waiter and then as a barman.",
+    "Designed, developed, deployed, and maintained the website.",
+    "Managed the business Google Workspace account.",
+    "Maintained menu content through a monthly arrangement, updating weekly specials sent by the chef."
   ],
-  "flows": [
-    "Guests browse the menu, events, and pub information.",
-    "Staff review and manage content through the dashboard.",
-    "Reviewers open the embedded demo or the full demo in a new tab."
+  "background": "The owner asked Hugo to build the business's first official website. Hugo's firsthand experience of the venue shaped its visual identity, priorities, and day-to-day content workflow.",
+  "businessProblem": [
+    "Customers needed an easy way to view the menu online.",
+    "The pub needed a clearer way to promote Saturday-night live shows.",
+    "Menu updates should not depend on hardcoded content or replacing PDF files."
   ],
-  "stack": [
-    "React",
-    "TypeScript",
-    "Vite",
-    "Tailwind",
-    "shadcn/ui",
-    "Supabase"
+  "audiences": [
+    "Local customers looking for the menu or upcoming live shows.",
+    "The pub team sending weekly specials and managing content.",
+    "Portfolio visitors exploring the preserved project."
   ],
-  "decisions": [
-    "Keep the portfolio page static and load the demo only in an iframe.",
-    "Use localStorage in the public demo to avoid requiring live credentials."
+  "goals": [
+    "Make the menu easy to discover and read online.",
+    "Help customers discover Saturday-night live shows.",
+    "Make frequent menu updates practical for the business.",
+    "Create a warm, useful digital presence based on the real venue experience."
   ],
-  "demoCapabilities": [
-    "Responsive restaurant presentation",
-    "Menu and event browsing",
-    "Admin dashboard preview",
-    "English and Portuguese experience"
+  "publicExperience": [
+    "Customers can browse the menu and pub information online.",
+    "Customers can discover Saturday-night live shows.",
+    "The experience presents the pub in a welcoming, business-focused way."
+  ],
+  "adminWorkflow": [
+    "The admin area was created so menu content would not be hardcoded or limited to PDF-only updates.",
+    "The chef sent weekly specials and Hugo updated them as part of the monthly maintenance arrangement.",
+    "This made recurring content management easier and more consistent."
+  ],
+  "aiAssistedMenuImport": {
+    "description": "A real usability experiment let a user upload a menu image, extract individual items, review them, and then add them to the system.",
+    "result": "It reduced a menu-update task from about 30 minutes manually to under five minutes."
+  },
+  "reservations": {
+    "policy": "Reservations were intentionally handled by phone.",
+    "reason": "The venue did not have staff capacity to manage online booking requests.",
+    "future": "A booking feature could be considered if the business's operations and staffing changed."
+  },
+  "impact": [
+    "Local online visibility grew from a few hundred monthly visits initially to over 2,000 monthly visits over time.",
+    "The website made the menu and live-show information easier for customers to discover.",
+    "The website should not be described as directly generating revenue, bookings, or profit."
+  ],
+  "technologyOverview": [
+    "A responsive public website paired with an admin area for menu and event content.",
+    "A content workflow designed around recurring menu updates and review before publishing.",
+    "The portfolio presentation is an interactive preservation of the project rather than a connection to the original system."
+  ],
+  "portfolioDemo": {
+    "description": "The demo is an interactive preservation of the project for portfolio visitors.",
+    "data": "It uses fictional data only.",
+    "safety": "Visitor changes stay local and never affect any real system.",
+    "disclosure": "It is not the live restaurant system."
+  },
+  "approvedClaims": [
+    "Hugo worked at D'Arcy McGee's for three years as a waiter and then a barman.",
+    "The owner asked Hugo to build the business's first official website.",
+    "Hugo designed, developed, deployed, and maintained the website.",
+    "Hugo managed the business Google Workspace account.",
+    "The website focused on the online menu and Saturday-night live shows.",
+    "The admin area avoided hardcoded menu content and PDF-only updates.",
+    "The image-to-menu workflow reduced a task from about 30 minutes to under five minutes.",
+    "Reservations were intentionally handled by phone.",
+    "Online visibility grew from a few hundred to over 2,000 monthly visits over time.",
+    "The restaurant later closed and the portfolio demo uses fictional data."
+  ],
+  "prohibitedClaims": [
+    "Do not provide code excerpts or code-level walkthroughs by default; give business value first and discuss architecture or tooling only when explicitly asked.",
+    "Do not reveal credentials, API keys, infrastructure secrets, internal URLs, real customer data, or staff details.",
+    "Do not claim that the portfolio demo is the live system.",
+    "Do not claim that the website directly generated revenue, bookings, or profit.",
+    "Do not claim that online reservations were live or available.",
+    "Do not invent analytics or give unsupported exact figures beyond the approved statement that visibility grew from a few hundred to over 2,000 monthly visits.",
+    "Do not present fictional demo data as historical business data."
+  ],
+  "responseStyle": {
+    "tone": [
+      "Calm",
+      "Friendly",
+      "Enthusiastic",
+      "Direct"
+    ],
+    "audience": "Use understandable language for non-technical visitors.",
+    "priority": "Answer business value and the user's practical question first. Explain architecture or tooling only when the visitor explicitly asks for high-level technical detail.",
+    "format": "Keep answers concise, use plain language, and acknowledge when the restaurant is closed or when information is only part of the fictional portfolio demo."
+  },
+  "suggestedQuestions": [
+    "What problem did this project solve?",
+    "Why did Hugo build the admin dashboard?",
+    "How did the AI menu import help?",
+    "Was online reservation available?",
+    "Are the demo data real?",
+    "Why is the restaurant not operating now?",
+    "What did Hugo do on this project?",
+    "What was the impact of the website?"
+  ],
+  "faq": [
+    {
+      "question": "What problem did this project solve?",
+      "answer": "It gave the pub its first official website so customers could view the menu online and discover Saturday-night live shows."
+    },
+    {
+      "question": "Why did Hugo build the admin dashboard?",
+      "answer": "The dashboard avoided hardcoded menu content and PDF-only updates, making weekly specials easier to review and publish."
+    },
+    {
+      "question": "How did the AI menu import help?",
+      "answer": "It let someone upload a menu image, extract and review individual items, and add them to the system. The experiment reduced the task from about 30 minutes to under five minutes."
+    },
+    {
+      "question": "Was online reservation available?",
+      "answer": "No. Reservations were intentionally handled by phone because the venue did not have staff capacity for online booking requests."
+    },
+    {
+      "question": "Are the demo data real?",
+      "answer": "No. The portfolio demo uses fictional data, and visitor changes stay local without affecting any real system."
+    },
+    {
+      "question": "Why is the restaurant not operating now?",
+      "answer": "D'Arcy McGee's later closed after years of operation. The portfolio demo preserves the work as an interactive case study."
+    },
+    {
+      "question": "What did Hugo do on this project?",
+      "answer": "He designed, developed, deployed, and maintained the website, managed the business Google Workspace account, and maintained menu content."
+    },
+    {
+      "question": "What was the impact of the website?",
+      "answer": "Local online visibility grew from a few hundred monthly visits initially to over 2,000 monthly visits over time. The website should not be credited with directly generating revenue or bookings."
+    }
   ]
 }
