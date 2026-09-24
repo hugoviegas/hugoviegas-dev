@@ -1,8 +1,10 @@
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const { t } = useLanguage();
 
   const handleClick = () => {
     const targetTheme = theme === "light" ? "dark" : "light";
@@ -17,10 +19,10 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={handleClick}
-      aria-label="Toggle theme"
-      className="rounded-full hover:bg-accent/10 transition-colors"
+      aria-label={t("aria.toggleTheme")}
+      className="rounded-full transition-colors hover:bg-accent"
     >
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">{t("aria.toggleTheme")}</span>
 
       {/* Animated toggle built from CSS (scoped with tp- prefix to avoid collisions) */}
       <div className={`tp-toggle ${isDark ? "tp-dark" : "tp-light"}`}>

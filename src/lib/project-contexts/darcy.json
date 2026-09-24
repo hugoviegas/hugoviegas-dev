@@ -1,0 +1,32 @@
+{
+  "name": "D'Arcy McGee's Irish Pub",
+  "problem": "Create a welcoming restaurant website with a practical admin dashboard for managing pub content.",
+  "audience": [
+    "Restaurant guests",
+    "Pub staff",
+    "Portfolio reviewers"
+  ],
+  "flows": [
+    "Guests browse the menu, events, and pub information.",
+    "Staff review and manage content through the dashboard.",
+    "Reviewers open the embedded demo or the full demo in a new tab."
+  ],
+  "stack": [
+    "React",
+    "TypeScript",
+    "Vite",
+    "Tailwind",
+    "shadcn/ui",
+    "Supabase"
+  ],
+  "decisions": [
+    "Keep the portfolio page static and load the demo only in an iframe.",
+    "Use localStorage in the public demo to avoid requiring live credentials."
+  ],
+  "demoCapabilities": [
+    "Responsive restaurant presentation",
+    "Menu and event browsing",
+    "Admin dashboard preview",
+    "English and Portuguese experience"
+  ]
+}

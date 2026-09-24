@@ -1,0 +1,102 @@
+/* Theme tokens bridge
+ * Maps the design-system palette (design-tokens.css) onto the semantic
+ * variables Tailwind/shadcn utilities consume (bg-background, text-muted-foreground,
+ * border-border, ...). Without this file every semantic Tailwind color resolves
+ * to an undefined var and the declaration is dropped by the browser.
+ *
+ * next-themes writes `class="dark"` or `class="light"` on <html>.
+ * `:root` holds the dark defaults, `.light` overrides them.
+ */
+
+:root,
+:root.dark {
+  /* Surfaces */
+  --background: 220 13% 10%;
+  --foreground: 210 40% 98%;
+  --card: 217 33% 17%;
+  --card-foreground: 210 40% 98%;
+  --popover: 221 39% 11%;
+  --popover-foreground: 210 40% 98%;
+
+  /* Brand */
+  --primary: 174 100% 42%;
+  --primary-foreground: 221 39% 11%;
+  --secondary: 262 83% 67%;
+  --secondary-foreground: 210 40% 98%;
+  --brand-accent: 120 100% 60%;
+  --brand-accent-foreground: 221 39% 11%;
+
+  /* Neutral surfaces / states */
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 14% 65%;
+  --accent: 217 33% 24%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --success: 142 76% 45%;
+  --warning: 45 93% 58%;
+
+  /* Lines & focus */
+  --border: 215 25% 27%;
+  --input: 215 25% 27%;
+  --ring: 174 100% 42%;
+
+  /* Radius scale consumed by tailwind borderRadius */
+  --radius: 0.75rem;
+
+  /* Sidebar (shadcn sidebar primitive) */
+  --sidebar-background: 217 33% 17%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: 174 100% 42%;
+  --sidebar-primary-foreground: 221 39% 11%;
+  --sidebar-accent: 217 33% 24%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: 215 25% 27%;
+  --sidebar-ring: 174 100% 42%;
+
+  /* Charts */
+  --chart-1: 174 100% 42%;
+  --chart-2: 262 83% 67%;
+  --chart-3: 45 93% 58%;
+  --chart-4: 199 89% 48%;
+  --chart-5: 340 82% 62%;
+}
+
+.light {
+  --background: 0 0% 100%;
+  --foreground: 221 39% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 221 39% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 221 39% 11%;
+
+  /* Darkened brand tones so text stays legible on light surfaces */
+  --primary: 174 100% 27%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 262 70% 52%;
+  --secondary-foreground: 0 0% 100%;
+  --brand-accent: 120 70% 30%;
+  --brand-accent-foreground: 0 0% 100%;
+
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 20% 40%;
+  --accent: 210 40% 94%;
+  --accent-foreground: 221 39% 11%;
+  --destructive: 0 72% 45%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 142 71% 32%;
+  --warning: 38 92% 40%;
+
+  --border: 214 32% 88%;
+  --input: 214 32% 88%;
+  --ring: 174 100% 27%;
+
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 221 39% 11%;
+  --sidebar-primary: 174 100% 27%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 210 40% 94%;
+  --sidebar-accent-foreground: 221 39% 11%;
+  --sidebar-border: 214 32% 88%;
+  --sidebar-ring: 174 100% 27%;
+}

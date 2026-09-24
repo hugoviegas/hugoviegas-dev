@@ -1,90 +1,83 @@
 import { Github, Linkedin, Mail, Heart } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 
+const SOCIAL_LINKS = [
+  { icon: Github, url: "https://github.com/hugoviegas/", label: "GitHub" },
+  {
+    icon: Linkedin,
+    url: "https://www.linkedin.com/in/hviegas/",
+    label: "LinkedIn",
+  },
+  { icon: Mail, url: "mailto:hugoviegas3.1@gmail.com", label: "Email" },
+];
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
 
-  const socialLinks = [
-    {
-      icon: Github,
-      url: "https://github.com/hugoviegas/",
-      label: "GitHub",
-    },
-    {
-      icon: Linkedin,
-      url: "https://www.linkedin.com/in/hviegas/",
-      label: "LinkedIn",
-    },
-    {
-      icon: Mail,
-      url: "mailto:hugoviegas3.1@gmail.com",
-      label: "Email",
-    },
-  ];
-
   return (
-    <footer className="bg-muted/5 border-t border-white/10">
-      <div className="container mx-auto px-6 lg:px-8 py-12 wide-container">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+    <footer className="border-t border-border bg-muted/20">
+      <div className="section-wrapper py-12">
+        <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           {/* Brand */}
           <div className="text-center md:text-left">
-            <h3 className="text-2xl font-bold text-gradient mb-2">
-              Hugo Viegas
-            </h3>
-            <p className="text-muted-foreground">
-              IT Support Specialist → Full-Stack Developer
-            </p>
+            <h3 className="heading-card text-gradient mb-2">Hugo Viegas</h3>
+            <p className="caption-text">{t("role")}</p>
           </div>
 
-          {/* Social Links */}
-          <div className="flex items-center gap-6">
-            {socialLinks.map((social, index) => (
+          {/* Social links */}
+          <div className="flex items-center gap-4">
+            {SOCIAL_LINKS.map((social) => (
               <a
-                key={index}
+                key={social.label}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:glass-strong hover:scale-110 hover:neon-glow transition-all duration-300 group"
+                className="icon-button group"
                 aria-label={social.label}
               >
-                <social.icon className="w-5 h-5 text-primary group-hover:text-accent transition-colors" />
+                <social.icon className="h-5 w-5 text-primary transition-colors group-hover:text-secondary" />
               </a>
             ))}
-            {/* Link to the Formula D assistant game page */}
+            {/* Formula D assistant game page */}
             <a
               href="/formula-d"
-              className="p-3 glass rounded-full hover:glass-strong hover:scale-110 transition-all duration-300 flex items-center"
-              aria-label="Assistente Formula D"
+              className="icon-button flex items-center"
+              aria-label={t("formulaDAssistant")}
             >
-              <img src="/gold-coin-top.png" alt="Game" className="w-5 h-5" />
+              <img
+                src="/gold-coin-top.png"
+                alt=""
+                aria-hidden="true"
+                className="h-5 w-5"
+              />
             </a>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="my-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+        <div
+          className="my-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+          aria-hidden="true"
+        />
 
-        {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span>© {currentYear} Hugo Viegas. All rights reserved.</span>
-          </div>
+        {/* Bottom */}
+        <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground md:flex-row">
+          <span>{t("footer.copyright").replace("{year}", String(currentYear))}</span>
 
           <div className="flex items-center gap-2">
-            <span>Made with</span>
-            <Heart className="w-4 h-4 text-red-500 animate-pulse" />
-            <span>in Dublin, Ireland</span>
+            <span>{t("footer.madeWith")}</span>
+            <Heart
+              className="h-4 w-4 animate-pulse text-destructive"
+              aria-hidden="true"
+            />
+            <span>{t("footer.inLocation")}</span>
           </div>
         </div>
 
-        {/* Additional Info */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-muted-foreground">
-            Available for freelance work and full-time opportunities • Fluent in
-            Portuguese & English • Open to remote and hybrid arrangements
-          </p>
-        </div>
+        <p className="caption-text mt-6 text-center text-xs">
+          {t("footer.additionalInfo")}
+        </p>
       </div>
     </footer>
   );

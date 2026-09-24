@@ -3,12 +3,7 @@ import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -21,8 +16,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        inter: ["Inter", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+        sans: ["Inter", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+        inter: ["Inter", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "SFMono-Regular", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -50,6 +46,13 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        /* Neon brand accent - decorative only, never a hover surface */
+        "brand-accent": {
+          DEFAULT: "hsl(var(--brand-accent))",
+          foreground: "hsl(var(--brand-accent-foreground))",
+        },
+        success: "hsl(var(--success))",
+        warning: "hsl(var(--warning))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -73,6 +76,9 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      screens: {
+        xs: "480px",
       },
       keyframes: {
         "accordion-down": {

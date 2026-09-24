@@ -15,7 +15,7 @@ const Index = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Mostrar sidebar após passar da primeira seção (hero)
+      // Reveal the sidebar once the hero is mostly scrolled past
       const heroSection = document.getElementById("hero");
       if (heroSection) {
         const heroHeight = heroSection.offsetHeight;
@@ -23,32 +23,26 @@ const Index = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground relative">
+    <div className="relative min-h-screen bg-background text-foreground">
       {/* Ambient dots shared across the site (subtle, randomized) */}
       <AmbientDots count={36} />
       <TopControls />
       <DynamicSidebar show={showSidebar} />
       <TopBricksRow />
-      <section id="hero">
+
+      {/* Each section owns its own id + vertical rhythm (see .section-shell) */}
+      <main>
         <HeroSection />
-      </section>
-      <section id="about" className="pt-16">
         <AboutSection />
-      </section>
-      <section id="projects" className="pt-16">
         <ProjectsSection />
-      </section>
-      <section id="experience" className="pt-16">
         <ExperienceSection />
-      </section>
-      <section id="contact" className="pt-16">
         <ContactSection />
-      </section>
+      </main>
       <Footer />
     </div>
   );

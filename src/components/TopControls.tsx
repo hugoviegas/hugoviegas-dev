@@ -2,17 +2,15 @@ import { memo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { useLanguage } from "@/hooks/useLanguage";
-import { useEffect } from "react";
 
 const TopControls = memo(() => {
-  const { language, toggleLanguage, currentLanguage } = useLanguage();
+  const { language, toggleLanguage, currentLanguage, t } = useLanguage();
   const [isToggling, setIsToggling] = useState(false);
   // Twemoji flag state + animation control
   const [liveFlag, setLiveFlag] = useState<"BR" | "IE" | "GB">(
     currentLanguage.code === "PT" ? "BR" : "IE"
   );
   const [animateGBtoIE, setAnimateGBtoIE] = useState(false);
-  const [showFlagTest, setShowFlagTest] = useState(false);
 
   const handleToggle = () => {
     setIsToggling(true);
@@ -41,20 +39,20 @@ const TopControls = memo(() => {
   };
 
   return (
-    <div className="fixed top-3 left-0 right-0 z-[60] flex justify-end items-center px-6 lg:px-8 pointer-events-none md:px-4 sm:px-2">
-      <div className="pointer-events-auto sidebar-glass rounded-full px-3 py-2 shadow-lg border border-border/20 flex items-center gap-3 md:gap-2 sm:gap-1 z-[70]">
+    <div className="pointer-events-none fixed left-0 right-0 top-3 z-[60] flex items-center justify-end px-4 md:px-6 lg:px-8">
+      <div className="pill-glass pointer-events-auto z-[70] flex items-center gap-1 rounded-full px-2 py-1.5 sm:gap-2 sm:px-3 sm:py-2">
         <ThemeToggle />
         <Button
           variant="ghost"
           size="sm"
           onClick={handleToggle}
           disabled={isToggling}
-          className={`flex items-center gap-2 rounded-full hover:bg-accent/20 transition-transform duration-200 md:gap-3 lg:gap-3 px-3 py-2 lg:px-4 lg:py-2 ${
+          className={`flex items-center gap-2 rounded-full px-2 py-2 transition-colors duration-200 hover:bg-accent sm:px-3 lg:px-4 ${
             isToggling ? "opacity-85" : ""
           }`}
-          aria-label={`Switch to ${
-            language === "EN" ? "Portuguese" : "English"
-          }`}
+          aria-label={
+            language === "EN" ? t("aria.switchToPt") : t("aria.switchToEn")
+          }
         >
           {/* Live flag using Twemoji SVGs for consistent rendering */}
           <span className="inline-flex items-center">
@@ -72,11 +70,8 @@ const TopControls = memo(() => {
               height={16}
             />
           </span>
-          <span className="text-sm font-medium md:text-sm lg:text-base sm:text-[10px] min-w-[24px]">
-            {language}
-          </span>
+          <span className="min-w-[24px] text-sm font-medium">{language}</span>
         </Button>
-        {/* debug popup removed */}
       </div>
     </div>
   );

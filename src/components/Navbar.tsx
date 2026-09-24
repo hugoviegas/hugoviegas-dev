@@ -71,30 +71,25 @@ const Navbar = ({ show }: NavbarProps) => {
         }`}
         style={{ willChange: "transform, opacity" }}
       >
-        <div
-          className="pointer-events-auto flex items-center gap-3 bg-card/60 backdrop-blur-md p-2 rounded-full md:gap-2 sm:gap-1 border border-border/30 shadow-lg"
-          style={{
-            background: "hsl(var(--card) / 0.6)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            boxShadow: "var(--shadow-glass)",
-          }}
-        >
+        <div className="pill-glass pointer-events-auto flex items-center gap-2 rounded-full p-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="rounded-full"
-            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-label={
+              isMobileMenuOpen ? t("aria.closeMenu") : t("aria.openMenu")
+            }
           >
             {isMobileMenuOpen ? (
               <X className="w-5 h-5" />
             ) : (
               <img
                 src="/obiwan_face.png"
-                alt="Ícone do menu"
-                className="w-5 h-5 rounded-full object-cover"
+                alt=""
+                aria-hidden="true"
+                className="h-5 w-5 rounded-full object-cover"
               />
             )}
           </Button>
@@ -104,13 +99,13 @@ const Navbar = ({ show }: NavbarProps) => {
       {/* Mobile dropdown panel (left-aligned under the hamburger) */}
       {isMobileMenuOpen && (
         <div className="fixed top-20 left-4 z-40 md:hidden">
-          <div className="w-[90vw] max-w-[min(420px,92vw)] glass rounded-xl p-3 shadow-lg border border-white/10">
+          <div className="glass-card w-[90vw] max-w-[min(420px,92vw)] p-3">
             <div className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`w-full text-left px-4 py-3 text-muted-foreground hover:text-primary hover:bg-accent/10 transition-colors nav-item ${
+                  className={`nav-item w-full rounded-lg px-4 py-3 text-left text-muted-foreground transition-colors hover:bg-accent hover:text-primary ${
                     activeSection === item.id ? "active" : ""
                   }`}
                   aria-current={activeSection === item.id ? "page" : undefined}
@@ -130,16 +125,7 @@ const Navbar = ({ show }: NavbarProps) => {
         }`}
         style={{ willChange: "transform, opacity" }}
       >
-        <div
-          className="pointer-events-auto flex items-center gap-6 bg-card/60 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg border border-border/30"
-          style={{
-            background: "hsl(var(--card) / 0.6)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            boxShadow: "var(--shadow-glass)",
-          }}
-        >
+        <div className="pill-glass pointer-events-auto flex items-center gap-6 rounded-2xl px-4 py-2">
           {/* Desktop nav */}
           <div className="flex items-center gap-6 lg:gap-8 xl:gap-10">
             {navItems.map((item) =>
@@ -152,20 +138,22 @@ const Navbar = ({ show }: NavbarProps) => {
                       setIsMobileMenuOpen(false);
                     }}
                     className="p-0"
-                    aria-label="Ir para o topo"
+                    aria-label={t("aria.backToTop")}
                   >
                     <img
                       src="/obiwan_face.png"
-                      alt="Obi-Wan"
-                      className="w-4 h-4 rounded-full object-cover"
+                      alt=""
+                      aria-hidden="true"
+                      className="h-4 w-4 rounded-full object-cover"
                     />
                   </button>
 
                   <button
                     onClick={() => scrollToSection(item.id)}
-                    className={`nav-item ${
+                    className={`nav-item min-w-[64px] px-3 py-2 text-muted-foreground transition-colors hover:text-primary lg:min-w-[84px] ${
                       activeSection === item.id ? "active" : ""
-                    } text-muted-foreground hover:text-primary transition-colors px-3 py-2 rounded-btn min-w-[64px] lg:min-w-[84px]`}
+                    }`}
+                    aria-current={activeSection === item.id ? "true" : undefined}
                   >
                     {item.label}
                   </button>
@@ -174,7 +162,10 @@ const Navbar = ({ show }: NavbarProps) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-muted-foreground hover:text-primary transition-colors px-3 py-2 lg:px-4 lg:py-2 min-w-[60px] lg:min-w-[76px]"
+                  className={`nav-item min-w-[60px] px-3 py-2 text-muted-foreground transition-colors hover:text-primary lg:min-w-[76px] lg:px-4 ${
+                    activeSection === item.id ? "active" : ""
+                  }`}
+                  aria-current={activeSection === item.id ? "true" : undefined}
                 >
                   {item.label}
                 </button>

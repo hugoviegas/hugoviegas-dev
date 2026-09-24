@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowDown,
@@ -27,10 +27,73 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.jpg";
+
+const HERO_BRICK_IMAGES = [
+  redFront,
+  yellowFront,
+  blueFront,
+  whiteFront,
+  whiteTop,
+  whiteTopSingle,
+  redTop,
+  goldCoin2d,
+  goldCoinFront,
+  goldCoinTop,
+];
+
+// Resume hosted on Vercel Blob storage
+const RESUME_URL =
+  "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20CV%202025.pdf";
+
+/** Decorative bricks that fly outwards on hover (CSS-driven, see index.css). */
+const HeroBrickExplosion = () => {
+  const bricks = useMemo(
+    () =>
+      Array.from({ length: 20 }).map((_, i) => ({
+        id: i,
+        img: HERO_BRICK_IMAGES[
+          Math.floor(Math.random() * HERO_BRICK_IMAGES.length)
+        ],
+        size: 16 + Math.floor(Math.random() * 24), // 16-40px
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        rotate: -30 + Math.random() * 60,
+        delay: Math.random() * 300,
+        moveX: Math.round(-80 + Math.random() * 160),
+        moveY: Math.round(-100 + Math.random() * 60), // prefer upward
+      })),
+    []
+  );
+
+  return (
+    <>
+      {bricks.map((brick) => (
+        <img
+          key={brick.id}
+          src={brick.img}
+          alt=""
+          aria-hidden="true"
+          className="hero-brick-explosion-item"
+          style={
+            {
+              width: `${brick.size}px`,
+              height: "auto",
+              left: `${brick.left}%`,
+              top: `${brick.top}%`,
+              "--hero-delay": `${brick.delay}ms`,
+              "--hero-rand-rot": `${brick.rotate}deg`,
+              "--hero-move-x": `${brick.moveX}px`,
+              "--hero-move-y": `${brick.moveY}px`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </>
+  );
+};
 
 const HeroSection = () => {
   const [displayText, setDisplayText] = useState("");
@@ -60,29 +123,15 @@ const HeroSection = () => {
     }
   }, [currentIndex, fullText]);
 
-  const scrollToProjects = () => {
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
-  const scrollToAbout = () => {
-    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // Resume URL from Vercel Storage
-  const resumeUrl =
-    "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20CV%202025.pdf";
-
-  // Suppress noisy console errors originating from the Spotify embed while component is mounted
+  // Suppress noisy console errors originating from the Spotify embed while mounted
   useEffect(() => {
     const origConsoleError = console.error as (...args: unknown[]) => void;
     console.error = (...args: unknown[]) => {
       try {
         const msg = String(args[0] || "");
-        // Filter known spotify embed noisy messages
         if (
           msg.includes("Refused to display") ||
           msg.includes("Blocked a frame with origin")
@@ -99,175 +148,120 @@ const HeroSection = () => {
     };
   }, []);
 
-  // Hero Brick Explosion component
-  const HERO_BRICK_IMAGES = [
-    redFront,
-    yellowFront,
-    blueFront,
-    whiteFront,
-    whiteTop,
-    whiteTopSingle,
-    redTop,
-    goldCoin2d,
-    goldCoinFront,
-    goldCoinTop,
+  const socials = [
+    {
+      href: "https://github.com/hugoviegas/",
+      label: "GitHub",
+      Icon: Github,
+    },
+    {
+      href: "https://www.linkedin.com/in/hviegas/",
+      label: "LinkedIn",
+      Icon: Linkedin,
+    },
+    {
+      href: "mailto:hugoviegas3.1@gmail.com",
+      label: "Email",
+      Icon: Mail,
+    },
   ];
 
-  const HeroBrickExplosion = () => {
-    // Create 20 bricks with randomized sizes/angles/positions around the hero image
-    const count = 20;
-    return (
-      <>
-        {Array.from({ length: count }).map((_, i) => {
-          const img =
-            HERO_BRICK_IMAGES[
-              Math.floor(Math.random() * HERO_BRICK_IMAGES.length)
-            ];
-          const size = 16 + Math.floor(Math.random() * 24); // 16-40px
-          // random starting position within the explosion layer
-          const left = Math.random() * 100; // percent
-          const top = Math.random() * 100; // percent
-          const rotate = -30 + Math.random() * 60; // degrees
-          const delay = Math.random() * 300; // ms stagger
-          // movement vector for the hover explosion (px)
-          const moveX = Math.round(-80 + Math.random() * 160); // -80 .. +80
-          const moveY = Math.round(-100 + Math.random() * 60); // -100 .. -40 (prefer upward)
-
-          return (
-            <img
-              key={i}
-              src={img}
-              alt=""
-              className="hero-brick-explosion-item"
-              style={{
-                width: `${size}px`,
-                height: "auto",
-                left: `${left}%`,
-                top: `${top}%`,
-                // initial rotation and per-item CSS vars used by hover animation
-                ...({
-                  ["--hero-delay"]: `${delay}ms`,
-                  ["--hero-rand-rot"]: `${rotate}deg`,
-                  ["--hero-move-x"]: `${moveX}px`,
-                  ["--hero-move-y"]: `${moveY}px`,
-                } as React.CSSProperties),
-              }}
-            />
-          );
-        })}
-      </>
-    );
-  };
-
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0">
-      {/* Animated Background */}
+    <section
+      id="hero"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden pt-28 pb-16 md:pt-32 lg:py-24"
+    >
+      {/* Animated background blobs */}
       <div className="absolute inset-0 opacity-20" aria-hidden="true">
-        <div className="absolute top-20 left-20 w-40 h-40 bg-primary rounded-full blur-3xl subtle-pulse"></div>
-        <div className="absolute bottom-40 right-32 w-28 h-28 bg-secondary rounded-full blur-2xl subtle-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-accent rounded-full blur-xl subtle-pulse delay-2000"></div>
+        <div className="subtle-pulse absolute left-8 top-20 h-28 w-28 rounded-full bg-primary blur-3xl md:left-20 md:h-40 md:w-40" />
+        <div className="subtle-pulse absolute bottom-40 right-8 h-20 w-20 rounded-full bg-secondary blur-2xl md:right-32 md:h-28 md:w-28" />
+        <div className="subtle-pulse absolute left-1/3 top-1/2 h-16 w-16 rounded-full bg-brand-accent blur-xl md:h-20 md:w-20" />
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 relative z-10 wide-container">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Content Column */}
-          <div className="space-y-8 fade-in">
+      <div className="section-wrapper-wide relative z-10">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          {/* Content column */}
+          <div className="fade-in space-y-8">
             <div className="space-y-4">
-              <div className="text-primary font-mono text-lg">
+              <p className="font-mono text-base text-primary md:text-lg">
                 {currentGreeting}
-              </div>
-              <h1 className="heading-hero leading-tight mb-2">Hugo Viegas</h1>
-              <div className="h-24 flex items-center">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
+              </p>
+              <h1 className="heading-hero">Hugo Viegas</h1>
+              <div className="flex min-h-[3.5rem] items-center md:min-h-[4.5rem]">
+                <h2 className="font-mono text-xl font-semibold text-muted-foreground sm:text-2xl md:text-3xl">
                   {displayText}
-                  <span className="type-cursor inline-block w-1 h-8 bg-primary ml-2"></span>
+                  <span className="type-cursor ml-2 inline-block h-6 w-1 bg-primary align-middle md:h-8" />
                 </h2>
               </div>
-              <p className="text-xl text-muted-foreground max-w-[min(960px,92vw)] leading-relaxed mt-4">
-                {t("description")}
-              </p>
+              <p className="body-text max-w-2xl">{t("description")}</p>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <LegoButton onClick={scrollToProjects}>
+            {/* CTA buttons */}
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <LegoButton onClick={() => scrollTo("projects")}>
                 {t("viewProjects")}
               </LegoButton>
-              <LegoButton onClick={scrollToContact} brickColor="yellow">
+              <LegoButton
+                onClick={() => scrollTo("contact")}
+                brickColor="yellow"
+              >
                 {t("getInTouch")}
               </LegoButton>
             </div>
 
-            {/* Social Links */}
-            <div className="flex space-x-6">
-              <a
-                href="https://github.com/hugoviegas/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-              >
-                <Github className="w-6 h-6 text-primary" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/hviegas/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-              >
-                <Linkedin className="w-6 h-6 text-primary" />
-              </a>
-              <a
-                href="mailto:hugoviegas3.1@gmail.com"
-                className="p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-              >
-                <Mail className="w-6 h-6 text-primary" />
-              </a>
+            {/* Social links */}
+            <div className="flex flex-wrap items-center gap-4">
+              {socials.map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="icon-button"
+                >
+                  <Icon className="h-6 w-6 text-primary" />
+                </a>
+              ))}
 
-              {/* Resume Dialog Button */}
+              {/* Resume dialog */}
               <Dialog>
                 <DialogTrigger asChild>
                   <button
-                    className="flex items-center gap-2 px-4 py-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
+                    className="icon-button flex items-center gap-2 px-4"
                     aria-label={t("seeResume")}
                     title={t("seeResume")}
                   >
-                    <FileText className="w-6 h-6 text-primary" />
-                    <span className="text-primary font-medium">
+                    <FileText className="h-6 w-6 text-primary" />
+                    <span className="text-sm font-medium text-primary sm:text-base">
                       {t("seeResume")}
                     </span>
                   </button>
                 </DialogTrigger>
-                <DialogContent className="max-w-[min(1400px,92vw)] w-full h-[90vh] p-0">
-                  <DialogHeader className="p-6 pb-0">
-                    <DialogTitle className="flex items-center justify-between">
-                      <span>Hugo Viegas - CV 2025</span>
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="ml-4"
-                      >
+                <DialogContent className="flex h-[90vh] w-[95vw] max-w-[min(1400px,95vw)] flex-col gap-0 p-0">
+                  <DialogHeader className="p-4 pb-0 md:p-6">
+                    <DialogTitle className="flex flex-col items-start gap-3 pr-8 text-left sm:flex-row sm:items-center sm:justify-between">
+                      <span>Hugo Viegas — CV 2025</span>
+                      <Button asChild variant="outline" size="sm">
                         <a
-                          href={resumeUrl}
+                          href={RESUME_URL}
                           download="Hugo_Viegas_CV_2025.pdf"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2"
                         >
-                          <Download className="w-4 h-4" />
+                          <Download className="h-4 w-4" />
                           {t("downloadResume")}
                         </a>
                       </Button>
                     </DialogTitle>
                   </DialogHeader>
 
-                  {/* PDF Viewer */}
-                  <div className="flex-1 p-6 pt-0">
+                  <div className="min-h-0 flex-1 p-4 pt-4 md:p-6">
                     <iframe
-                      src={`${resumeUrl}#toolbar=1&navpanes=0&scrollbar=1`}
-                      className="w-full h-full rounded-lg border"
+                      src={`${RESUME_URL}#toolbar=1&navpanes=0&scrollbar=1`}
+                      className="h-full min-h-[60vh] w-full rounded-lg border border-border"
                       title="Hugo Viegas CV 2025"
-                      style={{ minHeight: "600px" }}
                     />
                   </div>
                 </DialogContent>
@@ -275,41 +269,43 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Image Column */}
-          <div className="relative lg:justify-self-end fade-in delay-300">
+          {/* Image column */}
+          <div className="fade-in relative delay-300 lg:justify-self-end">
             <div className="relative mx-auto">
-              {/* Hero image wrapper with brick explosion effect */}
               <div className="hero-image-wrapper relative">
                 {/* Brick explosion layer sits behind the image */}
-                <div className="hero-brick-explosion-layer pointer-events-none">
+                <div
+                  className="hero-brick-explosion-layer pointer-events-none"
+                  aria-hidden="true"
+                >
                   <HeroBrickExplosion />
                 </div>
 
-                {/* Glassmorphism Frame - single rounded square that the image fills */}
-                <div className="glass-strong rounded-3xl relative overflow-hidden lg:flex-shrink-0 aspect-square w-11/12 max-w-[420px] sm:w-80 md:w-96 lg:w-96 mx-auto transition-all duration-300">
-                  {/* subtle gradient overlay for depth */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none"></div>
-
-                  {/* image fills the frame (no smaller inner square) */}
-                  <div className="relative z-10 w-full h-full">
+                {/* Glass frame the image fills */}
+                <div className="glass-strong relative mx-auto aspect-square w-11/12 max-w-[420px] overflow-hidden rounded-3xl transition-all duration-300 sm:w-80 md:w-96">
+                  <div
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"
+                    aria-hidden="true"
+                  />
+                  <div className="relative z-10 h-full w-full">
                     <LazyImage
                       src={heroImage}
                       alt="Hugo Viegas - IT Support Specialist transitioning to Full-Stack Developer"
-                      className="object-cover w-full h-full shadow-2xl"
-                      placeholder="Loading profile..."
+                      className="h-full w-full object-cover"
+                      placeholder={t("loadingProfile")}
                     />
                   </div>
                 </div>
               </div>
-              {/* Compact Spotify embed under profile image */}
+
+              {/* Compact Spotify embed under the profile image */}
               <div className="mt-6 flex justify-center">
-                <div className="w-full max-w-[396px]">
+                <div className="w-11/12 max-w-[396px] sm:w-80 md:w-96">
                   <iframe
                     data-testid="embed-iframe"
                     title="Spotify Playlist Compact"
-                    style={{ borderRadius: 12 }}
+                    className="w-full rounded-xl"
                     src="https://open.spotify.com/embed/playlist/1Xi9HL4NA9vFhDUY9wjJtB?utm_source=generator&theme=0"
-                    width="100%"
                     height="152"
                     frameBorder="0"
                     allowFullScreen
@@ -322,14 +318,14 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Section footer: scroll indicator placed here to avoid overlapping mobile content */}
-        <div className="mt-8 flex justify-center">
+        {/* Scroll indicator */}
+        <div className="mt-12 flex justify-center">
           <button
-            onClick={scrollToAbout}
-            aria-label="Scroll to about section"
-            className="animate-bounce p-2 rounded-full glass hover:scale-110 transition-transform"
+            onClick={() => scrollTo("about")}
+            aria-label={t("scrollToAbout")}
+            className="icon-button animate-bounce"
           >
-            <ArrowDown className="w-6 h-6 text-primary" />
+            <ArrowDown className="h-6 w-6 text-primary" />
           </button>
         </div>
       </div>

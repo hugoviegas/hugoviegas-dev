@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface LazyImageProps {
   src: string;
@@ -10,9 +11,10 @@ interface LazyImageProps {
 export const LazyImage = ({
   src,
   alt,
-  className = '',
-  placeholder = 'Loading...'
+  className = "",
+  placeholder,
 }: LazyImageProps) => {
+  const { t } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -48,8 +50,10 @@ export const LazyImage = ({
   return (
     <div ref={imgRef} className={`relative ${className}`}>
       {!isLoaded && (
-        <div className="absolute inset-0 bg-muted animate-pulse rounded-lg flex items-center justify-center">
-          <span className="text-muted-foreground text-sm">{placeholder}</span>
+        <div className="absolute inset-0 flex animate-pulse items-center justify-center rounded-lg bg-muted">
+          <span className="text-sm text-muted-foreground">
+            {placeholder ?? t("loadingProfile")}
+          </span>
         </div>
       )}
       {isInView && !hasError && (
@@ -62,8 +66,10 @@ export const LazyImage = ({
         />
       )}
       {hasError && (
-        <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center">
-          <span className="text-muted-foreground text-sm">Failed to load image</span>
+        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-muted">
+          <span className="text-sm text-muted-foreground">
+            {t("imageFailed")}
+          </span>
         </div>
       )}
     </div>

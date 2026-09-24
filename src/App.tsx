@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
+import DarcyProject from "./pages/DarcyProject";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => {
               <Route path="/" element={<Index />} />
               {/* Game page - put the Formula D game files into public/games/formula-d/ */}
               <Route path="/formula-d" element={<FormulaD />} />
+              <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
               {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

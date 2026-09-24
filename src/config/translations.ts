@@ -137,12 +137,12 @@ export const translations: Translations = {
 
   // Individual projects (titles, descriptions, metrics)
   "project.1.title": {
-    EN: "D'Arcy McGee's Irish Pub Website",
-    PT: "Site do D'Arcy McGee's Irish Pub",
+    EN: "D'Arcy McGee's Irish Pub",
+    PT: "D'Arcy McGee's Irish Pub",
   },
   "project.1.description": {
-    EN: "Professional restaurant website featuring modern responsive design, interactive menu system, event listings, and seamless user experience.",
-    PT: "Site profissional para restaurante com design responsivo, sistema de menu interativo, lista de eventos e experiência de usuário fluida.",
+    EN: "Restaurant website & admin dashboard (demo)",
+    PT: "Site de restaurante e painel administrativo (demo)",
   },
   "project.1.metrics": { EN: "Live Client Website", PT: "Site do Cliente" },
 
@@ -193,6 +193,26 @@ export const translations: Translations = {
     PT: "Quer ver mais do meu trabalho ou discutir um projeto?",
   },
   projectsCTABtn: { EN: "Let's Work Together", PT: "Vamos Trabalhar Juntos" },
+  darcyTitle: {
+    EN: "D'Arcy McGee's Irish Pub",
+    PT: "D'Arcy McGee's Irish Pub",
+  },
+  darcySummary: {
+    EN: "Restaurant website and admin dashboard demo for a modern Irish pub experience.",
+    PT: "Demonstração de site e painel administrativo para a experiência de um pub irlandês moderno.",
+  },
+  darcyStack: { EN: "Stack", PT: "Tecnologias" },
+  darcyDemoButton: { EN: "View embedded demo", PT: "Ver demo incorporada" },
+  darcyOpenFull: { EN: "Open full demo", PT: "Abrir demo completa" },
+  darcyBack: { EN: "Back to Projects", PT: "Voltar aos Projetos" },
+  darcyDemoNote: {
+    EN: "Portfolio demo — fictional data",
+    PT: "Demo do portfólio — dados fictícios",
+  },
+  darcyIframeFallback: {
+    EN: "Unable to load demo preview. Open the full demo instead.",
+    PT: "Não foi possível carregar a prévia da demo. Abra a demo completa.",
+  },
 
   // Contact
   sendMessageTitle: { EN: "Send a Message", PT: "Enviar uma Mensagem" },
@@ -308,6 +328,265 @@ export const translations: Translations = {
     EN: "Skills & Certifications",
     PT: "Habilidades & Certificações",
   },
+
+  // ---------------------------------------------------------------- Hero
+  loadingProfile: { EN: "Loading profile...", PT: "Carregando perfil..." },
+  scrollToAbout: {
+    EN: "Scroll to the about section",
+    PT: "Rolar para a seção sobre",
+  },
+  imageFailed: {
+    EN: "Image unavailable",
+    PT: "Imagem indisponível",
+  },
+
+  // ---------------------------------------------------------------- Badges
+  "badge.fullStack": {
+    EN: "Full-Stack Developer",
+    PT: "Desenvolvedor Full-Stack",
+  },
+  "badge.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  "language.portuguese": { EN: "Portuguese", PT: "Português" },
+  "language.english": { EN: "English", PT: "Inglês" },
+
+  // ---------------------------------------------------------------- Skills
+  "category.Development": { EN: "Development", PT: "Desenvolvimento" },
+  "category.IT Support": { EN: "IT Support", PT: "Suporte de TI" },
+  "category.Design": { EN: "Design", PT: "Design" },
+  skillsCount: { EN: "skills", PT: "habilidades" },
+
+  // ------------------------------------------------------------ Experience
+  currentFocusText: {
+    EN: "Currently transitioning from IT Support to Full-Stack Development while studying Computer Science at CCT College Dublin.",
+    PT: "Atualmente em transição de Suporte de TI para Desenvolvimento Full-Stack enquanto curso Ciência da Computação na CCT College Dublin.",
+  },
+
+  "exp.1.period": { EN: "Sep 2024 - Present", PT: "Set 2024 - Atual" },
+  "exp.1.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  "exp.1.title": {
+    EN: "IT Support Specialist",
+    PT: "Especialista em Suporte de TI",
+  },
+  "exp.1.description": {
+    EN: "Resolve advanced software/hardware incidents, perform maintenance and device formatting, and restore operations quickly in a live school environment.",
+    PT: "Resolvo incidentes avançados de software/hardware, realizo manutenção e formatação de equipamentos e restauro operações rapidamente em um ambiente escolar em operação.",
+  },
+  "exp.1.a1": {
+    EN: "Resolve advanced software/hardware incidents and perform maintenance",
+    PT: "Resolução de incidentes avançados de software/hardware e manutenção",
+  },
+  "exp.1.a2": {
+    EN: "Train staff on internal systems with concise documentation",
+    PT: "Treinamento da equipe nos sistemas internos com documentação concisa",
+  },
+  "exp.1.a3": {
+    EN: "Manage user accounts and permissions in Active Directory",
+    PT: "Gestão de contas e permissões de usuários no Active Directory",
+  },
+  "exp.1.a4": {
+    EN: "Strengthen access security and compliance through governance",
+    PT: "Reforço da segurança de acesso e conformidade por meio de governança",
+  },
+
+  "exp.2.period": { EN: "May 2020 - Jun 2022", PT: "Mai 2020 - Jun 2022" },
+  "exp.2.location": {
+    EN: "Belo Horizonte, Brazil",
+    PT: "Belo Horizonte, Brasil",
+  },
+  "exp.2.title": {
+    EN: "IT Technical Support",
+    PT: "Suporte Técnico de TI",
+  },
+  "exp.2.description": {
+    EN: "Supported corporate systems and handled computer maintenance/formatting with focus on clarity and speed.",
+    PT: "Suporte a sistemas corporativos e manutenção/formatação de computadores com foco em clareza e agilidade.",
+  },
+  "exp.2.a1": {
+    EN: "Built custom system integrated with administrative platforms",
+    PT: "Construção de sistema próprio integrado às plataformas administrativas",
+  },
+  "exp.2.a2": {
+    EN: "Reduced process times by 90% using JavaScript with Google libraries",
+    PT: "Redução de 90% no tempo de processos usando JavaScript com bibliotecas Google",
+  },
+  "exp.2.a3": {
+    EN: "Collaborated on proposal and budgeting materials",
+    PT: "Colaboração em materiais de propostas e orçamentos",
+  },
+  "exp.2.a4": {
+    EN: "Aligned technology solutions to business goals",
+    PT: "Alinhamento das soluções de tecnologia aos objetivos do negócio",
+  },
+
+  "exp.3.period": { EN: "Jan 2019 - Feb 2020", PT: "Jan 2019 - Fev 2020" },
+  "exp.3.location": { EN: "Betim, Brazil", PT: "Betim, Brasil" },
+  "exp.3.title": {
+    EN: "Designer & Social Media Manager",
+    PT: "Designer e Gestor de Social Media",
+  },
+  "exp.3.description": {
+    EN: "Created visual identities and user-friendly websites with a focus on usability and conversion.",
+    PT: "Criação de identidades visuais e sites amigáveis com foco em usabilidade e conversão.",
+  },
+  "exp.3.a1": {
+    EN: "Managed social media accounts, increasing views by up to 20%",
+    PT: "Gestão de redes sociais, aumentando as visualizações em até 20%",
+  },
+  "exp.3.a2": {
+    EN: "Created visual identities and user-friendly websites",
+    PT: "Criação de identidades visuais e sites amigáveis",
+  },
+  "exp.3.a3": {
+    EN: "Drove client engagement through user-centered design",
+    PT: "Aumento do engajamento dos clientes com design centrado no usuário",
+  },
+  "exp.3.a4": {
+    EN: "Focused on usability and conversion optimization",
+    PT: "Foco em usabilidade e otimização de conversão",
+  },
+
+  "exp.4.period": { EN: "Sep 2024 - Sep 2025", PT: "Set 2024 - Set 2025" },
+  "exp.4.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  "exp.4.title": {
+    EN: "Computer Science Student",
+    PT: "Estudante de Ciência da Computação",
+  },
+  "exp.4.description": {
+    EN: "Pursuing a Computer Science degree (EQF Level 8) with focus on software development and modern technologies.",
+    PT: "Cursando Ciência da Computação (EQF Nível 8) com foco em desenvolvimento de software e tecnologias modernas.",
+  },
+  "exp.4.a1": {
+    EN: "Full-stack web development specialization",
+    PT: "Especialização em desenvolvimento web full-stack",
+  },
+  "exp.4.a2": {
+    EN: "Advanced programming and algorithms",
+    PT: "Programação avançada e algoritmos",
+  },
+  "exp.4.a3": {
+    EN: "Database design and management",
+    PT: "Modelagem e gestão de bancos de dados",
+  },
+  "exp.4.a4": {
+    EN: "Software engineering principles",
+    PT: "Princípios de engenharia de software",
+  },
+
+  "exp.5.period": { EN: "Mar 2018 - Jul 2021", PT: "Mar 2018 - Jul 2021" },
+  "exp.5.location": { EN: "Itaúna, Brazil", PT: "Itaúna, Brasil" },
+  "exp.5.title": {
+    EN: "Analysis and Systems Development",
+    PT: "Análise e Desenvolvimento de Sistemas",
+  },
+  "exp.5.description": {
+    EN: "Completed a technologist degree in Analysis and Systems Development, building foundational knowledge in technology and business processes.",
+    PT: "Concluí o curso de tecnólogo em Análise e Desenvolvimento de Sistemas, construindo a base em tecnologia e processos de negócio.",
+  },
+  "exp.5.a1": {
+    EN: "Technology fundamentals and systems analysis",
+    PT: "Fundamentos de tecnologia e análise de sistemas",
+  },
+  "exp.5.a2": {
+    EN: "Business process analysis and optimization",
+    PT: "Análise e otimização de processos de negócio",
+  },
+  "exp.5.a3": {
+    EN: "Project management and development methodologies",
+    PT: "Gestão de projetos e metodologias de desenvolvimento",
+  },
+  "exp.5.a4": {
+    EN: "Communication and technical documentation skills",
+    PT: "Comunicação e documentação técnica",
+  },
+
+  "cert.1": {
+    EN: "JavaScript (Node.js, Express)",
+    PT: "JavaScript (Node.js, Express)",
+  },
+  "cert.2": { EN: "Google Apps Script", PT: "Google Apps Script" },
+  "cert.3": {
+    EN: "Google Workspace Administration",
+    PT: "Administração do Google Workspace",
+  },
+  "cert.4": {
+    EN: "Active Directory Management",
+    PT: "Gestão de Active Directory",
+  },
+  "cert.5": {
+    EN: "Adobe Creative Suite (Illustrator, Photoshop, InDesign)",
+    PT: "Adobe Creative Suite (Illustrator, Photoshop, InDesign)",
+  },
+  "cert.6": {
+    EN: "ITSM Practices & L2/L3 Support",
+    PT: "Práticas de ITSM e Suporte N2/N3",
+  },
+  "cert.7": {
+    EN: "Technical Documentation",
+    PT: "Documentação Técnica",
+  },
+  "cert.8": {
+    EN: "Access Governance & Security",
+    PT: "Governança de Acesso e Segurança",
+  },
+
+  "focus.1": {
+    EN: "Full-Stack Development",
+    PT: "Desenvolvimento Full-Stack",
+  },
+  "focus.2": { EN: "Process Automation", PT: "Automação de Processos" },
+  "focus.3": {
+    EN: "Google Workspace Integration",
+    PT: "Integração com Google Workspace",
+  },
+  "focus.4": {
+    EN: "Technical Documentation",
+    PT: "Documentação Técnica",
+  },
+  "focus.5": {
+    EN: "Security & Compliance",
+    PT: "Segurança e Conformidade",
+  },
+  "focus.6": { EN: "User Experience", PT: "Experiência do Usuário" },
+
+  // --------------------------------------------------------------- Contact
+  "contact.emailLabel": { EN: "Email", PT: "Email" },
+  "contact.locationLabel": { EN: "Location", PT: "Localização" },
+  "contact.responseLabel": { EN: "Response Time", PT: "Tempo de Resposta" },
+  "contact.responseValue": { EN: "Within 24 hours", PT: "Em até 24 horas" },
+
+  // ---------------------------------------------------------- World clocks
+  "clocks.currentTime": { EN: "Current time", PT: "Hora atual" },
+  "clocks.offsetNow": { EN: "Offset now:", PT: "Fuso agora:" },
+
+  // ---------------------------------------------------------------- Footer
+  formulaDAssistant: {
+    EN: "Formula D assistant",
+    PT: "Assistente Formula D",
+  },
+
+  // ------------------------------------------------------- Navigation / a11y
+  "nav.me": { EN: "Me", PT: "Eu" },
+  "aria.switchToPt": {
+    EN: "Switch to Portuguese",
+    PT: "Mudar para português",
+  },
+  "aria.switchToEn": { EN: "Switch to English", PT: "Mudar para inglês" },
+  "aria.toggleTheme": { EN: "Toggle theme", PT: "Alternar tema" },
+  "aria.openMenu": { EN: "Open menu", PT: "Abrir menu" },
+  "aria.closeMenu": { EN: "Close menu", PT: "Fechar menu" },
+  "aria.navigateTo": { EN: "Navigate to", PT: "Ir para" },
+  "aria.backToTop": { EN: "Back to top", PT: "Voltar ao topo" },
+
+  // -------------------------------------------------------------- Not found
+  "notFound.title": {
+    EN: "404 - Page Not Found",
+    PT: "404 - Página Não Encontrada",
+  },
+  "notFound.description": {
+    EN: "The page you're looking for doesn't exist.",
+    PT: "A página que você procura não existe.",
+  },
+  "notFound.cta": { EN: "Return to Home", PT: "Voltar ao Início" },
 
   fullStory: {
     EN: `The first spark came early. At eight, a first phone opened a door to a world of tinkering—downloading .jar games, changing settings, and personalizing everything became a playground for curiosity. At eleven, that curiosity met purpose: a Lego robotics championship at school. Building and programming a robot with a drag‑and‑drop language, the team won regionals and reached nationals. Resources were limited, but the lesson was profound: technology wasn't just interesting—it was a path worth pursuing and mastering.
