@@ -1,0 +1,113 @@
+{
+  "id": "big-bang-duel",
+  "name": "Big Bang Duel",
+  "status": "Publicly available at duel.hugoviegas.dev with guest access for an immediate AI/solo experience and Google sign-in for returning players.",
+  "summary": "A fast browser-based strategy duel game that invites visitors to try a solo experience immediately as a guest, while offering a straightforward Google sign-in path for returning players.",
+  "hugoRole": [
+    "Designed and built the product experience for a public-facing strategy game.",
+    "Worked across the front-end experience, game flow, player identity journey, and the product decisions that kept the game approachable for first-time visitors.",
+    "Shaped the public story around guest access, AI/solo play, and a clear path from trying the game to continuing with a player account."
+  ],
+  "userProblem": [
+    "Visitors needed a low-friction way to understand the game before committing to an account journey.",
+    "The game needed a clear starting path that felt approachable and understandable to new players.",
+    "Returning players wanted a smoother option than starting from zero every time."
+  ],
+  "playerExperience": [
+    "Players can open the full game and try the core duel experience quickly.",
+    "Guest access is positioned as the easiest starting point for an AI/solo session.",
+    "The flow is designed to help visitors understand the game without requiring a heavy commitment upfront."
+  ],
+  "guestVsAiExperience": [
+    "Guest entry is intentionally the quickest way to try the game and experience the solo/AI mode.",
+    "The AI/solo route is meant to lower the barrier to first use while keeping the account path clear for returning players.",
+    "This does not overstate multiplayer, rankings, permanent purchases, or unrestricted cloud progression."
+  ],
+  "accountJourney": [
+    "The account journey is presented as a practical step for returning players who want a more consistent experience.",
+    "Google sign-in is the high-level recurring-player option, but the public story stays focused on convenience and familiarity.",
+    "The experience keeps the product messaging clear: guest entry is for immediate tryout, while the account path supports a returning player journey."
+  ],
+  "technologyOverview": [
+    "React",
+    "TypeScript",
+    "Vite",
+    "Tailwind CSS",
+    "Zustand",
+    "Firebase Authentication",
+    "Firestore",
+    "Firebase Realtime Database"
+  ],
+  "challenges": [
+    "Keeping fast game interactions responsive while maintaining a smooth duel experience.",
+    "Managing player identity and guest access without overstating what is available to each type of visitor.",
+    "Separating real-time game concerns from player-profile and progression concerns so the platform stays understandable and maintainable.",
+    "Making the game feel frictionless for first-time players while preserving a clear and practical long-term journey."
+  ],
+  "demonstrableCapabilities": [
+    "Interactive strategy duel gameplay available in a browser at duel.hugoviegas.dev.",
+    "Guest access for immediate AI/solo play.",
+    "Google sign-in route for returning players.",
+    "A clear game-first experience designed around ease of entry and product clarity."
+  ],
+  "approvedClaims": [
+    "Big Bang Duel is a browser-based strategy duel game available publicly at duel.hugoviegas.dev.",
+    "Guest entry makes it easy to start a solo/AI game immediately.",
+    "Google sign-in supports a returning-player path.",
+    "Hugo worked on the public-facing product experience and product decisions around accessibility, identity flow, and gameplay clarity.",
+    "The project uses React, TypeScript, Vite, Tailwind CSS, Zustand, Firebase Authentication, Firestore, and Firebase Realtime Database at a high level.",
+    "The project is positioned as a frictionless entry experience for visitors who want to try the game quickly."
+  ],
+  "prohibitedClaims": [
+    "Do not expose source code, Firebase configuration values, project identifiers, credentials, internal endpoints, database structures, security rules, or implementation secrets.",
+    "Do not claim guest users can access multiplayer, rankings, permanent purchases, unrestricted cloud progression, or unreleased features.",
+    "Do not invent metrics, active-player numbers, revenue, downloads, or launch dates that are not approved.",
+    "Do not describe the guest path as permanent account access or a full multiplayer system.",
+    "Do not present raw internal data or user records as public product information."
+  ],
+  "responseStyle": {
+    "tone": [
+      "Practical",
+      "Friendly",
+      "Clear",
+      "Direct"
+    ],
+    "audience": "Use understandable language for non-technical visitors and answer in the same language as the user asks.",
+    "priority": "Answer the visitor's practical question first. Keep explanations concise, product-focused, and factual.",
+    "format": "Use plain language and avoid referencing internal JSON, code, or hidden context."
+  },
+  "suggestedQuestions": [
+    "What can I try as a guest?",
+    "How does the game approach Google sign-in?",
+    "What is the player account journey at a high level?",
+    "Where can I access the full game?",
+    "What did Hugo build in this project?",
+    "What were the main challenges?"
+  ],
+  "faq": [
+    {
+      "question": "What can I try as a guest?",
+      "answer": "A guest entry makes it easy to start the AI/solo experience immediately without needing to commit to a full account flow first."
+    },
+    {
+      "question": "How does the game approach Google sign-in?",
+      "answer": "Google sign-in is presented as a returning-player option that supports a smoother experience for players who come back to the game."
+    },
+    {
+      "question": "What is the player account journey at a high level?",
+      "answer": "The product story is simple: try the game quickly, understand the experience, and continue with a player account if the visitor wants a more persistent path."
+    },
+    {
+      "question": "Where can I access the full game?",
+      "answer": "The public game is available at duel.hugoviegas.dev."
+    },
+    {
+      "question": "What did Hugo build in this project?",
+      "answer": "Hugo worked on the public-facing product experience and the product decisions around gameplay accessibility, onboarding, identity flow, and a smoother first-time experience."
+    },
+    {
+      "question": "What were the main challenges?",
+      "answer": "The main challenges were keeping gameplay responsive, balancing guest access with a clear player journey, and separating real-time game concerns from player profile and progression concerns."
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
 import DarcyProject from "./pages/DarcyProject";
+import BigBangDuelProject from "./pages/BigBangDuelProject";
 import LightsaberViewerMV from "./pages/LightsaberViewerMV";
 import LightsaberDemo from "./pages/LightsaberDemo";
 import StarshipDemo from "./pages/StarshipDemo";
@@ -51,6 +52,7 @@ const App = () => {
                 {/* Game page - put the Formula D game files into public/games/formula-d/ */}
                 <Route path="/formula-d" element={<FormulaD />} />
                 <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
+                <Route path="/projects/big-bang-duel" element={<BigBangDuelProject />} />
 
                 {/* Presente X Routes */}
                 <Route path="/presente-x" element={<PresenteX />} />

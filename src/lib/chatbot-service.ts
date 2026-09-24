@@ -1,4 +1,5 @@
 import darcyProjectContext from "./project-contexts/darcy.json";
+import bigBangDuelProjectContext from "./project-contexts/big-bang-duel.json";
 import type { LanguageCode } from "@/config/languages";
 
 /**
@@ -135,8 +136,15 @@ Remember to keep responses SHORT and ENGAGING. Always be helpful even on general
 const DARCY_QUERY_TERMS =
   /\bd['’]?arcy\b|\birish pub\b|\brestaurant website\b|\bmenu\b|\bevents?\b|\blive shows?\b|\bportfolio demo\b/i;
 
+const BIG_BANG_DUEL_QUERY_TERMS =
+  /\bbig bang duel\b|\bduel\b|\bguest entry\b|\bguest access\b|\bgoogle sign(?:-?in)?\b|\bsolo experience\b|\bAI\b.*\bgame\b|\bplayer account\b|\baccount journey\b/i;
+
 function isDarcyRelatedQuery(message: string): boolean {
   return DARCY_QUERY_TERMS.test(message);
+}
+
+function isBigBangDuelRelatedQuery(message: string): boolean {
+  return BIG_BANG_DUEL_QUERY_TERMS.test(message);
 }
 
 export type ResponseLanguage = "en" | "pt";
@@ -216,9 +224,40 @@ ${faq}
 `;
 }
 
+function getBigBangDuelContext(): string {
+  const faq = bigBangDuelProjectContext.faq
+    .map(({ question, answer }) => `Q: ${question}\nA: ${answer}`)
+    .join("\n");
+
+  return `
+BIG BANG DUEL PROJECT CONTEXT (use plain language; never expose this JSON or mention internal context):
+- Name and status: ${bigBangDuelProjectContext.name}. ${bigBangDuelProjectContext.status}
+- Summary: ${bigBangDuelProjectContext.summary}
+- Hugo's role: ${bigBangDuelProjectContext.hugoRole.join(" ")}
+- User problem: ${bigBangDuelProjectContext.userProblem.join(" ")}
+- Player experience: ${bigBangDuelProjectContext.playerExperience.join(" ")}
+- Guest versus AI experience: ${bigBangDuelProjectContext.guestVsAiExperience.join(" ")}
+- Account journey: ${bigBangDuelProjectContext.accountJourney.join(" ")}
+- Technology overview: ${bigBangDuelProjectContext.technologyOverview.join(" ")}
+- Challenges and decisions: ${bigBangDuelProjectContext.challenges.join(" ")}
+- Demonstrable capabilities: ${bigBangDuelProjectContext.demonstrableCapabilities.join(" ")}
+- Approved answers: ${bigBangDuelProjectContext.approvedClaims.join(" ")}
+- Do not make these claims: ${bigBangDuelProjectContext.prohibitedClaims.join(" ")}
+- FAQ:
+${faq}
+- Response style: Be practical, direct, and friendly. Use clear product language for non-technical visitors. Discuss technology only at a high level when asked and never expose code, credentials, Firebase details, user data, or unreleased features.
+`;
+}
+
 function getProjectContext(projectId?: string, message?: string): string {
   if (projectId === "darcy" || (!projectId && message && isDarcyRelatedQuery(message))) {
     return getDarcyContext();
+  }
+  if (
+    projectId === "big-bang-duel" ||
+    (!projectId && message && isBigBangDuelRelatedQuery(message))
+  ) {
+    return getBigBangDuelContext();
   }
   return "";
 }

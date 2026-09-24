@@ -185,6 +185,19 @@ export const translations: Translations = {
     PT: "Colaboração de equipe",
   },
 
+  "project.5.title": {
+    EN: "Big Bang Duel",
+    PT: "Big Bang Duel",
+  },
+  "project.5.description": {
+    EN: "Interactive strategy duel game with guest entry, AI/solo play, and a smooth path for player accounts.",
+    PT: "Jogo de duelo estratégico interativo com entrada de convidado, gameplay solo com IA e uma jornada simples para contas de jogadores.",
+  },
+  "project.5.metrics": {
+    EN: "Playable game",
+    PT: "Jogo jogável",
+  },
+
   "badge.featuredProject": {
     EN: "Featured Project",
     PT: "Projeto em Destaque",
@@ -282,6 +295,95 @@ export const translations: Translations = {
   darcyQuestionImpact: {
     EN: "What impact did the website have?",
     PT: "Qual foi o impacto do site?",
+  },
+
+  bigBangTitle: {
+    EN: "Big Bang Duel",
+    PT: "Big Bang Duel",
+  },
+  bigBangSummary: {
+    EN: "A fast strategy duel game that can be tried immediately as a guest before continuing with Google sign-in for returning players.",
+    PT: "Um jogo de duelo estratégico e rápido que pode ser testado imediatamente como visitante antes de continuar com login do Google para jogadores recorrentes.",
+  },
+  bigBangStack: { EN: "Stack", PT: "Tecnologias" },
+  bigBangOpenFull: { EN: "Play full game", PT: "Jogar jogo completo" },
+  bigBangBack: { EN: "Back to Projects", PT: "Voltar aos Projetos" },
+  bigBangDemoButton: { EN: "Live game preview", PT: "Prévia ao vivo do jogo" },
+  bigBangDemoNote: {
+    EN: "A live preview of the public game experience.",
+    PT: "Uma prévia ao vivo da experiência pública do jogo.",
+  },
+  bigBangIframeFallback: {
+    EN: "The live preview is unavailable right now. You can still open the full game directly below.",
+    PT: "A prévia ao vivo não está disponível no momento. Você ainda pode abrir o jogo completo diretamente abaixo.",
+  },
+  bigBangAskTitle: {
+    EN: "Ask about Big Bang Duel",
+    PT: "Pergunte sobre o Big Bang Duel",
+  },
+  bigBangChatDescription: {
+    EN: "Ask about guest access, game flow, the player account journey, or Hugo's contribution.",
+    PT: "Pergunte sobre acesso de convidado, fluxo do jogo, jornada da conta do jogador ou a contribuição do Hugo.",
+  },
+  bigBangSuggestedQuestions: {
+    EN: "Suggested questions",
+    PT: "Perguntas sugeridas",
+  },
+  bigBangSafetyNote: {
+    EN: "Answers use the approved game context and do not expose source code, Firebase configuration, or internal implementation details.",
+    PT: "As respostas usam o contexto aprovado do jogo e não expõem código-fonte, configuração do Firebase nem detalhes internos de implementação.",
+  },
+  bigBangLoadingResponse: {
+    EN: "Loading answer...",
+    PT: "Carregando resposta...",
+  },
+  bigBangChatError: {
+    EN: "We couldn't get a response. Please try again.",
+    PT: "Não foi possível obter uma resposta. Tente novamente.",
+  },
+  bigBangQuestionGuest: {
+    EN: "What can I try as a guest?",
+    PT: "O que posso testar como convidado?",
+  },
+  bigBangQuestionGoogle: {
+    EN: "How does Google sign-in work for returning players?",
+    PT: "Como funciona o login com Google para jogadores recorrentes?",
+  },
+  bigBangQuestionJourney: {
+    EN: "What is the player account journey at a high level?",
+    PT: "Qual é a jornada da conta do jogador em alto nível?",
+  },
+  bigBangQuestionAvailable: {
+    EN: "Where can I access the full game?",
+    PT: "Onde posso acessar o jogo completo?",
+  },
+  bigBangQuestionBuilt: {
+    EN: "What did Hugo build in this project?",
+    PT: "O que o Hugo construiu neste projeto?",
+  },
+  bigBangQuestionChallenges: {
+    EN: "What were the main challenges?",
+    PT: "Quais foram os principais desafios?",
+  },
+  bigBangTryTitle: {
+    EN: "What you can try",
+    PT: "O que você pode testar",
+  },
+  bigBangTryBody: {
+    EN: "The game is designed to be approachable from the first click, with a guest path that opens the AI/solo experience immediately and a Google sign-in route for returning players.",
+    PT: "O jogo foi pensado para ser acessível desde o primeiro clique, com um caminho de convidado que abre imediatamente a experiência solo com IA e uma rota de login com Google para jogadores recorrentes.",
+  },
+  bigBangBuiltTitle: {
+    EN: "What I built",
+    PT: "O que eu construí",
+  },
+  bigBangChallengesTitle: {
+    EN: "Key challenges",
+    PT: "Principais desafios",
+  },
+  bigBangTechTitle: {
+    EN: "Technology overview",
+    PT: "Visão geral da tecnologia",
   },
 
   // Contact

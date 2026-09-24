@@ -25,6 +25,27 @@ const ChatBot = ({
   onClose,
 }: ChatBotProps) => {
   const { language, t } = useLanguage();
+  const projectChatConfig =
+    projectId === "darcy"
+      ? {
+          title: t("darcyAskTitle"),
+          description: t("darcyChatDescription"),
+          loading: t("darcyLoadingResponse"),
+          error: t("darcyChatError"),
+        }
+      : projectId === "big-bang-duel"
+        ? {
+            title: t("bigBangAskTitle"),
+            description: t("bigBangChatDescription"),
+            loading: t("bigBangLoadingResponse"),
+            error: t("bigBangChatError"),
+          }
+        : {
+            title: "hugoviegas.dev",
+            description: t("chatDescription"),
+            loading: t("chatLoading"),
+            error: t("chatError"),
+          };
   const [isOpen, setIsOpen] = useState(embedded);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -132,9 +153,7 @@ const ChatBot = ({
             <h3 className="text-sm font-semibold text-white">
               Hugo's Assistant
             </h3>
-            <p className="text-xs text-neutral-400">
-              {projectId ? t("darcyAskTitle") : "hugoviegas.dev"}
-            </p>
+            <p className="text-xs text-neutral-400">{projectChatConfig.title}</p>
           </div>
         </div>
         <Button
@@ -158,9 +177,7 @@ const ChatBot = ({
               {t("chatGreeting")}
             </h4>
             <p className="mb-4 text-sm text-neutral-400">
-              {projectId
-                ? t("darcyChatDescription")
-                : t("chatDescription")}
+              {projectChatConfig.description}
             </p>
           </div>
         ) : (
@@ -184,13 +201,13 @@ const ChatBot = ({
             {isLoading && (
               <div className="flex justify-start">
                 <div className="rounded-2xl rounded-bl-sm bg-neutral-800 px-4 py-2.5 text-sm text-neutral-300">
-                  {projectId ? t("darcyLoadingResponse") : t("chatLoading")}
+                  {projectChatConfig.loading}
                 </div>
               </div>
             )}
             {error && (
               <p role="alert" className="text-sm text-red-300">
-                {projectId ? t("darcyChatError") : t("chatError")}
+                {projectChatConfig.error}
               </p>
             )}
             <div ref={messagesEndRef} />
