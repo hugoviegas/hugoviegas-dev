@@ -1,140 +1,83 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.png";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
 
-interface DynamicSidebarProps {
-  show: boolean;
-}
-
-const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
+const DynamicSidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProjectsOpen, setIsProjectsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [currentSection, setCurrentSection] = useState("hero");
-  const [isHovered, setIsHovered] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  // section label popup removed per user request (no left-corner indicator)
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [floatingPos, setFloatingPos] = useState({
-    left: 0,
-    top: 0,
-    visible: false,
-  });
-  const [isTablet, setIsTablet] = useState(false);
+  const projectMenuId = "projects-menu";
+
+  const { t } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // detect tablet/desktop breakpoint (>= md) so we render the top bar instead of left sidebar
   useEffect(() => {
-    const mq: MediaQueryList = window.matchMedia("(min-width: 768px)");
-    const onChange = (e: MediaQueryListEvent | MediaQueryList) =>
-      setIsTablet((e as MediaQueryList).matches);
-    // initial
-    setIsTablet(mq.matches);
-    // add listener (cross-browser). Use try/catch to avoid incompatible signature issues
-    try {
-      // modern browsers
-      mq.addEventListener("change", onChange as EventListener);
-    } catch (e) {
-      try {
-        // legacy fallback - typed shim
-        const legacy = mq as unknown as {
-          addListener?: (cb: (e: MediaQueryListEvent) => void) => void;
-        };
-        if (legacy.addListener)
-          legacy.addListener(onChange as (e: MediaQueryListEvent) => void);
-      } catch (err) {
-        // ignore
-      }
-    }
-
-    return () => {
-      try {
-        mq.removeEventListener("change", onChange as EventListener);
-      } catch (e) {
-        try {
-          const legacy = mq as unknown as {
-            removeListener?: (cb: (e: MediaQueryListEvent) => void) => void;
-          };
-          if (legacy.removeListener)
-            legacy.removeListener(onChange as (e: MediaQueryListEvent) => void);
-        } catch (err) {
-          // ignore
-        }
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsProjectsOpen(false);
+        setIsMobileMenuOpen(false);
       }
     };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
   }, []);
 
-  const { t } = useLanguage();
+  const projectLinks = useMemo(
+    () => [
+      { label: t("projectsMenuBigBangDuel"), href: "/projects/big-bang-duel" },
+      { label: t("projectsMenuDarcy"), href: "/projects/darcy-mcgees" },
+    ],
+    [t],
+  );
 
-  // Get the current language to display proper "Me" text
-  const getCurrentLanguage = useCallback(() => {
-    try {
-      const testTranslation = t("about");
-      return testTranslation === "Sobre" ? "PT" : "EN";
-    } catch {
-      return "EN";
-    }
-  }, [t]);
+  const navItems = useMemo(
+    () => [
+      { id: "hero", label: t("nav.me"), isHome: true },
+      { id: "experience", label: t("experience") },
+      { id: "about", label: t("about") },
+      { id: "projects", label: t("projectsMenuTitle") },
+      { id: "contact", label: t("contact") },
+    ],
+    [t],
+  );
 
-  const navItems = [
-    {
-      id: "hero",
-      label: getCurrentLanguage() === "PT" ? "Eu" : "Me",
-      isHome: true,
-    },
-    { id: "experience", label: t("experience") },
-    { id: "about", label: t("about") },
-    { id: "projects", label: t("projects") },
-    { id: "contact", label: t("contact") },
-  ];
-
-  // Enhanced section detection with better anchor positioning
+  // Section-spy: only meaningful on the homepage where these ids exist
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
-
       const sections = ["hero", "experience", "about", "projects", "contact"];
       const sectionElements = sections.map((id) => document.getElementById(id));
 
       let current = "hero";
-
-      // Check if we're at the very top
       if (window.scrollY < 50) {
         current = "hero";
       } else {
-        // Find the section that's closest to the top of the viewport
         let closestSection = "hero";
         let closestDistance = Infinity;
 
-        for (let i = 0; i < sectionElements.length; i++) {
-          const section = sectionElements[i];
+        sectionElements.forEach((section, i) => {
           if (section) {
             const rect = section.getBoundingClientRect();
-            // Calculate distance from top of viewport (accounting for navbar height)
-            const distanceFromTop = Math.abs(rect.top - 100); // 100px offset for navbar
-
+            const distanceFromTop = Math.abs(rect.top - 100);
             if (distanceFromTop < closestDistance && rect.top <= 200) {
               closestDistance = distanceFromTop;
               closestSection = sections[i];
             }
           }
-        }
+        });
         current = closestSection;
       }
 
-      // Trigger section change animation if section changed
-      if (current !== currentSection) {
-        setCurrentSection(current);
-        // Note: section label popup removed intentionally
-      }
+      setCurrentSection((prev) => (prev !== current ? current : prev));
     };
 
-    // Use throttled scroll handling for better performance
     let ticking = false;
     const throttledHandleScroll = () => {
       if (!ticking) {
@@ -147,27 +90,9 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
     };
 
     window.addEventListener("scroll", throttledHandleScroll, { passive: true });
-    handleScroll(); // Initial call
+    handleScroll();
     return () => window.removeEventListener("scroll", throttledHandleScroll);
-  }, [currentSection]);
-
-  // Smooth scroll-based opacity calculation
-  const calculateOpacity = useCallback(() => {
-    const heroSection = document.getElementById("hero");
-    if (!heroSection) return 1;
-
-    const heroHeight = heroSection.offsetHeight;
-    const maxScroll = heroHeight * 0.4; // Show earlier
-    const fadeInRange = heroHeight * 0.2;
-
-    if (scrollY < maxScroll) {
-      return 0;
-    } else if (scrollY < maxScroll + fadeInRange) {
-      return (scrollY - maxScroll) / fadeInRange;
-    } else {
-      return 1;
-    }
-  }, [scrollY]);
+  }, []);
 
   const scrollToSection = useCallback((sectionId: string) => {
     if (sectionId === "hero") {
@@ -175,77 +100,17 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
     } else {
       const element = document.getElementById(sectionId);
       if (element) {
-        const offsetTop = element.offsetTop - 80; // Account for any fixed headers
+        const offsetTop = element.offsetTop - 80;
         window.scrollTo({ top: offsetTop, behavior: "smooth" });
+      } else {
+        window.location.href = `/#${sectionId}`;
       }
     }
     setIsMobileMenuOpen(false);
   }, []);
 
-  // Compute position for floating icon based on active item
-  const updateFloatingPosition = useCallback(() => {
-    const container = sidebarRef.current;
-    const activeEl = itemRefs.current[currentSection];
-    if (!container || !activeEl) {
-      setFloatingPos((pos) => ({ ...pos, visible: false }));
-      return;
-    }
-
-    const containerRect = container.getBoundingClientRect();
-    const elRect = activeEl.getBoundingClientRect();
-    const iconSize = 20; // px
-
-    const left =
-      elRect.left - containerRect.left + elRect.width / 2 - iconSize / 2;
-    const top =
-      elRect.top - containerRect.top + elRect.height / 2 - iconSize / 2;
-
-    setFloatingPos({ left, top, visible: true });
-  }, [currentSection]);
-
-  useEffect(() => {
-    // update when currentSection, hover, or layout changes
-    updateFloatingPosition();
-    const onResize = () => updateFloatingPosition();
-    const onScroll = () => updateFloatingPosition();
-    window.addEventListener("resize", onResize);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [updateFloatingPosition, isHovered, isTablet]);
-
-  const getCurrentSectionLabel = () => {
-    const activeItem = navItems.find((item) => item.id === currentSection);
-    return activeItem?.label || "";
-  };
-
-  const getCurrentSectionIcon = () => {
-    const activeItem = navItems.find((item) => item.id === currentSection);
-    if (!activeItem) return null;
-
-    if (activeItem.isHome) {
-      return (
-        <img
-          src="/obiwan_face.png"
-          alt="Current section"
-          className="w-5 h-5 rounded-full object-cover"
-        />
-      );
-    } else {
-      return (
-        <img
-          src={goldCoin2d}
-          alt="Current section"
-          className="w-5 h-5 object-contain"
-        />
-      );
-    }
-  };
-
   return (
-    <>
+    <nav aria-label={t("aria.mainNavigation")} className="contents">
       {/* Mobile floating menu button */}
       <div
         className={`fixed left-2 sm:left-4 top-3 sm:top-4 z-50 md:hidden transition-all duration-500 ease-out ${
@@ -259,7 +124,8 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
           className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full sidebar-glass border border-border/30 shadow-lg transition-all duration-300 ${
             isMobileMenuOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
           }`}
-          aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={isMobileMenuOpen}
+          aria-label={isMobileMenuOpen ? t("aria.closeMenu") : t("aria.openMenu")}
         >
           {isMobileMenuOpen ? (
             <X className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
@@ -267,223 +133,179 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
             <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
           )}
         </Button>
-
-        {/* Indicator ring when menu is open (non-interactive, no blink) */}
-        {isMobileMenuOpen && (
-          <div className="absolute inset-0 rounded-full border-2 border-primary/40 pointer-events-none" />
-        )}
       </div>
 
-      {/* Mobile floating sidebar */}
-      <div
-        className={`fixed left-2 sm:left-4 top-16 sm:top-20 z-40 md:hidden transition-all duration-500 ease-out ${
-          isMobileMenuOpen
-            ? "opacity-100 translate-x-0 scale-100"
-            : "opacity-0 -translate-x-full scale-95"
-        }`}
-      >
-        <div className="w-56 sm:w-64 sidebar-glass rounded-2xl p-3 sm:p-4 shadow-2xl border border-border/30">
-          <div className="flex flex-col gap-1.5 sm:gap-2">
-            {navItems.map((item, index) => {
-              const isActive = currentSection === item.id;
-              const isHome = item.isHome;
+      {/* Mobile floating menu */}
+      {isMobileMenuOpen && (
+        <div className="fixed left-2 sm:left-4 top-16 sm:top-20 z-40 md:hidden">
+          <div className="w-56 sm:w-64 sidebar-glass rounded-2xl p-3 sm:p-4 shadow-2xl border border-border/30">
+            <div className="flex flex-col gap-1.5 sm:gap-2">
+              {navItems.map((item) => {
+                const isActive = currentSection === item.id;
+                const isHome = item.isHome;
 
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:bg-accent/20 ${
-                    isActive ? "bg-accent/30" : ""
-                  }`}
-                  style={{
-                    transitionDelay: isMobileMenuOpen
-                      ? `${index * 50}ms`
-                      : "0ms",
-                  }}
-                >
-                  <div className="flex items-center justify-center w-6 h-6">
-                    {isHome ? (
-                      <img
-                        src="/obiwan_face.png"
-                        alt="Obi-Wan"
-                        className="w-5 h-5 rounded-full object-cover"
-                      />
-                    ) : isActive ? (
-                      <img
-                        src={goldCoin2d}
-                        alt="Current section"
-                        className="w-5 h-5 object-contain"
-                      />
-                    ) : (
-                      <div className="w-2 h-2 rounded-full bg-muted-foreground/40 group-hover:bg-primary/60 transition-colors" />
-                    )}
-                  </div>
-                  <span
-                    className={`text-sm font-medium transition-colors ${
-                      isActive
-                        ? "text-primary"
-                        : "text-muted-foreground group-hover:text-foreground"
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-
-                  {/* Active indicator for mobile */}
-                  {isActive && (
-                    <div className="ml-auto w-2 h-2 bg-primary rounded-full animate-pulse" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Desktop minimal sidebar - shows only current section icon by default. On tablet, render a top bar to avoid overlapping content */}
-      {isTablet ? (
-        <div
-          className={`fixed top-3 left-4 right-4 z-50 flex justify-center transition-all duration-500`}
-        >
-          <div
-            ref={sidebarRef}
-            className="sidebar-glass rounded-full px-3 py-2 shadow-lg border border-border/20 flex items-center gap-2"
-          >
-            {navItems.map((item, index) => {
-              const isActive = currentSection === item.id;
-              const isHome = item.isHome;
-              return (
-                <button
-                  key={item.id}
-                  ref={(el) => (itemRefs.current[item.id] = el)}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 ${
-                    isActive
-                      ? "bg-accent/6 ring-1 ring-primary/20"
-                      : "hover:bg-accent/4"
-                  }`}
-                >
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    {isHome ? (
-                      <img
-                        src="/obiwan_face.png"
-                        className="w-5 h-5 rounded-full"
-                        alt="Obi-Wan"
-                      />
-                    ) : isActive ? (
-                      <img src={goldCoin2d} className="w-5 h-5" alt="coin" />
-                    ) : (
-                      <div className="w-2 h-2 rounded-full bg-muted-foreground/40" />
-                    )}
-                  </div>
-                  <span
-                    className={`text-sm font-medium ${
-                      isActive ? "text-primary" : "text-muted-foreground"
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      ) : (
-        <div
-          ref={sidebarRef}
-          className={`hidden md:block fixed left-4 top-1/2 -translate-y-1/2 z-50 transition-all duration-700 ease-out ${
-            mounted
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-full"
-          }`}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          style={{
-            opacity: show ? 1 : calculateOpacity(),
-          }}
-        >
-          <div
-            className={`relative sidebar-glass rounded-2xl shadow-2xl border border-border/20 transition-all duration-500 ease-out ${
-              isHovered ? "scale-105 px-3 py-4" : "scale-100 px-3 py-3"
-            }`}
-          >
-            {/* Collapsed state removed: current-section icon hidden by default (user requested) */}
-
-            {/* Expanded state - show all sections with labels */}
-            {isHovered && (
-              <div className="flex flex-col gap-2">
-                {navItems.map((item, index) => {
-                  const isActive = currentSection === item.id;
-                  const isHome = item.isHome;
-
+                if (item.id === "projects") {
                   return (
-                    <div
-                      key={item.id}
-                      className="relative"
-                      style={{
-                        transitionDelay: `${index * 30}ms`,
-                      }}
-                    >
+                    <div key={item.id} className="flex flex-col gap-1.5 sm:gap-2">
                       <button
-                        onClick={() => scrollToSection(item.id)}
-                        ref={(el) => (itemRefs.current[item.id] = el)}
-                        className={`group relative flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-400 hover:bg-accent/20 ${
+                        type="button"
+                        onClick={() => setIsProjectsOpen((prev) => !prev)}
+                        aria-haspopup="menu"
+                        aria-controls={projectMenuId}
+                        aria-expanded={isProjectsOpen}
+                        className={`group flex items-center justify-between gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:bg-accent/20 ${
                           isActive ? "bg-accent/30" : ""
-                        } w-full min-w-[120px]`}
-                        aria-label={`Navigate to ${item.label}`}
+                        }`}
                       >
-                        {/* Icon */}
-                        <div className="flex items-center justify-center w-6 h-6">
-                          {isHome ? (
-                            <img
-                              src="/obiwan_face.png"
-                              alt="Obi-Wan"
-                              className="w-5 h-5 rounded-full object-cover transition-all duration-300"
-                            />
-                          ) : isActive ? (
-                            <img
-                              src={goldCoin2d}
-                              alt="Current section"
-                              className="w-5 h-5 object-contain transition-all duration-300"
-                            />
-                          ) : (
-                            <div className="w-2 h-2 rounded-full bg-muted-foreground/40 group-hover:bg-primary/60 transition-all duration-300" />
-                          )}
-                        </div>
-
-                        {/* Label */}
-                        <span
-                          className={`text-sm font-medium transition-all duration-300 ${
-                            isActive
-                              ? "text-primary"
-                              : "text-muted-foreground group-hover:text-foreground"
-                          }`}
-                        >
-                          {item.label}
+                        <span className="flex items-center gap-3">
+                          <img src={goldCoin2d} alt="" aria-hidden="true" className="w-5 h-5 object-contain" />
+                          <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground">
+                            {item.label}
+                          </span>
                         </span>
-
-                        {/* Active indicator - replaced with subtle outline */}
-                        {isActive && (
-                          <div className="absolute inset-0 rounded-xl ring-1 ring-primary/30 pointer-events-none transition-all duration-300" />
-                        )}
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform ${isProjectsOpen ? "rotate-180" : ""}`}
+                        />
                       </button>
+                      {isProjectsOpen && (
+                        <div
+                          id={projectMenuId}
+                          role="menu"
+                          aria-label={t("projectsMenuTitle")}
+                          className="ml-3 flex flex-col gap-1 border-l border-border pl-3"
+                        >
+                          {projectLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              role="menuitem"
+                              onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                setIsProjectsOpen(false);
+                              }}
+                              className="rounded-md px-2 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-primary"
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   );
-                })}
-              </div>
-            )}
+                }
 
-            {/* Floating icon removed per request (no current-section indicator in collapsed sidebar) */}
-
-            {/* Decorative elements */}
-            <div className="absolute -top-1 -left-1 w-2 h-2 bg-primary/8 rounded-full blur-sm" />
-            <div
-              className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-accent/8 rounded-full blur-sm"
-              style={{ opacity: 0.6 }}
-            />
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:bg-accent/20 ${
+                      isActive ? "bg-accent/30" : ""
+                    }`}
+                  >
+                    <div className="flex items-center justify-center w-6 h-6">
+                      {isHome ? (
+                        <img src="/obiwan_face.png" alt="" aria-hidden="true" className="w-5 h-5 rounded-full object-cover" />
+                      ) : isActive ? (
+                        <img src={goldCoin2d} alt="" aria-hidden="true" className="w-5 h-5 object-contain" />
+                      ) : (
+                        <div className="w-2 h-2 rounded-full bg-muted-foreground/40 group-hover:bg-primary/60 transition-colors" />
+                      )}
+                    </div>
+                    <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
-    </>
+
+      {/* Desktop top bar */}
+      <div
+        className={`hidden md:flex fixed top-3 left-4 right-4 z-50 justify-center transition-all duration-500 ease-out ${
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"
+        }`}
+      >
+        <div className="sidebar-glass rounded-full px-3 py-2 shadow-lg border border-border/20 flex items-center gap-2">
+          {navItems.map((item) => {
+            const isActive = currentSection === item.id;
+            const isHome = item.isHome;
+
+            if (item.id === "projects") {
+              return (
+                <div key={item.id} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsProjectsOpen((prev) => !prev)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 ${
+                      isActive ? "bg-accent/6 ring-1 ring-primary/20" : "hover:bg-accent/4"
+                    }`}
+                    aria-expanded={isProjectsOpen}
+                    aria-haspopup="menu"
+                    aria-controls={projectMenuId}
+                    aria-label={t("projectsMenuTitle")}
+                  >
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <img src={goldCoin2d} className="w-5 h-5" alt="" aria-hidden="true" />
+                    </div>
+                    <span className={`text-sm font-medium ${isActive ? "text-primary" : "text-muted-foreground"}`}>
+                      {item.label}
+                    </span>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isProjectsOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {isProjectsOpen && (
+                    <div
+                      id={projectMenuId}
+                      role="menu"
+                      aria-label={t("projectsMenuTitle")}
+                      className="absolute left-0 top-full mt-3 min-w-[220px] rounded-2xl border border-border bg-card/95 p-2 shadow-xl backdrop-blur-sm"
+                    >
+                      {projectLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          to={link.href}
+                          role="menuitem"
+                          onClick={() => setIsProjectsOpen(false)}
+                          className="block rounded-xl px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-primary"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 ${
+                  isActive ? "bg-accent/6 ring-1 ring-primary/20" : "hover:bg-accent/4"
+                }`}
+                aria-label={isHome ? t("aria.backToTop") : undefined}
+              >
+                <div className="w-6 h-6 flex items-center justify-center">
+                  {isHome ? (
+                    <img src="/obiwan_face.png" className="w-5 h-5 rounded-full" alt="" aria-hidden="true" />
+                  ) : isActive ? (
+                    <img src={goldCoin2d} className="w-5 h-5" alt="" aria-hidden="true" />
+                  ) : (
+                    <div className="w-2 h-2 rounded-full bg-muted-foreground/40" />
+                  )}
+                </div>
+                <span className={`text-sm font-medium ${isActive ? "text-primary" : "text-muted-foreground"}`}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </nav>
   );
 };
 
