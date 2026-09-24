@@ -5,6 +5,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import TopControls from "@/components/TopControls";
+import ChatBot from "@/components/ChatBot";
 
 const DEMO_URL =
   import.meta.env.VITE_DEMO_DARCY_URL || "https://demo-darcy.hugoviegas.dev";
@@ -21,6 +22,17 @@ const STACK = [
 const DarcyProject = () => {
   const { t } = useLanguage();
   const [iframeFailed, setIframeFailed] = useState(false);
+  const [isContextChatOpen, setIsContextChatOpen] = useState(false);
+  const [initialPrompt, setInitialPrompt] = useState<string>();
+
+  const suggestedQuestions = [
+    "darcyQuestionProblem",
+    "darcyQuestionAdmin",
+    "darcyQuestionAi",
+    "darcyQuestionReservations",
+    "darcyQuestionData",
+    "darcyQuestionImpact",
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -96,6 +108,60 @@ const DarcyProject = () => {
               </Link>
             </Button>
           </div>
+
+          <section
+            className="mt-12 rounded-2xl border border-primary/30 bg-primary/5 p-6"
+            aria-labelledby="darcy-chat-title"
+          >
+            <div className="flex flex-col gap-4">
+              <div>
+                <h2 id="darcy-chat-title" className="heading-card">
+                  {t("darcyAskTitle")}
+                </h2>
+                <p className="body-text mt-2">{t("darcyChatDescription")}</p>
+              </div>
+              {!isContextChatOpen && (
+                <Button
+                  type="button"
+                  onClick={() => setIsContextChatOpen(true)}
+                  aria-controls="darcy-context-chat"
+                >
+                  {t("darcyAskTitle")}
+                </Button>
+              )}
+              <div className="flex flex-col gap-2">
+                <h3 className="text-sm font-semibold text-foreground">
+                  {t("darcySuggestedQuestions")}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {suggestedQuestions.map((questionKey) => (
+                    <button
+                      key={questionKey}
+                      type="button"
+                      onClick={() => {
+                        setInitialPrompt(t(questionKey));
+                        setIsContextChatOpen(true);
+                      }}
+                      className="rounded-full border border-primary/30 bg-background px-3 py-2 text-left text-sm text-foreground transition-colors hover:border-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    >
+                      {t(questionKey)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p className="caption-text">{t("darcySafetyNote")}</p>
+              {isContextChatOpen && (
+                <div id="darcy-context-chat" className="rounded-2xl bg-neutral-950/10 p-1">
+                  <ChatBot
+                    projectId="darcy"
+                    initialPrompt={initialPrompt}
+                    embedded
+                    onClose={() => setIsContextChatOpen(false)}
+                  />
+                </div>
+              )}
+            </div>
+          </section>
         </div>
       </main>
       <Footer />

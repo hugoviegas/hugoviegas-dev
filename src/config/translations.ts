@@ -216,6 +216,73 @@ export const translations: Translations = {
     EN: "Unable to load demo preview. Open the full demo instead.",
     PT: "Não foi possível carregar a prévia da demo. Abra a demo completa.",
   },
+  darcyAskTitle: {
+    EN: "Ask about this project",
+    PT: "Pergunte sobre este projeto",
+  },
+  darcySuggestedQuestions: {
+    EN: "Suggested questions",
+    PT: "Perguntas sugeridas",
+  },
+  darcyChatDescription: {
+    EN: "Ask about the business goals, workflow, or impact of the D'Arcy McGee's project.",
+    PT: "Pergunte sobre os objetivos, o fluxo de trabalho ou o impacto do projeto D'Arcy McGee's.",
+  },
+  darcyCloseChat: { EN: "Close chat", PT: "Fechar chat" },
+  darcyLoadingResponse: {
+    EN: "Loading response...",
+    PT: "A carregar resposta...",
+  },
+  darcyChatError: {
+    EN: "We couldn't get a response. Please try again.",
+    PT: "Não foi possível obter uma resposta. Tente novamente.",
+  },
+  darcySafetyNote: {
+    EN: "Answers use the approved project context and do not expose source code or real operational data.",
+    PT: "As respostas usam o contexto aprovado do projeto e não expõem código-fonte nem dados operacionais reais.",
+  },
+  chatOpen: { EN: "Open chat", PT: "Abrir chat" },
+  chatClose: { EN: "Close chat", PT: "Fechar chat" },
+  chatGreeting: { EN: "Hi! 👋", PT: "Olá! 👋" },
+  chatDescription: {
+    EN: "I'm Hugo's assistant. Ask about technology, projects, or skills.",
+    PT: "Sou o assistente do Hugo. Pergunte sobre tecnologia, projetos ou habilidades.",
+  },
+  chatQuestionLabel: { EN: "Question", PT: "Pergunta" },
+  chatInputPlaceholder: {
+    EN: "Type your question...",
+    PT: "Digite sua pergunta...",
+  },
+  chatSend: { EN: "Send question", PT: "Enviar pergunta" },
+  chatLoading: { EN: "Loading response...", PT: "A carregar resposta..." },
+  chatError: {
+    EN: "An error occurred. Please try again.",
+    PT: "Ocorreu um erro. Tente novamente.",
+  },
+  darcyQuestionProblem: {
+    EN: "What problem did this project solve?",
+    PT: "Que problema este projeto resolveu?",
+  },
+  darcyQuestionAdmin: {
+    EN: "Why did Hugo build an admin dashboard?",
+    PT: "Por que o Hugo criou um painel administrativo?",
+  },
+  darcyQuestionAi: {
+    EN: "How did the AI menu import save time?",
+    PT: "Como a importação de menu com IA poupou tempo?",
+  },
+  darcyQuestionReservations: {
+    EN: "Was online reservation available?",
+    PT: "Havia reservas online?",
+  },
+  darcyQuestionData: {
+    EN: "Does the demo use real restaurant data?",
+    PT: "A demo usa dados reais do restaurante?",
+  },
+  darcyQuestionImpact: {
+    EN: "What impact did the website have?",
+    PT: "Qual foi o impacto do site?",
+  },
 
   // Contact
   sendMessageTitle: { EN: "Send a Message", PT: "Enviar uma Mensagem" },

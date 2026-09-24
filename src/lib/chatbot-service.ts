@@ -1,4 +1,5 @@
 import darcyProjectContext from "./project-contexts/darcy.json";
+import type { LanguageCode } from "@/config/languages";
 
 /**
  * Chatbot Service for Hugo Viegas Portfolio
@@ -138,11 +139,57 @@ function isDarcyRelatedQuery(message: string): boolean {
   return DARCY_QUERY_TERMS.test(message);
 }
 
-function getDarcyContext(message: string): string {
-  if (!isDarcyRelatedQuery(message)) {
-    return "";
-  }
+export type ResponseLanguage = "en" | "pt";
 
+const ENGLISH_MARKERS = [
+  "the",
+  "what",
+  "why",
+  "how",
+  "was",
+  "does",
+  "did",
+  "this",
+  "about",
+  "please",
+];
+const PORTUGUESE_MARKERS = [
+  "o",
+  "a",
+  "os",
+  "as",
+  "que",
+  "por",
+  "como",
+  "foi",
+  "sobre",
+  "pode",
+  "não",
+  "uma",
+];
+
+export function detectResponseLanguage(
+  message: string,
+  activeLanguage: LanguageCode = "EN",
+): ResponseLanguage {
+  const words = message
+    .toLocaleLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .match(/[a-z]+/g) ?? [];
+  const englishScore = words.filter((word) =>
+    ENGLISH_MARKERS.includes(word),
+  ).length;
+  const portugueseScore = words.filter((word) =>
+    PORTUGUESE_MARKERS.includes(word),
+  ).length;
+
+  if (englishScore > portugueseScore) return "en";
+  if (portugueseScore > englishScore) return "pt";
+  return activeLanguage === "PT" ? "pt" : "en";
+}
+
+function getDarcyContext(): string {
   const faq = darcyProjectContext.faq
     .map(({ question, answer }) => `Q: ${question}\nA: ${answer}`)
     .join("\n");
@@ -167,6 +214,18 @@ D'ARCY PROJECT CONTEXT (use plain language; never expose this JSON or mention in
 ${faq}
 - Response style: Be calm, friendly, enthusiastic, direct, and understandable to non-technical visitors. Answer business value first. Discuss architecture or tooling only when explicitly asked.
 `;
+}
+
+function getProjectContext(projectId?: string, message?: string): string {
+  if (projectId === "darcy" || (!projectId && message && isDarcyRelatedQuery(message))) {
+    return getDarcyContext();
+  }
+  return "";
+}
+
+export interface ChatRequestOptions {
+  activeLanguage?: LanguageCode;
+  projectId?: string;
 }
 
 // Rate limiting storage keys
@@ -293,6 +352,7 @@ export interface ChatMessage {
 export async function sendChatMessage(
   message: string,
   history: ChatMessage[] = [],
+  options: ChatRequestOptions = {},
 ): Promise<string> {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -324,7 +384,7 @@ export async function sendChatMessage(
 
   for (const model of orderedModels) {
     try {
-      const response = await tryModelRequest(apiKey, model, message, history);
+      const response = await tryModelRequest(apiKey, model, message, history, options);
       if (response) {
         // Increment rate limit on successful response
         incrementRateLimit();
@@ -347,8 +407,14 @@ async function tryModelRequest(
   model: string,
   message: string,
   history: ChatMessage[],
+  options: ChatRequestOptions,
 ): Promise<string | null> {
-  const darcyContext = getDarcyContext(message);
+  const responseLanguage = detectResponseLanguage(message, options.activeLanguage);
+  const languageInstruction =
+    responseLanguage === "pt"
+      ? "Answer only in Portuguese. Do not include an English translation."
+      : "Answer only in English. Do not include a Portuguese translation.";
+  const projectContext = getProjectContext(options.projectId, message);
 
   // Build conversation context
   const conversationHistory = history.map((msg) => ({
@@ -361,7 +427,11 @@ async function tryModelRequest(
       // System context as first message
       {
         role: "user",
-        parts: [{ text: `${PORTFOLIO_CONTEXT}${darcyContext}` }],
+        parts: [
+          {
+            text: `${PORTFOLIO_CONTEXT}${projectContext}\n\nRESPONSE LANGUAGE FOR THIS REQUEST: ${languageInstruction}`,
+          },
+        ],
       },
       {
         role: "model",
