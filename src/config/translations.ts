@@ -13,6 +13,9 @@ export const translations: Translations = {
   // Navigation
   about: { EN: "About", PT: "Sobre" },
   projects: { EN: "Projects", PT: "Projetos" },
+  projectsMenuTitle: { EN: "Projects", PT: "Projetos" },
+  projectsMenuBigBangDuel: { EN: "Big Bang Duel", PT: "Big Bang Duel" },
+  projectsMenuDarcy: { EN: "D'Arcy McGee's", PT: "D'Arcy McGee's" },
   experience: { EN: "Experience", PT: "Experiência" },
   contact: { EN: "Contact", PT: "Contato" },
 
@@ -313,9 +316,21 @@ export const translations: Translations = {
     EN: "A live preview of the public game experience.",
     PT: "Uma prévia ao vivo da experiência pública do jogo.",
   },
+  bigBangPreviewCaption: {
+    EN: "Live mobile-format preview of the game",
+    PT: "Prévia ao vivo do jogo em formato móvel",
+  },
+  bigBangPreviewLoading: {
+    EN: "Loading preview...",
+    PT: "A carregar prévia...",
+  },
+  bigBangPreviewFallback: {
+    EN: "The live preview is unavailable right now. You can still open the full game directly below.",
+    PT: "A prévia ao vivo não está disponível no momento. Pode abrir o jogo completo diretamente abaixo.",
+  },
   bigBangIframeFallback: {
     EN: "The live preview is unavailable right now. You can still open the full game directly below.",
-    PT: "A prévia ao vivo não está disponível no momento. Você ainda pode abrir o jogo completo diretamente abaixo.",
+    PT: "A prévia ao vivo não está disponível no momento. Pode abrir o jogo completo diretamente abaixo.",
   },
   bigBangAskTitle: {
     EN: "Ask about Big Bang Duel",
@@ -335,7 +350,7 @@ export const translations: Translations = {
   },
   bigBangLoadingResponse: {
     EN: "Loading answer...",
-    PT: "Carregando resposta...",
+    PT: "A carregar resposta...",
   },
   bigBangChatError: {
     EN: "We couldn't get a response. Please try again.",
@@ -384,6 +399,118 @@ export const translations: Translations = {
   bigBangTechTitle: {
     EN: "Technology overview",
     PT: "Visão geral da tecnologia",
+  },
+  bigBangFaqTitle: { EN: "FAQ", PT: "Perguntas frequentes" },
+  bigBangFaqIntro: {
+    EN: "Everything you need to know about the project, the game flow, and the guest experience.",
+    PT: "Tudo o que precisa saber sobre o projeto, o fluxo do jogo e a experiência de convidado.",
+  },
+  bigBangTechReact: { EN: "React", PT: "React" },
+  bigBangTechTypeScript: { EN: "TypeScript", PT: "TypeScript" },
+  bigBangTechVite: { EN: "Vite", PT: "Vite" },
+  bigBangTechTailwind: { EN: "Tailwind CSS", PT: "Tailwind CSS" },
+  bigBangTechZustand: { EN: "Zustand", PT: "Zustand" },
+  bigBangTechFirebaseAuth: { EN: "Firebase Authentication", PT: "Firebase Authentication" },
+  bigBangTechFirestore: { EN: "Firestore", PT: "Firestore" },
+  bigBangTechRealtime: { EN: "Firebase Realtime Database", PT: "Firebase Realtime Database" },
+  bigBangTryItemGuest: {
+    EN: "Guest entry for an immediate AI/solo experience",
+    PT: "Acesso de convidado para uma experiência imediata solo contra a IA",
+  },
+  bigBangTryItemGoogle: {
+    EN: "Google sign-in for returning players",
+    PT: "Login com Google para jogadores recorrentes",
+  },
+  bigBangTryItemJourney: {
+    EN: "A clear account journey that stays understandable at a high level",
+    PT: "Uma jornada de conta clara e fácil de compreender em alto nível",
+  },
+  bigBangTryItemAccess: {
+    EN: "Full game access at duel.hugoviegas.dev",
+    PT: "Acesso ao jogo completo em duel.hugoviegas.dev",
+  },
+  bigBangBuiltItemExperience: {
+    EN: "Designed the public-facing game experience around a low-friction entry flow.",
+    PT: "Desenhei a experiência pública do jogo em torno de um fluxo de entrada simples e acessível.",
+  },
+  bigBangBuiltItemProduct: {
+    EN: "Built the product work needed to support a playable game, identity flow, and user progression model.",
+    PT: "Construí o trabalho de produto necessário para suportar um jogo jogável, fluxo de identidade e modelo de progressão do utilizador.",
+  },
+  bigBangBuiltItemFlow: {
+    EN: "Worked across the game experience and the system behind it so the first visit feels responsive and approachable.",
+    PT: "Trabalhei em toda a experiência do jogo e no sistema por detrás dela para que a primeira visita seja responsiva e acessível.",
+  },
+  bigBangChallengeResponsive: {
+    EN: "Keeping fast game interactions responsive while the game state updates smoothly.",
+    PT: "Manter as interações rápidas do jogo responsivas enquanto o estado do jogo se atualiza sem problemas.",
+  },
+  bigBangChallengeGuest: {
+    EN: "Managing guest access without overstating permanent account or multiplayer capabilities.",
+    PT: "Gerir o acesso de convidado sem exagerar as capacidades permanentes de conta ou multijogador.",
+  },
+  bigBangChallengeSystems: {
+    EN: "Separating real-time game concerns from player profile and progression concerns.",
+    PT: "Separar as questões de jogo em tempo real das preocupações de perfil e progressão do jogador.",
+  },
+  bigBangChallengeFriction: {
+    EN: "Making the game easy to try without friction, even for players who do not want to commit immediately.",
+    PT: "Fazer com que o jogo seja fácil de experimentar sem fricção, mesmo para jogadores que não querem comprometer-se imediatamente.",
+  },
+  bigBangActionReload: { EN: "Reload", PT: "Recarregar" },
+  bigBangActionShoot: { EN: "Shoot", PT: "Atirar" },
+  bigBangActionDodge: { EN: "Dodge", PT: "Esquivar" },
+  bigBangActionCounter: { EN: "Counterattack", PT: "Contra-golpe" },
+  bigBangActionDouble: { EN: "Double Shot", PT: "Tiro duplo" },
+  "bigBangFaq.q1": { EN: "How did Big Bang Duel begin?", PT: "Como começou o Big Bang Duel?" },
+  "bigBangFaq.a1": {
+    EN: "The idea started from a childhood card game, then turned into a browser-based duel experience built and iterated by Hugo in a focused development sprint.",
+    PT: "A ideia começou num jogo de cartas de infância e depois evoluiu para uma experiência de duelo online construída e iterada pelo Hugo numa sprint de desenvolvimento focada.",
+  },
+  "bigBangFaq.q2": { EN: "What inspired the visual identity?", PT: "O que inspirou a identidade visual?" },
+  "bigBangFaq.a2": {
+    EN: "The visual direction combines a cartoon look with a Wild West mood, shaped through early AI concept exploration and a clear desire for a game that feels complete but easy to understand.",
+    PT: "A direção visual combina um visual cartoon com um ambiente de Velho Oeste, moldado por exploração inicial de conceitos com IA e pelo desejo de criar um jogo completo mas fácil de compreender.",
+  },
+  "bigBangFaq.q3": { EN: "How does the game work?", PT: "Como funciona o jogo?" },
+  "bigBangFaq.a3": {
+    EN: "Each match is turn-based, each player starts with four health points, and each round is built around choosing one of five actions while managing ammunition, risk, and the opponent's pattern.",
+    PT: "Cada partida é por turnos, cada jogador começa com quatro pontos de vida e cada ronda envolve escolher uma de cinco ações enquanto gere munição, risco e o padrão do adversário.",
+  },
+  "bigBangFaq.q4": { EN: "What do Reload, Shoot, Dodge, Counterattack, and Double Shot do?", PT: "O que fazem Recarregar, Atirar, Esquivar, Contra-golpe e Tiro duplo?" },
+  "bigBangFaq.a4": {
+    EN: "Reload gains one ammunition; Shoot spends one ammunition and deals damage if the opponent does not defend; Dodge avoids a normal shot and reduces damage from a Double Shot; Counterattack spends one ammunition and returns damage in specific situations; Double Shot spends two ammunition and is a stronger attack with a two-use match limit.",
+    PT: "Recarregar ganha uma munição; Atirar gasta uma munição e causa dano se o adversário não se defender; Esquivar evita um tiro normal e reduz dano de Tiro duplo; Contra-golpe gasta uma munição e devolve dano em situações específicas; Tiro duplo gasta duas munições e é um ataque mais forte com um limite de duas utilizações por partida.",
+  },
+  "bigBangFaq.q5": { EN: "What are the six classes and how does mastery affect them?", PT: "Quais são as seis classes e como a maestria afeta cada uma?" },
+  "bigBangFaq.a5": {
+    EN: "The six classes are Sharpshooter, Strategist, Sneak, Ricochet, Bloodthirsty, and Healer. Each class has a chance-based effect linked to its mastery level, which makes class specialization matter as players level up.",
+    PT: "As seis classes são Atirador, Estrategista, Sorrateiro, Ricochete, Sanguinário e Curandeiro. Cada classe tem um efeito baseado em probabilidade associado ao nível de maestria, o que faz com que a especialização em classes passe a importar à medida que o jogador evolui.",
+  },
+  "bigBangFaq.q6": { EN: "How does progression work?", PT: "Como funciona a progressão?" },
+  "bigBangFaq.a6": {
+    EN: "Players unlock and buy characters through progression, complete achievements, and tackle daily, weekly, and monthly missions that reward in-game currency and keep the game varied.",
+    PT: "Os jogadores desbloqueiam e compram personagens por progressão, completam conquistas e realizam missões diárias, semanais e mensais que recompensam moeda do jogo e mantêm o jogo variado.",
+  },
+  "bigBangFaq.q7": { EN: "What can a guest try?", PT: "O que um visitante pode testar como convidado?" },
+  "bigBangFaq.a7": {
+    EN: "Guests can choose one of the first three characters, play solo against the AI, and learn the main mechanics without committing to an account immediately. Guests cannot play online, access every character, or access the global ranking.",
+    PT: "Os convidados podem escolher um dos três primeiros personagens, jogar em modo solo contra a IA e aprender as mecânicas principais sem criar imediatamente uma conta. Os convidados não podem jogar online, usar todos os personagens nem aceder ao ranking global.",
+  },
+  "bigBangFaq.q8": { EN: "What was Hugo's role in the project?", PT: "Qual foi o papel do Hugo no projeto?" },
+  "bigBangFaq.a8": {
+    EN: "Hugo built the complete game concept and experience, from rules and art direction to frontend, backend, authentication, progression, and solo AI behaviour, with his brother contributing to early ideas, testing, and balancing feedback.",
+    PT: "O Hugo construiu o conceito e a experiência completa do jogo, desde as regras e direção artística até frontend, backend, autenticação, progressão e comportamento da IA solo, com o seu irmão a contribuir para ideias iniciais, testes e feedback de equilíbrio.",
+  },
+  "bigBangFaq.q9": { EN: "What was the biggest technical and design challenge?", PT: "Qual foi o maior desafio técnico e de design?" },
+  "bigBangFaq.a9": {
+    EN: "The biggest challenge was balancing the rules and making the AI hard to exploit while still fair. Hugo had to revisit design choices when the AI became too dominant or too predictable.",
+    PT: "O maior desafio foi equilibrar as regras e criar uma IA desafiante sem ser injusta. O Hugo teve de rever escolhas de design quando a IA ficou demasiado dominante ou demasiado previsível.",
+  },
+  "bigBangFaq.q10": { EN: "What comes next for the game?", PT: "O que vem a seguir para o jogo?" },
+  "bigBangFaq.a10": {
+    EN: "The project is still evolving, with more rules, refinement, and deeper systems planned as the game continues to grow beyond the playable prototype stage.",
+    PT: "O projeto continua em evolução, com mais regras, refinamentos e sistemas mais profundos planeados à medida que o jogo cresce para além do estado de protótipo jogável.",
   },
 
   // Contact

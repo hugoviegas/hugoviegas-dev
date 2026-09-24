@@ -1,12 +1,97 @@
 {
   "id": "big-bang-duel",
   "name": "Big Bang Duel",
-  "status": "Publicly available at duel.hugoviegas.dev with guest access for an immediate AI/solo experience and Google sign-in for returning players.",
-  "summary": "A fast browser-based strategy duel game that invites visitors to try a solo experience immediately as a guest, while offering a straightforward Google sign-in path for returning players.",
+  "status": "Publicly available at duel.hugoviegas.dev. Guests can try the game immediately in solo mode against the AI, and returning players can continue through Google sign-in.",
+  "summary": "A browser-based strategy duel game built around fast matches, approachable onboarding, and a clear guest-to-account progression story.",
+  "originStory": {
+    "EN": "Big Bang Duel began as a childhood card game idea that Hugo revisited as a digital duel. Using a quieter week to prototype, he built a playable solo version quickly and discovered that the concept had real potential.",
+    "PT": "O Big Bang Duel começou como uma ideia de jogo de cartas da infância que Hugo retomou como duelo digital. Aproveitando uma semana mais tranquila para prototipar, construiu uma versão solo jogável rapidamente e percebeu que o conceito tinha potencial real."
+  },
+  "visualIdentity": {
+    "EN": "The visual direction blends cartoon energy with a Wild West aesthetic, using AI to explore early concepts and then building a consistent identity around a complete but easy-to-understand game feel.",
+    "PT": "A direção visual combina energia cartoon com uma estética de Velho Oeste, usando IA para explorar conceitos iniciais e depois construindo uma identidade consistente em torno de um jogo completo mas fácil de compreender."
+  },
+  "coreGameplayLoop": {
+    "EN": "Matches are turn-based. Each player starts with four health points and no ammunition. Every round presents one of five actions: Reload, Shoot, Dodge, Counterattack, and Double Shot.",
+    "PT": "As partidas são por turnos. Cada jogador começa com quatro pontos de vida e sem munição. Cada ronda apresenta uma de cinco ações: Recarregar, Atirar, Esquivar, Contra-golpe e Tiro duplo."
+  },
+  "actionCards": [
+    {
+      "name": "Reload",
+      "description": "Gain one ammunition.",
+      "descriptionPt": "Ganha uma munição."
+    },
+    {
+      "name": "Shoot",
+      "description": "Spend one ammunition and deal damage if the opponent does not defend.",
+      "descriptionPt": "Gasta uma munição e causa dano se o adversário não se defender."
+    },
+    {
+      "name": "Dodge",
+      "description": "Avoid normal-shot damage and reduce the impact of Double Shot so the player loses only one health point.",
+      "descriptionPt": "Evita o dano de um tiro normal e reduz o impacto do Tiro duplo para que o jogador perca apenas um ponto de vida."
+    },
+    {
+      "name": "Counterattack",
+      "description": "Spend one ammunition and return damage in specific situations.",
+      "descriptionPt": "Gasta uma munição e devolve dano em situações específicas."
+    },
+    {
+      "name": "Double Shot",
+      "description": "Spend two ammunition and perform a stronger attack. It can be used only twice per match.",
+      "descriptionPt": "Gasta duas munições e realiza um ataque mais forte. Só pode ser usado duas vezes por partida."
+    }
+  ],
+  "classes": [
+    {
+      "name": "Sharpshooter",
+      "effect": "When using Shoot, there is a 10% chance to trigger a critical hit that removes two health points. The probability increases with class mastery.",
+      "effectPt": "Ao usar Atirar, há 10% de probabilidade de causar um tiro crítico que remove duas vidas. A probabilidade aumenta com a maestria da classe.",
+      "masteryBehavior": "The chance increases with class mastery."
+    },
+    {
+      "name": "Strategist",
+      "effect": "When using Reload, there is a 12% chance to gain two ammunition instead of one. The probability increases with class mastery.",
+      "effectPt": "Ao usar Recarregar, há 12% de probabilidade de ganhar duas munições em vez de uma. A probabilidade aumenta com a maestria da classe.",
+      "masteryBehavior": "The chance increases with class mastery."
+    },
+    {
+      "name": "Sneak",
+      "effect": "When using any card, there is a 9% chance to automatically dodge enemy shots. The probability increases with class mastery.",
+      "effectPt": "Ao usar qualquer carta, há 9% de probabilidade de se esquivar automaticamente de tiros inimigos. A probabilidade aumenta com a maestria da classe.",
+      "masteryBehavior": "The chance increases with class mastery."
+    },
+    {
+      "name": "Ricochet",
+      "effect": "When using Counterattack, there is a 12% chance to double the returned damage. The chance is doubled against Double Shot and increases with class mastery.",
+      "effectPt": "Ao usar Contra-golpe, há 12% de probabilidade de duplicar o dano devolvido. A chance duplica contra Tiro duplo e aumenta com a maestria da classe.",
+      "masteryBehavior": "The chance increases with class mastery."
+    },
+    {
+      "name": "Bloodthirsty",
+      "effect": "When using any card, there is a 6% chance to recover one Double Shot charge, up to a maximum of two recoveries per match. It never exceeds three charges at the same time.",
+      "effectPt": "Ao usar qualquer carta, há 6% de probabilidade de recuperar uma carga de Tiro duplo, até ao máximo de duas recuperações por partida. Nunca ultrapassa três cargas ao mesmo tempo.",
+      "masteryBehavior": "The chance increases with class mastery."
+    },
+    {
+      "name": "Healer",
+      "effect": "When using any card, there is a 9% chance to recover one health point, up to a maximum of two heals per match. Healing never exceeds maximum health.",
+      "effectPt": "Ao usar qualquer carta, há 9% de probabilidade de recuperar um ponto de vida, até ao máximo de duas curas por partida. A cura nunca ultrapassa a vida máxima.",
+      "masteryBehavior": "The chance increases with class mastery."
+    }
+  ],
+  "guestExperience": {
+    "EN": "Guest mode lets a player choose one of the first three characters and play solo against the game AI. The mode is intentionally limited: guests do not access online play, every character, or the global ranking.",
+    "PT": "O modo de convidado permite escolher um dos três primeiros personagens e jogar em modo solo contra a IA do jogo. O modo tem limitações intencionais: os convidados não têm acesso ao jogo online, a todos os personagens ou ao ranking global."
+  },
+  "progression": {
+    "EN": "Progression adds purpose to plays through unlockable characters, achievements, and weekly, daily, and monthly missions that encourage experimentation. The assistant-driven mission generation uses clear difficulty rules to avoid repetitive challenges.",
+    "PT": "A progressão dá mais sentido às partidas através de personagens desbloqueáveis, conquistas e missões diárias, semanais e mensais que incentivam a experimentação. A geração de missões com IA usa regras claras de dificuldade para evitar desafios repetidos."
+  },
   "hugoRole": [
-    "Designed and built the product experience for a public-facing strategy game.",
-    "Worked across the front-end experience, game flow, player identity journey, and the product decisions that kept the game approachable for first-time visitors.",
-    "Shaped the public story around guest access, AI/solo play, and a clear path from trying the game to continuing with a player account."
+    "Designed and built the complete game experience, from rules and art direction to frontend, backend, authentication, progression, and AI behaviour.",
+    "Worked across the public-facing product decisions, identity flow, guest experience, and system design needed to keep the game approachable for first-time visitors.",
+    "Led the product, balance, architecture, and implementation work, while early testing and balancing suggestions came from his brother."
   ],
   "userProblem": [
     "Visitors needed a low-friction way to understand the game before committing to an account journey.",
@@ -20,13 +105,13 @@
   ],
   "guestVsAiExperience": [
     "Guest entry is intentionally the quickest way to try the game and experience the solo/AI mode.",
-    "The AI/solo route is meant to lower the barrier to first use while keeping the account path clear for returning players.",
-    "This does not overstate multiplayer, rankings, permanent purchases, or unrestricted cloud progression."
+    "The AI/solo route lowers the barrier to first use while keeping the account path clear for returning players.",
+    "The product messaging does not overstate online play, every character, or unrestricted progression."
   ],
   "accountJourney": [
     "The account journey is presented as a practical step for returning players who want a more consistent experience.",
-    "Google sign-in is the high-level recurring-player option, but the public story stays focused on convenience and familiarity.",
-    "The experience keeps the product messaging clear: guest entry is for immediate tryout, while the account path supports a returning player journey."
+    "Google sign-in is the high-level recurring-player option, while the public story stays focused on convenience and familiarity.",
+    "The experience keeps the product messaging clear: guest entry is for immediate tryout, and the account path supports a returning player journey."
   ],
   "technologyOverview": [
     "React",
@@ -40,21 +125,45 @@
   ],
   "challenges": [
     "Keeping fast game interactions responsive while maintaining a smooth duel experience.",
-    "Managing player identity and guest access without overstating what is available to each type of visitor.",
-    "Separating real-time game concerns from player-profile and progression concerns so the platform stays understandable and maintainable.",
-    "Making the game feel frictionless for first-time players while preserving a clear and practical long-term journey."
+    "Balancing rules and AI difficulty so the game stays challenging but fair.",
+    "Separating real-time game concerns from player profile and progression concerns so the platform stays understandable and maintainable.",
+    "Making the game easy to try without friction, even for visitors who do not want to commit immediately."
   ],
+  "productChallenges": {
+    "EN": "The biggest challenge was balancing the rules and creating an AI opponent that was challenging, fair, and not repetitive. Hugo had to revisit the rules when the AI became too dominant or too predictable.",
+    "PT": "O maior desafio foi equilibrar as regras e criar um adversário de IA desafiante, justo e não repetitivo. Hugo teve de rever as regras quando a IA se tornou demasiado dominante ou demasiado previsível."
+  },
+  "aiOpponentApproach": {
+    "EN": "The solo AI uses logical rules similar to a human player, avoids wasting a dodge when the opponent has no ammunition, and relies on patterns rather than simply random actions.",
+    "PT": "A IA solo usa regras lógicas semelhantes às de um jogador humano, evita desperdiçar uma esquiva quando o adversário não tem munição e baseia-se em padrões em vez de ações meramente aleatórias."
+  },
+  "currentProjectStatus": {
+    "EN": "The game is still evolving, but it is already a playable and functional experience with a visual identity, classes, progression, and guest mode.",
+    "PT": "O jogo continua a evoluir, mas já é uma experiência jogável e funcional com identidade visual, classes, progressão e modo de convidado."
+  },
+  "futureDirection": {
+    "EN": "The next steps are to keep refining the rules, improving AI behaviour, and expanding the game systems beyond the current playable prototype.",
+    "PT": "Os próximos passos são continuar a refinar as regras, melhorar o comportamento da IA e expandir os sistemas do jogo para além do protótipo jogável atual."
+  },
   "demonstrableCapabilities": [
     "Interactive strategy duel gameplay available in a browser at duel.hugoviegas.dev.",
     "Guest access for immediate AI/solo play.",
     "Google sign-in route for returning players.",
-    "A clear game-first experience designed around ease of entry and product clarity."
+    "A clear public-facing experience designed around ease of entry and product clarity."
   ],
-  "approvedClaims": [
+  "allowedClaims": [
     "Big Bang Duel is a browser-based strategy duel game available publicly at duel.hugoviegas.dev.",
     "Guest entry makes it easy to start a solo/AI game immediately.",
     "Google sign-in supports a returning-player path.",
-    "Hugo worked on the public-facing product experience and product decisions around accessibility, identity flow, and gameplay clarity.",
+    "Hugo worked on the public-facing product experience and product decisions around accessibility, identity flow, onboarding, and gameplay clarity.",
+    "The project uses React, TypeScript, Vite, Tailwind CSS, Zustand, Firebase Authentication, Firestore, and Firebase Realtime Database at a high level.",
+    "The project is positioned as a frictionless entry experience for visitors who want to try the game quickly."
+  ],
+  "approvedClaims": [
+    "Big Bang Duel is a browser-based strategy duel game publicly available at duel.hugoviegas.dev.",
+    "Guest entry makes it easy to start a solo/AI game immediately.",
+    "Google sign-in supports a returning-player path.",
+    "Hugo worked on the public-facing product experience and product decisions around accessibility, identity flow, onboarding, and gameplay clarity.",
     "The project uses React, TypeScript, Vite, Tailwind CSS, Zustand, Firebase Authentication, Firestore, and Firebase Realtime Database at a high level.",
     "The project is positioned as a frictionless entry experience for visitors who want to try the game quickly."
   ],
@@ -64,6 +173,11 @@
     "Do not invent metrics, active-player numbers, revenue, downloads, or launch dates that are not approved.",
     "Do not describe the guest path as permanent account access or a full multiplayer system.",
     "Do not present raw internal data or user records as public product information."
+  ],
+  "forbiddenDetails": [
+    "Never mention hidden implementation details, Firebase secrets, or internal data models.",
+    "Never suggest the game is complete in all ways or that every feature is available to every player.",
+    "Never describe guest mode as supporting online matches or global rankings."
   ],
   "responseStyle": {
     "tone": [
@@ -77,37 +191,56 @@
     "format": "Use plain language and avoid referencing internal JSON, code, or hidden context."
   },
   "suggestedQuestions": [
+    "How did Big Bang Duel begin?",
+    "How do I play?",
+    "What does each card do?",
+    "What are the six classes?",
+    "How does the solo AI make decisions?",
     "What can I try as a guest?",
-    "How does the game approach Google sign-in?",
-    "What is the player account journey at a high level?",
-    "Where can I access the full game?",
-    "What did Hugo build in this project?",
-    "What were the main challenges?"
+    "What did Hugo build?",
+    "Why was balancing the game difficult?",
+    "What is planned next?"
   ],
   "faq": [
     {
-      "question": "What can I try as a guest?",
-      "answer": "A guest entry makes it easy to start the AI/solo experience immediately without needing to commit to a full account flow first."
+      "question": "How did Big Bang Duel begin?",
+      "answer": "The idea began with a childhood card game and evolved into a browser-based duel experience that Hugo built and iterated quickly during a focused development sprint."
     },
     {
-      "question": "How does the game approach Google sign-in?",
-      "answer": "Google sign-in is presented as a returning-player option that supports a smoother experience for players who come back to the game."
+      "question": "What inspired the visual identity?",
+      "answer": "The visual direction combines a cartoon style with a Wild West feeling, shaped by early AI concept exploration and a desire for a game that feels complete but still easy to understand."
     },
     {
-      "question": "What is the player account journey at a high level?",
-      "answer": "The product story is simple: try the game quickly, understand the experience, and continue with a player account if the visitor wants a more persistent path."
+      "question": "How does the game work?",
+      "answer": "Each match is turn-based. Each player starts with four health points and no ammunition, and every round is about choosing one of five cards while managing risk, ammo, and the opponent's pattern."
     },
     {
-      "question": "Where can I access the full game?",
-      "answer": "The public game is available at duel.hugoviegas.dev."
+      "question": "What do Reload, Shoot, Dodge, Counterattack, and Double Shot do?",
+      "answer": "Reload gains one ammunition; Shoot spends one ammunition and deals damage unless the opponent defends; Dodge avoids a normal shot and reduces damage from a Double Shot; Counterattack spends one ammunition and returns damage in specific situations; Double Shot spends two ammunition and is a stronger attack with a two-use per-match limit."
     },
     {
-      "question": "What did Hugo build in this project?",
-      "answer": "Hugo worked on the public-facing product experience and the product decisions around gameplay accessibility, onboarding, identity flow, and a smoother first-time experience."
+      "question": "What are the six classes and how does mastery affect them?",
+      "answer": "The six classes are Sharpshooter, Strategist, Sneak, Ricochet, Bloodthirsty, and Healer. Each class has a chance-based effect tied to class mastery, so specialization matters as players level up."
     },
     {
-      "question": "What were the main challenges?",
-      "answer": "The main challenges were keeping gameplay responsive, balancing guest access with a clear player journey, and separating real-time game concerns from player profile and progression concerns."
+      "question": "How does progression work?",
+      "answer": "Players unlock and buy characters through progression, earn achievements, and complete daily, weekly, and monthly missions that reward in-game currency and encourage experimentation with different strategies."
+    },
+    {
+      "question": "What can a guest try?",
+      "answer": "Guests can choose one of the first three characters, play solo against the AI, and learn the core mechanics without creating an account immediately. Guests cannot play online, access every character, or view the global ranking."
+    },
+    {
+      "question": "What was Hugo’s role in the project?",
+      "answer": "Hugo developed the full game concept and experience, from rules and art direction to frontend, backend, authentication, progression, and solo AI behaviour. His brother contributed to early ideas, testing, and balancing feedback."
+    },
+    {
+      "question": "What was the biggest technical and design challenge?",
+      "answer": "The biggest challenge was balancing the game rules and creating an AI opponent that was challenging but fair. Hugo had to revisit design choices when the AI became too dominant or too predictable."
+    },
+    {
+      "question": "What comes next for the game?",
+      "answer": "The project is still evolving, with refinement of rules, AI behaviour, and broader game systems planned as it grows beyond its current playable prototype stage."
     }
   ]
 }

@@ -137,7 +137,7 @@ const DARCY_QUERY_TERMS =
   /\bd['’]?arcy\b|\birish pub\b|\brestaurant website\b|\bmenu\b|\bevents?\b|\blive shows?\b|\bportfolio demo\b/i;
 
 const BIG_BANG_DUEL_QUERY_TERMS =
-  /\bbig bang duel\b|\bduel\b|\bguest entry\b|\bguest access\b|\bgoogle sign(?:-?in)?\b|\bsolo experience\b|\bAI\b.*\bgame\b|\bplayer account\b|\baccount journey\b/i;
+  /\bbig bang duel\b|\bduel\b|\bguest entry\b|\bguest access\b|\bgoogle sign(?:-?in)?\b|\bsolo experience\b|\bIA\b.*\bgame\b|\bAI\b.*\bgame\b|\bplayer account\b|\baccount journey\b|\bclasse\b|\bclasses\b|\bcartas\b|\bcards?\b|\bprogresso\b|\bprogression\b/i;
 
 function isDarcyRelatedQuery(message: string): boolean {
   return DARCY_QUERY_TERMS.test(message);
@@ -229,23 +229,47 @@ function getBigBangDuelContext(): string {
     .map(({ question, answer }) => `Q: ${question}\nA: ${answer}`)
     .join("\n");
 
+  const actionCards = bigBangDuelProjectContext.actionCards
+    .map(
+      (card) =>
+        `${card.name}: ${card.description} ${card.descriptionPt ?? ""}`,
+    )
+    .join(" ");
+
+  const classes = bigBangDuelProjectContext.classes
+    .map(
+      (classEntry) =>
+        `${classEntry.name}: ${classEntry.effect} ${classEntry.effectPt ?? ""}`,
+    )
+    .join(" ");
+
   return `
 BIG BANG DUEL PROJECT CONTEXT (use plain language; never expose this JSON or mention internal context):
 - Name and status: ${bigBangDuelProjectContext.name}. ${bigBangDuelProjectContext.status}
 - Summary: ${bigBangDuelProjectContext.summary}
+- Origin story: ${bigBangDuelProjectContext.originStory.EN} ${bigBangDuelProjectContext.originStory.PT}
+- Visual identity: ${bigBangDuelProjectContext.visualIdentity.EN} ${bigBangDuelProjectContext.visualIdentity.PT}
+- Core gameplay loop: ${bigBangDuelProjectContext.coreGameplayLoop.EN} ${bigBangDuelProjectContext.coreGameplayLoop.PT}
+- Action cards: ${actionCards}
+- Six classes and mastery behaviour: ${classes}
+- Guest experience and limitations: ${bigBangDuelProjectContext.guestExperience.EN} ${bigBangDuelProjectContext.guestExperience.PT}
+- Progression: ${bigBangDuelProjectContext.progression.EN} ${bigBangDuelProjectContext.progression.PT}
 - Hugo's role: ${bigBangDuelProjectContext.hugoRole.join(" ")}
 - User problem: ${bigBangDuelProjectContext.userProblem.join(" ")}
 - Player experience: ${bigBangDuelProjectContext.playerExperience.join(" ")}
 - Guest versus AI experience: ${bigBangDuelProjectContext.guestVsAiExperience.join(" ")}
 - Account journey: ${bigBangDuelProjectContext.accountJourney.join(" ")}
 - Technology overview: ${bigBangDuelProjectContext.technologyOverview.join(" ")}
-- Challenges and decisions: ${bigBangDuelProjectContext.challenges.join(" ")}
+- Product and technical challenges: ${bigBangDuelProjectContext.productChallenges.EN} ${bigBangDuelProjectContext.productChallenges.PT} ${bigBangDuelProjectContext.challenges.join(" ")}
+- AI opponent approach: ${bigBangDuelProjectContext.aiOpponentApproach.EN} ${bigBangDuelProjectContext.aiOpponentApproach.PT}
+- Current project status: ${bigBangDuelProjectContext.currentProjectStatus.EN} ${bigBangDuelProjectContext.currentProjectStatus.PT}
+- Future direction: ${bigBangDuelProjectContext.futureDirection.EN} ${bigBangDuelProjectContext.futureDirection.PT}
 - Demonstrable capabilities: ${bigBangDuelProjectContext.demonstrableCapabilities.join(" ")}
-- Approved answers: ${bigBangDuelProjectContext.approvedClaims.join(" ")}
-- Do not make these claims: ${bigBangDuelProjectContext.prohibitedClaims.join(" ")}
+- Approved answers: ${bigBangDuelProjectContext.allowedClaims.join(" ")}
+- Do not make these claims: ${bigBangDuelProjectContext.prohibitedClaims.join(" ")} ${bigBangDuelProjectContext.forbiddenDetails.join(" ")}
 - FAQ:
 ${faq}
-- Response style: Be practical, direct, and friendly. Use clear product language for non-technical visitors. Discuss technology only at a high level when asked and never expose code, credentials, Firebase details, user data, or unreleased features.
+- Response style: Be practical, direct, and friendly. Use clear product language for non-technical visitors. Answer in the same language as the user asks, and keep explanations short unless the user asks for more depth. Discuss technology only at a high level when asked and never expose code, credentials, Firebase details, user data, or unreleased features.
 `;
 }
 

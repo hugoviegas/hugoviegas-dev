@@ -1,4 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { ArrowLeft, ExternalLink, Gamepad2, ShieldCheck, Sparkles, TimerReset } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -9,37 +15,7 @@ import ChatBot from "@/components/ChatBot";
 
 const DEMO_URL =
   import.meta.env.VITE_DEMO_BIG_BANG_DUEL_URL || "https://duel.hugoviegas.dev";
-
-const STACK = [
-  "React",
-  "TypeScript",
-  "Vite",
-  "Tailwind CSS",
-  "Zustand",
-  "Firebase Authentication",
-  "Firestore",
-  "Firebase Realtime Database",
-];
-
-const tryItems = [
-  "Guest entry for an immediate AI/solo experience",
-  "Google sign-in for returning players",
-  "A clean player account journey that stays understandable at a high level",
-  "Full game access at duel.hugoviegas.dev",
-];
-
-const builtItems = [
-  "Designed the public-facing game experience around a low-friction entry flow.",
-  "Built the full-stack product work needed to support a playable game, identity flow, and user progression model.",
-  "Worked across the user experience and the system behind it so the game feels responsive and approachable from the first visit.",
-];
-
-const challengeItems = [
-  "Keeping fast game interactions responsive while the game state updates smoothly.",
-  "Managing guest access without overstating permanent account or multiplayer capabilities.",
-  "Separating real-time/shared game concerns from player-profile and progression concerns.",
-  "Making the game easy to try without friction, even for visitors who do not want to commit immediately.",
-];
+const GAME_PREVIEW_RATIO = 390 / 844;
 
 const BigBangDuelProject = () => {
   const { t } = useLanguage();
@@ -47,6 +23,65 @@ const BigBangDuelProject = () => {
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [isContextChatOpen, setIsContextChatOpen] = useState(false);
   const [initialPrompt, setInitialPrompt] = useState<string>();
+
+  const techStack = useMemo(
+    () => [
+      t("bigBangTechReact"),
+      t("bigBangTechTypeScript"),
+      t("bigBangTechVite"),
+      t("bigBangTechTailwind"),
+      t("bigBangTechZustand"),
+      t("bigBangTechFirebaseAuth"),
+      t("bigBangTechFirestore"),
+      t("bigBangTechRealtime"),
+    ],
+    [t],
+  );
+
+  const tryItems = useMemo(
+    () => [
+      t("bigBangTryItemGuest"),
+      t("bigBangTryItemGoogle"),
+      t("bigBangTryItemJourney"),
+      t("bigBangTryItemAccess"),
+    ],
+    [t],
+  );
+
+  const builtItems = useMemo(
+    () => [
+      t("bigBangBuiltItemExperience"),
+      t("bigBangBuiltItemProduct"),
+      t("bigBangBuiltItemFlow"),
+    ],
+    [t],
+  );
+
+  const challengeItems = useMemo(
+    () => [
+      t("bigBangChallengeResponsive"),
+      t("bigBangChallengeGuest"),
+      t("bigBangChallengeSystems"),
+      t("bigBangChallengeFriction"),
+    ],
+    [t],
+  );
+
+  const faqItems = useMemo(
+    () => [
+      { question: t("bigBangFaq.q1"), answer: t("bigBangFaq.a1") },
+      { question: t("bigBangFaq.q2"), answer: t("bigBangFaq.a2") },
+      { question: t("bigBangFaq.q3"), answer: t("bigBangFaq.a3") },
+      { question: t("bigBangFaq.q4"), answer: t("bigBangFaq.a4") },
+      { question: t("bigBangFaq.q5"), answer: t("bigBangFaq.a5") },
+      { question: t("bigBangFaq.q6"), answer: t("bigBangFaq.a6") },
+      { question: t("bigBangFaq.q7"), answer: t("bigBangFaq.a7") },
+      { question: t("bigBangFaq.q8"), answer: t("bigBangFaq.a8") },
+      { question: t("bigBangFaq.q9"), answer: t("bigBangFaq.a9") },
+      { question: t("bigBangFaq.q10"), answer: t("bigBangFaq.a10") },
+    ],
+    [t],
+  );
 
   const suggestedQuestions = [
     "bigBangQuestionGuest",
@@ -76,7 +111,7 @@ const BigBangDuelProject = () => {
               {t("bigBangStack")}
             </h2>
             <div className="flex flex-wrap gap-2">
-              {STACK.map((technology) => (
+              {techStack.map((technology) => (
                 <span
                   key={technology}
                   className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm text-primary"
@@ -135,62 +170,67 @@ const BigBangDuelProject = () => {
             </ul>
           </section>
 
-          <section aria-labelledby="big-bang-demo">
+          <section aria-labelledby="big-bang-demo" className="mb-10">
             <h2 id="big-bang-demo" className="sr-only">
               {t("bigBangDemoButton")}
             </h2>
-            <div className="overflow-hidden rounded-btn border border-border bg-card shadow-lg">
-              <div className="relative aspect-video w-full bg-muted">
-                {!iframeFailed ? (
-                  <>
-                    {isPreviewLoading && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-muted text-sm text-muted-foreground">
-                        {t("bigBangDemoButton")}
+            <div className="mx-auto max-w-[390px]">
+              <div className="overflow-hidden rounded-[28px] border border-border bg-card shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+                <div
+                  className="relative w-full bg-muted"
+                  style={{ aspectRatio: `${GAME_PREVIEW_RATIO}` }}
+                >
+                  {!iframeFailed ? (
+                    <>
+                      {isPreviewLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-muted/90 text-center text-sm text-muted-foreground">
+                          <span>{t("bigBangPreviewLoading")}</span>
+                        </div>
+                      )}
+                      <iframe
+                        src={DEMO_URL}
+                        title="Big Bang Duel live preview"
+                        className="h-full w-full border-0"
+                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation-by-user-activation"
+                        onLoad={() => setIsPreviewLoading(false)}
+                        onError={() => {
+                          setIsPreviewLoading(false);
+                          setIframeFailed(true);
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <div
+                      role="alert"
+                      className="flex h-full items-center justify-center p-6 text-center text-muted-foreground"
+                    >
+                      <div className="max-w-lg">
+                        <p className="mb-4">{t("bigBangPreviewFallback")}</p>
+                        <Button asChild>
+                          <a href={DEMO_URL} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink aria-hidden="true" className="mr-2 h-4 w-4" />
+                            {t("bigBangOpenFull")}
+                          </a>
+                        </Button>
                       </div>
-                    )}
-                    <iframe
-                      src={DEMO_URL}
-                      title="Big Bang Duel live preview"
-                      className="h-full w-full border-0"
-                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation-by-user-activation"
-                      onLoad={() => setIsPreviewLoading(false)}
-                      onError={() => {
-                        setIsPreviewLoading(false);
-                        setIframeFailed(true);
-                      }}
-                    />
-                  </>
-                ) : (
-                  <div
-                    role="alert"
-                    className="flex h-full items-center justify-center p-6 text-center text-muted-foreground"
-                  >
-                    <div className="max-w-lg">
-                      <p className="mb-4">{t("bigBangIframeFallback")}</p>
-                      <Button asChild>
-                        <a href={DEMO_URL} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink aria-hidden="true" />
-                          {t("bigBangOpenFull")}
-                        </a>
-                      </Button>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
+              <p className="caption-text mt-3 text-center">{t("bigBangPreviewCaption")}</p>
             </div>
-            <p className="caption-text mt-3">{t("bigBangDemoNote")}</p>
           </section>
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
               <a href={DEMO_URL} target="_blank" rel="noopener noreferrer">
-                <ExternalLink aria-hidden="true" />
+                <ExternalLink aria-hidden="true" className="mr-2 h-4 w-4" />
                 {t("bigBangOpenFull")}
               </a>
             </Button>
             <Button asChild variant="outline">
               <Link to="/#projects">
-                <ArrowLeft aria-hidden="true" />
+                <ArrowLeft aria-hidden="true" className="mr-2 h-4 w-4" />
                 {t("bigBangBack")}
               </Link>
             </Button>
@@ -254,12 +294,38 @@ const BigBangDuelProject = () => {
             </div>
           </section>
 
+          <section className="mt-10" aria-labelledby="big-bang-faq-title">
+            <div className="mb-4 flex items-center gap-3 text-primary">
+              <Gamepad2 className="h-5 w-5" aria-hidden="true" />
+              <h2 id="big-bang-faq-title" className="heading-card">
+                {t("bigBangFaqTitle")}
+              </h2>
+            </div>
+            <p className="body-text mb-5 max-w-3xl">{t("bigBangFaqIntro")}</p>
+            <Accordion type="single" collapsible className="w-full space-y-3">
+              {faqItems.map((item, index) => (
+                <AccordionItem
+                  key={item.question}
+                  value={`faq-${index}`}
+                  className="rounded-2xl border border-border bg-card px-4 shadow-sm"
+                >
+                  <AccordionTrigger className="text-left text-base font-medium text-foreground">
+                    {item.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-3 text-sm leading-7 text-muted-foreground">
+                    {item.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </section>
+
           <section className="mt-10" aria-labelledby="big-bang-tech">
             <h2 id="big-bang-tech" className="heading-card mb-4">
               {t("bigBangTechTitle")}
             </h2>
             <div className="flex flex-wrap gap-2">
-              {STACK.map((technology) => (
+              {techStack.map((technology) => (
                 <span
                   key={technology}
                   className="rounded-full border border-border bg-background px-3 py-1 text-sm text-foreground"
