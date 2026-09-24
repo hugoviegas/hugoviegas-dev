@@ -14,15 +14,10 @@ const Navbar = ({ show }: NavbarProps) => {
   // language hook + nav items (memoized so effects can depend on stable ref)
   const { t } = useLanguage();
 
-  const navItems = useMemo(
-    () => [
-      { id: "about", label: t("about") },
-      { id: "projects", label: t("projects") },
-      { id: "experience", label: t("experience") },
-      { id: "contact", label: t("contact") },
-    ],
-    [t]
-  );
+  const navItems = useMemo(() => {
+    const orderedIds = ["about", "experience", "projects", "contact"];
+    return orderedIds.map((id) => ({ id, label: t(id) }));
+  }, [t]);
 
   useEffect(() => {
     // trigger entrance animation once on mount

@@ -28,6 +28,7 @@ interface Project {
   detailUrl?: string;
 }
 
+<<<<<<< HEAD
 /** Copy lives in translations (`project.<id>.*`); only assets/links live here. */
 const PROJECTS: Project[] = [
   {
@@ -58,6 +59,68 @@ const PROJECTS: Project[] = [
     githubUrl: "#",
   },
 ];
+=======
+  // TODO: Future plans for this section:
+  // - Social media post-inspired card design
+  // - Backend integration with MongoDB or Supabase for project management
+  // - CRUD admin interface for adding/editing projects
+
+  const projects = [
+    {
+      id: 1,
+      titleKey: "project.1.title",
+      descriptionKey: "project.1.description",
+      image: darcyMcgeesProject,
+      technologies: ["HTML5", "CSS3", "ReactJs", "Responsive Design"],
+      category: "Web Development",
+      featured: true,
+      liveUrl: "https://www.darcymcgeespub.com/",
+      githubUrl: "https://github.com/hugoviegas/mcgees-irish-pub-online",
+      metricsKey: "project.1.metrics",
+    },
+    {
+      id: 2,
+      titleKey: "project.2.title",
+      descriptionKey: "project.2.description",
+      image: automationProject,
+      technologies: [
+        "JavaScript",
+        "Google Apps Script",
+        "AppSheet",
+        "Google Sheets",
+      ],
+      category: "Automation",
+      featured: true,
+      liveUrl: "#",
+      githubUrl: "#",
+      metricsKey: "project.2.metrics",
+    },
+    {
+      id: 3,
+      titleKey: "project.3.title",
+      descriptionKey: "project.3.description",
+      image: ecommerceProject,
+      technologies: ["React", "Node.js", "Express", "SQL", "Stripe"],
+      category: "Web Development",
+      featured: false,
+      liveUrl: "#",
+      githubUrl: "#",
+      metricsKey: "project.3.metrics",
+    },
+    {
+      id: 4,
+      titleKey: "project.4.title",
+      descriptionKey: "project.4.description",
+      image: taskManagerProject,
+      technologies: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
+      category: "Web Development",
+      featured: false,
+      liveUrl: "#",
+      githubUrl: "#",
+      metricsKey: "project.4.metrics",
+    },
+  ];
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
 
 const BRICK_IMAGES = [
   redFront,
@@ -72,6 +135,7 @@ const BRICK_IMAGES = [
   goldCoinTop,
 ];
 
+<<<<<<< HEAD
 /** Decorative bricks that fly outwards on card hover (CSS-driven, see index.css). */
 const BrickExplosion = () => {
   const bricks = useMemo(
@@ -88,6 +152,93 @@ const BrickExplosion = () => {
         moveY: Math.round(-120 + Math.random() * -20), // prefer upward
       })),
     []
+=======
+  // Helper: render the lego 'square tile' project card
+  const ProjectTile = ({
+    project,
+    index,
+  }: {
+    project: Project;
+    index: number;
+  }) => (
+    <div
+      key={project.id}
+      className="project-wrapper relative"
+      style={{ animationDelay: `${index * 140}ms` }}
+    >
+      {/* Brick layer sits before the card so it can appear behind (lower z-index) and contains the bricks */}
+      <div className="brick-explosion-layer pointer-events-none">
+        <BrickExplosion />
+      </div>
+
+      <div className="card-project glass-strong rounded-2xl overflow-hidden relative flex flex-col z-10">
+        {/* Image on top - keep full width and not covered by text */}
+        <div className="w-full h-44 md:h-56 overflow-hidden">
+          <img
+            src={project.image}
+            alt={t(project.titleKey)}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Content below image */}
+        <div className="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 className="text-lg font-bold mb-1 text-foreground">
+              {t(project.titleKey)}
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
+              {t(project.descriptionKey)}
+            </p>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between">
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((tech: string, i: number) => (
+                <Badge key={i} variant="outline" className="text-primary">
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => window.open(project.liveUrl, "_blank")}
+              >
+                <ExternalLink className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => window.open(project.githubUrl, "_blank")}
+              >
+                <Github className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* decorative bricks to the right side, slightly rotated */}
+        <div className="decor-bricks absolute right-[-18px] top-10 pointer-events-none hidden md:flex flex-col gap-2 items-center">
+          <img
+            src={redFront}
+            className="w-10 h-5 lego-rot-1 drop-shadow-lg"
+            alt=""
+          />
+          <img
+            src={yellowFront}
+            className="w-8 h-4 lego-rot-2 drop-shadow-lg"
+            alt=""
+          />
+        </div>
+      </div>
+
+      {/* explosion content is rendered above (in DOM) inside the positioned layer before the card
+          so it sits visually behind the card and animates on wrapper hover */}
+    </div>
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
   );
 
   return (
@@ -125,13 +276,20 @@ const ProjectsSection = () => {
   };
 
   return (
+<<<<<<< HEAD
     <section id="projects" className="section-shell">
       <div className="section-wrapper-wide">
         <div className="fade-in mb-12 text-center">
+=======
+    <section id="projects" className="py-20 relative w-full">
+      <div className="container mx-auto px-6 lg:px-8 wide-container">
+        <div className="text-center mb-12 fade-in">
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
           <h2 className="heading-section mb-4">{t("projectsTitle")}</h2>
           <p className="body-text mx-auto max-w-3xl">{t("projectsIntro")}</p>
         </div>
 
+<<<<<<< HEAD
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PROJECTS.map((project, index) => {
             const title = t(`project.${project.id}.title`);
@@ -244,6 +402,15 @@ const ProjectsSection = () => {
               </div>
             );
           })}
+=======
+        {/* Uniform square tiles layout: show three specific projects (restore missing one) */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {([projects[0], projects[1], projects[3]] as Project[]).map(
+            (p, i) => (
+              <ProjectTile key={p.id} project={p} index={i} />
+            ),
+          )}
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
         </div>
 
         {/* CTA */}

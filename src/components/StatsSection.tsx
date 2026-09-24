@@ -66,12 +66,17 @@ const StatsSection = () => {
       ),
     },
     {
-      value: 20,
+      value: 120,
       label: t("stats.viewsGrowth"),
+<<<<<<< HEAD
       suffix: "%",
       icon: (
         <TrendingUp className="h-7 w-7 text-blue-600 dark:text-blue-400" />
       ),
+=======
+      suffix: "+",
+      icon: <TrendingUp className="mx-auto text-blue-400" size={32} />,
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
     },
     {
       value: 4,

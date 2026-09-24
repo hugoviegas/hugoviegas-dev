@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LegoButton from "./LegoButton";
-import WorldClocks from "@/components/WorldClocks";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -93,7 +92,7 @@ const ContactSection = () => {
       const formDataToSend = new FormData();
       formDataToSend.append(
         "access_key",
-        "c40cf7dd-eb73-4c03-9a22-30647387e501"
+        "c40cf7dd-eb73-4c03-9a22-30647387e501",
       );
       formDataToSend.append("name", formData.name.trim());
       formDataToSend.append("email", formData.email.trim());
@@ -140,7 +139,7 @@ const ContactSection = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -160,20 +159,34 @@ const ContactSection = () => {
   const contactInfo = [
     {
       icon: Mail,
+<<<<<<< HEAD
       label: t("contact.emailLabel"),
+=======
+      labelKey: "contactEmailLabel",
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
       value: "hugoviegas3.1@gmail.com",
       link: "mailto:hugoviegas3.1@gmail.com",
     },
     {
       icon: MapPin,
+<<<<<<< HEAD
       label: t("contact.locationLabel"),
       value: t("badge.location"),
+=======
+      labelKey: "contactLocationLabel",
+      valueKey: "contactLocationValue",
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
       link: null,
     },
     {
       icon: Clock,
+<<<<<<< HEAD
       label: t("contact.responseLabel"),
       value: t("contact.responseValue"),
+=======
+      labelKey: "contactResponseLabel",
+      valueKey: "contactResponseValue",
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
       link: null,
     },
   ];
@@ -263,11 +276,19 @@ const ContactSection = () => {
   ];
 
   return (
+<<<<<<< HEAD
     <section id="contact" className="section-shell">
       <div className="section-wrapper">
         <div className="fade-in mb-12 text-center md:mb-16">
           <h2 className="heading-section mb-4">{t("contactTitle")}</h2>
           <p className="body-text mx-auto max-w-3xl">
+=======
+    <section id="contact" className="py-20 w-full">
+      <div className="container mx-auto px-6 lg:px-8">
+        <div className="text-center mb-16 fade-in">
+          <h2 className="heading-section mb-6">{t("contactTitle")}</h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
             {t("contactDescription")}
           </p>
         </div>
@@ -391,8 +412,13 @@ const ContactSection = () => {
             </form>
           </div>
 
+<<<<<<< HEAD
           {/* Contact info */}
           <div className="slide-up space-y-8 delay-300">
+=======
+          {/* Contact Info */}
+          <div className="space-y-6 slide-up delay-300">
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
             <div>
               <h3 className="heading-card text-gradient mb-2">
                 {t("getInTouch")}
@@ -413,18 +439,23 @@ const ContactSection = () => {
                     </div>
                     <div className="min-w-0">
                       <div className="text-sm text-muted-foreground">
-                        {info.label}
+                        {t(info.labelKey)}
                       </div>
                       {info.link ? (
                         <a
                           href={info.link}
                           className="break-all text-base font-semibold text-foreground transition-colors hover:text-primary md:text-lg"
                         >
-                          {info.value}
+                          {info.valueKey ? t(info.valueKey) : info.value}
                         </a>
                       ) : (
+<<<<<<< HEAD
                         <div className="text-base font-semibold text-foreground md:text-lg">
                           {info.value}
+=======
+                        <div className="text-lg font-semibold text-foreground">
+                          {info.valueKey ? t(info.valueKey) : info.value}
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                         </div>
                       )}
                     </div>
@@ -452,8 +483,13 @@ const ContactSection = () => {
                         React.SVGProps<SVGSVGElement>
                       >,
                       {
+<<<<<<< HEAD
                         className: `h-5 w-5 shrink-0 ${social.color} transition-transform group-hover:scale-110`,
                       }
+=======
+                        className: `w-5 h-5 ${social.color} group-hover:scale-110 transition-transform`,
+                      },
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                     )}
                     <span className="text-sm text-muted-foreground transition-colors group-hover:text-primary">
                       {social.label}
@@ -479,9 +515,6 @@ const ContactSection = () => {
               </div>
               <p className="caption-text">{t("availabilityText")}</p>
             </div>
-
-            {/* World Clocks (rendered directly so only inner card is shown) */}
-            <WorldClocks />
           </div>
         </div>
       </div>

@@ -16,6 +16,7 @@ const Footer = () => {
   const { t } = useLanguage();
 
   return (
+<<<<<<< HEAD
     <footer className="border-t border-border bg-muted/20">
       <div className="section-wrapper py-12">
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
@@ -23,6 +24,21 @@ const Footer = () => {
           <div className="text-center md:text-left">
             <h3 className="heading-card text-gradient mb-2">Hugo Viegas</h3>
             <p className="caption-text">{t("role")}</p>
+=======
+    <footer
+      className="bg-muted/5 border-t border-white/10 w-full"
+    >
+      <div className="container mx-auto px-6 lg:px-8 py-12 wide-container">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          {/* Brand */}
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl font-bold text-gradient mb-2">
+              Hugo Viegas
+            </h3>
+            <p className="text-muted-foreground">
+              IT Support Specialist | System Administrator
+            </p>
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
           </div>
 
           {/* Social links */}

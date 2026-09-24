@@ -1,22 +1,26 @@
+<<<<<<< HEAD
 import { useMemo } from "react";
 import { Code, Globe, BookOpen, TrendingUp, Target, Brain } from "lucide-react";
+=======
+import {
+  Code,
+  Globe,
+  BookOpen,
+  TrendingUp,
+  Target,
+  Brain,
+} from "lucide-react";
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
-import StatsSection from "@/components/StatsSection";
 import SkillsSection from "@/components/SkillsSection";
-import FastTransparentCube from "@/components/FastTransparentCube";
 import redFront from "@/assets/lego-bricks/red-front.png";
 import yellowFront from "@/assets/lego-bricks/yellow-front.png";
 import blueFront from "@/assets/lego-bricks/blue-front.png";
 import whiteFront from "@/assets/lego-bricks/white-front.png";
+import StarWarsCrawlOverlay from "@/components/StarWarsCrawl";
 
 const HIGHLIGHTS = [
   {
@@ -74,6 +78,7 @@ const DecoLegoBricks = () => (
 );
 
 const AboutSection = () => {
+<<<<<<< HEAD
   const { t } = useLanguage();
 
   const highlights = useMemo(
@@ -130,6 +135,86 @@ const AboutSection = () => {
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary">
                   <BookOpen className="h-6 w-6 text-primary-foreground" />
+=======
+  const { t, language } = useLanguage();
+  const [isCrawlOpen, setIsCrawlOpen] = useState(false);
+  const episodeLabel = language === "PT" ? "Episódio I" : "Episode I";
+  const introText =
+    language === "PT"
+      ? "Há muito tempo, em uma galáxia não muito distante..."
+      : "A long time ago in a galaxy far, far away....";
+  const highlights = [
+    {
+      icon: TrendingUp,
+      color: "text-green-400",
+      bgColor: "bg-green-400/10",
+    },
+    {
+      icon: Globe,
+      color: "text-blue-400",
+      bgColor: "bg-blue-400/10",
+    },
+    {
+      icon: Target,
+      color: "text-purple-400",
+      bgColor: "bg-purple-400/10",
+    },
+    {
+      icon: Brain,
+      color: "text-orange-400",
+      bgColor: "bg-orange-400/10",
+    },
+  ];
+
+  // Decorative LEGO bricks component
+  const DecoLegoBricks = () => {
+    const bricks = [
+      { img: redFront, size: 24, top: "10%", left: "5%", rotation: -15 },
+      { img: yellowFront, size: 28, top: "25%", right: "8%", rotation: 20 },
+      { img: blueFront, size: 20, top: "60%", left: "3%", rotation: -10 },
+      { img: whiteFront, size: 32, top: "80%", right: "5%", rotation: 25 },
+    ];
+
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {bricks.map((brick, i) => (
+          <img
+            key={i}
+            src={brick.img}
+            alt=""
+            className="absolute opacity-20 transition-all duration-700 hover:opacity-30"
+            style={{
+              width: `${brick.size}px`,
+              height: "auto",
+              top: brick.top,
+              left: brick.left,
+              right: brick.right,
+              transform: `rotate(${brick.rotation}deg)`,
+              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))",
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <section id="about" className="py-20 bg-muted/3 relative w-full">
+      <DecoLegoBricks />
+
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+        <div className="mb-12 text-center fade-in">
+          <h2 className="heading-section">{t("aboutTitle")}</h2>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Journey Column */}
+          <div className="space-y-8 slide-up">
+            <div className="glass-strong rounded-3xl p-8 lg:p-10 space-y-6">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
+                  <BookOpen className="w-6 h-6 text-white" />
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                 </div>
                 <h3 className="heading-card text-primary">{t("myJourney")}</h3>
               </div>
@@ -139,6 +224,7 @@ const AboutSection = () => {
                 <p className="body-text">{t("journeySummary2")}</p>
               </div>
 
+<<<<<<< HEAD
               <Dialog>
                 <DialogTrigger asChild>
                   <Button
@@ -177,16 +263,43 @@ const AboutSection = () => {
                 <div
                   key={index}
                   className="glass-card group p-6 transition-transform duration-300 hover:scale-[1.03]"
+=======
+              <Button
+                variant="outline"
+                className="glass-strong border-primary/30 hover:bg-primary/5"
+                onClick={() => setIsCrawlOpen(true)}
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                {t("readFullStory")}
+              </Button>
+            </div>
+
+            {/* Highlights Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {highlights.map((highlight, index) => (
+                <div
+                  key={index}
+                  className="glass-strong rounded-2xl p-6 transition-all duration-300 hover:shadow-lg group"
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                 >
                   <div
                     className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${highlight.bgColor}`}
                   >
                     <highlight.icon className={`h-6 w-6 ${highlight.color}`} />
                   </div>
+<<<<<<< HEAD
                   <h4 className="mb-2 text-lg font-semibold text-foreground">
                     {highlight.title}
                   </h4>
                   <p className="caption-text">{highlight.description}</p>
+=======
+                  <h4 className="font-semibold text-lg mb-2 text-foreground">
+                    {t(`highlight${index + 1}Title`)}
+                  </h4>
+                  <p className="text-sm text-foreground/70 leading-relaxed">
+                    {t(`highlight${index + 1}Desc`)}
+                  </p>
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                 </div>
               ))}
             </div>
@@ -199,7 +312,11 @@ const AboutSection = () => {
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary">
                   <Code className="h-6 w-6 text-primary-foreground" />
                 </div>
+<<<<<<< HEAD
                 <h3 className="heading-card text-primary">
+=======
+                <h3 className="text-2xl lg:text-3xl font-bold text-blue-500">
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                   {t("technicalSkills")}
                 </h3>
               </div>
@@ -213,12 +330,22 @@ const AboutSection = () => {
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary">
                   <Globe className="h-5 w-5 text-primary-foreground" />
                 </div>
+<<<<<<< HEAD
                 <h4 className="heading-card">{t("languagesTitle")}</h4>
+=======
+                <h4 className="text-xl font-semibold text-foreground">
+                  {t("languagesTitle")}
+                </h4>
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
               </div>
               <div className="space-y-4">
                 <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-4">
                   <span className="font-medium text-foreground">
+<<<<<<< HEAD
                     {t("language.portuguese")}
+=======
+                    {t("portuguese")}
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                   </span>
                   <Badge
                     variant="secondary"
@@ -227,9 +354,15 @@ const AboutSection = () => {
                     {t("native")}
                   </Badge>
                 </div>
+<<<<<<< HEAD
                 <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-4">
                   <span className="font-medium text-foreground">
                     {t("language.english")}
+=======
+                <div className="flex justify-between items-center p-4 rounded-xl bg-muted/30">
+                  <span className="font-medium text-foreground">
+                    {t("english")}
+>>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                   </span>
                   <Badge
                     variant="secondary"
@@ -243,6 +376,14 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
+      <StarWarsCrawlOverlay
+        open={isCrawlOpen}
+        onClose={() => setIsCrawlOpen(false)}
+        title={t("fullStoryTitle")}
+        story={t("fullStory")}
+        episodeLabel={episodeLabel}
+        introText={introText}
+      />
     </section>
   );
 };
