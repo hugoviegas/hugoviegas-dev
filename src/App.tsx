@@ -9,9 +9,7 @@ import { UserProvider } from "@/features/presente-x/contexts/UserContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
-<<<<<<< HEAD
 import DarcyProject from "./pages/DarcyProject";
-=======
 import LightsaberViewerMV from "./pages/LightsaberViewerMV";
 import LightsaberDemo from "./pages/LightsaberDemo";
 import StarshipDemo from "./pages/StarshipDemo";
@@ -20,7 +18,6 @@ import PropostaEtal from "./pages/PropostaEtal";
 import PresenteX from "./pages/PresenteX";
 import PresenteXAdmin from "./pages/PresenteXAdmin";
 import PresenteXRecompensas from "./pages/PresenteXRecompensas";
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
 
 const queryClient = new QueryClient();
 
@@ -40,22 +37,6 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-<<<<<<< HEAD
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              {/* Game page - put the Formula D game files into public/games/formula-d/ */}
-              <Route path="/formula-d" element={<FormulaD />} />
-              <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
-              {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-=======
         <UserProvider>
           <TooltipProvider>
             <Toaster />
@@ -69,6 +50,7 @@ const App = () => {
                 <Route path="/proposta-etal" element={<PropostaEtal />} />
                 {/* Game page - put the Formula D game files into public/games/formula-d/ */}
                 <Route path="/formula-d" element={<FormulaD />} />
+                <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
 
                 {/* Presente X Routes */}
                 <Route path="/presente-x" element={<PresenteX />} />
@@ -84,7 +66,6 @@ const App = () => {
             </BrowserRouter>
           </TooltipProvider>
         </UserProvider>
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
       </ThemeProvider>
     </QueryClientProvider>
   );

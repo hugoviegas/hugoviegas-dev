@@ -14,14 +14,13 @@ const StatItem = ({
   value,
   label,
   suffix = "",
-  icon,
+  icon = "",
   duration = 2000,
 }: StatItemProps) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     let startTime: number;
-    let frame: number;
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
@@ -29,26 +28,21 @@ const StatItem = ({
       setCount(Math.floor(progress * value));
 
       if (progress < 1) {
-        frame = requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
       }
     };
 
-    frame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frame);
+    requestAnimationFrame(animate);
   }, [value, duration]);
 
   return (
-    <div className="glass-card p-5 text-center transition-transform duration-300 hover:-translate-y-0.5 md:p-6">
-      {icon && (
-        <div className="mb-2 flex justify-center" aria-hidden="true">
-          {icon}
-        </div>
-      )}
-      <div className="mb-2 text-3xl font-bold text-primary md:text-4xl">
+    <div className="text-center p-6 glass rounded-xl hover:glass-strong transition-all duration-300">
+      {icon && <div className="text-3xl mb-2">{icon}</div>}
+      <div className="text-4xl font-bold text-primary mb-2">
         {count}
         {suffix}
       </div>
-      <div className="caption-text">{label}</div>
+      <div className="text-muted-foreground">{label}</div>
     </div>
   );
 };
@@ -61,44 +55,33 @@ const StatsSection = () => {
       value: 90,
       label: t("stats.processReduction"),
       suffix: "%",
-      icon: (
-        <Zap className="h-7 w-7 text-orange-600 dark:text-orange-400" />
-      ),
+      icon: <Zap className="mx-auto text-orange-400" size={32} />,
     },
     {
       value: 120,
       label: t("stats.viewsGrowth"),
-<<<<<<< HEAD
-      suffix: "%",
-      icon: (
-        <TrendingUp className="h-7 w-7 text-blue-600 dark:text-blue-400" />
-      ),
-=======
       suffix: "+",
       icon: <TrendingUp className="mx-auto text-blue-400" size={32} />,
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
     },
     {
       value: 4,
       label: t("stats.yearsExperience"),
       suffix: "+",
-      icon: (
-        <Calendar className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
-      ),
+      icon: <Calendar className="mx-auto text-green-400" size={32} />,
     },
     {
       value: 2,
       label: t("stats.countriesWorked"),
       suffix: "",
-      icon: <Globe className="h-7 w-7 text-cyan-600 dark:text-cyan-400" />,
+      icon: <Globe className="mx-auto text-cyan-400" size={32} />,
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {stats.map((stat, index) => (
         <StatItem
-          key={stat.label}
+          key={index}
           value={stat.value}
           label={stat.label}
           suffix={stat.suffix}

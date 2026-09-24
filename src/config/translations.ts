@@ -380,12 +380,6 @@ export const translations: Translations = {
   "category.Design": { EN: "Design", PT: "Design" },
   skillsCount: { EN: "skills", PT: "habilidades" },
 
-  // ------------------------------------------------------------ Experience
-  currentFocusText: {
-    EN: "Currently transitioning from IT Support to Full-Stack Development while studying Computer Science at CCT College Dublin.",
-    PT: "Atualmente em transição de Suporte de TI para Desenvolvimento Full-Stack enquanto curso Ciência da Computação na CCT College Dublin.",
-  },
-
   "exp.1.period": { EN: "Sep 2024 - Present", PT: "Set 2024 - Atual" },
   "exp.1.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
   "exp.1.title": {

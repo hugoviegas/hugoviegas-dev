@@ -159,34 +159,20 @@ const ContactSection = () => {
   const contactInfo = [
     {
       icon: Mail,
-<<<<<<< HEAD
-      label: t("contact.emailLabel"),
-=======
       labelKey: "contactEmailLabel",
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
       value: "hugoviegas3.1@gmail.com",
       link: "mailto:hugoviegas3.1@gmail.com",
     },
     {
       icon: MapPin,
-<<<<<<< HEAD
-      label: t("contact.locationLabel"),
-      value: t("badge.location"),
-=======
       labelKey: "contactLocationLabel",
       valueKey: "contactLocationValue",
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
       link: null,
     },
     {
       icon: Clock,
-<<<<<<< HEAD
-      label: t("contact.responseLabel"),
-      value: t("contact.responseValue"),
-=======
       labelKey: "contactResponseLabel",
       valueKey: "contactResponseValue",
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
       link: null,
     },
   ];
@@ -241,7 +227,7 @@ const ContactSection = () => {
       icon: Linkedin,
       label: "LinkedIn",
       url: "https://www.linkedin.com/in/hviegas/",
-      color: "text-blue-600 dark:text-blue-400",
+      color: "text-blue-400",
     },
     {
       icon: Github,
@@ -259,48 +245,40 @@ const ContactSection = () => {
       icon: Instagram,
       label: "Instagram",
       url: "https://www.instagram.com/_hviegas",
-      color: "text-pink-600 dark:text-pink-400",
+      color: "text-pink-400",
     },
     {
       icon: TelegramIcon,
       label: "Telegram",
       url: "https://t.me/Hviegas",
-      color: "text-cyan-600 dark:text-cyan-400",
+      color: "text-cyan-400",
     },
     {
       icon: WhatsAppIcon,
       label: "WhatsApp",
       url: "https://api.whatsapp.com/send?phone=3530830865984",
-      color: "text-emerald-600 dark:text-emerald-400",
+      color: "text-green-400",
     },
   ];
 
   return (
-<<<<<<< HEAD
-    <section id="contact" className="section-shell">
-      <div className="section-wrapper">
-        <div className="fade-in mb-12 text-center md:mb-16">
-          <h2 className="heading-section mb-4">{t("contactTitle")}</h2>
-          <p className="body-text mx-auto max-w-3xl">
-=======
     <section id="contact" className="py-20 w-full">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
           <h2 className="heading-section mb-6">{t("contactTitle")}</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
             {t("contactDescription")}
           </p>
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          {/* Contact form */}
-          <div className="slide-up space-y-8">
+        <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
+          {/* Contact Form */}
+          <div className="space-y-8 slide-up">
             <div>
-              <h3 className="heading-card text-gradient mb-2">
+              <h3 className="text-3xl font-bold text-gradient mb-4">
                 {t("sendMessageTitle")}
               </h3>
-              <p className="caption-text">{t("contactPrompt")}</p>
+              <p className="text-muted-foreground">{t("contactPrompt")}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -312,15 +290,12 @@ const ContactSection = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className={`bg-card/50 transition-colors duration-300 ${
-                      errors.name
-                        ? "border-destructive focus-visible:ring-destructive"
-                        : ""
+                    className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                      errors.name ? "border-red-500 focus:border-red-500" : ""
                     }`}
-                    aria-invalid={Boolean(errors.name)}
                   />
                   {errors.name && (
-                    <p className="mt-1 text-sm text-destructive">{errors.name}</p>
+                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                   )}
                 </div>
                 <div>
@@ -331,15 +306,12 @@ const ContactSection = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className={`bg-card/50 transition-colors duration-300 ${
-                      errors.email
-                        ? "border-destructive focus-visible:ring-destructive"
-                        : ""
+                    className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                      errors.email ? "border-red-500 focus:border-red-500" : ""
                     }`}
-                    aria-invalid={Boolean(errors.email)}
                   />
                   {errors.email && (
-                    <p className="mt-1 text-sm text-destructive">{errors.email}</p>
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
                   )}
                 </div>
               </div>
@@ -351,15 +323,12 @@ const ContactSection = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className={`bg-card/50 transition-colors duration-300 ${
-                    errors.subject
-                      ? "border-destructive focus-visible:ring-destructive"
-                      : ""
+                  className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                    errors.subject ? "border-red-500 focus:border-red-500" : ""
                   }`}
-                  aria-invalid={Boolean(errors.subject)}
                 />
                 {errors.subject && (
-                  <p className="mt-1 text-sm text-destructive">{errors.subject}</p>
+                  <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
                 )}
               </div>
 
@@ -371,15 +340,12 @@ const ContactSection = () => {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className={`bg-card/50 transition-colors duration-300 ${
-                    errors.message
-                      ? "border-destructive focus-visible:ring-destructive"
-                      : ""
+                  className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+                    errors.message ? "border-red-500 focus:border-red-500" : ""
                   }`}
-                  aria-invalid={Boolean(errors.message)}
                 />
                 {errors.message && (
-                  <p className="mt-1 text-sm text-destructive">{errors.message}</p>
+                  <p className="text-red-500 text-sm mt-1">{errors.message}</p>
                 )}
               </div>
 
@@ -389,9 +355,8 @@ const ContactSection = () => {
                 name="_honeypot"
                 value={formData._honeypot}
                 onChange={handleChange}
-                className="hidden"
+                style={{ display: "none" }}
                 tabIndex={-1}
-                aria-hidden="true"
                 autoComplete="off"
               />
 
@@ -412,18 +377,13 @@ const ContactSection = () => {
             </form>
           </div>
 
-<<<<<<< HEAD
-          {/* Contact info */}
-          <div className="slide-up space-y-8 delay-300">
-=======
           {/* Contact Info */}
           <div className="space-y-6 slide-up delay-300">
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
             <div>
-              <h3 className="heading-card text-gradient mb-2">
+              <h3 className="text-3xl font-bold text-gradient mb-4">
                 {t("getInTouch")}
               </h3>
-              <p className="caption-text">{t("connectWithMe")}</p>
+              <p className="text-muted-foreground">{t("connectWithMe")}</p>
             </div>
 
             {/* Contact Information */}
@@ -431,31 +391,26 @@ const ContactSection = () => {
               {contactInfo.map((info, index) => (
                 <div
                   key={index}
-                  className="glass-card p-5 transition-transform duration-300 hover:-translate-y-0.5 md:p-6"
+                  className="glass p-6 rounded-xl hover:glass-strong transition-all duration-300"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="shrink-0 rounded-full bg-primary/10 p-3">
-                      <info.icon className="h-6 w-6 text-primary" />
+                    <div className="p-3 bg-primary/10 rounded-full">
+                      <info.icon className="w-6 h-6 text-primary" />
                     </div>
-                    <div className="min-w-0">
+                    <div>
                       <div className="text-sm text-muted-foreground">
                         {t(info.labelKey)}
                       </div>
                       {info.link ? (
                         <a
                           href={info.link}
-                          className="break-all text-base font-semibold text-foreground transition-colors hover:text-primary md:text-lg"
+                          className="text-lg font-semibold text-foreground hover:text-primary transition-colors"
                         >
                           {info.valueKey ? t(info.valueKey) : info.value}
                         </a>
                       ) : (
-<<<<<<< HEAD
-                        <div className="text-base font-semibold text-foreground md:text-lg">
-                          {info.value}
-=======
                         <div className="text-lg font-semibold text-foreground">
                           {info.valueKey ? t(info.valueKey) : info.value}
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                         </div>
                       )}
                     </div>
@@ -465,33 +420,28 @@ const ContactSection = () => {
             </div>
 
             {/* Social Links */}
-            <div className="glass-card p-6">
-              <h4 className="heading-card text-gradient mb-4">
+            <div className="glass p-6 rounded-xl">
+              <h4 className="text-xl font-semibold text-gradient mb-4">
                 {t("connectWithMe")}
               </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-4">
                 {socialLinks.map((social, index) => (
                   <a
                     key={index}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-lg p-3 transition-all duration-300 hover:scale-105 hover:bg-primary/5"
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 hover:scale-105 transition-all duration-300 group"
                   >
                     {React.createElement(
                       social.icon as React.ComponentType<
                         React.SVGProps<SVGSVGElement>
                       >,
                       {
-<<<<<<< HEAD
-                        className: `h-5 w-5 shrink-0 ${social.color} transition-transform group-hover:scale-110`,
-                      }
-=======
                         className: `w-5 h-5 ${social.color} group-hover:scale-110 transition-transform`,
                       },
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
                     )}
-                    <span className="text-sm text-muted-foreground transition-colors group-hover:text-primary">
+                    <span className="text-muted-foreground group-hover:text-primary transition-colors">
                       {social.label}
                     </span>
                   </a>
@@ -500,20 +450,16 @@ const ContactSection = () => {
             </div>
 
             {/* Availability Status */}
-            <div className="glass-card border-brand-accent/30 p-6">
-              <div className="mb-3 flex items-center gap-3">
-                <span
-                  className="h-3 w-3 animate-pulse rounded-full bg-brand-accent"
-                  aria-hidden="true"
-                />
-                <Badge
-                  variant="outline"
-                  className="border-brand-accent/30 bg-brand-accent/10 text-brand-accent"
-                >
+            <div className="glass p-6 rounded-xl border border-accent/30">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-3 h-3 bg-accent rounded-full animate-pulse"></div>
+                <Badge className="bg-accent/10 text-accent border-accent/30">
                   {t("availableForWork")}
                 </Badge>
               </div>
-              <p className="caption-text">{t("availabilityText")}</p>
+              <p className="text-sm text-muted-foreground">
+                {t("availabilityText")}
+              </p>
             </div>
           </div>
         </div>

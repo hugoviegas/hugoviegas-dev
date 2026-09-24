@@ -71,17 +71,23 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
 
   const { t } = useLanguage();
 
+  // Get the current language to display proper "Me" text
+  const getCurrentLanguage = useCallback(() => {
+    try {
+      const testTranslation = t("about");
+      return testTranslation === "Sobre" ? "PT" : "EN";
+    } catch {
+      return "EN";
+    }
+  }, [t]);
+
   const navItems = [
-<<<<<<< HEAD
-    { id: "hero", label: t("nav.me"), isHome: true },
-=======
     {
       id: "hero",
       label: getCurrentLanguage() === "PT" ? "Eu" : "Me",
       isHome: true,
     },
     { id: "experience", label: t("experience") },
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
     { id: "about", label: t("about") },
     { id: "projects", label: t("projects") },
     { id: "contact", label: t("contact") },
@@ -250,17 +256,10 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
           variant="ghost"
           size="icon"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-<<<<<<< HEAD
-          className={`sidebar-glass h-12 w-12 rounded-full transition-all duration-300 ${
-=======
           className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full sidebar-glass border border-border/30 shadow-lg transition-all duration-300 ${
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
             isMobileMenuOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"
           }`}
-          aria-expanded={isMobileMenuOpen}
-          aria-label={
-            isMobileMenuOpen ? t("aria.closeMenu") : t("aria.openMenu")
-          }
+          aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
         >
           {isMobileMenuOpen ? (
             <X className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
@@ -283,13 +282,8 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
             : "opacity-0 -translate-x-full scale-95"
         }`}
       >
-<<<<<<< HEAD
-        <div className="sidebar-glass w-64 rounded-2xl p-4">
-          <div className="flex flex-col gap-2">
-=======
         <div className="w-56 sm:w-64 sidebar-glass rounded-2xl p-3 sm:p-4 shadow-2xl border border-border/30">
           <div className="flex flex-col gap-1.5 sm:gap-2">
->>>>>>> 57341ddefe7f3b416527f9e2d2bc41d6daab08c4
             {navItems.map((item, index) => {
               const isActive = currentSection === item.id;
               const isHome = item.isHome;
@@ -298,8 +292,8 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 hover:bg-accent ${
-                    isActive ? "bg-accent" : ""
+                  className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:bg-accent/20 ${
+                    isActive ? "bg-accent/30" : ""
                   }`}
                   style={{
                     transitionDelay: isMobileMenuOpen
@@ -352,7 +346,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
         >
           <div
             ref={sidebarRef}
-            className="sidebar-glass flex items-center gap-1 rounded-full px-2 py-1.5 lg:gap-2 lg:px-3 lg:py-2"
+            className="sidebar-glass rounded-full px-3 py-2 shadow-lg border border-border/20 flex items-center gap-2"
           >
             {navItems.map((item, index) => {
               const isActive = currentSection === item.id;
@@ -362,12 +356,11 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
                   key={item.id}
                   ref={(el) => (itemRefs.current[item.id] = el)}
                   onClick={() => scrollToSection(item.id)}
-                  className={`flex items-center gap-2 rounded-full px-2 py-2 transition-all duration-300 lg:px-3 ${
+                  className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 ${
                     isActive
-                      ? "bg-accent ring-1 ring-primary/20"
-                      : "hover:bg-accent/60"
+                      ? "bg-accent/6 ring-1 ring-primary/20"
+                      : "hover:bg-accent/4"
                   }`}
-                  aria-current={isActive ? "true" : undefined}
                 >
                   <div className="w-6 h-6 flex items-center justify-center">
                     {isHome ? (
@@ -409,7 +402,7 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
           }}
         >
           <div
-            className={`sidebar-glass relative rounded-2xl transition-all duration-500 ease-out ${
+            className={`relative sidebar-glass rounded-2xl shadow-2xl border border-border/20 transition-all duration-500 ease-out ${
               isHovered ? "scale-105 px-3 py-4" : "scale-100 px-3 py-3"
             }`}
           >
@@ -433,11 +426,10 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
                       <button
                         onClick={() => scrollToSection(item.id)}
                         ref={(el) => (itemRefs.current[item.id] = el)}
-                        className={`group relative flex w-full min-w-[120px] items-center gap-3 rounded-xl px-3 py-3 transition-all duration-300 hover:bg-accent ${
-                          isActive ? "bg-accent" : ""
-                        }`}
-                        aria-current={isActive ? "true" : undefined}
-                        aria-label={`${t("aria.navigateTo")} ${item.label}`}
+                        className={`group relative flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-400 hover:bg-accent/20 ${
+                          isActive ? "bg-accent/30" : ""
+                        } w-full min-w-[120px]`}
+                        aria-label={`Navigate to ${item.label}`}
                       >
                         {/* Icon */}
                         <div className="flex items-center justify-center w-6 h-6">
@@ -483,13 +475,10 @@ const DynamicSidebar = ({ show }: DynamicSidebarProps) => {
             {/* Floating icon removed per request (no current-section indicator in collapsed sidebar) */}
 
             {/* Decorative elements */}
+            <div className="absolute -top-1 -left-1 w-2 h-2 bg-primary/8 rounded-full blur-sm" />
             <div
-              className="absolute -left-1 -top-1 h-2 w-2 rounded-full bg-primary/10 blur-sm"
-              aria-hidden="true"
-            />
-            <div
-              className="absolute -bottom-1 -right-1 h-1.5 w-1.5 rounded-full bg-brand-accent/10 blur-sm"
-              aria-hidden="true"
+              className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-accent/8 rounded-full blur-sm"
+              style={{ opacity: 0.6 }}
             />
           </div>
         </div>
