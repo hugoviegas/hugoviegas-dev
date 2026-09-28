@@ -30,69 +30,6 @@
   border-radius: var(--button-border-radius-default) !important;
 }
 
-/* Navbar: active item glass transition */
-.nav-container {
-  --nav-gap: var(--space-6);
-}
-
-.nav-item {
-  position: relative;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--nav-border-radius);
-  color: hsl(var(--color-text-muted));
-  transition: background-color var(--duration-base) var(--ease-out),
-    color var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out),
-    transform var(--duration-base) var(--ease-out);
-}
-
-.nav-item:hover {
-  color: hsl(var(--color-text-primary));
-}
-
-.nav-item::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  transition: opacity var(--duration-base) var(--ease-out),
-    transform var(--duration-base) var(--ease-out);
-  opacity: 0;
-  transform: scale(0.98);
-}
-
-.nav-item.active {
-  color: hsl(var(--color-text-primary));
-}
-
-.nav-item.active::after {
-  background: linear-gradient(
-    180deg,
-    hsl(var(--color-glass-bg)),
-    rgba(255, 255, 255, 0.03)
-  );
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  opacity: 1;
-  transform: scale(1);
-}
-
-.nav-item.glass-focus {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-}
-
-/* small helpers for desktop container */
-.nav-pill {
-  background: hsl(var(--color-bg-primary));
-  border-radius: var(--nav-border-radius);
-  padding: 0.25rem 0.5rem;
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
 /* Theme toggle (prefixed with tp- to avoid collisions) */
 .tp-toggle {
   width: 36px;

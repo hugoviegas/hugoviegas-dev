@@ -1,4 +1,5 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
@@ -15,6 +16,15 @@ const ChatBot = lazy(() => import("@/components/ChatBot"));
 const WidgetsSection = lazy(() => import("@/components/WidgetsSection"));
 
 const Index = () => {
+  const location = useLocation();
+
+  // Land on the section named by the hash when arriving via a cross-route nav fallback
+  useEffect(() => {
+    if (!location.hash) return;
+    const element = document.getElementById(location.hash.slice(1));
+    element?.scrollIntoView({ behavior: "smooth" });
+  }, [location.hash]);
+
   return (
     <div className="min-h-screen bg-background text-foreground relative">
       {/* Ambient dots shared across the site (subtle, randomized) */}
