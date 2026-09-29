@@ -7,6 +7,7 @@ import ExperienceSection from "@/components/ExperienceSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import TopBricksRow from "@/components/TopBricksRow";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 
 const AmbientDots = lazy(() => import("@/components/AmbientDots"));
 const BackgroundXWing = lazy(
@@ -17,6 +18,7 @@ const WidgetsSection = lazy(() => import("@/components/WidgetsSection"));
 
 const Index = () => {
   const location = useLocation();
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   // Land on the section named by the hash when arriving via a cross-route nav fallback
   useEffect(() => {
@@ -30,7 +32,8 @@ const Index = () => {
       {/* Ambient dots shared across the site (subtle, randomized) */}
       <Suspense fallback={null}>
         <AmbientDots count={18} />
-        <BackgroundXWing />
+        {/* Continuous WebGL flight: skipped when reduced motion is requested */}
+        {!prefersReducedMotion && <BackgroundXWing />}
       </Suspense>
       <TopBricksRow />
       {/* AI Chatbot */}
