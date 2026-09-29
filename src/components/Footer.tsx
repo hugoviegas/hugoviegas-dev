@@ -53,14 +53,7 @@ const Footer = () => {
                 <social.icon className="w-5 h-5 text-primary group-hover:text-accent transition-colors" />
               </a>
             ))}
-            {/* Link to the Formula D assistant game page */}
-            <a
-              href="/formula-d"
-              className="p-3 glass rounded-full hover:glass-strong hover:scale-110 transition-all duration-300 flex items-center"
-              aria-label="Assistente Formula D"
-            >
-              <img src="/gold-coin-top.png" alt="Game" className="w-5 h-5" />
-            </a>
+            {/* Formula D is archived: route /formula-d kept, not linked publicly. */}
           </div>
         </div>
 

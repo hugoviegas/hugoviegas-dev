@@ -81,24 +81,15 @@ Cloud & Tools: Google Workspace Administration, Google Apps Script, AppSheet, Ve
 System Admin: Active Directory, Windows Server, Linux, Group Policy
 Design: UI/UX principles, responsive design, Figma basics
 
-FEATURED PROJECTS:
+FEATURED PROJECTS (these are the only published portfolio projects; do not present any other project, game, or experiment as featured portfolio work):
 1. D'Arcy McGee's Irish Pub Website (darcymcgeespub.com)
    - Hugo's first official website for the business, focused on the online menu and Saturday-night live shows
    - Included an admin workflow for practical menu updates
    - The restaurant later closed; the portfolio demo preserves the work with fictional data
 
-2. Business Process Automation System
-   - Custom JavaScript solution with Google Sheets and AppSheet integration
-   - Reduced critical business processes by 90%
-   - Technologies: JavaScript, Google Apps Script, AppSheet
-
-3. Modern E-Commerce Platform
-   - Full-stack solution with authentication, payment processing, admin dashboard
-   - Built with React, Node.js, Express, SQL, Stripe
-
-4. Project Management Dashboard
-   - Collaborative task management with real-time updates
-   - Built with React, TypeScript, Tailwind CSS, Supabase
+2. Big Bang Duel (duel.hugoviegas.dev)
+   - Interactive strategy duel game with guest entry, AI/solo play, and a smooth path for player accounts
+   - Built with React, TypeScript, Vite, Tailwind CSS, Zustand, Firebase
 
 PERSONAL JOURNEY (interesting story to share):
 - Started tinkering with technology at age 8 with his first phone (downloading .jar games, customizing settings)

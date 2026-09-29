@@ -165,29 +165,6 @@ export const translations: Translations = {
     PT: "Redução de 90% no tempo",
   },
 
-  "project.3.title": {
-    EN: "Modern E-Commerce Platform",
-    PT: "Plataforma de E-Commerce Moderna",
-  },
-  "project.3.description": {
-    EN: "Full-stack e-commerce solution with authentication, payment processing and admin dashboard.",
-    PT: "Solução full-stack de e-commerce com autenticação, processamento de pagamentos e painel administrativo.",
-  },
-  "project.3.metrics": { EN: "Full-stack solution", PT: "Solução full-stack" },
-
-  "project.4.title": {
-    EN: "Project Management Dashboard",
-    PT: "Dashboard de Gestão de Projetos",
-  },
-  "project.4.description": {
-    EN: "Collaborative task management app with real-time updates and project analytics.",
-    PT: "Aplicativo de gestão de tarefas colaborativo com atualizações em tempo real e análises de projetos.",
-  },
-  "project.4.metrics": {
-    EN: "Team collaboration",
-    PT: "Colaboração de equipe",
-  },
-
   "project.5.title": {
     EN: "Big Bang Duel",
     PT: "Big Bang Duel",
