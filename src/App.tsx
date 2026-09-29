@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import DynamicSidebar from "@/components/DynamicSidebar";
 import TopControls from "@/components/TopControls";
 import { UserProvider } from "@/features/presente-x/contexts/UserContext";
@@ -18,10 +18,16 @@ import LightsaberViewerMV from "./pages/LightsaberViewerMV";
 import LightsaberDemo from "./pages/LightsaberDemo";
 import StarshipDemo from "./pages/StarshipDemo";
 import MicroFalcon from "./pages/MicroFalcon";
-import PropostaEtal from "./pages/PropostaEtal";
-import PresenteX from "./pages/PresenteX";
-import PresenteXAdmin from "./pages/PresenteXAdmin";
-import PresenteXRecompensas from "./pages/PresenteXRecompensas";
+
+// Private, non-portfolio routes: lazy-loaded so their code stays out of the
+// main bundle. Not a security boundary; responses also carry X-Robots-Tag
+// noindex (see vercel.json).
+const PropostaEtal = lazy(() => import("./pages/PropostaEtal"));
+const PresenteX = lazy(() => import("./pages/PresenteX"));
+const PresenteXAdmin = lazy(() => import("./pages/PresenteXAdmin"));
+const PresenteXRecompensas = lazy(
+  () => import("./pages/PresenteXRecompensas"),
+);
 
 const queryClient = new QueryClient();
 
@@ -53,7 +59,14 @@ const App = () => {
                 <Route path="/lightsaber" element={<LightsaberViewerMV />} />
                 <Route path="/starship-demo" element={<StarshipDemo />} />
                 <Route path="/micro-falcon" element={<MicroFalcon />} />
-                <Route path="/proposta-etal" element={<PropostaEtal />} />
+                <Route
+                  path="/proposta-etal"
+                  element={
+                    <Suspense fallback={null}>
+                      <PropostaEtal />
+                    </Suspense>
+                  }
+                />
                 {/* Game page - put the Formula D game files into public/games/formula-d/ */}
                 <Route path="/formula-d" element={<FormulaD />} />
                 <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
@@ -61,11 +74,29 @@ const App = () => {
                 <Route path="/projects/big-bang-duel/story" element={<BigBangDuelStoryPage />} />
 
                 {/* Presente X Routes */}
-                <Route path="/presente-x" element={<PresenteX />} />
-                <Route path="/presente-x/admin" element={<PresenteXAdmin />} />
+                <Route
+                  path="/presente-x"
+                  element={
+                    <Suspense fallback={null}>
+                      <PresenteX />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/presente-x/admin"
+                  element={
+                    <Suspense fallback={null}>
+                      <PresenteXAdmin />
+                    </Suspense>
+                  }
+                />
                 <Route
                   path="/presente-x/recompensas"
-                  element={<PresenteXRecompensas />}
+                  element={
+                    <Suspense fallback={null}>
+                      <PresenteXRecompensas />
+                    </Suspense>
+                  }
                 />
 
                 {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
