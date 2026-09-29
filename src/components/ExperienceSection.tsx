@@ -19,8 +19,10 @@ export function ExperienceSection(props) {
       company: "Erin College, Dublin",
       location: "Dublin, Ireland",
       description:
-        "Responsible for IT infrastructure and system administration at an educational institution in Dublin, supporting daily operations and maintaining enterprise environments.",
+        "Designed, developed, and maintain a full-stack internal ERP platform alongside IT infrastructure and system administration for an educational institution in Dublin.",
       achievements: [
+        "Designed, developed, and maintain a full-stack ERP (HR, payroll, finance, student management, ticketing) with React, TypeScript, and Google Apps Script, supporting 120+ users",
+        "Build automation tools and data pipelines to reduce manual work and improve process efficiency",
         "Provide hands-on technical support and system administration to 120+ users",
         "Manage Google Workspace enterprise environment with user accounts and access controls",
         "Administer Active Directory user accounts, permissions, and Group Policy configurations",
@@ -37,10 +39,10 @@ export function ExperienceSection(props) {
       description:
         "Managed IT systems and developed automation solutions for a services company in Brazil, combining technical support with software development to streamline operations.",
       achievements: [
-        "Provided technical support for Windows Server environment supporting 50+ employees",
+        "Provided technical support for a Windows Server environment supporting employees across multiple departments",
         "Managed user accounts, permissions, and access controls",
         "Performed system maintenance including hardware troubleshooting and workstation configurations",
-        "Developed custom JavaScript automation (Node.js, Express.js) reducing processing time by 90%",
+        "Developed a custom automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL, reducing administrative processing time by 90%",
         "Built full-stack application integrating on-premise systems with Google Workspace APIs",
         "Created technical documentation and standard operating procedures",
         "Achieved high first-call resolution rates through systematic troubleshooting",
@@ -64,13 +66,12 @@ export function ExperienceSection(props) {
 
   const education = [
     {
-      period: "Sep 2024 – Aug 2025",
-      title:
-        "Bachelor of Science (Honours) in Computing - Software Engineering",
+      period: "Sep 2024 – Sep 2025",
+      title: "Higher Diploma in Science in Computing",
       company: "CCT College Dublin",
       location: "Dublin, Ireland",
       description:
-        "Pursuing honours degree in Software Engineering with focus on software development, system architecture, database management, and web technologies. Expected Grade: First Class Honours.",
+        "Completed with a First Class final grade (EQF level 8), covering software development, system architecture, database management, and web technologies.",
       achievements: [
         "Software Development and System Architecture",
         "Database Management and Web Technologies",

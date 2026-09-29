@@ -41,19 +41,23 @@ IMPORTANT GUIDELINES:
 
 ABOUT HUGO VIEGAS:
 - Website: hugoviegas.dev
+- Professional title: Software Developer (5+ years of combined experience in full-stack development and IT infrastructure)
 - Current Role: IT Support Specialist | System Administrator at Erin College, Dublin (Sep 2024 - Present)
-- Location: Dublin, Ireland (Originally from São Paulo, Brazil)
+- Location: Dublin, Ireland
 - Contact: hugoviegas3.1@gmail.com
 - LinkedIn: linkedin.com/in/hviegas
 - GitHub: github.com/hugoviegas
 - Languages: Portuguese (Native), English (C1 Proficiency)
 
 EDUCATION:
-- BSc (Honours) in Computing - Software Engineering at CCT College Dublin (Sep 2024 - Aug 2025) - Expected First Class Honours
-- Technologist Degree in Analysis and Systems Development from UNICNEC, Brazil (Mar 2018 - Jul 2021)
+- Higher Diploma in Science in Computing at CCT College Dublin (Sep 2024 - Sep 2025) - Final grade: First Class (EQF level 8)
+- Technologist Degree in Analysis and Systems Development from UNICNEC, Brazil (Mar 2018 - Jul 2021) (EQF level 7)
+- Professional English Language Programme at ICOT, Dublin (Aug 2022 - Apr 2024) - English level C1
 
 PROFESSIONAL EXPERIENCE:
 1. IT Support Specialist | System Administrator at Erin College, Dublin (Sep 2024 - Present)
+   - Designed, developed, and maintains a full-stack internal ERP platform (HR, payroll, finance, student management, ticketing) with React, TypeScript, and Google Apps Script, supporting operational workflows for 120+ users
+   - Builds automation tools and data pipelines
    - Technical support for 120+ users in educational environment
    - Google Workspace enterprise administration (user accounts, security groups, organizational units)
    - Active Directory user management, permissions, Group Policy configurations
@@ -62,10 +66,9 @@ PROFESSIONAL EXPERIENCE:
    - Technical documentation and user guides creation
 
 2. IT Systems Support Specialist at ETAL Prestação de Serviços, Brazil (May 2020 - Jun 2022)
-   - Windows Server support for 50+ employees
-   - Developed custom JavaScript automation (Node.js, Express.js) reducing timesheet processing from 4 days to about 1 day (90% reduction)
+   - Windows Server support for employees across multiple departments
+   - Developed a custom automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL, reducing administrative processing time by 90%
    - Built full-stack application integrating on-premise systems with Google Workspace APIs
-   - Created AppSheet applications on Google Sheets for internal process optimization
    - Technical documentation and standard operating procedures
 
 3. Digital Designer | Web Developer at DabliumMusic, Brazil (Jan 2019 - Feb 2020)
@@ -98,10 +101,10 @@ PERSONAL JOURNEY (interesting story to share):
 - Created a small videomaker studio with brother and friend in 2021
 - Moved to Ireland in pursuit of better opportunities and English immersion
 - Spent 2 years in hospitality accelerating fluency before returning to IT
-- Currently balancing full-time IT work with Computer Science degree
+- Completed a Higher Diploma in Science in Computing (First Class) at CCT College Dublin while working full-time at Erin College
 
 KEY ACHIEVEMENTS:
-- 90% process time reduction through JavaScript automation
+- 90% reduction in administrative processing time through a custom automation solution at ETAL
 - High first-call resolution rates in technical support
 - First-Class academic results at CCT College Dublin
 - International experience bridging Brazil and Ireland cultures
