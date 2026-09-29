@@ -5,10 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
 import { Link } from "react-router-dom";
 import LegoButton from "./LegoButton";
-import automationProject from "@/assets/project-automation.jpg";
-import ecommerceProject from "@/assets/project-ecommerce.jpg";
-import taskManagerProject from "@/assets/project-taskmanager.jpg";
 import darcyMcgeesProject from "@/assets/project-darcy-mcgees.jpg";
+import bigBangDuelProject from "@/assets/project-big-bang-duel.webp";
 import redFront from "@/assets/lego-bricks/red-front.png";
 import yellowFront from "@/assets/lego-bricks/yellow-front.png";
 import blueFront from "@/assets/lego-bricks/blue-front.png";
@@ -29,7 +27,24 @@ const ProjectsSection = () => {
   // - Backend integration with MongoDB or Supabase for project management
   // - CRUD admin interface for adding/editing projects
 
-  const projects = [
+  // Only entries with `published: true` render. Optional links/images are
+  // omitted (not "#") until a verified destination or real screenshot exists.
+  interface Project {
+    id: number;
+    titleKey: string;
+    descriptionKey: string;
+    image?: string;
+    technologies: string[];
+    category: string;
+    featured: boolean;
+    published: boolean;
+    liveUrl?: string;
+    githubUrl?: string;
+    detailUrl?: string;
+    metricsKey: string;
+  }
+
+  const projects: Project[] = [
     {
       id: 1,
       titleKey: "project.1.title",
@@ -38,8 +53,9 @@ const ProjectsSection = () => {
       technologies: ["HTML5", "CSS3", "ReactJs", "Responsive Design"],
       category: "Web Development",
       featured: true,
+      published: true,
       liveUrl: "https://www.darcymcgeespub.com/",
-      githubUrl: "https://github.com/hugoviegas/mcgees-irish-pub-online",
+      // GitHub repo is not publicly reachable; hidden until Hugo approves a public URL.
       detailUrl: "/projects/darcy-mcgees",
       metricsKey: "project.1.metrics",
     },
@@ -47,7 +63,8 @@ const ProjectsSection = () => {
       id: 2,
       titleKey: "project.5.title",
       descriptionKey: "project.5.description",
-      image: taskManagerProject,
+      // Real screenshot of the live game (character collection screen).
+      image: bigBangDuelProject,
       technologies: [
         "React",
         "TypeScript",
@@ -58,16 +75,17 @@ const ProjectsSection = () => {
       ],
       category: "Game Development",
       featured: true,
+      published: true,
       liveUrl: "https://duel.hugoviegas.dev",
       githubUrl: "https://github.com/hugoviegas/Big-bang-Duel",
       detailUrl: "/projects/big-bang-duel",
       metricsKey: "project.5.metrics",
     },
     {
+      // ETAL QR Registration / automation: unpublished until Hugo approves public content.
       id: 3,
       titleKey: "project.2.title",
       descriptionKey: "project.2.description",
-      image: automationProject,
       technologies: [
         "JavaScript",
         "Google Apps Script",
@@ -76,37 +94,13 @@ const ProjectsSection = () => {
       ],
       category: "Automation",
       featured: true,
-      liveUrl: "#",
-      githubUrl: "#",
+      published: false,
       metricsKey: "project.2.metrics",
     },
-    {
-      id: 4,
-      titleKey: "project.3.title",
-      descriptionKey: "project.3.description",
-      image: ecommerceProject,
-      technologies: ["React", "Node.js", "Express", "SQL", "Stripe"],
-      category: "Web Development",
-      featured: false,
-      liveUrl: "#",
-      githubUrl: "#",
-      metricsKey: "project.3.metrics",
-    },
-    {
-      id: 5,
-      titleKey: "project.4.title",
-      descriptionKey: "project.4.description",
-      image: taskManagerProject,
-      technologies: ["React", "TypeScript", "Tailwind CSS", "Supabase"],
-      category: "Web Development",
-      featured: false,
-      liveUrl: "#",
-      githubUrl: "#",
-      metricsKey: "project.4.metrics",
-    },
+    // Erinhub: add here with `published: false` until approved content exists.
   ];
 
-  type Project = (typeof projects)[number];
+  const publishedProjects = projects.filter((project) => project.published);
 
   // Helper: render the lego 'square tile' project card
   const ProjectTile = ({
@@ -128,23 +122,25 @@ const ProjectsSection = () => {
 
       <div className="card-project glass-strong rounded-2xl overflow-hidden relative flex flex-col z-10">
         {/* Image on top - keep full width and not covered by text */}
-        <div className="w-full h-44 md:h-56 overflow-hidden">
-          {project.detailUrl ? (
-            <Link to={project.detailUrl} aria-label={t(project.titleKey)}>
+        {project.image && (
+          <div className="w-full h-44 md:h-56 overflow-hidden">
+            {project.detailUrl ? (
+              <Link to={project.detailUrl} aria-label={t(project.titleKey)}>
+                <img
+                  src={project.image}
+                  alt={t(project.titleKey)}
+                  className="w-full h-full object-cover"
+                />
+              </Link>
+            ) : (
               <img
                 src={project.image}
                 alt={t(project.titleKey)}
                 className="w-full h-full object-cover"
               />
-            </Link>
-          ) : (
-            <img
-              src={project.image}
-              alt={t(project.titleKey)}
-              className="w-full h-full object-cover"
-            />
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         {/* Content below image */}
         <div className="p-6 flex-1 flex flex-col justify-between">
@@ -175,20 +171,30 @@ const ProjectsSection = () => {
             </div>
 
             <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => window.open(project.liveUrl, "_blank")}
-              >
-                <ExternalLink className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => window.open(project.githubUrl, "_blank")}
-              >
-                <Github className="w-4 h-4" />
-              </Button>
+              {project.liveUrl && (
+                <Button variant="ghost" size="sm" asChild>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${t(project.titleKey)}: ${t("viewProject")}`}
+                  >
+                    <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                  </a>
+                </Button>
+              )}
+              {project.githubUrl && (
+                <Button variant="ghost" size="sm" asChild>
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${t(project.titleKey)}: ${t("viewCode")}`}
+                  >
+                    <Github className="w-4 h-4" aria-hidden="true" />
+                  </a>
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -281,13 +287,11 @@ const ProjectsSection = () => {
           </p>
         </div>
 
-        {/* Uniform square tiles layout: show three specific projects (restore missing one) */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {([projects[0], projects[1], projects[3]] as Project[]).map(
-            (p, i) => (
-              <ProjectTile key={p.id} project={p} index={i} />
-            ),
-          )}
+        {/* Uniform tiles layout: published projects only */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {publishedProjects.map((p, i) => (
+            <ProjectTile key={p.id} project={p} index={i} />
+          ))}
         </div>
 
         {/* CTA */}
