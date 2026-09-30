@@ -1,9 +1,6 @@
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
-vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
-vi.stubEnv("VITE_SUPABASE_ANON_KEY", "test-key");
 
 let App: typeof import("@/App").default;
 

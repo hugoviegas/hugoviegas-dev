@@ -277,7 +277,8 @@ Observed during the September 2026 audit. Re-verify before relying on them.
 - Homepage composition: `src/pages/Index.tsx`. Routes: `src/App.tsx`. Global nav: `src/components/DynamicSidebar.tsx` + `src/components/TopControls.tsx`.
 - Stack notes: Zod and `@hookform/resolvers` are installed but not yet used; the contact form (`src/components/ContactSection.tsx`) uses manual validation and Web3Forms. `@vercel/analytics` is installed but not mounted. Framer Motion (mentioned in README) is not installed.
 - Theme tokens: `src/styles/design-tokens.css` and `src/styles/theme-tokens.css`; global styles in `src/index.css`.
-- Known security items from the audit: a Gemini API key is read in the browser (`src/lib/chatbot-service.ts`), and the Presente X password is injected via `vite.config.ts` `define` and checked client-side (`src/features/presente-x/components/PasswordGate.tsx`). Follow the Security and Privacy rules before touching either.
+- Known security item from the audit: a Gemini API key is read in the browser (`src/lib/chatbot-service.ts`). Follow the Security and Privacy rules before touching it.
+- `/proposta-etal` and `/presente-x*` were removed from the app in September 2026. Their source is archived at the git tag `archive/private-routes-2026-09`; do not restore them to the deployed app.
 - `dist/` is gitignored. `.env` is gitignored; `.env.sample` documents variables.
 
 ## Working Method

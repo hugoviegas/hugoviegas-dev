@@ -1,30 +1,14 @@
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), "");
   return {
     server: {
       host: "::",
       port: 5173,
-    },
-    define: {
-      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
-        env.NEXT_PUBLIC_SUPABASE_URL ||
-          env.VITE_SUPABASE_URL ||
-          process.env.NEXT_PUBLIC_SUPABASE_URL,
-      ),
-      "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(
-        env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-          env.VITE_SUPABASE_ANON_KEY ||
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      ),
-      "import.meta.env.VITE_PRESENTE_X_PASSWORD": JSON.stringify(
-        env.PRESENTE_X_PASSWORD || process.env.PRESENTE_X_PASSWORD,
-      ),
     },
     // Include GLB assets so Vite doesn't attempt to parse them as JS
     assetsInclude: ["**/*.glb"],
