@@ -27,6 +27,10 @@ Positioning guidance:
 - Hugo is seeking a job opportunity in Ireland.
 - Do not mention visa, work permit, nationality, date of birth, home address, or phone number on the website unless Hugo explicitly requests it.
 
+### Contact details
+- The site contact email is `hugoviegas3.1@gmail.com`. Never show Hugo's primary email address anywhere on the site.
+- A WhatsApp link that uses Hugo's secondary number is allowed. Never show Hugo's primary number.
+
 ## Verified Facts
 Use these as the current source of truth. Do not invent, exaggerate, or create alternative versions.
 
@@ -118,7 +122,7 @@ The portfolio should be:
 
 Visual system:
 - Use neutral surfaces and text.
-- Use one professional green accent colour.
+- Use one professional green accent colour. The final green tone and the system design will come later from Claude Design; do not redesign the palette before then.
 - Do not use gradients.
 - Use consistent spacing and a limited typography hierarchy.
 - Ensure text meets WCAG AA contrast requirements.
@@ -192,7 +196,7 @@ Hero requirements:
 - Do not use client-side password checks for private content.
 - Keep `/proposta-etal` and `/presente-x*` out of the public portfolio flow.
 - Do not expose proposals, pricing, passwords, client information, private records, or confidential ETAL information.
-- Before making any change involving authentication, private routes, environment variables, server-side APIs, Supabase, Firebase, or Vercel configuration, explain the security impact and ask Hugo for approval.
+- Before making any change involving authentication, private routes, environment variables, server-side APIs, Firebase, or Vercel configuration, explain the security impact and ask Hugo for approval.
 
 ## Chatbot
 - Keep the existing chatbot only until its redesign is explicitly scheduled.

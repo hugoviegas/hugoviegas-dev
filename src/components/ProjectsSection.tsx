@@ -24,7 +24,6 @@ const ProjectsSection = () => {
 
   // TODO: Future plans for this section:
   // - Social media post-inspired card design
-  // - Backend integration with MongoDB or Supabase for project management
   // - CRUD admin interface for adding/editing projects
 
   // Only entries with `published: true` render. Optional links/images are
