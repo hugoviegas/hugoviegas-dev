@@ -42,24 +42,27 @@ const Index = () => {
       </Suspense>
       {/* Main content positioned above background */}
       <div className="relative z-10">
-        <section id="hero">
-          <HeroSection />
-        </section>
-        <section id="experience" className="pt-16">
-          <ExperienceSection />
-        </section>
-        <section id="about" className="pt-16">
-          <AboutSection />
-        </section>
-        <section id="projects" className="pt-16">
-          <ProjectsSection />
-        </section>
-        <section id="contact" className="pt-16">
-          <ContactSection />
-        </section>
-        <Suspense fallback={null}>
-          <WidgetsSection />
-        </Suspense>
+        {/* Section ids live on the section components themselves */}
+        <main id="main-content" tabIndex={-1} className="focus:outline-none">
+          <div id="hero">
+            <HeroSection />
+          </div>
+          <div className="pt-16">
+            <ExperienceSection />
+          </div>
+          <div className="pt-16">
+            <AboutSection />
+          </div>
+          <div className="pt-16">
+            <ProjectsSection />
+          </div>
+          <div className="pt-16">
+            <ContactSection />
+          </div>
+          <Suspense fallback={null}>
+            <WidgetsSection />
+          </Suspense>
+        </main>
         <Footer />
       </div>
     </div>

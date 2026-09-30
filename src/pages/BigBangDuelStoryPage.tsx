@@ -154,7 +154,11 @@ const BigBangDuelStoryPage = () => {
         </Link>
       </div>
 
-      <main className="section-wrapper py-24">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="section-wrapper py-24 focus:outline-none"
+      >
         <div className="mx-auto max-w-4xl">
           <header className="mb-10 text-center">
             <p className="caption-text mb-3 uppercase tracking-[0.2em]">{t("bigBangTitle")}</p>

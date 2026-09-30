@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import DynamicSidebar from "@/components/DynamicSidebar";
 import TopControls from "@/components/TopControls";
 import RouteSeo from "@/components/RouteSeo";
+import SkipLink from "@/components/SkipLink";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
@@ -42,6 +43,7 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <RouteSeo />
+            <SkipLink />
             <DynamicSidebar />
             <TopControls />
             <Routes>

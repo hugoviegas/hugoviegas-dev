@@ -1373,6 +1373,13 @@
   color: white !important;
 }
 
+/* Visible keyboard focus: the base Button ring is a box-shadow, which
+   .btn-lego removes, so use an outline instead. */
+.btn-lego:focus-visible {
+  outline: 3px solid hsl(var(--ring)) !important;
+  outline-offset: 4px;
+}
+
 .btn-lego:active {
   transform: translateY(0) scale(0.98);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
