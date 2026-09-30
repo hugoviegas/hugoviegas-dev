@@ -5,18 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
 import { Link } from "react-router-dom";
 import LegoButton from "./LegoButton";
-import darcyMcgeesProject from "@/assets/project-darcy-mcgees.jpg";
+import darcyMcgeesProject from "@/assets/project-darcy-mcgees.webp";
 import bigBangDuelProject from "@/assets/project-big-bang-duel.webp";
-import redFront from "@/assets/lego-bricks/red-front.png";
-import yellowFront from "@/assets/lego-bricks/yellow-front.png";
-import blueFront from "@/assets/lego-bricks/blue-front.png";
-import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.png";
-import goldCoinFront from "@/assets/lego-bricks/gold-coin-front.png";
-import goldCoinTop from "@/assets/lego-bricks/gold-coin-top.png";
-import redTop from "@/assets/lego-bricks/red-top.png";
-import whiteFront from "@/assets/lego-bricks/white-front.png";
-import whiteTop from "@/assets/lego-bricks/white-top.png";
-import whiteTopSingle from "@/assets/lego-bricks/white-top-single.png";
+import redFront from "@/assets/lego-bricks/red-front.webp";
+import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
+import blueFront from "@/assets/lego-bricks/blue-front.webp";
+import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.webp";
+import goldCoinFront from "@/assets/lego-bricks/gold-coin-front.webp";
+import goldCoinTop from "@/assets/lego-bricks/gold-coin-top.webp";
+import redTop from "@/assets/lego-bricks/red-top.webp";
+import whiteFront from "@/assets/lego-bricks/white-front.webp";
+import whiteTop from "@/assets/lego-bricks/white-top.webp";
+import whiteTopSingle from "@/assets/lego-bricks/white-top-single.webp";
 
 const ProjectsSection = () => {
   const [selectedFilter] = useState("All");
@@ -34,6 +34,9 @@ const ProjectsSection = () => {
     titleKey: string;
     descriptionKey: string;
     image?: string;
+    // Intrinsic image size, used to reserve space and avoid layout shift.
+    imageWidth?: number;
+    imageHeight?: number;
     technologies: string[];
     category: string;
     featured: boolean;
@@ -50,6 +53,8 @@ const ProjectsSection = () => {
       titleKey: "project.1.title",
       descriptionKey: "project.1.description",
       image: darcyMcgeesProject,
+      imageWidth: 1280,
+      imageHeight: 720,
       technologies: ["HTML5", "CSS3", "ReactJs", "Responsive Design"],
       category: "Web Development",
       featured: true,
@@ -65,6 +70,8 @@ const ProjectsSection = () => {
       descriptionKey: "project.5.description",
       // Real screenshot of the live game (character collection screen).
       image: bigBangDuelProject,
+      imageWidth: 864,
+      imageHeight: 557,
       technologies: [
         "React",
         "TypeScript",
@@ -129,6 +136,10 @@ const ProjectsSection = () => {
                 <img
                   src={project.image}
                   alt={t(project.titleKey)}
+                  width={project.imageWidth}
+                  height={project.imageHeight}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </Link>
@@ -136,6 +147,10 @@ const ProjectsSection = () => {
               <img
                 src={project.image}
                 alt={t(project.titleKey)}
+                width={project.imageWidth}
+                height={project.imageHeight}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             )}

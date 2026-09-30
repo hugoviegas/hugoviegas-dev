@@ -63,7 +63,26 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: (id) => {
             const normalizedId = id.replace(/\\/g, "/");
+            // Shared build helpers (Vite's dynamic-import preload helper and
+            // Rollup's CommonJS interop) must not be captured into vendor-r3f,
+            // or the entry would import, and preload, that chunk.
+            if (
+              normalizedId.includes("vite/preload-helper") ||
+              normalizedId.includes("commonjsHelpers")
+            ) {
+              return "vendor-react";
+            }
             if (normalizedId.includes("/node_modules/")) {
+              // Pin React to its own chunk. Otherwise Rollup pulls react-dom
+              // and scheduler into vendor-r3f (as dependencies of
+              // @react-three/fiber), forcing three.js onto every page.
+              if (
+                /\/node_modules\/(react|react-dom|scheduler)\//.test(
+                  normalizedId,
+                )
+              ) {
+                return "vendor-react";
+              }
               if (
                 normalizedId.includes("three") ||
                 normalizedId.includes("@react-three/fiber") ||

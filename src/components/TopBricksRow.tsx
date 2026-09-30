@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import redFront from "@/assets/lego-bricks/red-front.png";
-import whiteFront from "@/assets/lego-bricks/white-front.png";
-import yellowFront from "@/assets/lego-bricks/yellow-front.png";
-import blueFront from "@/assets/lego-bricks/blue-front.png";
+import redFront from "@/assets/lego-bricks/red-front.webp";
+import whiteFront from "@/assets/lego-bricks/white-front.webp";
+import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
+import blueFront from "@/assets/lego-bricks/blue-front.webp";
 
 const FRONT_IMAGES = [redFront, whiteFront, yellowFront, blueFront];
 

@@ -11,16 +11,16 @@ import {
 import { LazyImage } from "@/components/LazyImage";
 import LegoButton from "./LegoButton";
 import { useLanguage } from "@/hooks/useLanguage";
-import redFront from "@/assets/lego-bricks/red-front.png";
-import yellowFront from "@/assets/lego-bricks/yellow-front.png";
-import blueFront from "@/assets/lego-bricks/blue-front.png";
-import whiteFront from "@/assets/lego-bricks/white-front.png";
-import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.png";
-import goldCoinFront from "@/assets/lego-bricks/gold-coin-front.png";
-import goldCoinTop from "@/assets/lego-bricks/gold-coin-top.png";
-import redTop from "@/assets/lego-bricks/red-top.png";
-import whiteTop from "@/assets/lego-bricks/white-top.png";
-import whiteTopSingle from "@/assets/lego-bricks/white-top-single.png";
+import redFront from "@/assets/lego-bricks/red-front.webp";
+import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
+import blueFront from "@/assets/lego-bricks/blue-front.webp";
+import whiteFront from "@/assets/lego-bricks/white-front.webp";
+import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.webp";
+import goldCoinFront from "@/assets/lego-bricks/gold-coin-front.webp";
+import goldCoinTop from "@/assets/lego-bricks/gold-coin-top.webp";
+import redTop from "@/assets/lego-bricks/red-top.webp";
+import whiteTop from "@/assets/lego-bricks/white-top.webp";
+import whiteTopSingle from "@/assets/lego-bricks/white-top-single.webp";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +30,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { getCurrentGreeting } from "@/lib/time-utils";
-import heroImage from "@/assets/hugo-hero.jpg";
+import heroImage from "@/assets/hugo-hero.webp";
 
 const HeroSection = () => {
   const [currentGreeting, setCurrentGreeting] = useState("");
@@ -254,6 +254,9 @@ const HeroSection = () => {
                     <LazyImage
                       src={heroImage}
                       alt={t("heroImageAlt")}
+                      width={800}
+                      height={800}
+                      priority
                       className="object-cover w-full h-full shadow-2xl"
                       placeholder="Loading profile..."
                     />
