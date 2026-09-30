@@ -16,12 +16,22 @@ try {
   // If localStorage fails, keep default
 }
 
+// Keep <html lang> in sync with the active language.
+const applyDocumentLang = (language: LanguageCode) => {
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = language === "PT" ? "pt-BR" : "en";
+  }
+};
+
+applyDocumentLang(globalLanguage);
+
 const notifyListeners = () => {
   globalListeners.forEach((listener) => listener());
 };
 
 const setGlobalLanguage = (newLanguage: LanguageCode) => {
   globalLanguage = newLanguage;
+  applyDocumentLang(newLanguage);
   try {
     localStorage.setItem("language", newLanguage);
   } catch (e) {

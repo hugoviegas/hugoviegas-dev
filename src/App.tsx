@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { useEffect } from "react";
 import DynamicSidebar from "@/components/DynamicSidebar";
 import TopControls from "@/components/TopControls";
+import RouteSeo from "@/components/RouteSeo";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import FormulaD from "./pages/FormulaD";
@@ -40,6 +41,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <RouteSeo />
             <DynamicSidebar />
             <TopControls />
             <Routes>

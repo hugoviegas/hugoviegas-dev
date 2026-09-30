@@ -1,3 +1,36 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "www.hugoviegas.dev" }],
+      "destination": "https://hugoviegas.dev/:path",
+      "permanent": true
+    },
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "hugoviegas.vercel.app" }],
+      "destination": "https://hugoviegas.dev/:path",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(formula-d|lightsaber|micro-falcon|starship-demo|404.html)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/games/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
+  ],
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/projects/darcy-mcgees", "destination": "/index.html" },
+    { "source": "/projects/big-bang-duel", "destination": "/index.html" },
+    { "source": "/projects/big-bang-duel/story", "destination": "/index.html" },
+    { "source": "/formula-d", "destination": "/index.html" },
+    { "source": "/lightsaber", "destination": "/index.html" },
+    { "source": "/micro-falcon", "destination": "/index.html" },
+    { "source": "/starship-demo", "destination": "/index.html" }
+  ]
 }
