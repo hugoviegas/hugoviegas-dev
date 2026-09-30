@@ -204,6 +204,36 @@ Hero requirements:
 - Do not expose proposals, pricing, passwords, client information, private records, or confidential ETAL information.
 - Before making any change involving authentication, private routes, environment variables, server-side APIs, Firebase, or Vercel configuration, explain the security impact and ask Hugo for approval.
 
+## Content Backend and Hidden Admin (Firebase)
+Active work, approved by Hugo in October 2026. Delivered in three PRs: (1) foundation, (2) content layer, (3) admin editors. Each starts only after the previous one is merged.
+
+Project:
+- Firebase project ID: `assistente-virtual-e4322` (public identifier). Do not share it with Big Bang Duel.
+- Firestore region: `europe-west2` (London). The region is permanent once the database exists.
+- Services used: Firebase Authentication (Google provider only) and Cloud Firestore on the Spark plan. No Firebase Storage, App Check, Cloud Functions, or Hosting.
+
+Security model:
+- Google sign-in only, with `signInWithPopup`. Every other provider stays disabled, and there are no passwords. After Hugo's first sign-in, "Enable create (sign-up)" is turned off in Authentication settings.
+- `firestore.rules` is the access control. The owner check is `request.auth.uid == '<HUGO_UID>'`, `email_verified == true`, and `sign_in_provider == 'google.com'`.
+- Public reads are allowed only for docs with `published == true`. `settings/site` is public. `admin/ping` and `contentHistory` are owner-only. Everything else is implicitly denied.
+- Writes stay denied until the content layer adds validated, owner-only writes.
+- The admin page checks access by reading `admin/ping`. On `permission-denied` it signs the user out immediately. The client never decides who is allowed.
+- The admin route is an unguessable slug in `src/config/admin.ts`, repeated in `vercel.json` (a test keeps them in sync). It is unlinked, `noindex` (route SEO config plus `X-Robots-Tag`), and absent from the sitemap and `robots.txt`. This is obscurity only; the rules are the protection.
+- The admin page and the Firebase SDK load only in the lazy admin chunk (`src/pages/admin/`). Public pages must never import the Firebase SDK. Public content is read through the Firestore REST API.
+- Hugo runs the Firebase CLI, console steps, rule deploys, and sign-in himself.
+
+Config and secrets:
+- Only the public Firebase web config (`VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID`) may live in `.env.sample`, `.env.local`, Vercel env vars, or the repo. Restrict that API key to Firebase APIs only.
+- Never commit, or place in `VITE_*` or `define`: service-account JSON, Admin SDK keys, Firebase CLI tokens, Vercel tokens, or deploy-hook URLs.
+
+Content split:
+- Moves to Firestore: experience, education, projects, project detail pages (stack, lists, FAQ, story), skills and certifications, and About (summary, highlights, full story). Collections: `experience`, `education`, `projects`, `projectDetails`, `skills`, `about`, `settings/site`, `contentHistory`.
+- Every content doc has `en` and `ptBR` blocks, `published`, `order`, `updatedAt`, and `version`. Publishing is blocked when either language is empty.
+- Stays in code: hero copy, contact and social links, the CV link, SEO titles and descriptions (`seo.*`, read at build time), UI chrome strings, chatbot context, Fun Stuff, and archived pages.
+- Images stay in the repository. Docs store an image key that maps to a bundled asset.
+- The build writes a committed JSON snapshot. It is the first-paint source and the fallback. `settings/site.useRemote` is the kill switch.
+- Hard-coded content stays as a dual-run fallback until Hugo approves deleting it after cutover.
+
 ## Chatbot
 - Keep the existing chatbot only until its redesign is explicitly scheduled.
 - Do not increase its visual prominence.
@@ -289,7 +319,8 @@ Observed during the September 2026 audit. Re-verify before relying on them.
 - Theme tokens: `src/styles/design-tokens.css` and `src/styles/theme-tokens.css`; global styles in `src/index.css`.
 - Known security item from the audit: a Gemini API key is read in the browser (`src/lib/chatbot-service.ts`). Follow the Security and Privacy rules before touching it.
 - `/proposta-etal` and `/presente-x*` were removed from the app in September 2026. Their source is archived at the git tag `archive/private-routes-2026-09`; do not restore them to the deployed app.
-- `dist/` is gitignored. `.env` is gitignored; `.env.sample` documents variables.
+- `dist/` is gitignored. `.env` and `*.local` are gitignored; `.env.sample` documents variables.
+- Firebase files: `firestore.rules`, `firestore.indexes.json`, `firebase.json`, and `.firebaserc` at the repo root. Admin code: `src/pages/admin/`. Admin route constant: `src/config/admin.ts`.
 
 ## Working Method
 For every task:
@@ -324,8 +355,6 @@ Follow this order unless Hugo explicitly reprioritizes:
 Do not start these without a separate approved task:
 - Full portfolio redesign.
 - 3D LEGO room/camera experience.
-- Database-driven admin panel.
-- CMS migration.
 - New Fun Stuff route.
 - Chatbot redesign or backend proxy.
 - PT-BR indexable route strategy and hreflang.

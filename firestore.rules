@@ -1,0 +1,71 @@
+rules_version = '2';
+
+// Firestore Security Rules for the hugoviegas.dev content backend.
+// These rules are the access control. The hidden admin URL is obscurity only.
+//
+// BOOTSTRAP: replace HUGO_UID_PLACEHOLDER below with Hugo's Firebase Auth UID
+// (Firebase console > Authentication > Users) before deploying. Until it is
+// replaced, no request is the owner.
+//
+// WRITES: there is no `allow write` anywhere, so every write is denied. The
+// content layer adds validated owner-only writes in a later change.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner() {
+      return request.auth != null
+        && request.auth.uid == 'HUGO_UID_PLACEHOLDER'
+        && request.auth.token.email_verified == true
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+
+    // Anyone may read a published doc; only the owner may read drafts.
+    // isOwner() comes first so the owner can also read missing docs.
+    // Public list queries must filter on published == true.
+    function isPublishedOrOwner() {
+      return isOwner() || resource.data.published == true;
+    }
+
+    // Access probe for the admin page. Any account that gets
+    // permission-denied here is signed out immediately.
+    match /admin/ping {
+      allow read: if isOwner();
+    }
+
+    match /experience/{docId} {
+      allow read: if isPublishedOrOwner();
+    }
+
+    match /education/{docId} {
+      allow read: if isPublishedOrOwner();
+    }
+
+    match /projects/{docId} {
+      allow read: if isPublishedOrOwner();
+    }
+
+    match /projectDetails/{docId} {
+      allow read: if isPublishedOrOwner();
+    }
+
+    match /skills/{docId} {
+      allow read: if isPublishedOrOwner();
+    }
+
+    match /about/{docId} {
+      allow read: if isPublishedOrOwner();
+    }
+
+    // Site-wide switches (useRemote kill switch). Public, no content.
+    match /settings/site {
+      allow read: if true;
+    }
+
+    // Previous versions of edited docs. Owner only.
+    match /contentHistory/{docId} {
+      allow read: if isOwner();
+    }
+
+    // Everything else is implicitly denied.
+  }
+}

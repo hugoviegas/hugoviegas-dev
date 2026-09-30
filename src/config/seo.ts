@@ -1,4 +1,6 @@
 // Per-route head metadata. Titles and descriptions are translation keys.
+import { ADMIN_PATH } from "./admin";
+
 export const SITE_URL = "https://hugoviegas.dev";
 
 export interface BreadcrumbEntry {
@@ -64,6 +66,11 @@ export const routeSeo: Record<string, RouteSeoConfig> = {
   "/starship-demo": {
     titleKey: "seo.starship.title",
     descriptionKey: "seo.archived.description",
+    noindex: true,
+  },
+  [ADMIN_PATH]: {
+    titleKey: "seo.admin.title",
+    descriptionKey: "seo.admin.description",
     noindex: true,
   },
 };

@@ -11,6 +11,7 @@ import RouteSeo from "@/components/RouteSeo";
 import SkipLink from "@/components/SkipLink";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { ADMIN_PATH } from "@/config/admin";
 
 // Secondary routes load on demand so the homepage critical path stays small
 // (the archived 3D pages would otherwise pull three.js into the entry).
@@ -23,6 +24,8 @@ const BigBangDuelStoryPage = lazy(
 const LightsaberViewerMV = lazy(() => import("./pages/LightsaberViewerMV"));
 const StarshipDemo = lazy(() => import("./pages/StarshipDemo"));
 const MicroFalcon = lazy(() => import("./pages/MicroFalcon"));
+// Hidden admin: its own chunk, so the Firebase SDK never loads on public pages.
+const AdminPage = lazy(() => import("./pages/admin/AdminPage"));
 
 const queryClient = new QueryClient();
 
@@ -61,6 +64,7 @@ const App = () => {
                 <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
                 <Route path="/projects/big-bang-duel" element={<BigBangDuelProject />} />
                 <Route path="/projects/big-bang-duel/story" element={<BigBangDuelStoryPage />} />
+                <Route path={ADMIN_PATH} element={<AdminPage />} />
 
                 {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
