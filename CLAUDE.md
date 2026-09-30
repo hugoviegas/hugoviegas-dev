@@ -58,7 +58,6 @@ Use these as the current source of truth. Do not invent, exaggerate, or create a
   - Maintenance included bug fixes, content updates, and minor feature improvements.
 
 ### ETAL
-- Source of truth: the About full story (`aboutFullStory` in `src/config/translations.ts`). Where it differs from the list below, the story wins; the list is realigned to it in the content PR.
 - Organisation: ETAL Prestação de Serviços LTDA
 - Location: Belo Horizonte, Brazil
 - Period: 9 May 2020 to 1 June 2022
