@@ -940,6 +940,65 @@ export const translations: Translations = {
   },
   "notFound.cta": { EN: "Return to Home", PT: "Voltar ao Início" },
 
+  // ---------------------------------------------------------------- SEO
+  "seo.breadcrumbHome": { EN: "Home", PT: "Início" },
+  "seo.home.title": {
+    EN: "Hugo Viegas | Software Developer in Dublin, Ireland",
+    PT: "Hugo Viegas | Desenvolvedor de Software em Dublin, Irlanda",
+  },
+  "seo.home.description": {
+    EN: "Hugo Viegas is a Software Developer in Dublin, Ireland, with 5+ years of combined experience in full-stack development and IT infrastructure. Projects built with React, TypeScript, and Google Apps Script, including an internal ERP supporting 120+ users.",
+    PT: "Hugo Viegas é Desenvolvedor de Software em Dublin, Irlanda, com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Projetos com React, TypeScript e Google Apps Script, incluindo um ERP interno que atende 120+ usuários.",
+  },
+  "seo.darcy.title": {
+    EN: "D'Arcy McGee's Restaurant Website | Hugo Viegas",
+    PT: "Site do Restaurante D'Arcy McGee's | Hugo Viegas",
+  },
+  "seo.darcy.description": {
+    EN: "Restaurant website and admin dashboard for D'Arcy McGee's Irish pub, designed and built by Hugo Viegas. Shown as a portfolio demo with fictional data.",
+    PT: "Site e painel administrativo para o pub irlandês D'Arcy McGee's, projetados e desenvolvidos por Hugo Viegas. Apresentado como demo do portfólio com dados fictícios.",
+  },
+  "seo.bigBang.title": {
+    EN: "Big Bang Duel Strategy Game | Hugo Viegas",
+    PT: "Jogo de Estratégia Big Bang Duel | Hugo Viegas",
+  },
+  "seo.bigBang.description": {
+    EN: "Big Bang Duel is a fast browser strategy duel game by Hugo Viegas. Play immediately as a guest, or continue with Google sign-in as a returning player.",
+    PT: "Big Bang Duel é um jogo de duelo estratégico e rápido no navegador, criado por Hugo Viegas. Jogue na hora como visitante ou continue com login do Google.",
+  },
+  "seo.bigBangStory.title": {
+    EN: "The Story Behind Big Bang Duel | Hugo Viegas",
+    PT: "A História por Trás do Big Bang Duel | Hugo Viegas",
+  },
+  "seo.bigBangStory.description": {
+    EN: "How Hugo Viegas turned a childhood card game into Big Bang Duel, a browser strategy duel game.",
+    PT: "Como Hugo Viegas transformou um jogo de cartas da infância no Big Bang Duel, um jogo de duelo estratégico no navegador.",
+  },
+  "seo.archived.description": {
+    EN: "Archived experiment by Hugo Viegas. Not part of the main portfolio.",
+    PT: "Experimento arquivado de Hugo Viegas. Não faz parte do portfólio principal.",
+  },
+  "seo.formulaD.title": {
+    EN: "Formula D (archived) | Hugo Viegas",
+    PT: "Formula D (arquivado) | Hugo Viegas",
+  },
+  "seo.lightsaber.title": {
+    EN: "Lightsaber Viewer (archived) | Hugo Viegas",
+    PT: "Visualizador de Sabre de Luz (arquivado) | Hugo Viegas",
+  },
+  "seo.microFalcon.title": {
+    EN: "Micro Falcon Viewer (archived) | Hugo Viegas",
+    PT: "Visualizador Micro Falcon (arquivado) | Hugo Viegas",
+  },
+  "seo.starship.title": {
+    EN: "Starship Demo (archived) | Hugo Viegas",
+    PT: "Demo de Nave Espacial (arquivado) | Hugo Viegas",
+  },
+  "seo.notFound.title": {
+    EN: "Page Not Found | Hugo Viegas",
+    PT: "Página Não Encontrada | Hugo Viegas",
+  },
+
   fullStory: {
     EN: `A long time ago I found a spark. At eight years old, a first phone became my training droid — downloading .jar games, tweaking settings and customizing things were my first experiments with systems (my tiny training droid did more beeps than features). At eleven, curiosity became a mission: a Lego robotics championship at school. We built and programmed a robot with a drag‑and‑drop language, won regionals and reached nationals. Tools were humble, but the lesson was clear: like a young Padawan, I had found a path worth mastering (no robes required).
 
