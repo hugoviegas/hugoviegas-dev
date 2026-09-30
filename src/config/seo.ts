@@ -79,3 +79,68 @@ export const normalizePath = (pathname: string) =>
 
 export const getRouteSeo = (pathname: string): RouteSeoConfig =>
   routeSeo[normalizePath(pathname)] ?? notFoundSeo;
+
+export interface ResolvedBreadcrumb {
+  name: string;
+  url: string;
+}
+
+export interface ResolvedRouteHead {
+  title: string;
+  description: string;
+  url: string;
+  noindex: boolean;
+  // Null for noindex routes, which carry no canonical.
+  canonical: string | null;
+  breadcrumbs: ResolvedBreadcrumb[];
+}
+
+// Single source for a route's head values. Used by the client (RouteSeo) and
+// by the build step that writes per-route static HTML, so both stay in sync.
+export const resolveRouteHead = (
+  pathname: string,
+  t: (key: string) => string,
+): ResolvedRouteHead => {
+  const path = normalizePath(pathname);
+  const seo = getRouteSeo(path);
+  const url = `${SITE_URL}${path}`;
+  return {
+    title: t(seo.titleKey),
+    description: t(seo.descriptionKey),
+    url,
+    noindex: Boolean(seo.noindex),
+    canonical: seo.noindex ? null : url,
+    breadcrumbs: seo.noindex
+      ? []
+      : (seo.breadcrumbs ?? []).map((crumb) => ({
+          name: t(crumb.nameKey),
+          url: `${SITE_URL}${crumb.path}`,
+        })),
+  };
+};
+
+export const buildBreadcrumbJsonLd = (
+  breadcrumbs: ResolvedBreadcrumb[],
+): Record<string, unknown> | null =>
+  breadcrumbs.length === 0
+    ? null
+    : {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbs.map((crumb, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: crumb.name,
+          item: crumb.url,
+        })),
+      };
+
+// Public routes other than "/" get a head-only HTML file at build time.
+// "/" keeps the handwritten head in index.html.
+export const staticHeadRoutes = (): string[] =>
+  Object.entries(routeSeo)
+    .filter(([path, config]) => path !== "/" && !config.noindex)
+    .map(([path]) => path);
+
+// Output path (relative to the build dir) and the rewrite destination.
+export const staticHeadFile = (path: string) => `${normalizePath(path)}.html`;

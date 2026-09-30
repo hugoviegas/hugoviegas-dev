@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
-import { SITE_URL, getRouteSeo, normalizePath } from "@/config/seo";
+import { buildBreadcrumbJsonLd, resolveRouteHead } from "@/config/seo";
 
 const BREADCRUMB_SCRIPT_ID = "route-breadcrumbs";
 
@@ -40,43 +40,30 @@ const RouteSeo = () => {
   const { t } = useLanguage();
 
   useEffect(() => {
-    const path = normalizePath(pathname);
-    const seo = getRouteSeo(path);
-    const title = t(seo.titleKey);
-    const description = t(seo.descriptionKey);
-    const url = `${SITE_URL}${path === "/" ? "/" : path}`;
+    const head = resolveRouteHead(pathname, t);
 
-    document.title = title;
-    setMeta("name", "description", description);
-    setMeta("property", "og:title", title);
-    setMeta("property", "og:description", description);
-    setMeta("property", "og:url", url);
-    setMeta("name", "twitter:title", title);
-    setMeta("name", "twitter:description", description);
+    document.title = head.title;
+    setMeta("name", "description", head.description);
+    setMeta("property", "og:title", head.title);
+    setMeta("property", "og:description", head.description);
+    setMeta("property", "og:url", head.url);
+    setMeta("name", "twitter:title", head.title);
+    setMeta("name", "twitter:description", head.description);
 
-    if (seo.noindex) {
+    if (head.noindex) {
       setMeta("name", "robots", "noindex, nofollow");
-      setCanonical(null);
     } else {
       removeElement('meta[name="robots"]');
-      setCanonical(url);
     }
+    setCanonical(head.canonical);
 
     removeElement(`#${BREADCRUMB_SCRIPT_ID}`);
-    if (seo.breadcrumbs && !seo.noindex) {
+    const breadcrumbs = buildBreadcrumbJsonLd(head.breadcrumbs);
+    if (breadcrumbs) {
       const script = document.createElement("script");
       script.id = BREADCRUMB_SCRIPT_ID;
       script.type = "application/ld+json";
-      script.textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: seo.breadcrumbs.map((crumb, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: t(crumb.nameKey),
-          item: `${SITE_URL}${crumb.path}`,
-        })),
-      });
+      script.textContent = JSON.stringify(breadcrumbs);
       document.head.appendChild(script);
     }
   }, [pathname, t]);

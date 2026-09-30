@@ -34,9 +34,9 @@
   ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
-    { "source": "/projects/darcy-mcgees", "destination": "/index.html" },
-    { "source": "/projects/big-bang-duel", "destination": "/index.html" },
-    { "source": "/projects/big-bang-duel/story", "destination": "/index.html" },
+    { "source": "/projects/darcy-mcgees", "destination": "/projects/darcy-mcgees.html" },
+    { "source": "/projects/big-bang-duel", "destination": "/projects/big-bang-duel.html" },
+    { "source": "/projects/big-bang-duel/story", "destination": "/projects/big-bang-duel/story.html" },
     { "source": "/formula-d", "destination": "/index.html" },
     { "source": "/lightsaber", "destination": "/index.html" },
     { "source": "/micro-falcon", "destination": "/index.html" },

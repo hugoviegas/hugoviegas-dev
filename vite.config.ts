@@ -3,6 +3,9 @@ import react from "@vitejs/plugin-react-swc";
 import fs from "fs";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import { resolveRouteHead, staticHeadFile, staticHeadRoutes } from "./src/config/seo";
+import { injectRouteHead } from "./src/config/seoHtml";
+import { getTranslation } from "./src/config/translations";
 
 // Emit dist/404.html from the built index.html. Vercel serves it with a real
 // 404 status for paths not listed in vercel.json rewrites; the SPA then
@@ -33,6 +36,35 @@ const notFoundPage = (): Plugin => {
   };
 };
 
+// Write a head-only HTML file per public route (title, description, canonical,
+// Open Graph, BreadcrumbList) so the raw HTML is correct for scrapers that do
+// not run JS. The body stays the SPA shell. vercel.json rewrites each route to
+// its file. Uses the English strings: the default language, no localized routes.
+const routeHeadPages = (): Plugin => {
+  let outDir = "dist";
+  return {
+    name: "route-head-pages",
+    apply: "build",
+    configResolved(config) {
+      outDir = path.resolve(config.root, config.build.outDir);
+    },
+    closeBundle() {
+      const indexPath = path.join(outDir, "index.html");
+      if (!fs.existsSync(indexPath)) return;
+      const indexHtml = fs.readFileSync(indexPath, "utf-8");
+      const t = (key: string) => getTranslation(key, "EN");
+      for (const route of staticHeadRoutes()) {
+        const target = path.join(outDir, staticHeadFile(route));
+        fs.mkdirSync(path.dirname(target), { recursive: true });
+        fs.writeFileSync(
+          target,
+          injectRouteHead(indexHtml, resolveRouteHead(route, t)),
+        );
+      }
+    },
+  };
+};
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
@@ -46,6 +78,7 @@ export default defineConfig(({ mode }) => {
       react(),
       mode === "development" && componentTagger(),
       notFoundPage(),
+      routeHeadPages(),
     ].filter(Boolean),
     resolve: {
       alias: {
