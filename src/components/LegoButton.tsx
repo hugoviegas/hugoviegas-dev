@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ButtonProps } from "@/components/ui/button";
 
 // Import LEGO brick images for explosion effect and main background
-import redFront from "@/assets/lego-bricks/red-front.png";
-import yellowFront from "@/assets/lego-bricks/yellow-front.png";
-import blueFront from "@/assets/lego-bricks/blue-front.png";
-import whiteFront from "@/assets/lego-bricks/white-front.png";
-import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.png";
+import redFront from "@/assets/lego-bricks/red-front.webp";
+import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
+import blueFront from "@/assets/lego-bricks/blue-front.webp";
+import whiteFront from "@/assets/lego-bricks/white-front.webp";
+import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.webp";
 
 const BRICK_IMAGES = [redFront, yellowFront, blueFront, whiteFront, goldCoin2d];
 

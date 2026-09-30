@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.png";
+import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.webp";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";

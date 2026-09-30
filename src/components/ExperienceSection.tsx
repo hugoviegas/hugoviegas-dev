@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "../hooks/useLanguage";
-import coinIcon from "@/assets/lego-bricks/gold-coin-2d.png";
+import coinIcon from "@/assets/lego-bricks/gold-coin-2d.webp";
 
 export function ExperienceSection(props) {
   const { t } = useLanguage();

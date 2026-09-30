@@ -11,10 +11,10 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import SkillsSection from "@/components/SkillsSection";
-import redFront from "@/assets/lego-bricks/red-front.png";
-import yellowFront from "@/assets/lego-bricks/yellow-front.png";
-import blueFront from "@/assets/lego-bricks/blue-front.png";
-import whiteFront from "@/assets/lego-bricks/white-front.png";
+import redFront from "@/assets/lego-bricks/red-front.webp";
+import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
+import blueFront from "@/assets/lego-bricks/blue-front.webp";
+import whiteFront from "@/assets/lego-bricks/white-front.webp";
 import StarWarsCrawlOverlay from "@/components/StarWarsCrawl";
 
 const AboutSection = () => {

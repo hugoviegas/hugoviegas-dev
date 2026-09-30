@@ -6,6 +6,10 @@ interface LazyImageProps {
   alt: string;
   className?: string;
   placeholder?: string;
+  // Above-the-fold image: load immediately with high fetch priority.
+  priority?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export const LazyImage = ({
@@ -13,14 +17,18 @@ export const LazyImage = ({
   alt,
   className = "",
   placeholder,
+  priority = false,
+  width,
+  height,
 }: LazyImageProps) => {
   const { t } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(false);
+  const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
+    if (priority) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -36,7 +44,7 @@ export const LazyImage = ({
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [priority]);
 
   const handleLoad = () => {
     setIsLoaded(true);
@@ -60,6 +68,12 @@ export const LazyImage = ({
         <img
           src={src}
           alt={alt}
+          width={width}
+          height={height}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+          // React 18 only forwards the lowercase attribute name.
+          {...(priority ? { fetchpriority: "high" } : {})}
           className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
           onLoad={handleLoad}
           onError={handleError}

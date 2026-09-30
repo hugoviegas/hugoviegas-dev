@@ -9,7 +9,7 @@ import {
   type ChatMessage,
 } from "@/lib/chatbot-service";
 import { useLanguage } from "@/hooks/useLanguage";
-import redFront from "@/assets/lego-bricks/red-front.png";
+import redFront from "@/assets/lego-bricks/red-front.webp";
 
 interface ChatBotProps {
   projectId?: string;

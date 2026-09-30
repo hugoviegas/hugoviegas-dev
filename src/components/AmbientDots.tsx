@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import redFront from "@/assets/lego-bricks/red-front.png";
-import redTop from "@/assets/lego-bricks/red-top.png";
-import whiteFront from "@/assets/lego-bricks/white-front.png";
-import whiteTop from "@/assets/lego-bricks/white-top.png";
-import yellowFront from "@/assets/lego-bricks/yellow-front.png";
+import redFront from "@/assets/lego-bricks/red-front.webp";
+import redTop from "@/assets/lego-bricks/red-top.webp";
+import whiteFront from "@/assets/lego-bricks/white-front.webp";
+import whiteTop from "@/assets/lego-bricks/white-top.webp";
+import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
 
 type Brick = {
   src: string;

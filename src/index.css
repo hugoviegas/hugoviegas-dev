@@ -4,9 +4,7 @@
  * repeat across sections or need effects Tailwind cannot express.
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Pathway+Gothic+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=News+Cycle:wght@700&display=swap");
+/* Web fonts are loaded from index.html (preconnect + one stylesheet link). */
 
 /* Design tokens + semantic Tailwind/shadcn variable bridge */
 @import "./styles/index.css";
@@ -1337,7 +1335,7 @@
     dynamically. Fallback to blue image for older browsers. */
   background-image: var(
     --lego-bg,
-    url("/src/assets/lego-bricks/blue-front.png")
+    url("/src/assets/lego-bricks/blue-front.webp")
   ) !important;
   background-size: var(--lego-bg-size, 100% 100%) !important;
   background-repeat: var(--lego-bg-repeat, no-repeat) !important;
