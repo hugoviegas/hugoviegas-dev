@@ -58,16 +58,22 @@ Use these as the current source of truth. Do not invent, exaggerate, or create a
   - Maintenance included bug fixes, content updates, and minor feature improvements.
 
 ### ETAL
+- Source of truth: the About full story (`fullStory` in `src/config/translations.ts`). It overrides the CV and the hosted PDF, which Hugo is correcting separately.
 - Organisation: ETAL Prestação de Serviços LTDA
 - Location: Belo Horizonte, Brazil
 - Period: 9 May 2020 to 1 June 2022
 - Role: IT Systems Support Specialist
 - Verified software work:
-  - Developed a custom automation solution using JavaScript, Node.js, Express.js, PHP, and MySQL.
-  - Reduced administrative processing time by 90%.
-  - Built a full-stack application integrating on-premise systems with Google Workspace APIs for automated workflow management.
-- Treat the 90% administrative processing reduction as the approved metric unless Hugo updates it.
+  - Built an internal app with AppSheet on top of Google Sheets that simplified daily processes, after learning the HR and finance workflows end to end.
+  - The timesheet close for 400+ employees fell from four days to about one. This is the approved metric.
+- Do not claim a percentage reduction, a JavaScript, Node.js, Express.js, PHP, or MySQL stack, or an on-premise/Google Workspace API integration for ETAL. The story does not support them.
 - Never expose confidential ETAL documents, pricing, proposals, client data, credentials, or internal implementation details.
+
+### DabliuMusic
+- Organisation: DabliuMusic (spelled with one "m").
+- Location: Betim, Brazil
+- Period: 2020 to 2021
+- Role: Digital Designer | Web Developer
 
 ### Education
 - Higher Diploma in Science in Computing, CCT College, Dublin, Ireland.

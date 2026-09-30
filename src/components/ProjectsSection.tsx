@@ -92,12 +92,7 @@ const ProjectsSection = () => {
       id: 3,
       titleKey: "project.2.title",
       descriptionKey: "project.2.description",
-      technologies: [
-        "JavaScript",
-        "Google Apps Script",
-        "AppSheet",
-        "Google Sheets",
-      ],
+      technologies: ["AppSheet", "Google Sheets"],
       category: "Automation",
       featured: true,
       published: false,

@@ -40,8 +40,8 @@ export const translations: Translations = {
 
   // About Section
   journeySummary1: {
-    EN: "Software Developer with 5+ years of combined experience in full-stack development and IT infrastructure. I started at ETAL in Belo Horizonte, Brazil, in 2020, where I supported a Windows Server environment and developed a custom automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL that reduced administrative processing time by 90%. I also built a full-stack application integrating on-premise systems with Google Workspace APIs for automated workflow management.",
-    PT: "Desenvolvedor de Software com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Comecei na ETAL, em Belo Horizonte, em 2020, onde dei suporte a um ambiente Windows Server e desenvolvi uma solução de automação personalizada com JavaScript (Node.js, Express.js), PHP e MySQL que reduziu o tempo de processamento administrativo em 90%. Também construí uma aplicação full-stack integrando sistemas locais às APIs do Google Workspace para gestão automatizada de fluxos de trabalho.",
+    EN: "Software Developer with 5+ years of combined experience in full-stack development and IT infrastructure. I started at ETAL in Belo Horizonte, Brazil, in 2020, where I worked in IT support and built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one.",
+    PT: "Desenvolvedor de Software com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Comecei na ETAL, em Belo Horizonte, em 2020, onde atuei em suporte de TI e construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um.",
   },
   journeySummary2: {
     EN: "Since September 2024 I have worked at Erin College in Dublin as IT Support Specialist | System Administrator. There I designed, developed, and maintain a full-stack internal ERP platform covering HR, payroll, finance, student management, and ticketing, built with React, TypeScript, and Google Apps Script and supporting operational workflows for 120+ users. In parallel, I completed a Higher Diploma in Science in Computing at CCT College Dublin (EQF level 8) with a First Class final grade in September 2025.",
@@ -102,12 +102,12 @@ export const translations: Translations = {
     PT: "Desenvolvimento full-stack e infraestrutura de TI",
   },
   highlight2Title: {
-    EN: "90% Process Reduction",
-    PT: "Redução de 90% nos Processos",
+    EN: "Timesheet Close: 4 Days to ~1",
+    PT: "Fechamento de Ponto: 4 Dias para ~1",
   },
   highlight2Desc: {
-    EN: "Automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL at ETAL",
-    PT: "Solução de automação com JavaScript (Node.js, Express.js), PHP e MySQL na ETAL",
+    EN: "Internal AppSheet app on Google Sheets at ETAL, serving 400+ employees",
+    PT: "App interno em AppSheet sobre Google Sheets na ETAL, para mais de 400 colaboradores",
   },
   highlight3Title: {
     EN: "Internal ERP Platform",
@@ -160,12 +160,12 @@ export const translations: Translations = {
     PT: "Sistema de Automação de Processos",
   },
   "project.2.description": {
-    EN: "Custom automation solution that reduced administrative processing time by 90%.",
-    PT: "Solução de automação personalizada que reduziu o tempo de processamento administrativo em 90%.",
+    EN: "Internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one.",
+    PT: "App interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um.",
   },
   "project.2.metrics": {
-    EN: "90% time reduction",
-    PT: "Redução de 90% no tempo",
+    EN: "Four days to about one",
+    PT: "De quatro dias para cerca de um",
   },
 
   "project.5.title": {
@@ -683,6 +683,194 @@ export const translations: Translations = {
     PT: "Concluí um programa profissional de língua inglesa em Dublin, atingindo o nível C1 (Avançado).",
   },
 
+  // Work experience entries
+  "exp.erin.period": { EN: "Sep 2024 – Present", PT: "Set 2024 – Atual" },
+  "exp.erin.title": {
+    EN: "IT Support Specialist | System Administrator",
+    PT: "Especialista em Suporte de TI | Administrador de Sistemas",
+  },
+  "exp.erin.company": { EN: "Erin College, Dublin", PT: "Erin College, Dublin" },
+  "exp.erin.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  "exp.erin.description": {
+    EN: "Designed, developed, and maintain a full-stack internal ERP platform alongside IT infrastructure and system administration for an educational institution in Dublin.",
+    PT: "Projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack, além de cuidar da infraestrutura de TI e da administração de sistemas de uma instituição de ensino em Dublin.",
+  },
+  "exp.erin.a1": {
+    EN: "Designed, developed, and maintain a full-stack ERP (HR, payroll, finance, student management, ticketing) with React, TypeScript, and Google Apps Script, supporting 120+ users",
+    PT: "Projetei, desenvolvi e mantenho um ERP full-stack (RH, folha de pagamento, finanças, gestão de alunos, chamados) com React, TypeScript e Google Apps Script, atendendo 120+ usuários",
+  },
+  "exp.erin.a2": {
+    EN: "Build automation tools and data pipelines to reduce manual work and improve process efficiency",
+    PT: "Construo ferramentas de automação e pipelines de dados para reduzir trabalho manual e melhorar a eficiência dos processos",
+  },
+  "exp.erin.a3": {
+    EN: "Provide hands-on technical support and system administration to 120+ users",
+    PT: "Presto suporte técnico prático e administração de sistemas para 120+ usuários",
+  },
+  "exp.erin.a4": {
+    EN: "Manage Google Workspace enterprise environment with user accounts and access controls",
+    PT: "Gerencio o ambiente corporativo do Google Workspace, com contas de usuários e controles de acesso",
+  },
+  "exp.erin.a5": {
+    EN: "Administer Active Directory user accounts, permissions, and Group Policy configurations",
+    PT: "Administro contas de usuários, permissões e configurações de Group Policy no Active Directory",
+  },
+  "exp.erin.a6": {
+    EN: "Configure and manage network services ensuring campus-wide connectivity",
+    PT: "Configuro e gerencio serviços de rede para garantir conectividade em todo o campus",
+  },
+  "exp.erin.a7": {
+    EN: "Create comprehensive technical documentation and user guides",
+    PT: "Crio documentação técnica e guias de usuário completos",
+  },
+  "exp.erin.a8": {
+    EN: "Implement security policies following information security best practices",
+    PT: "Implemento políticas de segurança seguindo boas práticas de segurança da informação",
+  },
+
+  "exp.etal.period": { EN: "May 2020 – Jun 2022", PT: "Mai 2020 – Jun 2022" },
+  "exp.etal.title": {
+    EN: "IT Systems Support Specialist",
+    PT: "Especialista em Suporte a Sistemas de TI",
+  },
+  "exp.etal.company": {
+    EN: "ETAL Prestação de Serviços LTDA",
+    PT: "ETAL Prestação de Serviços LTDA",
+  },
+  "exp.etal.location": {
+    EN: "Belo Horizonte, Brazil",
+    PT: "Belo Horizonte, Brasil",
+  },
+  "exp.etal.description": {
+    EN: "Managed IT systems and built internal workflow tools for a services company in Brazil, combining technical support with software development to streamline operations.",
+    PT: "Gerenciei sistemas de TI e construí ferramentas internas de fluxo de trabalho para uma empresa de prestação de serviços no Brasil, combinando suporte técnico e desenvolvimento de software para simplificar operações.",
+  },
+  "exp.etal.a1": {
+    EN: "Built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one",
+    PT: "Construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um",
+  },
+  "exp.etal.a2": {
+    EN: "Provided technical support for a Windows Server environment supporting employees across multiple departments",
+    PT: "Prestei suporte técnico a um ambiente Windows Server que atendia colaboradores de vários departamentos",
+  },
+  "exp.etal.a3": {
+    EN: "Managed user accounts, permissions, and access controls",
+    PT: "Gerenciei contas de usuários, permissões e controles de acesso",
+  },
+  "exp.etal.a4": {
+    EN: "Performed system maintenance including hardware troubleshooting and workstation configurations",
+    PT: "Realizei manutenção de sistemas, incluindo diagnóstico de hardware e configuração de estações de trabalho",
+  },
+  "exp.etal.a5": {
+    EN: "Created technical documentation and standard operating procedures",
+    PT: "Criei documentação técnica e procedimentos operacionais padrão",
+  },
+  "exp.etal.a6": {
+    EN: "Achieved high first-call resolution rates through systematic troubleshooting",
+    PT: "Alcancei altas taxas de resolução no primeiro contato por meio de diagnóstico sistemático",
+  },
+
+  "exp.dabliu.period": { EN: "2020 – 2021", PT: "2020 – 2021" },
+  "exp.dabliu.title": {
+    EN: "Digital Designer | Web Developer",
+    PT: "Designer Digital | Desenvolvedor Web",
+  },
+  "exp.dabliu.company": { EN: "DabliuMusic", PT: "DabliuMusic" },
+  "exp.dabliu.location": { EN: "Betim, Brazil", PT: "Betim, Brasil" },
+  "exp.dabliu.description": {
+    EN: "Handled web development and digital branding for a creative studio, delivering client-facing websites and marketing materials.",
+    PT: "Cuidei do desenvolvimento web e da identidade digital de um estúdio criativo, entregando sites para clientes e materiais de marketing.",
+  },
+  "exp.dabliu.a1": {
+    EN: "Designed and developed business websites using HTML, CSS, and JavaScript",
+    PT: "Projetei e desenvolvi sites empresariais com HTML, CSS e JavaScript",
+  },
+  "exp.dabliu.a2": {
+    EN: "Created visual identities and digital marketing materials",
+    PT: "Criei identidades visuais e materiais de marketing digital",
+  },
+  "exp.dabliu.a3": {
+    EN: "Managed web hosting configurations and performed technical website maintenance",
+    PT: "Gerenciei configurações de hospedagem web e fiz a manutenção técnica dos sites",
+  },
+  "exp.dabliu.a4": {
+    EN: "Supported client portfolio development and brand strategy",
+    PT: "Apoiei o desenvolvimento de portfólios de clientes e a estratégia de marca",
+  },
+
+  // Education entries
+  "edu.cct.period": { EN: "Sep 2024 – Sep 2025", PT: "Set 2024 – Set 2025" },
+  "edu.cct.title": {
+    EN: "Higher Diploma in Science in Computing",
+    PT: "Higher Diploma in Science in Computing",
+  },
+  "edu.cct.company": { EN: "CCT College Dublin", PT: "CCT College Dublin" },
+  "edu.cct.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  "edu.cct.description": {
+    EN: "Completed with a First Class final grade (EQF level 8), covering software development, system architecture, database management, and web technologies.",
+    PT: "Concluído com nota final First Class (EQF nível 8), abordando desenvolvimento de software, arquitetura de sistemas, gestão de bancos de dados e tecnologias web.",
+  },
+  "edu.cct.a1": {
+    EN: "Software Development and System Architecture",
+    PT: "Desenvolvimento de Software e Arquitetura de Sistemas",
+  },
+  "edu.cct.a2": {
+    EN: "Database Management and Web Technologies",
+    PT: "Gestão de Bancos de Dados e Tecnologias Web",
+  },
+  "edu.cct.a3": {
+    EN: "Linux and Windows Server Administration",
+    PT: "Administração de Linux e Windows Server",
+  },
+  "edu.cct.a4": {
+    EN: "Cloud Computing and Network Fundamentals",
+    PT: "Computação em Nuvem e Fundamentos de Redes",
+  },
+  "edu.cct.a5": {
+    EN: "Information Security and Algorithms & Data Structures",
+    PT: "Segurança da Informação e Algoritmos e Estruturas de Dados",
+  },
+  "edu.cct.a6": {
+    EN: "Combining academic study with professional IT practice",
+    PT: "Combinação de estudo acadêmico com prática profissional em TI",
+  },
+
+  "edu.unicnec.period": { EN: "Mar 2018 – Jul 2021", PT: "Mar 2018 – Jul 2021" },
+  "edu.unicnec.title": {
+    EN: "Technologist Degree in Analysis and Systems Development",
+    PT: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+  },
+  "edu.unicnec.company": { EN: "UNICNEC", PT: "UNICNEC" },
+  "edu.unicnec.location": { EN: "Itaúna, Brazil", PT: "Itaúna, Brasil" },
+  "edu.unicnec.description": {
+    EN: "Completed higher education technology diploma with focus on software engineering and systems development. Key subjects included system analysis, database design, and network configuration.",
+    PT: "Concluí a graduação tecnológica com foco em engenharia de software e desenvolvimento de sistemas. As principais disciplinas incluíram análise de sistemas, modelagem de bancos de dados e configuração de redes.",
+  },
+  "edu.unicnec.a1": {
+    EN: "Software Engineering and System Analysis",
+    PT: "Engenharia de Software e Análise de Sistemas",
+  },
+  "edu.unicnec.a2": {
+    EN: "Database Design and Implementation",
+    PT: "Modelagem e Implementação de Bancos de Dados",
+  },
+  "edu.unicnec.a3": {
+    EN: "Object-Oriented Programming",
+    PT: "Programação Orientada a Objetos",
+  },
+  "edu.unicnec.a4": {
+    EN: "Linux Server Administration (practical coursework)",
+    PT: "Administração de Servidores Linux (disciplina prática)",
+  },
+  "edu.unicnec.a5": {
+    EN: "Network Configuration and Web Development",
+    PT: "Configuração de Redes e Desenvolvimento Web",
+  },
+  "edu.unicnec.a6": {
+    EN: "Project Management and Technical Communication",
+    PT: "Gestão de Projetos e Comunicação Técnica",
+  },
+
   // ---------------------------------------------------------------- Hero
   loadingProfile: { EN: "Loading profile...", PT: "Carregando perfil..." },
   heroImageAlt: {
@@ -754,12 +942,12 @@ export const translations: Translations = {
     PT: "Suporte a sistemas corporativos e manutenção/formatação de computadores com foco em clareza e agilidade.",
   },
   "exp.2.a1": {
-    EN: "Built custom system integrated with administrative platforms",
-    PT: "Construção de sistema próprio integrado às plataformas administrativas",
+    EN: "Built an internal AppSheet app on Google Sheets for timesheet processing",
+    PT: "Construção de um app interno em AppSheet sobre Google Sheets para o fechamento de ponto",
   },
   "exp.2.a2": {
-    EN: "Reduced process times by 90% using JavaScript with Google libraries",
-    PT: "Redução de 90% no tempo de processos usando JavaScript com bibliotecas Google",
+    EN: "Cut the timesheet close for 400+ employees from four days to about one",
+    PT: "Redução do fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um",
   },
   "exp.2.a3": {
     EN: "Collaborated on proposal and budgeting materials",
@@ -770,7 +958,7 @@ export const translations: Translations = {
     PT: "Alinhamento das soluções de tecnologia aos objetivos do negócio",
   },
 
-  "exp.3.period": { EN: "Jan 2019 - Feb 2020", PT: "Jan 2019 - Fev 2020" },
+  "exp.3.period": { EN: "2020 – 2021", PT: "2020 – 2021" },
   "exp.3.location": { EN: "Betim, Brazil", PT: "Betim, Brasil" },
   "exp.3.title": {
     EN: "Designer & Social Media Manager",

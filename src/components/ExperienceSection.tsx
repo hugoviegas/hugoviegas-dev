@@ -111,107 +111,28 @@ function TimelineItem({
 export function ExperienceSection(props) {
   const { t } = useLanguage();
 
+  const buildEntry = (prefix: string, achievementCount: number): TimelineEntry => ({
+    period: t(`${prefix}.period`),
+    title: t(`${prefix}.title`),
+    company: t(`${prefix}.company`),
+    location: t(`${prefix}.location`),
+    description: t(`${prefix}.description`),
+    achievements: Array.from({ length: achievementCount }, (_, i) =>
+      t(`${prefix}.a${i + 1}`),
+    ),
+  });
+
   const workExperiences: TimelineEntry[] = [
-    {
-      period: "Sep 2024 – Present",
-      title: "IT Support Specialist | System Administrator",
-      company: "Erin College, Dublin",
-      location: "Dublin, Ireland",
-      description:
-        "Designed, developed, and maintain a full-stack internal ERP platform alongside IT infrastructure and system administration for an educational institution in Dublin.",
-      achievements: [
-        "Designed, developed, and maintain a full-stack ERP (HR, payroll, finance, student management, ticketing) with React, TypeScript, and Google Apps Script, supporting 120+ users",
-        "Build automation tools and data pipelines to reduce manual work and improve process efficiency",
-        "Provide hands-on technical support and system administration to 120+ users",
-        "Manage Google Workspace enterprise environment with user accounts and access controls",
-        "Administer Active Directory user accounts, permissions, and Group Policy configurations",
-        "Configure and manage network services ensuring campus-wide connectivity",
-        "Create comprehensive technical documentation and user guides",
-        "Implement security policies following information security best practices",
-      ],
-    },
-    {
-      period: t("exp.freelance.period"),
-      title: t("exp.freelance.title"),
-      company: t("exp.freelance.company"),
-      location: t("exp.freelance.location"),
-      description: t("exp.freelance.description"),
-      achievements: [t("exp.freelance.a1"), t("exp.freelance.a2")],
-    },
-    {
-      period: "May 2020 – Jun 2022",
-      title: "IT Systems Support Specialist",
-      company: "ETAL Prestação de Serviços LTDA",
-      location: "Belo Horizonte, Brazil",
-      description:
-        "Managed IT systems and developed automation solutions for a services company in Brazil, combining technical support with software development to streamline operations.",
-      achievements: [
-        "Provided technical support for a Windows Server environment supporting employees across multiple departments",
-        "Managed user accounts, permissions, and access controls",
-        "Performed system maintenance including hardware troubleshooting and workstation configurations",
-        "Developed a custom automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL, reducing administrative processing time by 90%",
-        "Built full-stack application integrating on-premise systems with Google Workspace APIs",
-        "Created technical documentation and standard operating procedures",
-        "Achieved high first-call resolution rates through systematic troubleshooting",
-      ],
-    },
-    {
-      period: "Jan 2019 – Feb 2020",
-      title: "Digital Designer | Web Developer",
-      company: "DabliumMusic",
-      location: "Betim, Brazil",
-      description:
-        "Handled web development and digital branding for a creative studio, delivering client-facing websites and marketing materials.",
-      achievements: [
-        "Designed and developed business websites using HTML, CSS, and JavaScript",
-        "Created visual identities and digital marketing materials",
-        "Managed web hosting configurations and performed technical website maintenance",
-        "Supported client portfolio development and brand strategy",
-      ],
-    },
+    buildEntry("exp.erin", 8),
+    buildEntry("exp.freelance", 2),
+    buildEntry("exp.etal", 6),
+    buildEntry("exp.dabliu", 4),
   ];
 
-  const education: typeof workExperiences = [
-    {
-      period: "Sep 2024 – Sep 2025",
-      title: "Higher Diploma in Science in Computing",
-      company: "CCT College Dublin",
-      location: "Dublin, Ireland",
-      description:
-        "Completed with a First Class final grade (EQF level 8), covering software development, system architecture, database management, and web technologies.",
-      achievements: [
-        "Software Development and System Architecture",
-        "Database Management and Web Technologies",
-        "Linux and Windows Server Administration",
-        "Cloud Computing and Network Fundamentals",
-        "Information Security and Algorithms & Data Structures",
-        "Combining academic study with professional IT practice",
-      ],
-    },
-    {
-      period: t("edu.icot.period"),
-      title: t("edu.icot.title"),
-      company: t("edu.icot.company"),
-      location: t("edu.icot.location"),
-      description: t("edu.icot.description"),
-      achievements: [],
-    },
-    {
-      period: "Mar 2018 – Jul 2021",
-      title: "Technologist Degree in Analysis and Systems Development",
-      company: "UNICNEC",
-      location: "Itaúna, Brazil",
-      description:
-        "Completed higher education technology diploma with focus on software engineering and systems development. Key subjects included system analysis, database design, and network configuration.",
-      achievements: [
-        "Software Engineering and System Analysis",
-        "Database Design and Implementation",
-        "Object-Oriented Programming",
-        "Linux Server Administration (practical coursework)",
-        "Network Configuration and Web Development",
-        "Project Management and Technical Communication",
-      ],
-    },
+  const education: TimelineEntry[] = [
+    buildEntry("edu.cct", 6),
+    buildEntry("edu.icot", 0),
+    buildEntry("edu.unicnec", 6),
   ];
 
   const certifications = [
