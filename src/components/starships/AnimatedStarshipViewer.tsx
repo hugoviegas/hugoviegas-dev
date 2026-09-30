@@ -11,6 +11,7 @@ import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Box3, Color, Vector3, WebGLRenderer } from "three";
 import type { Group } from "three";
 import type { AnimationConfig } from "./animationUtils";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 
 const DEFAULT_CAMERA_POSITION: [number, number, number] = [0, 1.4, 4.2];
 
@@ -35,6 +36,7 @@ const AnimatedModel = ({
   const progressRef = useRef(0);
   const stateRef = useRef<"idle" | "running" | "waiting">("idle");
   const loopTimerRef = useRef(0);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useLayoutEffect(() => {
     if (!outerGroupRef.current) return;
@@ -61,10 +63,19 @@ const AnimatedModel = ({
   useEffect(() => {
     if (!outerGroupRef.current) return;
     progressRef.current = 0;
-    stateRef.current = "running";
     loopTimerRef.current = 0;
     animationConfig.setup(outerGroupRef.current);
-  }, [animationConfig, trigger]);
+    if (prefersReducedMotion) {
+      // Show a single static pose instead of playing the flight
+      animationConfig.update(
+        outerGroupRef.current,
+        animationConfig.staticProgress ?? 0,
+      );
+      stateRef.current = "idle";
+      return;
+    }
+    stateRef.current = "running";
+  }, [animationConfig, trigger, prefersReducedMotion]);
 
   useGLTF.preload(modelPath);
 

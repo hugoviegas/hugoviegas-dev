@@ -8,6 +8,8 @@ export type AnimationConfig = {
   finalize?: (group: Group) => void;
   autoLoop?: boolean;
   loopDelay?: number;
+  /** Progress (0-1) of the static pose shown when reduced motion is requested. */
+  staticProgress?: number;
 };
 
 export const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);

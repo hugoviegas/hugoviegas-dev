@@ -26,12 +26,12 @@ export const translations: Translations = {
   goodEvening: { EN: "Hi, Good Evening! I'm", PT: "Oi, Boa Noite! Eu sou" },
   goodNight: { EN: "Hi, Good Night! I'm", PT: "Oi, Boa Noite! Eu sou" },
   role: {
-    EN: "IT Support Specialist → Full-Stack Developer",
-    PT: "Especialista em TI → Desenvolvedor Full-Stack",
+    EN: "Software Developer",
+    PT: "Desenvolvedor de Software",
   },
   description: {
-    EN: "IT professional with 4+ years of experience in technical support, system administration, and infrastructure management. Expert in Active Directory administration, user account management, and technical troubleshooting across Windows and Linux environments. Currently supporting IT operations for 120+ users in Dublin educational institution.",
-    PT: "Profissional de TI com 4+ anos de experiência em suporte técnico, administração de sistemas e gestão de infraestrutura. Especialista em administração de Active Directory, gestão de contas de usuários e resolução de problemas técnicos em ambientes Windows e Linux. Atualmente suportando operações de TI para 120+ usuários em instituição educacional em Dublin.",
+    EN: "I design and build full-stack web platforms and automation tools with React, TypeScript, and Google Apps Script, including an internal ERP supporting 120+ users. 5+ years across full-stack development and IT infrastructure. Based in Dublin, Ireland.",
+    PT: "Projeto e desenvolvo plataformas web full-stack e ferramentas de automação com React, TypeScript e Google Apps Script, incluindo um ERP interno que atende 120+ usuários. 5+ anos de experiência em desenvolvimento full-stack e infraestrutura de TI. Baseado em Dublin, Irlanda.",
   },
   viewProjects: { EN: "View My Projects", PT: "Ver Meus Projetos" },
   getInTouch: { EN: "Get In Touch", PT: "Entre em Contato" },
@@ -40,12 +40,12 @@ export const translations: Translations = {
 
   // About Section
   journeySummary1: {
-    EN: "IT professional with 4+ years of progressive experience in technical support and system administration. Started my IT career with ETAL in 2020, where I managed Windows Server environments for 50+ employees and developed a custom JavaScript automation solution using Node.js, Express.js, and Google Workspace APIs that reduced administrative processing time by 90%. This success demonstrated the power of combining technical expertise with process optimization to deliver measurable business impact.",
-    PT: "Profissional de TI com 4+ anos de experiência progressiva em suporte técnico e administração de sistemas. Iniciei minha carreira em TI na ETAL em 2020, onde gerenciei ambientes Windows Server para 50+ funcionários e desenvolvi uma solução de automação personalizada em JavaScript usando Node.js, Express.js e APIs do Google Workspace que reduziu o tempo de processamento administrativo em 90%. Esse sucesso demonstrou o poder de combinar expertise técnica com otimização de processos para gerar impacto comercial mensurável.",
+    EN: "Software Developer with 5+ years of combined experience in full-stack development and IT infrastructure. I started at ETAL in Belo Horizonte, Brazil, in 2020, where I supported a Windows Server environment and developed a custom automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL that reduced administrative processing time by 90%. I also built a full-stack application integrating on-premise systems with Google Workspace APIs for automated workflow management.",
+    PT: "Desenvolvedor de Software com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Comecei na ETAL, em Belo Horizonte, em 2020, onde dei suporte a um ambiente Windows Server e desenvolvi uma solução de automação personalizada com JavaScript (Node.js, Express.js), PHP e MySQL que reduziu o tempo de processamento administrativo em 90%. Também construí uma aplicação full-stack integrando sistemas locais às APIs do Google Workspace para gestão automatizada de fluxos de trabalho.",
   },
   journeySummary2: {
-    EN: "In September 2024, I joined Erin College as an IT Support Specialist and System Administrator, where I provide hands-on technical support and system administration for an educational institution with 120+ users. I manage Google Workspace enterprise environments, administer Active Directory user accounts and Group Policy configurations, and implement security policies following information security best practices. Concurrently, I'm pursuing a Bachelor of Science (Honours) in Computing - Software Engineering at CCT College Dublin, combining professional practice with academic study to deepen my technical expertise and career development.",
-    PT: "Em setembro de 2024, me juntei ao Erin College como Especialista em Suporte de TI e Administrador de Sistemas, onde forneço suporte técnico prático e administração de sistemas para uma instituição educacional com 120+ usuários. Gerencio ambientes empresariais do Google Workspace, administro contas de usuários do Active Directory e configurações de Group Policy, e implemento políticas de segurança seguindo as melhores práticas de segurança da informação. Simultaneamente, estou cursando um Bacharelado em Computação - Engenharia de Software (Honras) no CCT College Dublin, combinando prática profissional com estudo acadêmico para aprofundar minha expertise técnica e desenvolvimento de carreira.",
+    EN: "Since September 2024 I have worked at Erin College in Dublin as IT Support Specialist | System Administrator. There I designed, developed, and maintain a full-stack internal ERP platform covering HR, payroll, finance, student management, and ticketing, built with React, TypeScript, and Google Apps Script and supporting operational workflows for 120+ users. In parallel, I completed a Higher Diploma in Science in Computing at CCT College Dublin (EQF level 8) with a First Class final grade in September 2025.",
+    PT: "Desde setembro de 2024 trabalho no Erin College, em Dublin, como IT Support Specialist | System Administrator. Lá projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados, construída com React, TypeScript e Google Apps Script e que apoia os fluxos operacionais de 120+ usuários. Em paralelo, concluí o Higher Diploma in Science in Computing no CCT College Dublin (EQF nível 8) com nota final First Class em setembro de 2025.",
   },
   readFullStory: { EN: "Read Full Story", PT: "Ler História Completa" },
   fullStoryTitle: { EN: "My Complete Journey", PT: "Minha Jornada Completa" },
@@ -87,40 +87,43 @@ export const translations: Translations = {
   // Additional UI strings
   aboutTitle: { EN: "About Me", PT: "Sobre Mim" },
   aboutSummary: {
-    EN: "IT professional with 4+ years of hands-on experience in technical support, system administration, and infrastructure management across enterprise and educational environments. Proven expertise in Active Directory administration, user account management, and technical troubleshooting in Windows and Linux server environments. Currently supporting IT operations for 120+ users in Dublin.",
-    PT: "Profissional de TI com 4+ anos de experiência prática em suporte técnico, administração de sistemas e gestão de infraestrutura em ambientes corporativos e educacionais. Expertise comprovada em administração de Active Directory, gestão de contas de usuários e resolução de problemas técnicos em ambientes de servidores Windows e Linux. Atualmente suportando operações de TI para 120+ usuários em Dublin.",
+    EN: "Software Developer with 5+ years of combined experience in full-stack development and IT infrastructure. I build web platforms and automation tools with React, TypeScript, and Google Apps Script, including an internal ERP supporting 120+ users in Dublin.",
+    PT: "Desenvolvedor de Software com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Construo plataformas web e ferramentas de automação com React, TypeScript e Google Apps Script, incluindo um ERP interno que atende 120+ usuários em Dublin.",
   },
   myJourney: { EN: "Professional Background", PT: "Histórico Profissional" },
 
   // Highlights
   highlight1Title: {
-    EN: "4+ Years Experience",
-    PT: "4+ Anos de Experiência",
+    EN: "5+ Years Experience",
+    PT: "5+ Anos de Experiência",
   },
   highlight1Desc: {
-    EN: "Technical support, system administration, and infrastructure management",
-    PT: "Suporte técnico, administração de sistemas e gestão de infraestrutura",
+    EN: "Full-stack development and IT infrastructure",
+    PT: "Desenvolvimento full-stack e infraestrutura de TI",
   },
   highlight2Title: {
     EN: "90% Process Reduction",
     PT: "Redução de 90% nos Processos",
   },
   highlight2Desc: {
-    EN: "JavaScript automation solution with Node.js, Express.js, and Google Workspace",
-    PT: "Solução de automação JavaScript com Node.js, Express.js e Google Workspace",
+    EN: "Automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL at ETAL",
+    PT: "Solução de automação com JavaScript (Node.js, Express.js), PHP e MySQL na ETAL",
   },
   highlight3Title: {
-    EN: "Active Directory & Google Workspace",
-    PT: "Active Directory & Google Workspace",
+    EN: "Internal ERP Platform",
+    PT: "Plataforma ERP Interna",
   },
   highlight3Desc: {
-    EN: "Expert in user account management, permissions, and hybrid IT infrastructure",
-    PT: "Especialista em gestão de contas de usuários, permissões e infraestrutura de TI híbrida",
+    EN: "Full-stack ERP with HR, payroll, finance, student management, and ticketing modules for 120+ users",
+    PT: "ERP full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados para 120+ usuários",
   },
-  highlight4Title: { EN: "Continuous Learning", PT: "Aprendizado Contínuo" },
+  highlight4Title: {
+    EN: "First Class Higher Diploma",
+    PT: "Higher Diploma com First Class",
+  },
   highlight4Desc: {
-    EN: "Currently pursuing Computer Science degree (Honours) at CCT College Dublin",
-    PT: "Cursando Bacharelado em Ciência da Computação (Honras) no CCT College Dublin",
+    EN: "Higher Diploma in Science in Computing, CCT College Dublin (EQF level 8), 2025",
+    PT: "Higher Diploma in Science in Computing, CCT College Dublin (EQF nível 8), 2025",
   },
 
   technicalSkills: { EN: "Technical Skills", PT: "Habilidades Técnicas" },
@@ -130,8 +133,8 @@ export const translations: Translations = {
 
   // Projects
   projectsIntro: {
-    EN: "A showcase of innovative solutions that demonstrate my journey from IT Support to Full-Stack Development, with measurable impact and cutting-edge technologies.",
-    PT: "Uma seleção de soluções que mostram minha evolução de Suporte de TI a Desenvolvedor Full-Stack, com impacto mensurável e tecnologias modernas.",
+    EN: "Selected projects I designed and built, from a client restaurant website to a browser strategy game.",
+    PT: "Projetos selecionados que projetei e desenvolvi, de um site para um restaurante cliente a um jogo de estratégia no navegador.",
   },
   "category.All": { EN: "All", PT: "Todos" },
   "category.Automation": { EN: "Automation", PT: "Automação" },
@@ -157,8 +160,8 @@ export const translations: Translations = {
     PT: "Sistema de Automação de Processos",
   },
   "project.2.description": {
-    EN: "Custom JavaScript solution integrated with Google Sheets and AppSheet that reduced critical business processes by 90%.",
-    PT: "Solução personalizada em JavaScript integrada ao Google Sheets e AppSheet que reduziu processos críticos em 90%.",
+    EN: "Custom automation solution that reduced administrative processing time by 90%.",
+    PT: "Solução de automação personalizada que reduziu o tempo de processamento administrativo em 90%.",
   },
   "project.2.metrics": {
     EN: "90% time reduction",
@@ -610,8 +613,8 @@ export const translations: Translations = {
 
   // Experience
   experienceIntro: {
-    EN: "A professional journey spanning technical support, system administration, and infrastructure management across Brazil and Ireland, with expertise in Active Directory, Google Workspace, and process automation.",
-    PT: "Uma jornada profissional abrangendo suporte técnico, administração de sistemas e gestão de infraestrutura no Brasil e Irlanda, com expertise em Active Directory, Google Workspace e automação de processos.",
+    EN: "Full-stack development and IT infrastructure experience across Ireland and Brazil, from an internal ERP platform to workflow automation.",
+    PT: "Experiência em desenvolvimento full-stack e infraestrutura de TI na Irlanda e no Brasil, de uma plataforma ERP interna à automação de fluxos de trabalho.",
   },
   timelineTitle: {
     EN: "Professional Timeline",
@@ -619,8 +622,8 @@ export const translations: Translations = {
   },
   currentFocusLabel: { EN: "Professional Focus", PT: "Foco Profissional" },
   currentFocusText: {
-    EN: "Expert in Active Directory administration, user account management, and technical troubleshooting across Windows and Linux environments. Skilled in Google Workspace administration, system automation, and implementing technical solutions that optimize workflows and enhance system reliability.",
-    PT: "Especialista em administração de Active Directory, gestão de contas de usuários e resolução de problemas técnicos em ambientes Windows e Linux. Hábil em administração do Google Workspace, automação de sistemas e implementação de soluções técnicas que otimizam fluxos de trabalho e aumentam confiabilidade dos sistemas.",
+    EN: "Building full-stack web platforms and automation with React, TypeScript, Node.js, and Google Apps Script, backed by hands-on experience with Windows/Linux, Active Directory, and Google Workspace.",
+    PT: "Desenvolvimento de plataformas web full-stack e automações com React, TypeScript, Node.js e Google Apps Script, com experiência prática em Windows/Linux, Active Directory e Google Workspace.",
   },
   certificationsTitle: {
     EN: "Skills & Certifications",
@@ -647,6 +650,10 @@ export const translations: Translations = {
 
   // ---------------------------------------------------------------- Hero
   loadingProfile: { EN: "Loading profile...", PT: "Carregando perfil..." },
+  heroImageAlt: {
+    EN: "Hugo Viegas, Software Developer",
+    PT: "Hugo Viegas, Desenvolvedor de Software",
+  },
   scrollToAbout: {
     EN: "Scroll to the about section",
     PT: "Rolar para a seção sobre",

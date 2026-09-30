@@ -67,6 +67,10 @@ const createCinematicLoopAnimation = (): AnimationConfig => {
   return {
     duration: totalDuration,
     autoLoop: true,
+    // Middle of the hold phase: model at rest facing the camera
+    staticProgress:
+      (sweepDuration + transitDuration + returnDuration + holdDuration / 2) /
+      totalDuration,
     setup: (group) => {
       group.position.copy(sweepStartPos);
       group.quaternion.copy(sweepStartQuat);

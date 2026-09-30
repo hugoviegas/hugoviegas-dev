@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowDown,
@@ -31,46 +31,16 @@ import {
 } from "@/components/ui/dialog";
 import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.jpg";
-import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
-  const [displayText, setDisplayText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [currentGreeting, setCurrentGreeting] = useState("");
   const { t, language } = useLanguage();
-  const navigate = useNavigate();
-  const fullText = t("role");
 
   // Update greeting when component mounts or language changes
   useEffect(() => {
     const greeting = getCurrentGreeting();
     setCurrentGreeting(greeting.text[language]);
   }, [language]);
-
-  // Reset typewriter when language changes (fullText changes)
-  useEffect(() => {
-    setDisplayText("");
-    setCurrentIndex(0);
-    const blink = document.querySelector(".type-cursor");
-    if (blink) {
-      blink.classList.remove("blink-after");
-    }
-  }, [fullText]);
-
-  useEffect(() => {
-    if (currentIndex < fullText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText(fullText.slice(0, currentIndex + 1));
-        setCurrentIndex(currentIndex + 1);
-      }, 20);
-      return () => clearTimeout(timeout);
-    } else {
-      const blink = document.querySelector(".type-cursor");
-      if (blink) {
-        blink.classList.add("blink-after");
-      }
-    }
-  }, [currentIndex, fullText]);
 
   const scrollToProjects = () => {
     document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
@@ -83,10 +53,6 @@ const HeroSection = () => {
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
-
-  const goToProposal = useCallback(() => {
-    navigate("/proposta-etal");
-  }, [navigate]);
 
   // Resume URL from Vercel Storage
   const resumeUrl =
@@ -170,8 +136,7 @@ const HeroSection = () => {
               <h1 className="heading-hero leading-tight mb-2">Hugo Viegas</h1>
               <div className="h-16 sm:h-20 lg:h-24 flex items-center">
                 <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
-                  {displayText}
-                  <span className="type-cursor inline-block w-1 h-5 sm:h-6 lg:h-8 bg-primary ml-1 sm:ml-2"></span>
+                  {t("role")}
                 </h2>
               </div>
               <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-[min(960px,92vw)] leading-relaxed mt-4">
@@ -288,7 +253,7 @@ const HeroSection = () => {
                   <div className="relative z-10 w-full h-full">
                     <LazyImage
                       src={heroImage}
-                      alt="Hugo Viegas - IT Support Specialist transitioning to Full-Stack Developer"
+                      alt={t("heroImageAlt")}
                       className="object-cover w-full h-full shadow-2xl"
                       placeholder="Loading profile..."
                     />

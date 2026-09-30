@@ -34,9 +34,7 @@ const Footer = () => {
             <h3 className="text-2xl font-bold text-gradient mb-2">
               Hugo Viegas
             </h3>
-            <p className="text-muted-foreground">
-              IT Support Specialist | System Administrator
-            </p>
+            <p className="text-muted-foreground">{t("role")}</p>
           </div>
 
           {/* Social Links */}
