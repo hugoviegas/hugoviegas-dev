@@ -65,13 +65,16 @@ PROFESSIONAL EXPERIENCE:
    - Security policy implementation following best practices
    - Technical documentation and user guides creation
 
-2. IT Systems Support Specialist at ETAL Prestação de Serviços, Brazil (May 2020 - Jun 2022)
+2. Web Developer (self-employed, freelance), Dublin (Jun 2023 - Mar 2024)
+   - Designed, developed, and deployed a website for a real restaurant client (D'Arcy McGee's)
+   - Maintained the site for about 10 months after launch: bug fixes, content updates, and minor feature improvements
+
+3. IT Systems Support Specialist at ETAL Prestação de Serviços, Brazil (May 2020 - Jun 2022)
+   - Built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one
    - Windows Server support for employees across multiple departments
-   - Developed a custom automation solution with JavaScript (Node.js, Express.js), PHP, and MySQL, reducing administrative processing time by 90%
-   - Built full-stack application integrating on-premise systems with Google Workspace APIs
    - Technical documentation and standard operating procedures
 
-3. Digital Designer | Web Developer at DabliumMusic, Brazil (Jan 2019 - Feb 2020)
+4. Digital Designer | Web Developer at DabliuMusic, Brazil (2020 - 2021)
    - Web development using HTML, CSS, JavaScript
    - Visual identity and brand development
    - Web hosting management and technical maintenance
@@ -104,7 +107,7 @@ PERSONAL JOURNEY (interesting story to share):
 - Completed a Higher Diploma in Science in Computing (First Class) at CCT College Dublin while working full-time at Erin College
 
 KEY ACHIEVEMENTS:
-- 90% reduction in administrative processing time through a custom automation solution at ETAL
+- Cut the timesheet close for 400+ employees at ETAL from four days to about one, with an internal AppSheet app on Google Sheets
 - High first-call resolution rates in technical support
 - First-Class academic results at CCT College Dublin
 - International experience bridging Brazil and Ireland cultures
