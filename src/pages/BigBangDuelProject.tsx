@@ -93,7 +93,11 @@ const BigBangDuelProject = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="section-wrapper py-24">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="section-wrapper py-24 focus:outline-none"
+      >
         <div className="mx-auto max-w-6xl">
           <header className="mb-10 max-w-3xl">
             <p className="caption-text mb-3 uppercase tracking-[0.2em]">

@@ -3,6 +3,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
   Mail,
@@ -15,6 +16,13 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LegoButton from "./LegoButton";
+
+const FIELD_ORDER = ["name", "email", "subject", "message"] as const;
+
+const fieldClass = (hasError: boolean) =>
+  `glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
+    hasError ? "border-red-500 focus:border-red-500" : ""
+  }`;
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -59,13 +67,16 @@ const ContactSection = () => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    const validationErrors = validateForm();
+    const firstInvalid = FIELD_ORDER.find((field) => validationErrors[field]);
+    if (firstInvalid) {
+      document.getElementById(`contact-${firstInvalid}`)?.focus();
       toast({
         title: t("validation.errorTitle") || "Validation Error",
         description:
@@ -271,7 +282,7 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
           {/* Contact Form */}
           <div className="space-y-8 slide-up">
             <div>
@@ -281,71 +292,111 @@ const ContactSection = () => {
               <p className="text-muted-foreground">{t("contactPrompt")}</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} noValidate className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
+                  <Label htmlFor="contact-name" className="mb-2 block">
+                    {t("label.name")}
+                  </Label>
                   <Input
+                    id="contact-name"
                     name="name"
+                    autoComplete="name"
                     placeholder={t("placeholder.name")}
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
-                      errors.name ? "border-red-500 focus:border-red-500" : ""
-                    }`}
+                    aria-invalid={Boolean(errors.name)}
+                    aria-describedby={errors.name ? "contact-name-error" : undefined}
+                    className={fieldClass(Boolean(errors.name))}
                   />
                   {errors.name && (
-                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                    <p
+                      id="contact-name-error"
+                      className="text-red-600 dark:text-red-400 text-sm mt-1"
+                    >
+                      {errors.name}
+                    </p>
                   )}
                 </div>
                 <div>
+                  <Label htmlFor="contact-email" className="mb-2 block">
+                    {t("label.email")}
+                  </Label>
                   <Input
+                    id="contact-email"
                     name="email"
                     type="email"
+                    autoComplete="email"
                     placeholder={t("placeholder.email")}
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
-                      errors.email ? "border-red-500 focus:border-red-500" : ""
-                    }`}
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? "contact-email-error" : undefined}
+                    className={fieldClass(Boolean(errors.email))}
                   />
                   {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                    <p
+                      id="contact-email-error"
+                      className="text-red-600 dark:text-red-400 text-sm mt-1"
+                    >
+                      {errors.email}
+                    </p>
                   )}
                 </div>
               </div>
 
               <div>
+                <Label htmlFor="contact-subject" className="mb-2 block">
+                  {t("label.subject")}
+                </Label>
                 <Input
+                  id="contact-subject"
                   name="subject"
+                  autoComplete="off"
                   placeholder={t("placeholder.subject")}
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
-                    errors.subject ? "border-red-500 focus:border-red-500" : ""
-                  }`}
+                  aria-invalid={Boolean(errors.subject)}
+                  aria-describedby={errors.subject ? "contact-subject-error" : undefined}
+                  className={fieldClass(Boolean(errors.subject))}
                 />
                 {errors.subject && (
-                  <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
+                  <p
+                    id="contact-subject-error"
+                    className="text-red-600 dark:text-red-400 text-sm mt-1"
+                  >
+                    {errors.subject}
+                  </p>
                 )}
               </div>
 
               <div>
+                <Label htmlFor="contact-message" className="mb-2 block">
+                  {t("label.message")}
+                </Label>
                 <Textarea
+                  id="contact-message"
                   name="message"
+                  autoComplete="off"
                   placeholder={t("placeholder.project")}
                   value={formData.message}
                   onChange={handleChange}
                   required
                   rows={6}
-                  className={`glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
-                    errors.message ? "border-red-500 focus:border-red-500" : ""
-                  }`}
+                  aria-invalid={Boolean(errors.message)}
+                  aria-describedby={errors.message ? "contact-message-error" : undefined}
+                  className={fieldClass(Boolean(errors.message))}
                 />
                 {errors.message && (
-                  <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+                  <p
+                    id="contact-message-error"
+                    className="text-red-600 dark:text-red-400 text-sm mt-1"
+                  >
+                    {errors.message}
+                  </p>
                 )}
               </div>
 
@@ -358,6 +409,7 @@ const ContactSection = () => {
                 style={{ display: "none" }}
                 tabIndex={-1}
                 autoComplete="off"
+                aria-hidden="true"
               />
 
               <LegoButton
@@ -395,16 +447,16 @@ const ContactSection = () => {
                 >
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-primary/10 rounded-full">
-                      <info.icon className="w-6 h-6 text-primary" />
+                      <info.icon className="w-6 h-6 text-primary" aria-hidden="true" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="text-sm text-muted-foreground">
                         {t(info.labelKey)}
                       </div>
                       {info.link ? (
                         <a
                           href={info.link}
-                          className="text-lg font-semibold text-foreground hover:text-primary transition-colors"
+                          className="text-lg font-semibold text-foreground hover:text-primary transition-colors break-all"
                         >
                           {info.valueKey ? t(info.valueKey) : info.value}
                         </a>
@@ -453,7 +505,7 @@ const ContactSection = () => {
             <div className="glass p-6 rounded-xl border border-accent/30">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-3 h-3 bg-accent rounded-full animate-pulse"></div>
-                <Badge className="bg-accent/10 text-accent border-accent/30">
+                <Badge className="bg-accent/10 text-foreground border-accent/30">
                   {t("availableForWork")}
                 </Badge>
               </div>

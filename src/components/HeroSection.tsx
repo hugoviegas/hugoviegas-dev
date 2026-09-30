@@ -160,23 +160,35 @@ const HeroSection = () => {
                 href="https://github.com/hugoviegas/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={t("a11y.githubProfile")}
                 className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
               >
-                <Github className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                <Github
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-primary"
+                  aria-hidden="true"
+                />
               </a>
               <a
                 href="https://www.linkedin.com/in/hviegas/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={t("a11y.linkedinProfile")}
                 className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
               >
-                <Linkedin className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                <Linkedin
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-primary"
+                  aria-hidden="true"
+                />
               </a>
               <a
                 href="mailto:hugoviegas3.1@gmail.com"
+                aria-label={t("a11y.emailHugo")}
                 className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
               >
-                <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                <Mail
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-primary"
+                  aria-hidden="true"
+                />
               </a>
 
               {/* Resume Dialog Button */}

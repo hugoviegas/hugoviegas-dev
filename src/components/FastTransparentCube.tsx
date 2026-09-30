@@ -14,6 +14,7 @@ declare global {
 }
 import { Button } from "@/components/ui/button";
 import { X, Maximize } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function FastTransparentCube({
   width = 250,
@@ -24,6 +25,7 @@ export default function FastTransparentCube({
   height?: number;
   enableExpand?: boolean;
 }) {
+  const { t } = useLanguage();
   const hasInitialized = useRef(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const cubeRef = useRef<HTMLDivElement | null>(null);
@@ -320,9 +322,10 @@ export default function FastTransparentCube({
             variant="outline"
             className="!p-3 backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all"
             onClick={flipToExpanded}
+            aria-label={t("a11y.expandCube")}
             style={{ zIndex: 91, touchAction: "manipulation" }}
           >
-            <Maximize className="w-4 h-4" />
+            <Maximize className="w-4 h-4" aria-hidden="true" />
           </Button>
         )}
       </div>
@@ -357,8 +360,9 @@ export default function FastTransparentCube({
                   variant="outline"
                   className="!p-3 backdrop-blur-sm bg-white/20 hover:bg-white/30 border-white/30"
                   onClick={!isAnimating ? flipToOriginal : undefined}
+                  aria-label={t("a11y.closeCube")}
                 >
-                  <X className="w-6 h-6 text-white" />
+                  <X className="w-6 h-6 text-white" aria-hidden="true" />
                 </Button>
 
                 <Button
@@ -367,7 +371,7 @@ export default function FastTransparentCube({
                   className="!p-3 backdrop-blur-sm bg-white/15 hover:bg-white/25 border-white/30"
                   onClick={() => playSequence("R U R' U'")}
                   disabled={isAnimating}
-                  aria-label="Play cube moves"
+                  aria-label={t("a11y.playCubeMoves")}
                 >
                   ▶
                 </Button>

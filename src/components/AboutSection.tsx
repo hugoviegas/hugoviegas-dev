@@ -176,7 +176,7 @@ const AboutSection = () => {
                   </span>
                   <Badge
                     variant="secondary"
-                    className="bg-green-500/10 text-green-400 border-green-500/30"
+                    className="bg-green-500/10 text-green-800 dark:text-green-400 border-green-500/30"
                   >
                     {t("native")}
                   </Badge>
@@ -187,7 +187,7 @@ const AboutSection = () => {
                   </span>
                   <Badge
                     variant="secondary"
-                    className="bg-blue-500/10 text-blue-400 border-blue-500/30"
+                    className="bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30"
                   >
                     {t("c1Proficiency")}
                   </Badge>

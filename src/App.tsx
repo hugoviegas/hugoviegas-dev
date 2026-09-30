@@ -8,6 +8,7 @@ import { lazy, Suspense, useEffect } from "react";
 import DynamicSidebar from "@/components/DynamicSidebar";
 import TopControls from "@/components/TopControls";
 import RouteSeo from "@/components/RouteSeo";
+import SkipLink from "@/components/SkipLink";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -46,6 +47,7 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <RouteSeo />
+            <SkipLink />
             <DynamicSidebar />
             <TopControls />
             <Suspense fallback={null}>

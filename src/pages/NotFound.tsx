@@ -14,7 +14,11 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-6">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="flex min-h-screen items-center justify-center bg-background px-6 focus:outline-none"
+    >
       <div className="text-center">
         <h1 className="heading-section mb-4 text-primary">
           {t("notFound.title")}
@@ -24,7 +28,7 @@ const NotFound = () => {
           {t("notFound.cta")}
         </a>
       </div>
-    </div>
+    </main>
   );
 };
 

@@ -11,7 +11,7 @@ const ViewerSkeleton = ({ height }: { height: number }) => (
     className="w-full rounded-3xl border border-muted/20 bg-muted/10 flex items-center justify-center animate-pulse"
     style={{ minHeight: height }}
   >
-    <span className="text-sm text-muted-foreground/70">
+    <span className="text-sm text-muted-foreground">
       Loading 3D experience...
     </span>
   </div>

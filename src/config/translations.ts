@@ -517,6 +517,10 @@ export const translations: Translations = {
     EN: "Have a project in mind? I'd love to hear about it.",
     PT: "Tem um projeto em mente? Adoraria saber sobre ele.",
   },
+  "label.name": { EN: "Name", PT: "Nome" },
+  "label.email": { EN: "Email", PT: "Email" },
+  "label.subject": { EN: "Subject", PT: "Assunto" },
+  "label.message": { EN: "Message", PT: "Mensagem" },
   "placeholder.name": { EN: "Your Name", PT: "Seu Nome" },
   "placeholder.email": { EN: "Your Email", PT: "Seu Email" },
   "placeholder.subject": { EN: "Subject", PT: "Assunto" },
@@ -998,6 +1002,27 @@ export const translations: Translations = {
     EN: "Page Not Found | Hugo Viegas",
     PT: "Página Não Encontrada | Hugo Viegas",
   },
+
+  // ------------------------------------------------------- Accessibility
+  "a11y.skipToContent": {
+    EN: "Skip to main content",
+    PT: "Pular para o conteúdo principal",
+  },
+  "a11y.githubProfile": {
+    EN: "GitHub profile (opens in a new tab)",
+    PT: "Perfil no GitHub (abre em nova aba)",
+  },
+  "a11y.linkedinProfile": {
+    EN: "LinkedIn profile (opens in a new tab)",
+    PT: "Perfil no LinkedIn (abre em nova aba)",
+  },
+  "a11y.emailHugo": {
+    EN: "Email Hugo Viegas",
+    PT: "Enviar email para Hugo Viegas",
+  },
+  "a11y.expandCube": { EN: "Expand cube", PT: "Expandir cubo" },
+  "a11y.closeCube": { EN: "Close expanded cube", PT: "Fechar cubo expandido" },
+  "a11y.playCubeMoves": { EN: "Play cube moves", PT: "Executar movimentos do cubo" },
 
   fullStory: {
     EN: `A long time ago I found a spark. At eight years old, a first phone became my training droid — downloading .jar games, tweaking settings and customizing things were my first experiments with systems (my tiny training droid did more beeps than features). At eleven, curiosity became a mission: a Lego robotics championship at school. We built and programmed a robot with a drag‑and‑drop language, won regionals and reached nationals. Tools were humble, but the lesson was clear: like a young Padawan, I had found a path worth mastering (no robes required).
