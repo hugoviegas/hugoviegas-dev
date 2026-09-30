@@ -648,6 +648,37 @@ export const translations: Translations = {
     PT: "Educação",
   },
 
+  // Self-employed web development entry
+  "exp.freelance.period": { EN: "Jun 2023 – Mar 2024", PT: "Jun 2023 – Mar 2024" },
+  "exp.freelance.title": { EN: "Web Developer", PT: "Desenvolvedor Web" },
+  "exp.freelance.company": { EN: "Self-employed", PT: "Autônomo" },
+  "exp.freelance.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  "exp.freelance.description": {
+    EN: "Freelance web development for a restaurant client in Dublin, from requirements through launch and ongoing maintenance.",
+    PT: "Desenvolvimento web freelance para um restaurante cliente em Dublin, dos requisitos ao lançamento e à manutenção contínua.",
+  },
+  "exp.freelance.a1": {
+    EN: "Designed, developed, and deployed a website for a restaurant client, from requirements through launch",
+    PT: "Projetei, desenvolvi e publiquei um site para um restaurante cliente, dos requisitos ao lançamento",
+  },
+  "exp.freelance.a2": {
+    EN: "Provided about 10 months of post-launch maintenance, including bug fixes, content updates, and minor feature improvements",
+    PT: "Fiz cerca de 10 meses de manutenção após o lançamento, incluindo correções de bugs, atualizações de conteúdo e pequenas melhorias de funcionalidades",
+  },
+
+  // ICOT education entry
+  "edu.icot.period": { EN: "Aug 2022 – Apr 2024", PT: "Ago 2022 – Abr 2024" },
+  "edu.icot.title": {
+    EN: "Professional English Language Programme (Level C1 – Advanced)",
+    PT: "Programa Profissional de Língua Inglesa (Nível C1 – Avançado)",
+  },
+  "edu.icot.company": { EN: "ICOT", PT: "ICOT" },
+  "edu.icot.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
+  "edu.icot.description": {
+    EN: "Completed a professional English language programme in Dublin, reaching C1 (Advanced) level.",
+    PT: "Concluí um programa profissional de língua inglesa em Dublin, atingindo o nível C1 (Avançado).",
+  },
+
   // ---------------------------------------------------------------- Hero
   loadingProfile: { EN: "Loading profile...", PT: "Carregando perfil..." },
   heroImageAlt: {

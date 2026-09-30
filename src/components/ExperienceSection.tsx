@@ -12,7 +12,16 @@ import { useLanguage } from "../hooks/useLanguage";
 import coinIcon from "@/assets/lego-bricks/gold-coin-2d.png";
 
 export function ExperienceSection(props) {
-  const workExperiences = [
+  const { t } = useLanguage();
+
+  const workExperiences: {
+    period: string;
+    title: string;
+    company: string;
+    location: string;
+    description: string;
+    achievements: string[];
+  }[] = [
     {
       period: "Sep 2024 – Present",
       title: "IT Support Specialist | System Administrator",
@@ -30,6 +39,14 @@ export function ExperienceSection(props) {
         "Create comprehensive technical documentation and user guides",
         "Implement security policies following information security best practices",
       ],
+    },
+    {
+      period: t("exp.freelance.period"),
+      title: t("exp.freelance.title"),
+      company: t("exp.freelance.company"),
+      location: t("exp.freelance.location"),
+      description: t("exp.freelance.description"),
+      achievements: [t("exp.freelance.a1"), t("exp.freelance.a2")],
     },
     {
       period: "May 2020 – Jun 2022",
@@ -64,7 +81,7 @@ export function ExperienceSection(props) {
     },
   ];
 
-  const education = [
+  const education: typeof workExperiences = [
     {
       period: "Sep 2024 – Sep 2025",
       title: "Higher Diploma in Science in Computing",
@@ -80,6 +97,14 @@ export function ExperienceSection(props) {
         "Information Security and Algorithms & Data Structures",
         "Combining academic study with professional IT practice",
       ],
+    },
+    {
+      period: t("edu.icot.period"),
+      title: t("edu.icot.title"),
+      company: t("edu.icot.company"),
+      location: t("edu.icot.location"),
+      description: t("edu.icot.description"),
+      achievements: [],
     },
     {
       period: "Mar 2018 – Jul 2021",
@@ -112,7 +137,6 @@ export function ExperienceSection(props) {
     "HTML5 & CSS3 Development",
   ];
 
-  const { t } = useLanguage();
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>(
     {},
   );
@@ -171,35 +195,39 @@ export function ExperienceSection(props) {
             {exp.description}
           </p>
 
-          <div className="space-y-1.5">
-            {visibleAchievements.map((achievement, achIndex) => (
-              <div
-                key={`${cardKey}-ach-${achIndex}`}
-                className="flex items-start gap-2"
-              >
-                <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <span className="text-sm text-muted-foreground">
-                  {achievement}
-                </span>
-              </div>
-            ))}
-          </div>
+          {exp.achievements.length > 0 && (
+            <div className="space-y-1.5">
+              {visibleAchievements.map((achievement, achIndex) => (
+                <div
+                  key={`${cardKey}-ach-${achIndex}`}
+                  className="flex items-start gap-2"
+                >
+                  <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                  <span className="text-sm text-muted-foreground">
+                    {achievement}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
 
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-expanded={isExpanded}
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-          >
-            <img
-              src={coinIcon}
-              alt="Toggle details"
-              className={`w-4 h-4 object-contain transition-transform duration-300 ${
-                isExpanded ? "rotate-180" : ""
-              }`}
-            />
-            {isExpanded ? t("experienceShowLess") : t("experienceShowMore")}
-          </button>
+          {exp.achievements.length > 3 && (
+            <button
+              type="button"
+              onClick={onToggle}
+              aria-expanded={isExpanded}
+              className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              <img
+                src={coinIcon}
+                alt="Toggle details"
+                className={`w-4 h-4 object-contain transition-transform duration-300 ${
+                  isExpanded ? "rotate-180" : ""
+                }`}
+              />
+              {isExpanded ? t("experienceShowLess") : t("experienceShowMore")}
+            </button>
+          )}
         </div>
       </div>
     );
