@@ -16,16 +16,20 @@ import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
 import blueFront from "@/assets/lego-bricks/blue-front.webp";
 import whiteFront from "@/assets/lego-bricks/white-front.webp";
 import StarWarsCrawlOverlay from "@/components/StarWarsCrawl";
+import { useContentLang, useCoreContent } from "@/content/store";
 
 const AboutSection = () => {
   const { t, language } = useLanguage();
+  const lang = useContentLang();
+  const about = useCoreContent().about[0]?.[lang];
   const [isCrawlOpen, setIsCrawlOpen] = useState(false);
   const episodeLabel = language === "PT" ? "Episódio I" : "Episode I";
   const introText =
     language === "PT"
       ? "Há muito tempo, em uma galáxia não muito distante..."
       : "A long time ago in a galaxy far, far away....";
-  const highlights = [
+  // Icon styles cycle when there are more highlights than styles.
+  const highlightStyles = [
     {
       icon: TrendingUp,
       color: "text-green-400",
@@ -103,12 +107,14 @@ const AboutSection = () => {
               </div>
 
               <div className="space-y-4">
-                <p className="text-base lg:text-lg text-foreground/80 leading-relaxed">
-                  {t("journeySummary1")}
-                </p>
-                <p className="text-base lg:text-lg text-foreground/80 leading-relaxed">
-                  {t("journeySummary2")}
-                </p>
+                {about?.summary.map((paragraph, index) => (
+                  <p
+                    key={index}
+                    className="text-base lg:text-lg text-foreground/80 leading-relaxed"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
               </div>
 
               <Button
@@ -123,24 +129,27 @@ const AboutSection = () => {
 
             {/* Highlights Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {highlights.map((highlight, index) => (
-                <div
-                  key={index}
-                  className="glass-strong rounded-2xl p-6 transition-all duration-300 hover:shadow-lg group"
-                >
+              {about?.highlights.map((item, index) => {
+                const highlight = highlightStyles[index % highlightStyles.length];
+                return (
                   <div
-                    className={`w-12 h-12 rounded-xl ${highlight.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                    key={index}
+                    className="glass-strong rounded-2xl p-6 transition-all duration-300 hover:shadow-lg group"
                   >
-                    <highlight.icon className={`w-6 h-6 ${highlight.color}`} />
+                    <div
+                      className={`w-12 h-12 rounded-xl ${highlight.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                    >
+                      <highlight.icon className={`w-6 h-6 ${highlight.color}`} />
+                    </div>
+                    <h4 className="font-semibold text-lg mb-2 text-foreground">
+                      {item.title}
+                    </h4>
+                    <p className="text-sm text-foreground/70 leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
-                  <h4 className="font-semibold text-lg mb-2 text-foreground">
-                    {t(`highlight${index + 1}Title`)}
-                  </h4>
-                  <p className="text-sm text-foreground/70 leading-relaxed">
-                    {t(`highlight${index + 1}Desc`)}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -201,7 +210,7 @@ const AboutSection = () => {
         open={isCrawlOpen}
         onClose={() => setIsCrawlOpen(false)}
         title={t("fullStoryTitle")}
-        story={t("fullStory")}
+        story={about?.fullStory ?? ""}
         episodeLabel={episodeLabel}
         introText={introText}
       />

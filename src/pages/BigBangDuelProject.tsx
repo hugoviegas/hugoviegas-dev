@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -11,6 +11,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
+import { useContentLang } from "@/content/store";
+import { useProjectDetail } from "@/content/useProjectDetail";
 
 const DEMO_URL =
   import.meta.env.VITE_DEMO_BIG_BANG_DUEL_URL || "https://duel.hugoviegas.dev";
@@ -23,64 +25,15 @@ const BigBangDuelProject = () => {
   const [isContextChatOpen, setIsContextChatOpen] = useState(false);
   const [initialPrompt, setInitialPrompt] = useState<string>();
 
-  const techStack = useMemo(
-    () => [
-      t("bigBangTechReact"),
-      t("bigBangTechTypeScript"),
-      t("bigBangTechVite"),
-      t("bigBangTechTailwind"),
-      t("bigBangTechZustand"),
-      t("bigBangTechFirebaseAuth"),
-      t("bigBangTechFirestore"),
-      t("bigBangTechRealtime"),
-    ],
-    [t],
-  );
-
-  const tryItems = useMemo(
-    () => [
-      t("bigBangTryItemGuest"),
-      t("bigBangTryItemGoogle"),
-      t("bigBangTryItemJourney"),
-      t("bigBangTryItemAccess"),
-    ],
-    [t],
-  );
-
-  const builtItems = useMemo(
-    () => [
-      t("bigBangBuiltItemExperience"),
-      t("bigBangBuiltItemProduct"),
-      t("bigBangBuiltItemFlow"),
-    ],
-    [t],
-  );
-
-  const challengeItems = useMemo(
-    () => [
-      t("bigBangChallengeResponsive"),
-      t("bigBangChallengeGuest"),
-      t("bigBangChallengeSystems"),
-      t("bigBangChallengeFriction"),
-    ],
-    [t],
-  );
-
-  const faqItems = useMemo(
-    () => [
-      { question: t("bigBangFaq.q1"), answer: t("bigBangFaq.a1") },
-      { question: t("bigBangFaq.q2"), answer: t("bigBangFaq.a2") },
-      { question: t("bigBangFaq.q3"), answer: t("bigBangFaq.a3") },
-      { question: t("bigBangFaq.q4"), answer: t("bigBangFaq.a4") },
-      { question: t("bigBangFaq.q5"), answer: t("bigBangFaq.a5") },
-      { question: t("bigBangFaq.q6"), answer: t("bigBangFaq.a6") },
-      { question: t("bigBangFaq.q7"), answer: t("bigBangFaq.a7") },
-      { question: t("bigBangFaq.q8"), answer: t("bigBangFaq.a8") },
-      { question: t("bigBangFaq.q9"), answer: t("bigBangFaq.a9") },
-      { question: t("bigBangFaq.q10"), answer: t("bigBangFaq.a10") },
-    ],
-    [t],
-  );
+  const lang = useContentLang();
+  const detail = useProjectDetail("big-bang-duel");
+  const text = detail?.[lang];
+  const techStack = detail?.stack ?? [];
+  const section = (id: string) => text?.sections.find((item) => item.id === id);
+  const trySection = section("try");
+  const builtSection = section("built");
+  const challengesSection = section("challenges");
+  const faqItems = text?.faq ?? [];
 
   const suggestedQuestions = [
     "bigBangQuestionGuest",
@@ -103,8 +56,8 @@ const BigBangDuelProject = () => {
             <p className="caption-text mb-3 uppercase tracking-[0.2em]">
               {t("bigBangDemoButton")}
             </p>
-            <h1 className="heading-section mb-4">{t("bigBangTitle")}</h1>
-            <p className="body-text">{t("bigBangSummary")}</p>
+            <h1 className="heading-section mb-4">{text?.title}</h1>
+            <p className="body-text">{text?.summary}</p>
           </header>
 
           <section className="mb-8" aria-labelledby="big-bang-stack">
@@ -127,11 +80,11 @@ const BigBangDuelProject = () => {
             <div className="rounded-2xl border border-border bg-card p-6 shadow-lg">
               <div className="mb-4 flex items-center gap-3 text-primary">
                 <Gamepad2 className="h-5 w-5" aria-hidden="true" />
-                <h2 className="heading-card">{t("bigBangTryTitle")}</h2>
+                <h2 className="heading-card">{trySection?.title}</h2>
               </div>
-              <p className="body-text mb-4">{t("bigBangTryBody")}</p>
+              {trySection?.body && <p className="body-text mb-4">{trySection.body}</p>}
               <ul className="space-y-3 text-sm text-muted-foreground">
-                {tryItems.map((item) => (
+                {trySection?.items.map((item) => (
                   <li key={item} className="flex gap-3">
                     <span className="mt-1 h-2.5 w-2.5 rounded-full bg-primary" aria-hidden="true" />
                     <span>{item}</span>
@@ -143,10 +96,10 @@ const BigBangDuelProject = () => {
             <div className="rounded-2xl border border-border bg-card p-6 shadow-lg">
               <div className="mb-4 flex items-center gap-3 text-primary">
                 <Sparkles className="h-5 w-5" aria-hidden="true" />
-                <h2 className="heading-card">{t("bigBangBuiltTitle")}</h2>
+                <h2 className="heading-card">{builtSection?.title}</h2>
               </div>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                {builtItems.map((item) => (
+                {builtSection?.items.map((item) => (
                   <li key={item} className="flex gap-3">
                     <span className="mt-1 h-2.5 w-2.5 rounded-full bg-primary" aria-hidden="true" />
                     <span>{item}</span>
@@ -159,10 +112,10 @@ const BigBangDuelProject = () => {
           <section className="mb-10 rounded-2xl border border-border bg-card p-6 shadow-lg">
             <div className="mb-4 flex items-center gap-3 text-primary">
               <TimerReset className="h-5 w-5" aria-hidden="true" />
-              <h2 className="heading-card">{t("bigBangChallengesTitle")}</h2>
+              <h2 className="heading-card">{challengesSection?.title}</h2>
             </div>
             <ul className="grid gap-3 text-sm text-muted-foreground md:grid-cols-2">
-              {challengeItems.map((item) => (
+              {challengesSection?.items.map((item) => (
                 <li key={item} className="flex gap-3 rounded-xl border border-border bg-background/40 p-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                   <span>{item}</span>

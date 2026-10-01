@@ -229,10 +229,23 @@ Config and secrets:
 Content split:
 - Moves to Firestore: experience, education, projects, project detail pages (stack, lists, FAQ, story), skills and certifications, and About (summary, highlights, full story). Collections: `experience`, `education`, `projects`, `projectDetails`, `skills`, `about`, `settings/site`, `contentHistory`.
 - Every content doc has `en` and `ptBR` blocks, `published`, `order`, `updatedAt`, and `version`. Publishing is blocked when either language is empty.
-- Stays in code: hero copy, contact and social links, the CV link, SEO titles and descriptions (`seo.*`, read at build time), UI chrome strings, chatbot context, Fun Stuff, and archived pages.
-- Images stay in the repository. Docs store an image key that maps to a bundled asset.
-- The build writes a committed JSON snapshot. It is the first-paint source and the fallback. `settings/site.useRemote` is the kill switch.
-- Hard-coded content stays as a dual-run fallback until Hugo approves deleting it after cutover.
+- Stays in code: hero copy, contact and social links, the CV link, SEO titles and descriptions (`seo.*`, read at build time), UI chrome strings (section headings, buttons, chatbot prompts), `currentFocusText`, the languages card, chatbot context, Fun Stuff, and archived pages.
+- Images stay in the repository. Docs store an image key that maps to a bundled asset (`src/content/images.ts`); skills store an `iconKey` mapped in `SkillsSection.tsx`.
+
+Content layer (`src/content/`):
+- `types.ts` is the model, and `schema.ts` holds the Zod schemas with `LIMITS`. Keep `LIMITS` and the limits in `firestore.rules` in sync.
+- The schemas are used by the admin, the snapshot script, the lazy refresh, and tests. Never import Zod or the Firebase SDK into the homepage entry.
+- `snapshot/core.json` holds the homepage collections and ships in the entry. `snapshot/details.json` holds `projectDetails` and ships in the project-page chunk.
+- Both snapshot files are committed and contain published docs only. `npm run content:snapshot` regenerates them from Firestore through public REST reads. The `prebuild` script runs it on every build.
+- If Firestore is unreachable or invalid, or `useRemote` is off, the script keeps the committed files. `npm run content:snapshot -- --seed` regenerates them from the hard-coded seed.
+- Runtime: the snapshot renders first. After idle, `remoteCheck.ts` reads `settings/site` once (no Zod).
+- Only when `useRemote` is on and `settings/site.updatedAt` is newer than the snapshot does `refresh.ts` (with Zod) load the published docs and swap them in. Invalid docs are dropped.
+- A core collection that comes back empty keeps its snapshot docs.
+- Every admin write must also bump `settings/site.updatedAt`, or the public refresh will not notice it.
+- `seed.ts` builds the seed from `translations.ts` plus `legacy.ts`, which holds the arrays formerly inside the components. CV-only skills are seeded as unpublished drafts.
+- The admin "Import seed" action shows a dry-run diff and writes in one batch. Changed docs are copied to `contentHistory` first.
+- `src/content/__tests__/dualRun.test.tsx` compares the data-driven render with the pre-migration render (`__fixtures__/legacy-render.json`) in EN and PT-BR.
+- Hard-coded content (`legacy.ts`, the content translation keys, `public/projects/big-bang-duel/*.md`) stays as the seed source and dual-run reference until Hugo approves deleting it after cutover. Keep the `darcyTitle` and `bigBangTitle` keys, which SEO breadcrumbs use.
 
 ## Chatbot
 - Keep the existing chatbot only until its redesign is explicitly scheduled.
@@ -308,7 +321,8 @@ Observed during the September 2026 audit. Re-verify before relying on them.
 
 - Commands:
   - Dev: `npm run dev` (Vite on port 5173; `.claude/launch.json` currently says 8080).
-  - Build: `npm run build`. For audits, build outside the repo: `npx vite build --outDir <tmp> --emptyOutDir`.
+  - Build: `npm run build` (its `prebuild` refreshes the content snapshot from Firestore). For audits, build outside the repo: `npx vite build --outDir <tmp> --emptyOutDir`, which skips the snapshot refresh.
+  - Content snapshot: `npm run content:snapshot` (from Firestore) or `npm run content:snapshot -- --seed` (from the hard-coded seed).
   - Tests: `npx vitest run --dir src` (limit to `src` so `.claude/worktrees` is not picked up).
   - Types: `npx tsc --noEmit -p tsconfig.app.json`.
   - Lint: `npx eslint src`.

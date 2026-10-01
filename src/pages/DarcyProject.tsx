@@ -5,21 +5,17 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
+import { useContentLang } from "@/content/store";
+import { useProjectDetail } from "@/content/useProjectDetail";
 
 const DEMO_URL =
   import.meta.env.VITE_DEMO_DARCY_URL || "https://demo-darcy.hugoviegas.dev";
 
-const STACK = [
-  "React",
-  "TypeScript",
-  "Vite",
-  "Tailwind",
-  "shadcn/ui",
-  "Supabase (real) / localStorage (demo)",
-];
-
 const DarcyProject = () => {
   const { t } = useLanguage();
+  const lang = useContentLang();
+  const detail = useProjectDetail("darcy-mcgees");
+  const text = detail?.[lang];
   const [iframeFailed, setIframeFailed] = useState(false);
   const [isContextChatOpen, setIsContextChatOpen] = useState(false);
   const [initialPrompt, setInitialPrompt] = useState<string>();
@@ -45,8 +41,8 @@ const DarcyProject = () => {
             <p className="caption-text mb-3 uppercase tracking-[0.2em]">
               {t("darcyDemoButton")}
             </p>
-            <h1 className="heading-section mb-4">{t("darcyTitle")}</h1>
-            <p className="body-text">{t("darcySummary")}</p>
+            <h1 className="heading-section mb-4">{text?.title}</h1>
+            <p className="body-text">{text?.summary}</p>
           </header>
 
           <section className="mb-8" aria-labelledby="darcy-stack">
@@ -54,7 +50,7 @@ const DarcyProject = () => {
               {t("darcyStack")}
             </h2>
             <div className="flex flex-wrap gap-2">
-              {STACK.map((technology) => (
+              {detail?.stack.map((technology) => (
                 <span
                   key={technology}
                   className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm text-primary"
