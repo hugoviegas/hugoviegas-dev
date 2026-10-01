@@ -1,0 +1,863 @@
+{
+  "siteUpdatedAt": null,
+  "source": "seed",
+  "experience": [
+    {
+      "id": "erin-college",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "IT Support Specialist | System Administrator",
+        "organization": "Erin College, Dublin",
+        "location": "Dublin, Ireland",
+        "period": "Sep 2024 – Present",
+        "description": "Designed, developed, and maintain a full-stack internal ERP platform alongside IT infrastructure and system administration for an educational institution in Dublin.",
+        "bullets": [
+          "Designed, developed, and maintain a full-stack ERP (HR, payroll, finance, student management, ticketing) with React, TypeScript, and Google Apps Script, supporting 120+ users",
+          "Build automation tools and data pipelines to reduce manual work and improve process efficiency",
+          "Provide hands-on technical support and system administration to 120+ users",
+          "Manage Google Workspace enterprise environment with user accounts and access controls",
+          "Administer Active Directory user accounts, permissions, and Group Policy configurations",
+          "Configure and manage network services ensuring campus-wide connectivity",
+          "Create comprehensive technical documentation and user guides",
+          "Implement security policies following information security best practices"
+        ]
+      },
+      "ptBR": {
+        "title": "Especialista em Suporte de TI | Administrador de Sistemas",
+        "organization": "Erin College, Dublin",
+        "location": "Dublin, Irlanda",
+        "period": "Set 2024 – Atual",
+        "description": "Projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack, além de cuidar da infraestrutura de TI e da administração de sistemas de uma instituição de ensino em Dublin.",
+        "bullets": [
+          "Projetei, desenvolvi e mantenho um ERP full-stack (RH, folha de pagamento, finanças, gestão de alunos, chamados) com React, TypeScript e Google Apps Script, atendendo 120+ usuários",
+          "Construo ferramentas de automação e pipelines de dados para reduzir trabalho manual e melhorar a eficiência dos processos",
+          "Presto suporte técnico prático e administração de sistemas para 120+ usuários",
+          "Gerencio o ambiente corporativo do Google Workspace, com contas de usuários e controles de acesso",
+          "Administro contas de usuários, permissões e configurações de Group Policy no Active Directory",
+          "Configuro e gerencio serviços de rede para garantir conectividade em todo o campus",
+          "Crio documentação técnica e guias de usuário completos",
+          "Implemento políticas de segurança seguindo boas práticas de segurança da informação"
+        ]
+      }
+    },
+    {
+      "id": "freelance-web-developer",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Web Developer",
+        "organization": "Self-employed",
+        "location": "Dublin, Ireland",
+        "period": "Jun 2023 – Mar 2024",
+        "description": "Freelance web development for a restaurant client in Dublin, from requirements through launch and ongoing maintenance.",
+        "bullets": [
+          "Designed, developed, and deployed a website for a restaurant client, from requirements through launch",
+          "Provided about 10 months of post-launch maintenance, including bug fixes, content updates, and minor feature improvements"
+        ]
+      },
+      "ptBR": {
+        "title": "Desenvolvedor Web",
+        "organization": "Autônomo",
+        "location": "Dublin, Irlanda",
+        "period": "Jun 2023 – Mar 2024",
+        "description": "Desenvolvimento web freelance para um restaurante cliente em Dublin, dos requisitos ao lançamento e à manutenção contínua.",
+        "bullets": [
+          "Projetei, desenvolvi e publiquei um site para um restaurante cliente, dos requisitos ao lançamento",
+          "Fiz cerca de 10 meses de manutenção após o lançamento, incluindo correções de bugs, atualizações de conteúdo e pequenas melhorias de funcionalidades"
+        ]
+      }
+    },
+    {
+      "id": "etal",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "IT Systems Support Specialist",
+        "organization": "ETAL Prestação de Serviços LTDA",
+        "location": "Belo Horizonte, Brazil",
+        "period": "May 2020 – Jun 2022",
+        "description": "Managed IT systems and built internal workflow tools for a services company in Brazil, combining technical support with software development to streamline operations.",
+        "bullets": [
+          "Built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one",
+          "Provided technical support for a Windows Server environment supporting employees across multiple departments",
+          "Managed user accounts, permissions, and access controls",
+          "Performed system maintenance including hardware troubleshooting and workstation configurations",
+          "Created technical documentation and standard operating procedures",
+          "Achieved high first-call resolution rates through systematic troubleshooting"
+        ]
+      },
+      "ptBR": {
+        "title": "Especialista em Suporte a Sistemas de TI",
+        "organization": "ETAL Prestação de Serviços LTDA",
+        "location": "Belo Horizonte, Brasil",
+        "period": "Mai 2020 – Jun 2022",
+        "description": "Gerenciei sistemas de TI e construí ferramentas internas de fluxo de trabalho para uma empresa de prestação de serviços no Brasil, combinando suporte técnico e desenvolvimento de software para simplificar operações.",
+        "bullets": [
+          "Construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um",
+          "Prestei suporte técnico a um ambiente Windows Server que atendia colaboradores de vários departamentos",
+          "Gerenciei contas de usuários, permissões e controles de acesso",
+          "Realizei manutenção de sistemas, incluindo diagnóstico de hardware e configuração de estações de trabalho",
+          "Criei documentação técnica e procedimentos operacionais padrão",
+          "Alcancei altas taxas de resolução no primeiro contato por meio de diagnóstico sistemático"
+        ]
+      }
+    },
+    {
+      "id": "dabliumusic",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Digital Designer | Web Developer",
+        "organization": "DabliuMusic",
+        "location": "Betim, Brazil",
+        "period": "2020 – 2021",
+        "description": "Handled web development and digital branding for a creative studio, delivering client-facing websites and marketing materials.",
+        "bullets": [
+          "Designed and developed business websites using HTML, CSS, and JavaScript",
+          "Created visual identities and digital marketing materials",
+          "Managed web hosting configurations and performed technical website maintenance",
+          "Supported client portfolio development and brand strategy"
+        ]
+      },
+      "ptBR": {
+        "title": "Designer Digital | Desenvolvedor Web",
+        "organization": "DabliuMusic",
+        "location": "Betim, Brasil",
+        "period": "2020 – 2021",
+        "description": "Cuidei do desenvolvimento web e da identidade digital de um estúdio criativo, entregando sites para clientes e materiais de marketing.",
+        "bullets": [
+          "Projetei e desenvolvi sites empresariais com HTML, CSS e JavaScript",
+          "Criei identidades visuais e materiais de marketing digital",
+          "Gerenciei configurações de hospedagem web e fiz a manutenção técnica dos sites",
+          "Apoiei o desenvolvimento de portfólios de clientes e a estratégia de marca"
+        ]
+      }
+    }
+  ],
+  "education": [
+    {
+      "id": "cct-college",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Higher Diploma in Science in Computing",
+        "organization": "CCT College Dublin",
+        "location": "Dublin, Ireland",
+        "period": "Sep 2024 – Sep 2025",
+        "description": "Completed with a First Class final grade (EQF level 8), covering software development, system architecture, database management, and web technologies.",
+        "bullets": [
+          "Software Development and System Architecture",
+          "Database Management and Web Technologies",
+          "Linux and Windows Server Administration",
+          "Cloud Computing and Network Fundamentals",
+          "Information Security and Algorithms & Data Structures",
+          "Combining academic study with professional IT practice"
+        ]
+      },
+      "ptBR": {
+        "title": "Higher Diploma in Science in Computing",
+        "organization": "CCT College Dublin",
+        "location": "Dublin, Irlanda",
+        "period": "Set 2024 – Set 2025",
+        "description": "Concluído com nota final First Class (EQF nível 8), abordando desenvolvimento de software, arquitetura de sistemas, gestão de bancos de dados e tecnologias web.",
+        "bullets": [
+          "Desenvolvimento de Software e Arquitetura de Sistemas",
+          "Gestão de Bancos de Dados e Tecnologias Web",
+          "Administração de Linux e Windows Server",
+          "Computação em Nuvem e Fundamentos de Redes",
+          "Segurança da Informação e Algoritmos e Estruturas de Dados",
+          "Combinação de estudo acadêmico com prática profissional em TI"
+        ]
+      }
+    },
+    {
+      "id": "icot",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Professional English Language Programme (Level C1 – Advanced)",
+        "organization": "ICOT",
+        "location": "Dublin, Ireland",
+        "period": "Aug 2022 – Apr 2024",
+        "description": "Completed a professional English language programme in Dublin, reaching C1 (Advanced) level.",
+        "bullets": []
+      },
+      "ptBR": {
+        "title": "Programa Profissional de Língua Inglesa (Nível C1 – Avançado)",
+        "organization": "ICOT",
+        "location": "Dublin, Irlanda",
+        "period": "Ago 2022 – Abr 2024",
+        "description": "Concluí um programa profissional de língua inglesa em Dublin, atingindo o nível C1 (Avançado).",
+        "bullets": []
+      }
+    },
+    {
+      "id": "unicnec",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Technologist Degree in Analysis and Systems Development",
+        "organization": "UNICNEC",
+        "location": "Itaúna, Brazil",
+        "period": "Mar 2018 – Jul 2021",
+        "description": "Completed higher education technology diploma with focus on software engineering and systems development. Key subjects included system analysis, database design, and network configuration.",
+        "bullets": [
+          "Software Engineering and System Analysis",
+          "Database Design and Implementation",
+          "Object-Oriented Programming",
+          "Linux Server Administration (practical coursework)",
+          "Network Configuration and Web Development",
+          "Project Management and Technical Communication"
+        ]
+      },
+      "ptBR": {
+        "title": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+        "organization": "UNICNEC",
+        "location": "Itaúna, Brasil",
+        "period": "Mar 2018 – Jul 2021",
+        "description": "Concluí a graduação tecnológica com foco em engenharia de software e desenvolvimento de sistemas. As principais disciplinas incluíram análise de sistemas, modelagem de bancos de dados e configuração de redes.",
+        "bullets": [
+          "Engenharia de Software e Análise de Sistemas",
+          "Modelagem e Implementação de Bancos de Dados",
+          "Programação Orientada a Objetos",
+          "Administração de Servidores Linux (disciplina prática)",
+          "Configuração de Redes e Desenvolvimento Web",
+          "Gestão de Projetos e Comunicação Técnica"
+        ]
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "darcy-mcgees",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "image": "darcy-mcgees",
+      "imageWidth": 1280,
+      "imageHeight": 720,
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "ReactJs",
+        "Responsive Design"
+      ],
+      "liveUrl": "https://www.darcymcgeespub.com/",
+      "githubUrl": "",
+      "detailPath": "/projects/darcy-mcgees",
+      "en": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "description": "Restaurant website & admin dashboard (demo)",
+        "imageAlt": "D'Arcy McGee's Irish Pub"
+      },
+      "ptBR": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "description": "Site de restaurante e painel administrativo (demo)",
+        "imageAlt": "D'Arcy McGee's Irish Pub"
+      }
+    },
+    {
+      "id": "big-bang-duel",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "image": "big-bang-duel",
+      "imageWidth": 864,
+      "imageHeight": 557,
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "Zustand",
+        "Firebase"
+      ],
+      "liveUrl": "https://duel.hugoviegas.dev",
+      "githubUrl": "https://github.com/hugoviegas/Big-bang-Duel",
+      "detailPath": "/projects/big-bang-duel",
+      "en": {
+        "title": "Big Bang Duel",
+        "description": "Interactive strategy duel game with guest entry, AI/solo play, and a smooth path for player accounts.",
+        "imageAlt": "Big Bang Duel"
+      },
+      "ptBR": {
+        "title": "Big Bang Duel",
+        "description": "Jogo de duelo estratégico interativo com entrada de convidado, gameplay solo com IA e uma jornada simples para contas de jogadores.",
+        "imageAlt": "Big Bang Duel"
+      }
+    }
+  ],
+  "skills": [
+    {
+      "id": "certification-google-workspace-administration",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Google Workspace Administration"
+      },
+      "ptBR": {
+        "label": "Administração do Google Workspace"
+      }
+    },
+    {
+      "id": "focus-active-directory",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Active Directory"
+      },
+      "ptBR": {
+        "label": "Active Directory"
+      }
+    },
+    {
+      "id": "it-active-directory",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "active-directory",
+      "en": {
+        "label": "Active Directory"
+      },
+      "ptBR": {
+        "label": "Active Directory"
+      }
+    },
+    {
+      "id": "programming-html5",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "html",
+      "en": {
+        "label": "HTML5"
+      },
+      "ptBR": {
+        "label": "HTML5"
+      }
+    },
+    {
+      "id": "certification-active-directory-management",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Active Directory Management"
+      },
+      "ptBR": {
+        "label": "Gestão de Active Directory"
+      }
+    },
+    {
+      "id": "focus-google-workspace",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Google Workspace"
+      },
+      "ptBR": {
+        "label": "Google Workspace"
+      }
+    },
+    {
+      "id": "it-google-workspace",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "google-workspace",
+      "en": {
+        "label": "Google Workspace"
+      },
+      "ptBR": {
+        "label": "Google Workspace"
+      }
+    },
+    {
+      "id": "programming-css3",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "css",
+      "en": {
+        "label": "CSS3"
+      },
+      "ptBR": {
+        "label": "CSS3"
+      }
+    },
+    {
+      "id": "certification-windows-server-administration",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Windows Server Administration"
+      },
+      "ptBR": {
+        "label": "Administração do Windows Server"
+      }
+    },
+    {
+      "id": "focus-system-administration",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "System Administration"
+      },
+      "ptBR": {
+        "label": "Administração de Sistemas"
+      }
+    },
+    {
+      "id": "it-windows-server",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "windows-server",
+      "en": {
+        "label": "Windows Server"
+      },
+      "ptBR": {
+        "label": "Windows Server"
+      }
+    },
+    {
+      "id": "programming-javascript",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "javascript",
+      "en": {
+        "label": "JavaScript"
+      },
+      "ptBR": {
+        "label": "JavaScript"
+      }
+    },
+    {
+      "id": "certification-javascript-node-js-express-js",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "JavaScript (Node.js, Express.js)"
+      },
+      "ptBR": {
+        "label": "JavaScript (Node.js, Express.js)"
+      }
+    },
+    {
+      "id": "focus-process-automation",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Process Automation"
+      },
+      "ptBR": {
+        "label": "Automação de Processos"
+      }
+    },
+    {
+      "id": "it-linux",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "linux",
+      "en": {
+        "label": "Linux"
+      },
+      "ptBR": {
+        "label": "Linux"
+      }
+    },
+    {
+      "id": "programming-php",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "php",
+      "en": {
+        "label": "PHP"
+      },
+      "ptBR": {
+        "label": "PHP"
+      }
+    },
+    {
+      "id": "certification-google-apps-script",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Google Apps Script"
+      },
+      "ptBR": {
+        "label": "Google Apps Script"
+      }
+    },
+    {
+      "id": "focus-technical-support",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Technical Support"
+      },
+      "ptBR": {
+        "label": "Suporte Técnico"
+      }
+    },
+    {
+      "id": "it-docker",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "docker",
+      "en": {
+        "label": "Docker"
+      },
+      "ptBR": {
+        "label": "Docker"
+      }
+    },
+    {
+      "id": "programming-java",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "java",
+      "en": {
+        "label": "Java"
+      },
+      "ptBR": {
+        "label": "Java"
+      }
+    },
+    {
+      "id": "certification-mysql-database-management",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "MySQL Database Management"
+      },
+      "ptBR": {
+        "label": "Gestão de Banco de Dados MySQL"
+      }
+    },
+    {
+      "id": "focus-infrastructure-management",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Infrastructure Management"
+      },
+      "ptBR": {
+        "label": "Gestão de Infraestrutura"
+      }
+    },
+    {
+      "id": "it-network",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "network",
+      "en": {
+        "label": "Network"
+      },
+      "ptBR": {
+        "label": "Redes"
+      }
+    },
+    {
+      "id": "programming-python",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "python",
+      "en": {
+        "label": "Python"
+      },
+      "ptBR": {
+        "label": "Python"
+      }
+    },
+    {
+      "id": "certification-system-monitoring-troubleshooting",
+      "published": true,
+      "order": 60,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "System Monitoring & Troubleshooting"
+      },
+      "ptBR": {
+        "label": "Monitoramento e Diagnóstico de Sistemas"
+      }
+    },
+    {
+      "id": "programming-c",
+      "published": true,
+      "order": 60,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "c",
+      "en": {
+        "label": "C"
+      },
+      "ptBR": {
+        "label": "C"
+      }
+    },
+    {
+      "id": "certification-information-security-best-practices",
+      "published": true,
+      "order": 70,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Information Security Best Practices"
+      },
+      "ptBR": {
+        "label": "Boas Práticas de Segurança da Informação"
+      }
+    },
+    {
+      "id": "programming-vue-js",
+      "published": true,
+      "order": 70,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "vue",
+      "en": {
+        "label": "Vue.js"
+      },
+      "ptBR": {
+        "label": "Vue.js"
+      }
+    },
+    {
+      "id": "certification-technical-documentation-process-optimization",
+      "published": true,
+      "order": 80,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Technical Documentation & Process Optimization"
+      },
+      "ptBR": {
+        "label": "Documentação Técnica e Otimização de Processos"
+      }
+    },
+    {
+      "id": "programming-react",
+      "published": true,
+      "order": 80,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "react",
+      "en": {
+        "label": "React"
+      },
+      "ptBR": {
+        "label": "React"
+      }
+    },
+    {
+      "id": "certification-html5-css3-development",
+      "published": true,
+      "order": 90,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "HTML5 & CSS3 Development"
+      },
+      "ptBR": {
+        "label": "Desenvolvimento HTML5 e CSS3"
+      }
+    },
+    {
+      "id": "programming-shell-bash",
+      "published": true,
+      "order": 90,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "shell",
+      "en": {
+        "label": "Shell/Bash"
+      },
+      "ptBR": {
+        "label": "Shell/Bash"
+      }
+    },
+    {
+      "id": "programming-sql",
+      "published": true,
+      "order": 100,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "sql",
+      "en": {
+        "label": "SQL"
+      },
+      "ptBR": {
+        "label": "SQL"
+      }
+    }
+  ],
+  "about": [
+    {
+      "id": "main",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "summary": [
+          "Software Developer with 5+ years of combined experience in full-stack development and IT infrastructure. I started at ETAL in Belo Horizonte, Brazil, in 2020, where I worked in IT support and built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one.",
+          "Since September 2024 I have worked at Erin College in Dublin as IT Support Specialist | System Administrator. There I designed, developed, and maintain a full-stack internal ERP platform covering HR, payroll, finance, student management, and ticketing, built with React, TypeScript, and Google Apps Script and supporting operational workflows for 120+ users. In parallel, I completed a Higher Diploma in Science in Computing at CCT College Dublin (EQF level 8) with a First Class final grade in September 2025."
+        ],
+        "highlights": [
+          {
+            "title": "5+ Years Experience",
+            "description": "Full-stack development and IT infrastructure"
+          },
+          {
+            "title": "Timesheet Close: 4 Days to ~1",
+            "description": "Internal AppSheet app on Google Sheets at ETAL, serving 400+ employees"
+          },
+          {
+            "title": "Internal ERP Platform",
+            "description": "Full-stack ERP with HR, payroll, finance, student management, and ticketing modules for 120+ users"
+          },
+          {
+            "title": "First Class Higher Diploma",
+            "description": "Higher Diploma in Science in Computing, CCT College Dublin (EQF level 8), 2025"
+          }
+        ],
+        "fullStory": "A long time ago I found a spark. At eight years old, a first phone became my training droid — downloading .jar games, tweaking settings and customizing things were my first experiments with systems (my tiny training droid did more beeps than features). At eleven, curiosity became a mission: a Lego robotics championship at school. We built and programmed a robot with a drag‑and‑drop language, won regionals and reached nationals. Tools were humble, but the lesson was clear: like a young Padawan, I had found a path worth mastering (no robes required).\n\nYears later, at seventeen, a first job as a supermarket apprentice funded my first laptop (my first cockpit). With it came image and video editing, system restores, and an obsession with how things work under the hood. At eighteen, formal training in Analysis and Systems Development gave structure to that curiosity — programming logic, mathematics, databases and web development became the foundation for building real systems.\n\nIn 2021 a small venture took shape with a friend and my older brother: a videomaker and social media studio (my brother the wise co‑pilot). It sharpened storytelling and design, but it also revealed a deeper calling — solving operational problems with code. In IT at a services company, in stolen hours, AppSheet on top of Google Sheets became the engine for an internal app that simplified daily processes (a small rebellion against slow processes). I learned HR and finance workflows end‑to‑end to design it properly. The result: the timesheet close for 400+ employees fell from four days to about one. Curiosity met impact; making messy workflows simple became my signature.\n\nIreland came next. A year of saving made the move possible for better opportunities and full English immersion. Two years in hospitality accelerated fluency and cultural understanding. In September 2024, the path doubled down: a Higher Diploma in Science of Computing at CCT College and an IT role at Erin College began the same month. The academic effort paid off with First‑Class results. At work, spreadsheet automation evolved with AI prompting and sharper programming logic — projects across departments were streamlined and each week revealed another layer of automation possible within Google's ecosystem.\n\nAlongside this, a practical challenge from the restaurant job led to building the D'Arcy McGee's website. With AI tooling, UX study and hands‑on engineering, a fast, functional site shipped — proof that delivering quick, reliable value is a repeatable skill (almost a pixel‑perfect lightsaber, but not quite). Today I seek a front‑end or full‑stack role that values curiosity, product sense and the ability to turn complex processes into elegant, measurable solutions. The drive is the same as that eleven‑year‑old at the robotics table: learn fast, build well, and keep moving.\n"
+      },
+      "ptBR": {
+        "summary": [
+          "Desenvolvedor de Software com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Comecei na ETAL, em Belo Horizonte, em 2020, onde atuei em suporte de TI e construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um.",
+          "Desde setembro de 2024 trabalho no Erin College, em Dublin, como IT Support Specialist | System Administrator. Lá projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados, construída com React, TypeScript e Google Apps Script e que apoia os fluxos operacionais de 120+ usuários. Em paralelo, concluí o Higher Diploma in Science in Computing no CCT College Dublin (EQF nível 8) com nota final First Class em setembro de 2025."
+        ],
+        "highlights": [
+          {
+            "title": "5+ Anos de Experiência",
+            "description": "Desenvolvimento full-stack e infraestrutura de TI"
+          },
+          {
+            "title": "Fechamento de Ponto: 4 Dias para ~1",
+            "description": "App interno em AppSheet sobre Google Sheets na ETAL, para mais de 400 colaboradores"
+          },
+          {
+            "title": "Plataforma ERP Interna",
+            "description": "ERP full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados para 120+ usuários"
+          },
+          {
+            "title": "Higher Diploma com First Class",
+            "description": "Higher Diploma in Science in Computing, CCT College Dublin (EQF nível 8), 2025"
+          }
+        ],
+        "fullStory": "Há muito tempo encontrei uma faísca. Aos oito anos, um primeiro celular virou meu pequeno droide de treino — baixar joguinhos .jar, mexer em configurações e personalizar tudo foram meus primeiros experimentos com sistemas (meu droide fazia mais bipes que milagres). Aos onze, a curiosidade virou missão: um campeonato escolar de robótica Lego. Construímos e programamos um robô com uma linguagem de arrastar e soltar, vencemos a etapa regional e chegamos ao nacional. As ferramentas eram simples, mas a lição ficou clara: como um jovem Padawan, encontrei um caminho a ser dominado (sem túnicas, por enquanto).\n\nAnos depois, aos dezessete, o primeiro emprego como aprendiz de supermercado financiou meu primeiro notebook (meu primeiro cockpit). Com ele vieram edição de imagem e vídeo, restaurações de sistema e a obsessão por entender como as coisas funcionam por baixo do capô. Aos dezoito, a formação em Análise e Desenvolvimento de Sistemas deu estrutura a essa curiosidade — lógica de programação, matemática, bancos de dados e desenvolvimento web tornaram‑se a base para construir sistemas reais.\n\nEm 2021, com um amigo e meu irmão mais velho, nasceu um pequeno estúdio de videomaker e social media (meu irmão, o co‑piloto sábio). Isso aprimorou a narrativa e o design, mas também revelou um chamado mais profundo — resolver problemas operacionais com código. Em TI, numa empresa de prestação de serviços, nas horas vagas o AppSheet sobre Google Sheets virou o motor de um app interno que simplificou processos diários (uma pequena rebelião contra processos lentos). Aprendi os fluxos de RH e financeiro ponta a ponta para desenhá‑lo bem. O resultado: o fechamento de ponto de mais de 400 colaboradores caiu de quatro dias para cerca de um. Curiosidade virou impacto; transformar processos caóticos em soluções simples virou minha marca.\n\nVeio então a Irlanda. Um ano de economias tornou a mudança possível, em busca de melhores oportunidades e imersão no inglês. Dois anos na hospitalidade aceleraram a fluência e o entendimento cultural. Em setembro de 2024, a jornada se intensificou: um Higher Diploma em Science of Computing no CCT College e um cargo de TI no Erin College começaram no mesmo mês. O esforço acadêmico rendeu First‑Class. No trabalho, as automações em planilhas evoluíram com prompting de IA e lógica de programação mais robusta — projetos em vários departamentos foram otimizados e, a cada semana, surgia uma nova camada de automação possível dentro do ecossistema Google.\n\nParalelamente, um desafio prático do restaurante onde trabalhava levou à construção do site do D'Arcy McGee's. Com ferramentas de IA, estudo de UX e engenharia prática, saiu um site rápido e funcional — prova de que entregar valor com rapidez é uma habilidade repetível (quase um sabre de luz em pixels). Hoje procuro uma vaga front‑end ou full‑stack que valorize essa combinação de curiosidade, senso de produto e capacidade de transformar processos complexos em soluções elegantes e mensuráveis. A motivação é a mesma daquele garoto de onze anos na mesa de robótica: aprender rápido, construir bem e seguir em frente."
+      }
+    }
+  ]
+}

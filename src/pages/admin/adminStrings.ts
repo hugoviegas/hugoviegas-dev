@@ -33,9 +33,28 @@ const adminStrings = {
   },
   signedInAs: { EN: "Signed in as", PT: "Conectado como" },
   granted: {
-    EN: "Access confirmed. Content editors will be added in a later update.",
-    PT: "Acesso confirmado. Os editores de conteúdo serão adicionados em uma atualização futura.",
+    EN: "Access confirmed. Full content editors will be added in a later update.",
+    PT: "Acesso confirmado. Os editores completos de conteúdo serão adicionados em uma atualização futura.",
   },
+  seedTitle: { EN: "Import seed content", PT: "Importar conteúdo inicial" },
+  seedIntro: {
+    EN: "Copies the site's current hard-coded content to Firestore. Preview the changes first; nothing is written until you confirm.",
+    PT: "Copia o conteúdo atual do site, que está no código, para o Firestore. Veja as mudanças primeiro; nada é gravado até você confirmar.",
+  },
+  seedPreview: { EN: "Preview import", PT: "Pré-visualizar importação" },
+  seedWrite: { EN: "Write changes", PT: "Gravar mudanças" },
+  seedNothing: { EN: "Nothing to write", PT: "Nada para gravar" },
+  seedLoading: { EN: "Comparing with Firestore…", PT: "Comparando com o Firestore…" },
+  seedWriting: { EN: "Writing…", PT: "Gravando…" },
+  seedDone: { EN: "Done. Docs written:", PT: "Concluído. Documentos gravados:" },
+  seedError: { EN: "Import failed:", PT: "A importação falhou:" },
+  seedUntouched: {
+    EN: "Only in Firestore (left as is)",
+    PT: "Só no Firestore (mantidos)",
+  },
+  "seedStatus.new": { EN: "New", PT: "Novo" },
+  "seedStatus.changed": { EN: "Changed", PT: "Alterado" },
+  "seedStatus.unchanged": { EN: "Unchanged", PT: "Sem mudança" },
 } satisfies Record<string, Translation>;
 
 export type AdminStringKey = keyof typeof adminStrings;

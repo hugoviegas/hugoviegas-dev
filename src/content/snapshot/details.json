@@ -1,0 +1,220 @@
+{
+  "projectDetails": [
+    {
+      "id": "darcy-mcgees",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind",
+        "shadcn/ui",
+        "Supabase (real) / localStorage (demo)"
+      ],
+      "en": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "summary": "Restaurant website and admin dashboard demo for a modern Irish pub experience.",
+        "sections": [],
+        "faq": [],
+        "storyTitle": "",
+        "storyIntro": "",
+        "story": ""
+      },
+      "ptBR": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "summary": "Demonstração de site e painel administrativo para a experiência de um pub irlandês moderno.",
+        "sections": [],
+        "faq": [],
+        "storyTitle": "",
+        "storyIntro": "",
+        "story": ""
+      }
+    },
+    {
+      "id": "big-bang-duel",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "Zustand",
+        "Firebase Authentication",
+        "Firestore",
+        "Firebase Realtime Database"
+      ],
+      "en": {
+        "title": "Big Bang Duel",
+        "summary": "A fast strategy duel game that can be tried immediately as a guest before continuing with Google sign-in for returning players.",
+        "sections": [
+          {
+            "id": "try",
+            "title": "What you can try",
+            "body": "The game is designed to be approachable from the first click, with a guest path that opens the AI/solo experience immediately and a Google sign-in route for returning players.",
+            "items": [
+              "Guest entry for an immediate AI/solo experience",
+              "Google sign-in for returning players",
+              "A clear account journey that stays understandable at a high level",
+              "Full game access at duel.hugoviegas.dev"
+            ]
+          },
+          {
+            "id": "built",
+            "title": "What I built",
+            "body": "",
+            "items": [
+              "Designed the public-facing game experience around a low-friction entry flow.",
+              "Built the product work needed to support a playable game, identity flow, and user progression model.",
+              "Worked across the game experience and the system behind it so the first visit feels responsive and approachable."
+            ]
+          },
+          {
+            "id": "challenges",
+            "title": "Key challenges",
+            "body": "",
+            "items": [
+              "Keeping fast game interactions responsive while the game state updates smoothly.",
+              "Managing guest access without overstating permanent account or multiplayer capabilities.",
+              "Separating real-time game concerns from player profile and progression concerns.",
+              "Making the game easy to try without friction, even for players who do not want to commit immediately."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "How did Big Bang Duel begin?",
+            "answer": "The idea started from a childhood card game, then turned into a browser-based duel experience built and iterated by Hugo in a focused development sprint."
+          },
+          {
+            "question": "What inspired the visual identity?",
+            "answer": "The visual direction combines a cartoon look with a Wild West mood, shaped through early AI concept exploration and a clear desire for a game that feels complete but easy to understand."
+          },
+          {
+            "question": "How does the game work?",
+            "answer": "Each match is turn-based, each player starts with four health points, and each round is built around choosing one of five actions while managing ammunition, risk, and the opponent's pattern."
+          },
+          {
+            "question": "What do Reload, Shoot, Dodge, Counterattack, and Double Shot do?",
+            "answer": "Reload gains one ammunition; Shoot spends one ammunition and deals damage if the opponent does not defend; Dodge avoids a normal shot and reduces damage from a Double Shot; Counterattack spends one ammunition and returns damage in specific situations; Double Shot spends two ammunition and is a stronger attack with a two-use match limit."
+          },
+          {
+            "question": "What are the six classes and how does mastery affect them?",
+            "answer": "The six classes are Sharpshooter, Strategist, Sneak, Ricochet, Bloodthirsty, and Healer. Each class has a chance-based effect linked to its mastery level, which makes class specialization matter as players level up."
+          },
+          {
+            "question": "How does progression work?",
+            "answer": "Players unlock and buy characters through progression, complete achievements, and tackle daily, weekly, and monthly missions that reward in-game currency and keep the game varied."
+          },
+          {
+            "question": "What can a guest try?",
+            "answer": "Guests can choose one of the first three characters, play solo against the AI, and learn the main mechanics without committing to an account immediately. Guests cannot play online, access every character, or access the global ranking."
+          },
+          {
+            "question": "What was Hugo's role in the project?",
+            "answer": "Hugo built the complete game concept and experience, from rules and art direction to frontend, backend, authentication, progression, and solo AI behaviour, with his brother contributing to early ideas, testing, and balancing feedback."
+          },
+          {
+            "question": "What was the biggest technical and design challenge?",
+            "answer": "The biggest challenge was balancing the rules and making the AI hard to exploit while still fair. Hugo had to revisit design choices when the AI became too dominant or too predictable."
+          },
+          {
+            "question": "What comes next for the game?",
+            "answer": "The project is still evolving, with more rules, refinement, and deeper systems planned as the game continues to grow beyond the playable prototype stage."
+          }
+        ],
+        "storyTitle": "The story behind Big Bang Duel",
+        "storyIntro": "A guest-first game concept that turns a quick browser session into a full strategic duel experience.",
+        "story": "# Big Bang Duel\r\n\r\n## The idea\r\n\r\nBig Bang Duel began as a simple, fast, browser-first idea: a strategy card game that could be picked up in seconds, but still feel rich enough to reward repeated plays.\r\n\r\nThe original goal was to make the first session feel immediate. A player could step in as a guest, see the core loop quickly, and choose whether to keep exploring the game or continue with a more personal account path later.\r\n\r\n## Why guests matter\r\n\r\nThe project was designed around a low-friction experience. Guest access removes the need for a full account setup before the player understands the game’s value. It keeps the first click playful and focused on action, while the Google sign-in flow supports returning players without making the experience feel heavy.\r\n\r\n## The rules and progression\r\n\r\nThe design centers on a short duel loop: decide on a class, build a strategy around your chosen tools, and manage tempo against an opponent. Each match is meant to teach the player the game’s rhythm quickly, while progression rewards better decisions and stronger card combinations over time.\r\n\r\nThe project also introduced a clear hierarchy of classes, tactical choices, and progression goals. The challenge was not just making the game fun in isolation, but making the systems readable from a phone-sized screen without overwhelming the player.\r\n\r\n## The technical challenge\r\n\r\nThe main difficulty was balancing accessibility with depth. A fast tactical game needs to feel responsive, readable, and easy to grasp on mobile, while still giving enough room for meaningful decisions and a sense of progression.\r\n\r\nThis meant keeping the interface clear, reducing friction, and ensuring the guest-first flow and account path felt coherent instead of bolted together.\r\n\r\n## Hugo's role\r\n\r\nHugo shaped the product direction across the game concept, UI flow, player onboarding, and the deployment-focused polish needed to make the experience feel complete. The work focused on practical product decisions as much as on the game systems themselves: how a player enters, learns, and returns to the game.\r\n\r\n## The result\r\n\r\nBig Bang Duel is meant to feel approachable, quick to understand, and memorable on first contact. It brings together a clear strategic fantasy, a guest-first onboarding model, and a sustainable progression path that can continue to grow as more features are added.\r\n"
+      },
+      "ptBR": {
+        "title": "Big Bang Duel",
+        "summary": "Um jogo de duelo estratégico e rápido que pode ser testado imediatamente como visitante antes de continuar com login do Google para jogadores recorrentes.",
+        "sections": [
+          {
+            "id": "try",
+            "title": "O que você pode testar",
+            "body": "O jogo foi pensado para ser acessível desde o primeiro clique, com um caminho de convidado que abre imediatamente a experiência solo com IA e uma rota de login com Google para jogadores recorrentes.",
+            "items": [
+              "Acesso de convidado para uma experiência imediata solo contra a IA",
+              "Login com Google para jogadores recorrentes",
+              "Uma jornada de conta clara e fácil de compreender em alto nível",
+              "Acesso ao jogo completo em duel.hugoviegas.dev"
+            ]
+          },
+          {
+            "id": "built",
+            "title": "O que eu construí",
+            "body": "",
+            "items": [
+              "Desenhei a experiência pública do jogo em torno de um fluxo de entrada simples e acessível.",
+              "Construí o trabalho de produto necessário para suportar um jogo jogável, fluxo de identidade e modelo de progressão do utilizador.",
+              "Trabalhei em toda a experiência do jogo e no sistema por detrás dela para que a primeira visita seja responsiva e acessível."
+            ]
+          },
+          {
+            "id": "challenges",
+            "title": "Principais desafios",
+            "body": "",
+            "items": [
+              "Manter as interações rápidas do jogo responsivas enquanto o estado do jogo se atualiza sem problemas.",
+              "Gerir o acesso de convidado sem exagerar as capacidades permanentes de conta ou multijogador.",
+              "Separar as questões de jogo em tempo real das preocupações de perfil e progressão do jogador.",
+              "Fazer com que o jogo seja fácil de experimentar sem fricção, mesmo para jogadores que não querem comprometer-se imediatamente."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "Como começou o Big Bang Duel?",
+            "answer": "A ideia começou num jogo de cartas de infância e depois evoluiu para uma experiência de duelo online construída e iterada pelo Hugo numa sprint de desenvolvimento focada."
+          },
+          {
+            "question": "O que inspirou a identidade visual?",
+            "answer": "A direção visual combina um visual cartoon com um ambiente de Velho Oeste, moldado por exploração inicial de conceitos com IA e pelo desejo de criar um jogo completo mas fácil de compreender."
+          },
+          {
+            "question": "Como funciona o jogo?",
+            "answer": "Cada partida é por turnos, cada jogador começa com quatro pontos de vida e cada ronda envolve escolher uma de cinco ações enquanto gere munição, risco e o padrão do adversário."
+          },
+          {
+            "question": "O que fazem Recarregar, Atirar, Esquivar, Contra-golpe e Tiro duplo?",
+            "answer": "Recarregar ganha uma munição; Atirar gasta uma munição e causa dano se o adversário não se defender; Esquivar evita um tiro normal e reduz dano de Tiro duplo; Contra-golpe gasta uma munição e devolve dano em situações específicas; Tiro duplo gasta duas munições e é um ataque mais forte com um limite de duas utilizações por partida."
+          },
+          {
+            "question": "Quais são as seis classes e como a maestria afeta cada uma?",
+            "answer": "As seis classes são Atirador, Estrategista, Sorrateiro, Ricochete, Sanguinário e Curandeiro. Cada classe tem um efeito baseado em probabilidade associado ao nível de maestria, o que faz com que a especialização em classes passe a importar à medida que o jogador evolui."
+          },
+          {
+            "question": "Como funciona a progressão?",
+            "answer": "Os jogadores desbloqueiam e compram personagens por progressão, completam conquistas e realizam missões diárias, semanais e mensais que recompensam moeda do jogo e mantêm o jogo variado."
+          },
+          {
+            "question": "O que um visitante pode testar como convidado?",
+            "answer": "Os convidados podem escolher um dos três primeiros personagens, jogar em modo solo contra a IA e aprender as mecânicas principais sem criar imediatamente uma conta. Os convidados não podem jogar online, usar todos os personagens nem aceder ao ranking global."
+          },
+          {
+            "question": "Qual foi o papel do Hugo no projeto?",
+            "answer": "O Hugo construiu o conceito e a experiência completa do jogo, desde as regras e direção artística até frontend, backend, autenticação, progressão e comportamento da IA solo, com o seu irmão a contribuir para ideias iniciais, testes e feedback de equilíbrio."
+          },
+          {
+            "question": "Qual foi o maior desafio técnico e de design?",
+            "answer": "O maior desafio foi equilibrar as regras e criar uma IA desafiante sem ser injusta. O Hugo teve de rever escolhas de design quando a IA ficou demasiado dominante ou demasiado previsível."
+          },
+          {
+            "question": "O que vem a seguir para o jogo?",
+            "answer": "O projeto continua em evolução, com mais regras, refinamentos e sistemas mais profundos planeados à medida que o jogo cresce para além do estado de protótipo jogável."
+          }
+        ],
+        "storyTitle": "A história por trás do Big Bang Duel",
+        "storyIntro": "Um conceito de jogo pensado para começar rapidamente em navegador e evoluir para uma experiência de duelo estratégico completa.",
+        "story": "# Big Bang Duel\r\n\r\n## A ideia\r\n\r\nO Big Bang Duel começou como uma ideia simples, rápida e pensada para navegador: um jogo de duelo estratégico com cartas que podia ser experimentado em segundos, mas que ainda assim parecia rico o suficiente para recompensar jogadas repetidas.\r\n\r\nO objetivo inicial era fazer a primeira sessão parecer imediata. O jogador podia entrar como convidado, ver o loop principal do jogo rapidamente e decidir se queria continuar explorando a experiência ou avançar depois para um caminho com conta pessoal.\r\n\r\n## Por que os convidados importam\r\n\r\nO projeto foi desenhado com foco em uma experiência de baixa fricção. O acesso como convidado remove a necessidade de criar uma conta completa antes de o jogador entender o valor do jogo. Isso mantém o primeiro clique divertido e focado na ação, enquanto o fluxo de login com Google ajuda jogadores recorrentes sem tornar a experiência pesada.\r\n\r\n## As regras e a progressão\r\n\r\nO design gira em torno de um loop de duelo curto: escolher uma classe, construir uma estratégia ao redor das ferramentas escolhidas e gerenciar o ritmo contra um oponente. Cada partida pretende ensinar rapidamente o ritmo do jogo, enquanto a progressão recompensa decisões melhores e combinações mais fortes ao longo do tempo.\r\n\r\nO projeto também introduziu uma hierarquia clara de classes, escolhas táticas e objetivos de progressão. O desafio não era apenas tornar o jogo divertido isoladamente, mas também deixar os sistemas legíveis em uma tela de celular sem sobrecarregar o jogador.\r\n\r\n## O desafio técnico\r\n\r\nA dificuldade principal foi equilibrar acessibilidade com profundidade. Um jogo tático e rápido precisa parecer responsivo, legível e fácil de entender em mobile, ao mesmo tempo em que oferece espaço para decisões significativas e uma sensação de progresso.\r\n\r\nIsso exigiu manter a interface clara, reduzir atritos e garantir que o fluxo de convidado e o caminho com conta se sentissem coerentes em vez de montados de maneira improvisada.\r\n\r\n## O papel do Hugo\r\n\r\nO Hugo ajudou a definir a direção do produto em torno do conceito do jogo, do fluxo de interface, da introdução do jogador e do polimento final voltado para entrega, para que a experiência parecesse completa. O trabalho se concentrou em decisões práticas de produto tanto quanto nos próprios sistemas do jogo: como o jogador entra, aprende e retorna ao jogo.\r\n\r\n## O resultado\r\n\r\nO Big Bang Duel busca ser acessível, rápido de entender e memorável no primeiro contato. Ele reúne uma fantasia estratégica clara, um modelo de onboarding focado em convidado e um caminho de progressão que pode continuar crescendo conforme mais recursos forem adicionados.\r\n"
+      }
+    }
+  ]
+}

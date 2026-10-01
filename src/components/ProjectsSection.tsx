@@ -1,12 +1,11 @@
-import { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
 import { Link } from "react-router-dom";
 import LegoButton from "./LegoButton";
-import darcyMcgeesProject from "@/assets/project-darcy-mcgees.webp";
-import bigBangDuelProject from "@/assets/project-big-bang-duel.webp";
+import { contentImages } from "@/content/images";
+import { useContentLang, useCoreContent } from "@/content/store";
 import redFront from "@/assets/lego-bricks/red-front.webp";
 import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
 import blueFront from "@/assets/lego-bricks/blue-front.webp";
@@ -19,89 +18,41 @@ import whiteTop from "@/assets/lego-bricks/white-top.webp";
 import whiteTopSingle from "@/assets/lego-bricks/white-top-single.webp";
 
 const ProjectsSection = () => {
-  const [selectedFilter] = useState("All");
   const { t } = useLanguage();
 
-  // TODO: Future plans for this section:
-  // - Social media post-inspired card design
-  // - CRUD admin interface for adding/editing projects
+  const lang = useContentLang();
+  const { projects } = useCoreContent();
 
-  // Only entries with `published: true` render. Optional links/images are
-  // omitted (not "#") until a verified destination or real screenshot exists.
+  // Published projects only (the snapshot and the refresh drop drafts). Optional
+  // links and images are omitted, never "#".
   interface Project {
-    id: number;
-    titleKey: string;
-    descriptionKey: string;
+    id: string;
+    title: string;
+    description: string;
     image?: string;
+    imageAlt: string;
     // Intrinsic image size, used to reserve space and avoid layout shift.
     imageWidth?: number;
     imageHeight?: number;
     technologies: string[];
-    category: string;
-    featured: boolean;
-    published: boolean;
     liveUrl?: string;
     githubUrl?: string;
     detailUrl?: string;
-    metricsKey: string;
   }
 
-  const projects: Project[] = [
-    {
-      id: 1,
-      titleKey: "project.1.title",
-      descriptionKey: "project.1.description",
-      image: darcyMcgeesProject,
-      imageWidth: 1280,
-      imageHeight: 720,
-      technologies: ["HTML5", "CSS3", "ReactJs", "Responsive Design"],
-      category: "Web Development",
-      featured: true,
-      published: true,
-      liveUrl: "https://www.darcymcgeespub.com/",
-      // GitHub repo is not publicly reachable; hidden until Hugo approves a public URL.
-      detailUrl: "/projects/darcy-mcgees",
-      metricsKey: "project.1.metrics",
-    },
-    {
-      id: 2,
-      titleKey: "project.5.title",
-      descriptionKey: "project.5.description",
-      // Real screenshot of the live game (character collection screen).
-      image: bigBangDuelProject,
-      imageWidth: 864,
-      imageHeight: 557,
-      technologies: [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS",
-        "Zustand",
-        "Firebase",
-      ],
-      category: "Game Development",
-      featured: true,
-      published: true,
-      liveUrl: "https://duel.hugoviegas.dev",
-      githubUrl: "https://github.com/hugoviegas/Big-bang-Duel",
-      detailUrl: "/projects/big-bang-duel",
-      metricsKey: "project.5.metrics",
-    },
-    {
-      // ETAL QR Registration / automation: unpublished until Hugo approves public content.
-      id: 3,
-      titleKey: "project.2.title",
-      descriptionKey: "project.2.description",
-      technologies: ["AppSheet", "Google Sheets"],
-      category: "Automation",
-      featured: true,
-      published: false,
-      metricsKey: "project.2.metrics",
-    },
-    // Erinhub: add here with `published: false` until approved content exists.
-  ];
-
-  const publishedProjects = projects.filter((project) => project.published);
+  const publishedProjects: Project[] = projects.map((doc) => ({
+    id: doc.id,
+    title: doc[lang].title,
+    description: doc[lang].description,
+    image: contentImages[doc.image],
+    imageAlt: doc[lang].imageAlt,
+    imageWidth: doc.imageWidth || undefined,
+    imageHeight: doc.imageHeight || undefined,
+    technologies: doc.technologies,
+    liveUrl: doc.liveUrl || undefined,
+    githubUrl: doc.githubUrl || undefined,
+    detailUrl: doc.detailPath || undefined,
+  }));
 
   // Helper: render the lego 'square tile' project card
   const ProjectTile = ({
@@ -126,10 +77,10 @@ const ProjectsSection = () => {
         {project.image && (
           <div className="w-full h-44 md:h-56 overflow-hidden">
             {project.detailUrl ? (
-              <Link to={project.detailUrl} aria-label={t(project.titleKey)}>
+              <Link to={project.detailUrl} aria-label={project.title}>
                 <img
                   src={project.image}
-                  alt={t(project.titleKey)}
+                  alt={project.imageAlt}
                   width={project.imageWidth}
                   height={project.imageHeight}
                   loading="lazy"
@@ -140,7 +91,7 @@ const ProjectsSection = () => {
             ) : (
               <img
                 src={project.image}
-                alt={t(project.titleKey)}
+                alt={project.imageAlt}
                 width={project.imageWidth}
                 height={project.imageHeight}
                 loading="lazy"
@@ -157,16 +108,16 @@ const ProjectsSection = () => {
             {project.detailUrl ? (
               <Link to={project.detailUrl} className="block">
                 <h3 className="text-lg font-bold mb-1 text-foreground">
-                  {t(project.titleKey)}
+                  {project.title}
                 </h3>
               </Link>
             ) : (
               <h3 className="text-lg font-bold mb-1 text-foreground">
-                {t(project.titleKey)}
+                {project.title}
               </h3>
             )}
             <p className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
-              {t(project.descriptionKey)}
+              {project.description}
             </p>
           </div>
 
@@ -186,7 +137,7 @@ const ProjectsSection = () => {
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${t(project.titleKey)}: ${t("viewProject")}`}
+                    aria-label={`${project.title}: ${t("viewProject")}`}
                   >
                     <ExternalLink className="w-4 h-4" aria-hidden="true" />
                   </a>
@@ -198,7 +149,7 @@ const ProjectsSection = () => {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${t(project.titleKey)}: ${t("viewCode")}`}
+                    aria-label={`${project.title}: ${t("viewCode")}`}
                   >
                     <Github className="w-4 h-4" aria-hidden="true" />
                   </a>

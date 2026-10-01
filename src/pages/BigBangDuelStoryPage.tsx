@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useContentLang } from "@/content/store";
+import { useProjectDetail } from "@/content/useProjectDetail";
 
 const DEMO_URL =
   import.meta.env.VITE_DEMO_BIG_BANG_DUEL_URL || "https://duel.hugoviegas.dev";
@@ -98,48 +99,10 @@ const renderMarkdown = (raw: string) => {
 };
 
 const BigBangDuelStoryPage = () => {
-  const { language, t } = useLanguage();
-  const [story, setStory] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-
-  useEffect(() => {
-    const storyFile =
-      language === "PT" ? "/projects/big-bang-duel/story.pt.md" : "/projects/big-bang-duel/story.en.md";
-
-    let cancelled = false;
-
-    const loadStory = async () => {
-      try {
-        setIsLoading(true);
-        setHasError(false);
-
-        const response = await fetch(storyFile);
-        if (!response.ok) {
-          throw new Error("Failed to fetch story file");
-        }
-
-        const text = await response.text();
-        if (!cancelled) {
-          setStory(text);
-        }
-      } catch {
-        if (!cancelled) {
-          setHasError(true);
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    loadStory();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [language]);
+  const { t } = useLanguage();
+  const lang = useContentLang();
+  const text = useProjectDetail("big-bang-duel")?.[lang];
+  const story = text?.story ?? "";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -161,9 +124,9 @@ const BigBangDuelStoryPage = () => {
       >
         <div className="mx-auto max-w-4xl">
           <header className="mb-10 text-center">
-            <p className="caption-text mb-3 uppercase tracking-[0.2em]">{t("bigBangTitle")}</p>
-            <h1 className="heading-section mb-4">{t("bigBangStoryTitle")}</h1>
-            <p className="body-text mx-auto max-w-2xl">{t("bigBangStoryIntro")}</p>
+            <p className="caption-text mb-3 uppercase tracking-[0.2em]">{text?.title}</p>
+            <h1 className="heading-section mb-4">{text?.storyTitle}</h1>
+            <p className="body-text mx-auto max-w-2xl">{text?.storyIntro}</p>
           </header>
 
           <div className="mb-8 flex flex-wrap justify-center gap-3">
@@ -182,20 +145,18 @@ const BigBangDuelStoryPage = () => {
           </div>
 
           <article className="rounded-3xl border border-border bg-card p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] md:p-8">
-            {isLoading ? (
-              <p className="body-text text-center text-muted-foreground">{t("bigBangStoryLoading")}</p>
-            ) : hasError ? (
+            {story ? (
+              <div
+                className="prose prose-invert max-w-none space-y-5 text-foreground prose-headings:mt-0 prose-headings:font-semibold prose-headings:text-foreground prose-p:leading-8 prose-p:text-muted-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:leading-7 prose-strong:text-foreground prose-blockquote:border-l-2 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:text-muted-foreground"
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(story) }}
+              />
+            ) : (
               <div className="space-y-4 text-center">
                 <p className="body-text text-muted-foreground">{t("bigBangStoryError")}</p>
                 <Button asChild>
                   <Link to="/projects/big-bang-duel">{t("bigBangBackToProject")}</Link>
                 </Button>
               </div>
-            ) : (
-              <div
-                className="prose prose-invert max-w-none space-y-5 text-foreground prose-headings:mt-0 prose-headings:font-semibold prose-headings:text-foreground prose-p:leading-8 prose-p:text-muted-foreground prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:leading-7 prose-strong:text-foreground prose-blockquote:border-l-2 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: renderMarkdown(story) }}
-              />
             )}
           </article>
         </div>

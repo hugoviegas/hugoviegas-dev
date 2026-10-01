@@ -7,8 +7,9 @@ rules_version = '2';
 // Authentication > Users). It is an identifier, not a secret. Change it only
 // together with a rules deploy.
 //
-// WRITES: there is no `allow write` anywhere, so every write is denied. The
-// content layer adds validated owner-only writes in a later change.
+// Field limits mirror src/content/schema.ts (LIMITS): change both together.
+// Rules cannot check each element of a list, only its size; the admin
+// validates list items with Zod before writing.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -26,6 +27,159 @@ service cloud.firestore {
       return isOwner() || resource.data.published == true;
     }
 
+    // ---------------------------------------------------------------- helpers
+
+    function validId(id) {
+      return id.matches('^[a-z0-9-]{1,100}$');
+    }
+
+    function str(value, max) {
+      return value is string && value.size() <= max;
+    }
+
+    function filled(value) {
+      return value is string && value.trim().size() > 0;
+    }
+
+    function strList(value, max) {
+      return value is list && value.size() <= max;
+    }
+
+    function httpsOrEmpty(value) {
+      return str(value, 300) && (value == '' || value.matches('^https://.+'));
+    }
+
+    function exactKeys(data, keys) {
+      return data.keys().hasOnly(keys) && data.keys().hasAll(keys);
+    }
+
+    // updatedAt is the server time of this write; version goes 1, 2, 3...
+    // so a stale admin tab cannot overwrite a newer edit.
+    function validMeta(data) {
+      return data.published is bool
+        && data.order is int && data.order >= 0 && data.order <= 10000
+        && data.updatedAt == request.time
+        && data.version is int
+        && (request.method == 'create'
+          ? data.version == 1
+          : data.version == resource.data.version + 1);
+    }
+
+    function contentKeys(extra) {
+      return ['published', 'order', 'updatedAt', 'version', 'en', 'ptBR'].concat(extra);
+    }
+
+    // --------------------------------------------------------- per collection
+
+    function timelineText(t) {
+      return t is map
+        && exactKeys(t, ['title', 'organization', 'location', 'period', 'description', 'bullets'])
+        && str(t.title, 200) && str(t.organization, 200) && str(t.location, 120)
+        && str(t.period, 80) && str(t.description, 1000) && strList(t.bullets, 30);
+    }
+
+    function timelineFilled(t) {
+      return filled(t.title) && filled(t.organization) && filled(t.period);
+    }
+
+    function validTimeline(data) {
+      return exactKeys(data, contentKeys([])) && validMeta(data)
+        && timelineText(data.en) && timelineText(data.ptBR)
+        && (data.published == false || (timelineFilled(data.en) && timelineFilled(data.ptBR)));
+    }
+
+    function projectText(t) {
+      return t is map
+        && exactKeys(t, ['title', 'description', 'imageAlt'])
+        && str(t.title, 120) && str(t.description, 1000) && str(t.imageAlt, 200);
+    }
+
+    function projectFilled(t) {
+      return filled(t.title) && filled(t.description) && filled(t.imageAlt);
+    }
+
+    function validProject(data) {
+      return exactKeys(data, contentKeys([
+          'image', 'imageWidth', 'imageHeight', 'technologies',
+          'liveUrl', 'githubUrl', 'detailPath']))
+        && validMeta(data)
+        && str(data.image, 120)
+        && data.imageWidth is int && data.imageWidth >= 0 && data.imageWidth <= 10000
+        && data.imageHeight is int && data.imageHeight >= 0 && data.imageHeight <= 10000
+        && strList(data.technologies, 30)
+        && httpsOrEmpty(data.liveUrl) && httpsOrEmpty(data.githubUrl)
+        && str(data.detailPath, 120)
+        && (data.detailPath == '' || data.detailPath.matches('^/[a-z0-9/-]*$'))
+        && projectText(data.en) && projectText(data.ptBR)
+        && (data.published == false || (projectFilled(data.en) && projectFilled(data.ptBR)));
+    }
+
+    function skillText(t) {
+      return t is map && exactKeys(t, ['label']) && str(t.label, 120);
+    }
+
+    function validSkill(data) {
+      return exactKeys(data, contentKeys(['group', 'iconKey'])) && validMeta(data)
+        && data.group in ['programming', 'it', 'certification', 'focus']
+        && str(data.iconKey, 40)
+        && skillText(data.en) && skillText(data.ptBR)
+        && (data.published == false || (filled(data.en.label) && filled(data.ptBR.label)));
+    }
+
+    function aboutText(t) {
+      return t is map
+        && exactKeys(t, ['summary', 'highlights', 'fullStory'])
+        && strList(t.summary, 30) && strList(t.highlights, 30) && str(t.fullStory, 20000);
+    }
+
+    function aboutFilled(t) {
+      return t.summary.size() > 0 && filled(t.fullStory);
+    }
+
+    function validAbout(data) {
+      return exactKeys(data, contentKeys([])) && validMeta(data)
+        && aboutText(data.en) && aboutText(data.ptBR)
+        && (data.published == false || (aboutFilled(data.en) && aboutFilled(data.ptBR)));
+    }
+
+    function detailText(t) {
+      return t is map
+        && exactKeys(t, ['title', 'summary', 'sections', 'faq', 'storyTitle', 'storyIntro', 'story'])
+        && str(t.title, 120) && str(t.summary, 1000)
+        && strList(t.sections, 30) && strList(t.faq, 30)
+        && str(t.storyTitle, 120) && str(t.storyIntro, 1000) && str(t.story, 20000);
+    }
+
+    function validDetail(data) {
+      return exactKeys(data, contentKeys(['stack'])) && validMeta(data)
+        && strList(data.stack, 30)
+        && detailText(data.en) && detailText(data.ptBR)
+        && (data.published == false
+          || (filled(data.en.title) && filled(data.en.summary)
+            && filled(data.ptBR.title) && filled(data.ptBR.summary)));
+    }
+
+    function validSettings(data) {
+      return exactKeys(data, ['useRemote', 'updatedAt', 'version'])
+        && data.useRemote is bool
+        && data.updatedAt == request.time
+        && data.version is int
+        && (request.method == 'create'
+          ? data.version == 1
+          : data.version == resource.data.version + 1);
+    }
+
+    function validHistory(data) {
+      return exactKeys(data, ['collection', 'docId', 'version', 'data', 'savedAt'])
+        && data.collection in ['experience', 'education', 'projects', 'projectDetails', 'skills', 'about', 'settings']
+        && str(data.docId, 100)
+        && data.version is int
+        && data.data is map
+        && data.savedAt == request.time;
+    }
+
+    // ------------------------------------------------------------------ paths
+
     // Access probe for the admin page. Any account that gets
     // permission-denied here is signed out immediately.
     match /admin/ping {
@@ -34,36 +188,52 @@ service cloud.firestore {
 
     match /experience/{docId} {
       allow read: if isPublishedOrOwner();
+      allow create, update: if isOwner() && validId(docId) && validTimeline(request.resource.data);
+      allow delete: if isOwner();
     }
 
     match /education/{docId} {
       allow read: if isPublishedOrOwner();
+      allow create, update: if isOwner() && validId(docId) && validTimeline(request.resource.data);
+      allow delete: if isOwner();
     }
 
     match /projects/{docId} {
       allow read: if isPublishedOrOwner();
+      allow create, update: if isOwner() && validId(docId) && validProject(request.resource.data);
+      allow delete: if isOwner();
     }
 
     match /projectDetails/{docId} {
       allow read: if isPublishedOrOwner();
+      allow create, update: if isOwner() && validId(docId) && validDetail(request.resource.data);
+      allow delete: if isOwner();
     }
 
     match /skills/{docId} {
       allow read: if isPublishedOrOwner();
+      allow create, update: if isOwner() && validId(docId) && validSkill(request.resource.data);
+      allow delete: if isOwner();
     }
 
     match /about/{docId} {
       allow read: if isPublishedOrOwner();
+      allow create, update: if isOwner() && validId(docId) && validAbout(request.resource.data);
+      allow delete: if isOwner();
     }
 
     // Site-wide switches (useRemote kill switch). Public, no content.
+    // Every admin save bumps updatedAt so the public refresh notices.
     match /settings/site {
       allow read: if true;
+      allow create, update: if isOwner() && validSettings(request.resource.data);
     }
 
-    // Previous versions of edited docs. Owner only.
-    match /contentHistory/{docId} {
+    // Previous versions of edited docs. Owner only, create-only: history is
+    // never edited or deleted.
+    match /contentHistory/{entryId} {
       allow read: if isOwner();
+      allow create: if isOwner() && validHistory(request.resource.data);
     }
 
     // Everything else is implicitly denied.

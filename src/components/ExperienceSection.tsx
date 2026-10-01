@@ -10,6 +10,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "../hooks/useLanguage";
 import coinIcon from "@/assets/lego-bricks/gold-coin-2d.webp";
+import { useContentLang, useCoreContent } from "@/content/store";
+import type { SkillGroup, TimelineText } from "@/content/types";
 
 interface TimelineEntry {
   period: string;
@@ -108,45 +110,28 @@ function TimelineItem({
   );
 }
 
-export function ExperienceSection(props) {
+const toEntry = (text: TimelineText): TimelineEntry => ({
+  period: text.period,
+  title: text.title,
+  company: text.organization,
+  location: text.location,
+  description: text.description,
+  achievements: text.bullets,
+});
+
+export function ExperienceSection() {
   const { t } = useLanguage();
+  const lang = useContentLang();
+  const content = useCoreContent();
 
-  const buildEntry = (prefix: string, achievementCount: number): TimelineEntry => ({
-    period: t(`${prefix}.period`),
-    title: t(`${prefix}.title`),
-    company: t(`${prefix}.company`),
-    location: t(`${prefix}.location`),
-    description: t(`${prefix}.description`),
-    achievements: Array.from({ length: achievementCount }, (_, i) =>
-      t(`${prefix}.a${i + 1}`),
-    ),
-  });
-
-  const workExperiences: TimelineEntry[] = [
-    buildEntry("exp.erin", 8),
-    buildEntry("exp.freelance", 2),
-    buildEntry("exp.etal", 6),
-    buildEntry("exp.dabliu", 4),
-  ];
-
-  const education: TimelineEntry[] = [
-    buildEntry("edu.cct", 6),
-    buildEntry("edu.icot", 0),
-    buildEntry("edu.unicnec", 6),
-  ];
-
-  const certifications = [
-    "Google Workspace Administration",
-    "Active Directory Management",
-    "Windows Server Administration",
-    "JavaScript (Node.js, Express.js)",
-    "Google Apps Script",
-    "MySQL Database Management",
-    "System Monitoring & Troubleshooting",
-    "Information Security Best Practices",
-    "Technical Documentation & Process Optimization",
-    "HTML5 & CSS3 Development",
-  ];
+  const workExperiences = content.experience.map((doc) => toEntry(doc[lang]));
+  const education = content.education.map((doc) => toEntry(doc[lang]));
+  const skillLabels = (group: SkillGroup) =>
+    content.skills
+      .filter((skill) => skill.group === group)
+      .map((skill) => skill[lang].label);
+  const certifications = skillLabels("certification");
+  const focusAreas = skillLabels("focus");
 
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>(
     {},
@@ -235,14 +220,22 @@ export function ExperienceSection(props) {
         </div>
 
         {/* Skills & Certifications Section */}
-        <SkillsSection certifications={certifications} t={t} />
+        <SkillsSection certifications={certifications} focusAreas={focusAreas} t={t} />
       </div>
     </section>
   );
 }
 
 // Skills & Certifications Component with independent expand/collapse
-function SkillsSection({ certifications, t }) {
+function SkillsSection({
+  certifications,
+  focusAreas,
+  t,
+}: {
+  certifications: string[];
+  focusAreas: string[];
+  t: (key: string) => string;
+}) {
   const [isCertsExpanded, setIsCertsExpanded] = useState(true);
   const [isFocusExpanded, setIsFocusExpanded] = useState(true);
 
@@ -328,14 +321,7 @@ function SkillsSection({ certifications, t }) {
                 {t("currentFocusText")}
               </p>
               <div className="flex flex-wrap gap-1.5">
-                {[
-                  "Active Directory",
-                  "Google Workspace",
-                  "System Administration",
-                  "Process Automation",
-                  "Technical Support",
-                  "Infrastructure Management",
-                ].map((focus, index) => (
+                {focusAreas.map((focus, index) => (
                   <Badge
                     key={index}
                     className="bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/30 text-xs px-2 py-0.5"

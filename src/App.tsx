@@ -12,6 +12,7 @@ import SkipLink from "@/components/SkipLink";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { ADMIN_PATH } from "@/config/admin";
+import { scheduleContentRefresh } from "@/content/store";
 
 // Secondary routes load on demand so the homepage critical path stays small
 // (the archived 3D pages would otherwise pull three.js into the entry).
@@ -38,6 +39,9 @@ const App = () => {
 
     // Ensure page starts at top on initial load
     window.scrollTo(0, 0);
+
+    // Swap in newer Firestore content once the page is idle.
+    scheduleContentRefresh();
   }, []);
 
   // Render FormulaD normally as a React element so hooks work correctly.

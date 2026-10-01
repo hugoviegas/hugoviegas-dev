@@ -10,6 +10,7 @@ import {
   type AdminUser,
 } from "./adminAuth";
 import { useAdminT } from "./adminStrings";
+import SeedImport from "./SeedImport";
 
 type Status =
   | "unconfigured"
@@ -86,7 +87,7 @@ const AdminPage = () => {
       tabIndex={-1}
       className="flex min-h-screen items-center justify-center bg-background px-6 py-24 focus:outline-none"
     >
-      <div className="w-full max-w-md space-y-6 text-center">
+      <div className="w-full max-w-2xl space-y-6 text-center">
         <header className="space-y-2">
           <h1 className="heading-section">{t("title")}</h1>
           <p className="body-text">{t("intro")}</p>
@@ -134,6 +135,8 @@ const AdminPage = () => {
             </Button>
           </div>
         )}
+
+        {status === "granted" && <SeedImport />}
       </div>
     </main>
   );

@@ -66,6 +66,7 @@ describe("AdminPage", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(adminStrings.denied.EN);
     expect(screen.queryByText("stranger@example.com")).not.toBeInTheDocument();
     expect(screen.queryByText(adminStrings.granted.EN)).not.toBeInTheDocument();
+    expect(screen.queryByText(adminStrings.seedTitle.EN)).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeInTheDocument();
   });
 
@@ -74,7 +75,8 @@ describe("AdminPage", () => {
     emit(owner);
 
     expect(await screen.findByText(owner.email!)).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveTextContent(adminStrings.granted.EN);
+    expect(screen.getByText(adminStrings.granted.EN)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: adminStrings.seedTitle.EN })).toBeInTheDocument();
     expect(auth.signOutAdmin).not.toHaveBeenCalled();
   });
 

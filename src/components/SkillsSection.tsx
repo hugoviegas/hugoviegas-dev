@@ -1,4 +1,7 @@
+import { Code2 } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useContentLang, useCoreContent } from "@/content/store";
+import type { SkillGroup } from "@/content/types";
 
 /* ------------------------------------------------------------------ */
 /*  Inline SVG icon components – lightweight, no external libraries    */
@@ -348,42 +351,40 @@ const NetworkIcon = ({ className = "" }: { className?: string }) => (
 /*  Skill data                                                         */
 /* ------------------------------------------------------------------ */
 
-interface Skill {
-  name: string;
+interface SkillIcon {
   icon: React.FC<{ className?: string }>;
   tint: string; // tailwind bg tint for the card
 }
 
-const programmingSkills: Skill[] = [
-  { name: "HTML5", icon: HTMLIcon, tint: "bg-orange-500/10" },
-  { name: "CSS3", icon: CSSIcon, tint: "bg-blue-500/10" },
-  { name: "JavaScript", icon: JavaScriptIcon, tint: "bg-yellow-400/10" },
-  { name: "PHP", icon: PHPIcon, tint: "bg-purple-500/10" },
-  { name: "Java", icon: JavaIcon, tint: "bg-red-500/10" },
-  { name: "Python", icon: PythonIcon, tint: "bg-blue-400/10" },
-  { name: "C", icon: CIcon, tint: "bg-indigo-500/10" },
-  { name: "Vue.js", icon: VueIcon, tint: "bg-emerald-500/10" },
-  { name: "React", icon: ReactIcon, tint: "bg-cyan-400/10" },
-  { name: "Shell/Bash", icon: ShellIcon, tint: "bg-green-500/10" },
-  { name: "SQL", icon: SQLIcon, tint: "bg-orange-400/10" },
-];
+// Content docs reference an icon by `iconKey`; skills without one get a generic icon.
+const skillIcons: Record<string, SkillIcon> = {
+  html: { icon: HTMLIcon, tint: "bg-orange-500/10" },
+  css: { icon: CSSIcon, tint: "bg-blue-500/10" },
+  javascript: { icon: JavaScriptIcon, tint: "bg-yellow-400/10" },
+  php: { icon: PHPIcon, tint: "bg-purple-500/10" },
+  java: { icon: JavaIcon, tint: "bg-red-500/10" },
+  python: { icon: PythonIcon, tint: "bg-blue-400/10" },
+  c: { icon: CIcon, tint: "bg-indigo-500/10" },
+  vue: { icon: VueIcon, tint: "bg-emerald-500/10" },
+  react: { icon: ReactIcon, tint: "bg-cyan-400/10" },
+  shell: { icon: ShellIcon, tint: "bg-green-500/10" },
+  sql: { icon: SQLIcon, tint: "bg-orange-400/10" },
+  "active-directory": { icon: ActiveDirectoryIcon, tint: "bg-blue-500/10" },
+  "google-workspace": { icon: GoogleWorkspaceIcon, tint: "bg-green-400/10" },
+  "windows-server": { icon: WindowsServerIcon, tint: "bg-sky-500/10" },
+  linux: { icon: LinuxIcon, tint: "bg-yellow-400/10" },
+  docker: { icon: DockerIcon, tint: "bg-blue-400/10" },
+  network: { icon: NetworkIcon, tint: "bg-gray-400/10" },
+};
 
-const itSkills: Skill[] = [
-  {
-    name: "Active Directory",
-    icon: ActiveDirectoryIcon,
-    tint: "bg-blue-500/10",
-  },
-  {
-    name: "Google Workspace",
-    icon: GoogleWorkspaceIcon,
-    tint: "bg-green-400/10",
-  },
-  { name: "Windows Server", icon: WindowsServerIcon, tint: "bg-sky-500/10" },
-  { name: "Linux", icon: LinuxIcon, tint: "bg-yellow-400/10" },
-  { name: "Docker", icon: DockerIcon, tint: "bg-blue-400/10" },
-  { name: "Network", icon: NetworkIcon, tint: "bg-gray-400/10" },
-];
+const GenericIcon = ({ className = "" }: { className?: string }) => (
+  <Code2 className={`${className} text-primary`} aria-hidden="true" />
+);
+const fallbackIcon: SkillIcon = { icon: GenericIcon, tint: "bg-muted/30" };
+
+interface Skill extends SkillIcon {
+  name: string;
+}
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
@@ -407,6 +408,17 @@ const SkillCard = ({ skill }: { skill: Skill }) => {
 
 const SkillsSection = () => {
   const { t } = useLanguage();
+  const lang = useContentLang();
+  const { skills } = useCoreContent();
+  const skillsOf = (group: SkillGroup): Skill[] =>
+    skills
+      .filter((skill) => skill.group === group)
+      .map((skill) => ({
+        name: skill[lang].label,
+        ...(skillIcons[skill.iconKey] ?? fallbackIcon),
+      }));
+  const programmingSkills = skillsOf("programming");
+  const itSkills = skillsOf("it");
 
   return (
     <div className="space-y-10">
