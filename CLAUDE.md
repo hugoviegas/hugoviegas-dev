@@ -244,6 +244,12 @@ Content layer (`src/content/`):
 - Every admin write must also bump `settings/site.updatedAt`, or the public refresh will not notice it.
 - `seed.ts` builds the seed from `translations.ts` plus `legacy.ts`, which holds the arrays formerly inside the components. CV-only skills are seeded as unpublished drafts.
 - The admin "Import seed" action shows a dry-run diff and writes in one batch. Changed docs are copied to `contentHistory` first.
+- Admin editors (`src/pages/admin/`):
+  - `AdminDashboard.tsx` has tabs for the overview, each collection, settings, and import. `collectionConfig.ts` declares each collection's fields.
+  - `DocEditor.tsx` is a side-by-side EN and PT-BR form built with React Hook Form and validated by the same Zod schema, so publishing with an empty language is blocked.
+  - `CollectionPanel.tsx` handles create, edit, publish, reorder (per skill group), delete, history, and restore.
+  - Every write goes through `adminContent.ts`, which copies the previous version to `contentHistory` and bumps `settings/site`. Deleted docs stay restorable from history.
+  - Skill icon keys live in `src/content/skillIcons.ts`; `SkillsSection.tsx` must map every key.
 - `src/content/__tests__/dualRun.test.tsx` compares the data-driven render with the pre-migration render (`__fixtures__/legacy-render.json`) in EN and PT-BR.
 - Hard-coded content (`legacy.ts`, the content translation keys, `public/projects/big-bang-duel/*.md`) stays as the seed source and dual-run reference until Hugo approves deleting it after cutover. Keep the `darcyTitle` and `bigBangTitle` keys, which SEO breadcrumbs use.
 

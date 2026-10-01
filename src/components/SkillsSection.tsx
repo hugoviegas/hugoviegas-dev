@@ -2,6 +2,7 @@ import { Code2 } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useContentLang, useCoreContent } from "@/content/store";
 import type { SkillGroup } from "@/content/types";
+import type { SkillIconKey } from "@/content/skillIcons";
 
 /* ------------------------------------------------------------------ */
 /*  Inline SVG icon components – lightweight, no external libraries    */
@@ -357,7 +358,7 @@ interface SkillIcon {
 }
 
 // Content docs reference an icon by `iconKey`; skills without one get a generic icon.
-const skillIcons: Record<string, SkillIcon> = {
+const skillIcons: Record<SkillIconKey, SkillIcon> = {
   html: { icon: HTMLIcon, tint: "bg-orange-500/10" },
   css: { icon: CSSIcon, tint: "bg-blue-500/10" },
   javascript: { icon: JavaScriptIcon, tint: "bg-yellow-400/10" },
@@ -415,7 +416,7 @@ const SkillsSection = () => {
       .filter((skill) => skill.group === group)
       .map((skill) => ({
         name: skill[lang].label,
-        ...(skillIcons[skill.iconKey] ?? fallbackIcon),
+        ...(skillIcons[skill.iconKey as SkillIconKey] ?? fallbackIcon),
       }));
   const programmingSkills = skillsOf("programming");
   const itSkills = skillsOf("it");
