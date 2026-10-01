@@ -6,7 +6,7 @@ import {
   staticHeadFile,
   staticHeadRoutes,
 } from "@/config/seo";
-import { injectRouteHead } from "@/config/seoHtml";
+import { heroPreloadTag, injectRouteHead, stripHomeOnly } from "@/config/seoHtml";
 import { getTranslation } from "@/config/translations";
 
 const root = process.cwd();
@@ -76,5 +76,26 @@ describe("per-route static head", () => {
   it("fails loudly when a head tag is missing", () => {
     const head = resolveRouteHead("/projects/darcy-mcgees", t);
     expect(() => injectRouteHead("<html><head></head></html>", head)).toThrow();
+  });
+});
+
+describe("hero photo preload", () => {
+  const url = "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/profile/hugo-viegas-Ab12.webp";
+  const withPreload = indexHtml.replace("</head>", `  ${heroPreloadTag(url)}
+  </head>`);
+
+  it("is a high-priority image preload", () => {
+    expect(heroPreloadTag(url)).toBe(
+      `<link rel="preload" as="image" href="${url}" fetchpriority="high" data-home-only />`,
+    );
+    expect(heroPreloadTag('https://x/"><script>')).not.toContain("<script>");
+  });
+
+  it("stays on the home page only", () => {
+    expect(stripHomeOnly(withPreload)).toBe(indexHtml);
+    for (const route of staticHeadRoutes()) {
+      const html = injectRouteHead(withPreload, resolveRouteHead(route, t));
+      expect(html).not.toContain("data-home-only");
+    }
   });
 });

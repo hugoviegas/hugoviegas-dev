@@ -1,6 +1,5 @@
 // What each content collection looks like in the admin: its fields, its
 // empty doc, and how a row is labelled. Field names match src/content/types.ts.
-import { contentImages } from "@/content/images";
 import { SKILL_ICON_KEYS } from "@/content/skillIcons";
 import {
   SKILL_GROUPS,
@@ -11,7 +10,7 @@ import {
 } from "@/content/types";
 import type { AdminStringKey } from "./adminStrings";
 
-export type FieldKind = "text" | "textarea" | "lines" | "number" | "select" | "objects";
+export type FieldKind = "text" | "textarea" | "lines" | "number" | "select" | "objects" | "image";
 
 export interface FieldDef {
   name: string;
@@ -79,7 +78,7 @@ export const collectionDefs: Record<ContentCollection, CollectionDef> = {
       { name: "imageAlt", label: "field.imageAlt", kind: "text" },
     ],
     shared: [
-      { name: "image", label: "field.image", kind: "select", options: ["", ...Object.keys(contentImages)] },
+      { name: "image", label: "field.image", kind: "image" },
       { name: "imageWidth", label: "field.imageWidth", kind: "number" },
       { name: "imageHeight", label: "field.imageHeight", kind: "number" },
       { name: "technologies", label: "field.technologies", kind: "lines", rows: 4, hint: "hint.onePerLine" },

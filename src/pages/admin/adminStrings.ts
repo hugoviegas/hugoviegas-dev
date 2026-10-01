@@ -36,6 +36,7 @@ const adminStrings = {
 
   // Dashboard and collections
   "tab.overview": { EN: "Overview", PT: "Visão geral" },
+  "tab.files": { EN: "Files", PT: "Arquivos" },
   "tab.settings": { EN: "Settings", PT: "Configurações" },
   "tab.import": { EN: "Import", PT: "Importar" },
   "col.experience": { EN: "Experience", PT: "Experiência" },
@@ -217,6 +218,58 @@ const adminStrings = {
   "seedStatus.new": { EN: "New", PT: "Novo" },
   "seedStatus.changed": { EN: "Changed", PT: "Alterado" },
   "seedStatus.unchanged": { EN: "Unchanged", PT: "Sem mudança" },
+  "files.intro": {
+    EN: "Files are uploaded to the public Vercel Blob store and appear on the site right after saving. Replacing a file does not delete the old one; remove old files in the Vercel dashboard.",
+    PT: "Os arquivos vão para a store pública do Vercel Blob e aparecem no site logo depois de salvar. Substituir um arquivo não apaga o antigo; remova os antigos no painel da Vercel.",
+  },
+  "files.cvTitle": { EN: "CV (PDF)", PT: "Currículo (PDF)" },
+  "files.cvCurrent": { EN: "Open the current CV", PT: "Abrir o currículo atual" },
+  "files.cvFallback": {
+    EN: "No CV uploaded yet. The site uses the CV link built into the code.",
+    PT: "Nenhum currículo enviado ainda. O site usa o link de currículo que está no código.",
+  },
+  "files.cvFile": { EN: "New CV file", PT: "Novo arquivo do currículo" },
+  "files.pdfLimit": { EN: "PDF only, up to", PT: "Somente PDF, até" },
+  "files.imageLimit": { EN: "WebP, AVIF, JPEG or PNG, up to", PT: "WebP, AVIF, JPEG ou PNG, até" },
+  "files.publicHint": {
+    EN: "Anyone with the link can open the file.",
+    PT: "Qualquer pessoa com o link pode abrir o arquivo.",
+  },
+  "files.uploadSave": { EN: "Upload and use", PT: "Enviar e usar" },
+  "files.photoTitle": { EN: "Profile photo", PT: "Foto de perfil" },
+  "files.photoCurrent": { EN: "Current photo:", PT: "Foto atual:" },
+  "files.photoFallback": {
+    EN: "No photo uploaded yet. The site uses the photo built into the code.",
+    PT: "Nenhuma foto enviada ainda. O site usa a foto que está no código.",
+  },
+  "files.photoFile": { EN: "New photo file (optional when only editing the alt text)", PT: "Novo arquivo de foto (opcional se for só editar o texto alternativo)" },
+  "files.altRequired": {
+    EN: "Alt text is required in both languages.",
+    PT: "O texto alternativo é obrigatório nos dois idiomas.",
+  },
+  "files.savePhoto": { EN: "Save photo", PT: "Salvar foto" },
+  "files.projectFile": { EN: "Upload a new image", PT: "Enviar uma nova imagem" },
+  "files.projectHint": {
+    EN: "Width and height are filled in from the file. Save the project to use it.",
+    PT: "A largura e a altura são preenchidas a partir do arquivo. Salve o projeto para usá-la.",
+  },
+  "files.upload": { EN: "Upload", PT: "Enviar" },
+  "files.uploadedImage": { EN: "Uploaded image", PT: "Imagem enviada" },
+  "upload.chooseFile": { EN: "Choose a file first.", PT: "Escolha um arquivo primeiro." },
+  "upload.uploading": { EN: "Uploading…", PT: "Enviando…" },
+  "upload.saved": { EN: "Uploaded and saved.", PT: "Enviado e salvo." },
+  "upload.readyToSave": {
+    EN: "Uploaded. Save the project to use the new image.",
+    PT: "Enviado. Salve o projeto para usar a nova imagem.",
+  },
+  "upload.type": { EN: "This file type is not allowed here.", PT: "Este tipo de arquivo não é permitido aqui." },
+  "upload.size": { EN: "The file is larger than the limit.", PT: "O arquivo é maior que o limite." },
+  "upload.name": {
+    EN: "Set a valid id first (lowercase letters, numbers and hyphens).",
+    PT: "Defina um id válido primeiro (letras minúsculas, números e hífens).",
+  },
+  "upload.auth": { EN: "Your session ended. Sign in again.", PT: "Sua sessão terminou. Entre novamente." },
+  "upload.failed": { EN: "Upload failed.", PT: "O envio falhou." },
 } satisfies Record<string, Translation>;
 
 export type AdminStringKey = keyof typeof adminStrings;

@@ -33,7 +33,10 @@ export const refreshCore = async (
         [collection, validDocs(collection, await listPublished(collection))] as const,
     ),
   );
-  return mergeCore(current, Object.fromEntries(lists), site.updatedAt);
+  return mergeCore(current, Object.fromEntries(lists), site.updatedAt, {
+    cv: site.cv,
+    profilePhoto: site.profilePhoto,
+  });
 };
 
 export const fetchProjectDetail = async (id: string): Promise<ProjectDetailDoc | null> => {

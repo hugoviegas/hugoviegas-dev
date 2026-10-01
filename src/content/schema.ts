@@ -3,6 +3,7 @@
 // Field limits mirror firestore.rules: change both together.
 import { z } from "zod";
 import { SKILL_GROUPS } from "./types";
+import { isStoredBlobUrl } from "./uploadPolicy";
 
 export const LIMITS = {
   id: 100,
@@ -70,9 +71,16 @@ const timelineRequired = ["title", "organization", "period"];
 export const experienceSchema = bilingual({}, timelineText, timelineRequired);
 export const educationSchema = bilingual({}, timelineText, timelineRequired);
 
+// A bundled image key, or an image uploaded for a project.
+const projectImage = z.union([
+  z.literal(""),
+  str(LIMITS.id).regex(/^[a-z0-9-]+$/),
+  z.string().refine((value) => isStoredBlobUrl("project", value), "Not an uploaded project image"),
+]);
+
 export const projectSchema = bilingual(
   {
-    image: str(LIMITS.short),
+    image: projectImage,
     imageWidth: z.number().int().min(0).max(10000),
     imageHeight: z.number().int().min(0).max(10000),
     technologies: list(str(LIMITS.short)),
@@ -121,7 +129,28 @@ export const projectDetailSchema = bilingual(
   ["title", "summary"],
 );
 
-export const siteSettingsSchema = z.object({
+const dimension = z.number().int().min(1).max(10000);
+const altText = z.string().trim().min(1).max(LIMITS.title);
+
+export const cvFileSchema = z.object({
+  url: z.string().refine((value) => isStoredBlobUrl("cv", value), "Not an uploaded CV"),
+  version: z.number().int().min(1),
+});
+
+export const profilePhotoSchema = z.object({
+  url: z.string().refine((value) => isStoredBlobUrl("profile", value), "Not an uploaded photo"),
+  width: dimension,
+  height: dimension,
+  alt: z.object({ en: altText, ptBR: altText }),
+  version: z.number().int().min(1),
+});
+
+export const siteFilesSchema = z.object({
+  cv: cvFileSchema.nullable(),
+  profilePhoto: profilePhotoSchema.nullable(),
+});
+
+export const siteSettingsSchema = siteFilesSchema.extend({
   useRemote: z.boolean(),
   updatedAt: z.string().nullable(),
   version: z.number().int().min(0),
@@ -139,6 +168,7 @@ export const schemaByCollection = {
 export const coreSnapshotSchema = z.object({
   siteUpdatedAt: z.string().nullable(),
   source: z.enum(["seed", "firestore"]),
+  files: siteFilesSchema,
   experience: z.array(experienceSchema),
   education: z.array(educationSchema),
   projects: z.array(projectSchema),

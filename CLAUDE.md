@@ -30,6 +30,7 @@ Positioning guidance:
 ### Contact details
 - The site contact email is `hugoviegas3.1@gmail.com`. Never show Hugo's primary email address anywhere on the site.
 - A WhatsApp link that uses Hugo's secondary number is allowed. Never show Hugo's primary number.
+- The downloadable CV PDF may contain Hugo's primary email and phone number (Hugo approved this in October 2026). Website pages, metadata, structured data, and the chatbot still never show them.
 
 ## Verified Facts
 Use these as the current source of truth. Do not invent, exaggerate, or create alternative versions.
@@ -205,18 +206,19 @@ Hero requirements:
 - Before making any change involving authentication, private routes, environment variables, server-side APIs, Firebase, or Vercel configuration, explain the security impact and ask Hugo for approval.
 
 ## Content Backend and Hidden Admin (Firebase)
-Active work, approved by Hugo in October 2026. Delivered in three PRs: (1) foundation, (2) content layer, (3) admin editors. Each starts only after the previous one is merged.
+Active work, approved by Hugo in October 2026. Delivered in PRs: (1) foundation, (2) content layer, (3) admin editors, (4) file uploads, then a cutover cleanup after Hugo approves the preview. Each starts only after the previous one is merged.
 
 Project:
 - Firebase project ID: `assistente-virtual-e4322` (public identifier). Do not share it with Big Bang Duel.
 - Firestore region: `europe-west2` (London). The region is permanent once the database exists.
 - Services used: Firebase Authentication (Google provider only) and Cloud Firestore on the Spark plan. No Firebase Storage, App Check, Cloud Functions, or Hosting.
+- Files (CV, profile photo, project images) go to the public Vercel Blob store `sb7cb98htp9acpqo` through one Vercel serverless route. See "File uploads" below.
 
 Security model:
 - Google sign-in only, with `signInWithPopup`. Every other provider stays disabled, and there are no passwords. After Hugo's first sign-in, "Enable create (sign-up)" is turned off in Authentication settings.
 - `firestore.rules` is the access control. The owner check is `request.auth.uid == '<HUGO_UID>'`, `email_verified == true`, and `sign_in_provider == 'google.com'`.
 - Public reads are allowed only for docs with `published == true`. `settings/site` is public. `admin/ping` and `contentHistory` are owner-only. Everything else is implicitly denied.
-- Writes stay denied until the content layer adds validated, owner-only writes.
+- Writes are owner-only and validated per collection: exact keys, length limits, `updatedAt == request.time`, and sequential `version`.
 - The admin page checks access by reading `admin/ping`. On `permission-denied` it signs the user out immediately. The client never decides who is allowed.
 - The admin route is an unguessable slug in `src/config/admin.ts`, repeated in `vercel.json` (a test keeps them in sync). It is unlinked, `noindex` (route SEO config plus `X-Robots-Tag`), and absent from the sitemap and `robots.txt`. This is obscurity only; the rules are the protection.
 - The admin page and the Firebase SDK load only in the lazy admin chunk (`src/pages/admin/`). Public pages must never import the Firebase SDK. Public content is read through the Firestore REST API.
@@ -224,13 +226,16 @@ Security model:
 
 Config and secrets:
 - Only the public Firebase web config (`VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID`) may live in `.env.sample`, `.env.local`, Vercel env vars, or the repo. Restrict that API key to Firebase APIs only.
-- Never commit, or place in `VITE_*` or `define`: service-account JSON, Admin SDK keys, Firebase CLI tokens, Vercel tokens, or deploy-hook URLs.
+- Never commit, or place in `VITE_*` or `define`: service-account JSON, Admin SDK keys, Firebase CLI tokens, Vercel tokens, `BLOB_READ_WRITE_TOKEN`, or deploy-hook URLs.
+- `BLOB_READ_WRITE_TOKEN` is a server-only Vercel environment variable (Production and Preview), read only by `api/blob-upload.ts`. Hugo manages it in Vercel.
 
 Content split:
 - Moves to Firestore: experience, education, projects, project detail pages (stack, lists, FAQ, story), skills and certifications, and About (summary, highlights, full story). Collections: `experience`, `education`, `projects`, `projectDetails`, `skills`, `about`, `settings/site`, `contentHistory`.
 - Every content doc has `en` and `ptBR` blocks, `published`, `order`, `updatedAt`, and `version`. Publishing is blocked when either language is empty.
-- Stays in code: hero copy, contact and social links, the CV link, SEO titles and descriptions (`seo.*`, read at build time), UI chrome strings (section headings, buttons, chatbot prompts), `currentFocusText`, the languages card, chatbot context, Fun Stuff, and archived pages.
-- Images stay in the repository. Docs store an image key that maps to a bundled asset (`src/content/images.ts`); skills store an `iconKey` mapped in `SkillsSection.tsx`.
+- In `settings/site`: the CV link (`cv`) and the hero profile photo (`profilePhoto`: URL, width, height, EN and PT-BR alt text, version). When absent, the site uses the CV URL in `HeroSection.tsx` and the bundled `src/assets/hugo-hero.webp`.
+- Stays in code: hero copy, contact and social links, SEO titles and descriptions (`seo.*`, read at build time), UI chrome strings (section headings, buttons, chatbot prompts), `currentFocusText`, the languages card, chatbot context, Fun Stuff, and archived pages.
+- A project's `image` is either a key that maps to a bundled asset (`src/content/images.ts`) or the URL of an image uploaded to Blob. Skills store an `iconKey` mapped in `SkillsSection.tsx`.
+- `public/og-image.jpg` stays in the repository: social scrapers need a fixed URL. JSON-LD and Open Graph keep using it.
 
 Content layer (`src/content/`):
 - `types.ts` is the model, and `schema.ts` holds the Zod schemas with `LIMITS`. Keep `LIMITS` and the limits in `firestore.rules` in sync.
@@ -245,12 +250,21 @@ Content layer (`src/content/`):
 - `seed.ts` builds the seed from `translations.ts` plus `legacy.ts`, which holds the arrays formerly inside the components. CV-only skills are seeded as unpublished drafts.
 - The admin "Import seed" action shows a dry-run diff and writes in one batch. Changed docs are copied to `contentHistory` first.
 - Admin editors (`src/pages/admin/`):
-  - `AdminDashboard.tsx` has tabs for the overview, each collection, settings, and import. `collectionConfig.ts` declares each collection's fields.
+  - `AdminDashboard.tsx` has tabs for the overview, each collection, files (CV and photo, `FilesPanel.tsx`), settings, and import. Project images upload from the project editor (`ProjectImageField.tsx`). `collectionConfig.ts` declares each collection's fields.
   - `DocEditor.tsx` is a side-by-side EN and PT-BR form built with React Hook Form and validated by the same Zod schema, so publishing with an empty language is blocked.
   - `CollectionPanel.tsx` handles create, edit, publish, reorder (per skill group), delete, history, and restore.
   - Every write goes through `adminContent.ts`, which copies the previous version to `contentHistory` and bumps `settings/site`. Deleted docs stay restorable from history.
   - Skill icon keys live in `src/content/skillIcons.ts`; `SkillsSection.tsx` must map every key.
 - `src/content/__tests__/dualRun.test.tsx` compares the data-driven render with the pre-migration render (`__fixtures__/legacy-render.json`) in EN and PT-BR.
+File uploads (Vercel Blob):
+- Flow: the admin asks `POST /api/blob-upload` for a client token, sending the Firebase ID token as `Authorization: Bearer`. The browser then uploads straight to Blob, and the admin saves the URL to Firestore through the normal owner-only writes (with history).
+- `api/blob-upload.ts` verifies the ID token before reading the body: RS256 signature against Google's public keys (`jose`), `aud` and `iss` for the project, expiry, `sub` equal to Hugo's UID, `email_verified`, and the `google.com` provider (`src/server/ownerToken.ts`, mirroring `isOwner()`). Anything else gets 401. There is no service account and no Admin SDK, so a revoked session's token stays valid until it expires (at most one hour).
+- `src/content/uploadPolicy.ts` is the single source for the store host, allowed pathnames, types, and size limits: `cv/*.pdf` up to 5 MB; `profile/*` and `projects/<id>/*` as WebP, AVIF, JPEG, or PNG up to 2 MB and 3 MB. No SVG or HTML. Tokens last five minutes, add a random suffix, and never overwrite. `firestore.rules` repeats the stored-URL patterns: change both together.
+- Upload-completed callbacks are not used. Relative imports in `api/` need the `.js` extension because Vercel runs the route as Node ESM.
+- Blob URLs are public. Replacing a file does not delete the old one; Hugo removes old files in the Vercel dashboard.
+- Runtime: the CV link, photo, and project images update through the runtime refresh. The hero photo `<link rel="preload">` in the static home head comes from the snapshot and updates on the next deploy. Never add a deploy-hook URL to client code.
+- The admin loads `@vercel/blob/client` only when an upload starts.
+
 - Hard-coded content (`legacy.ts`, the content translation keys, `public/projects/big-bang-duel/*.md`) stays as the seed source and dual-run reference until Hugo approves deleting it after cutover. Keep the `darcyTitle` and `bigBangTitle` keys, which SEO breadcrumbs use.
 
 ## Chatbot

@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import type { FieldDef } from "./collectionConfig";
 import { fieldId } from "./editorModel";
 import { useAdminT, type AdminStringKey } from "./adminStrings";
+import ProjectImageField from "./ProjectImageField";
 
 const errorKey = (error: RhfError): AdminStringKey => {
   switch (error.type) {
@@ -35,6 +36,7 @@ export const FieldInput = ({ def, path }: { def: FieldDef; path: string }) => {
   const common = { id, "aria-invalid": error ? true : undefined, "aria-describedby": describedBy };
 
   if (def.kind === "objects") return <ObjectList def={def} path={path} />;
+  if (def.kind === "image") return <ProjectImageField def={def} path={path} />;
 
   let input: JSX.Element;
   switch (def.kind) {
