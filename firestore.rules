@@ -3,9 +3,9 @@ rules_version = '2';
 // Firestore Security Rules for the hugoviegas.dev content backend.
 // These rules are the access control. The hidden admin URL is obscurity only.
 //
-// BOOTSTRAP: replace HUGO_UID_PLACEHOLDER below with Hugo's Firebase Auth UID
-// (Firebase console > Authentication > Users) before deploying. Until it is
-// replaced, no request is the owner.
+// OWNER: the UID below is Hugo's Firebase Auth UID (Firebase console >
+// Authentication > Users). It is an identifier, not a secret. Change it only
+// together with a rules deploy.
 //
 // WRITES: there is no `allow write` anywhere, so every write is denied. The
 // content layer adds validated owner-only writes in a later change.
@@ -14,7 +14,7 @@ service cloud.firestore {
 
     function isOwner() {
       return request.auth != null
-        && request.auth.uid == 'HUGO_UID_PLACEHOLDER'
+        && request.auth.uid == 'pDIVBg1M6najIUMkuW2GLuYpszx1'
         && request.auth.token.email_verified == true
         && request.auth.token.firebase.sign_in_provider == 'google.com';
     }
