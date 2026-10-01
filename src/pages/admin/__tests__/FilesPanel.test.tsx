@@ -9,10 +9,26 @@ vi.mock("../adminContent", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../adminContent")>()),
   ...api,
 }));
-const blob = vi.hoisted(() => ({ uploadFile: vi.fn(), imageSize: vi.fn() }));
+const blob = vi.hoisted(() => ({ uploadFile: vi.fn() }));
 vi.mock("../blobUpload", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../blobUpload")>()),
   ...blob,
+}));
+const fit = vi.hoisted(() => ({ fitImage: vi.fn() }));
+vi.mock("../imageFit", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../imageFit")>()),
+  ...fit,
+}));
+
+// The crop editor has its own test; here a crop is chosen through this stub.
+const crop = vi.hoisted(() => ({ rect: { sx: 0, sy: 0, sw: 900, sh: 900 } }));
+vi.mock("../CropField", () => ({
+  default: ({ file, onChange }: { file: File | null; onChange: (choice: unknown) => void }) =>
+    file ? (
+      <button type="button" onClick={() => onChange({ rect: crop.rect, aspect: { label: "crop.aspect.square", ratio: 1 } })}>
+        stub-crop
+      </button>
+    ) : null,
 }));
 
 import FilesPanel from "../FilesPanel";
@@ -23,7 +39,7 @@ const baseSettings = { useRemote: true, version: 4, updatedAt: null, data: {}, c
 const s = adminStrings;
 
 beforeEach(() => {
-  for (const fn of [...Object.values(api), ...Object.values(blob)]) fn.mockReset();
+  for (const fn of [...Object.values(api), ...Object.values(blob), ...Object.values(fit)]) fn.mockReset();
   api.loadSettings.mockResolvedValue(baseSettings);
   api.saveSiteFiles.mockResolvedValue(undefined);
 });
@@ -61,13 +77,19 @@ describe("FilesPanel", () => {
   it("uploads a photo with its size and alt text in both languages", async () => {
     const user = userEvent.setup();
     blob.uploadFile.mockResolvedValue(photoUrl);
-    blob.imageSize.mockResolvedValue({ width: 800, height: 800 });
+    const file = new File(["img"], "me.jpg", { type: "image/jpeg" });
+    const compressed = new File(["small"], "me.webp", { type: "image/webp" });
+    fit.fitImage.mockResolvedValue({ file: compressed, width: 800, height: 800, originalBytes: 7 * 1024 * 1024 });
     render(<FilesPanel />);
-    const file = new File(["img"], "me.webp", { type: "image/webp" });
     await user.upload(await screen.findByLabelText(s["files.photoFile"].EN), file);
+    await user.click(screen.getByRole("button", { name: "stub-crop" }));
     await user.click(screen.getByRole("button", { name: s["files.savePhoto"].EN }));
 
-    expect(blob.uploadFile).toHaveBeenCalledWith("profile", file, "hugo-viegas");
+    expect(fit.fitImage).toHaveBeenCalledWith(file, 2 * 1024 * 1024, { crop: crop.rect });
+    expect(blob.uploadFile).toHaveBeenCalledWith("profile", compressed, "hugo-viegas");
+    expect(
+      await screen.findByText("Compressed: 7.0 MB → 0.0 MB (800 × 800 px).", { exact: false }),
+    ).toHaveAttribute("role", "status");
     expect(api.saveSiteFiles).toHaveBeenCalledWith(
       {
         profilePhoto: {

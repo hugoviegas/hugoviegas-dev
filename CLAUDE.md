@@ -264,6 +264,7 @@ File uploads (Vercel Blob):
 - Blob URLs are public. Replacing a file does not delete the old one; Hugo removes old files in the Vercel dashboard.
 - Runtime: the CV link, photo, and project images update through the runtime refresh. The hero photo `<link rel="preload">` in the static home head comes from the snapshot and updates on the next deploy. Never add a deploy-hook URL to client code.
 - The admin loads `@vercel/blob/client` only when an upload starts.
+- Images: before upload the admin opens a canvas crop editor (`CropDialog.tsx`, square for the profile photo; 16:9, 4:3, 1:1 or original for projects). `imageFit.ts` then re-encodes any decodable image that is cropped, too large, or in another format as WebP, keeping the highest quality that fits (quality 0.92 down to 0.8, then the smallest needed downscale). Files up to 40 MB are accepted as input. No image library is used.
 
 - Hard-coded content (`legacy.ts`, the content translation keys, `public/projects/big-bang-duel/*.md`) stays as the seed source and dual-run reference until Hugo approves deleting it after cutover. Keep the `darcyTitle` and `bigBangTitle` keys, which SEO breadcrumbs use.
 

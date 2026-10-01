@@ -19,7 +19,9 @@ export class UploadError extends Error {
 
 export const maxMegabytes = (kind: UploadKind) => UPLOAD_KINDS[kind].maxBytes / (1024 * 1024);
 
-export const acceptedTypes = (kind: UploadKind) => Object.keys(UPLOAD_KINDS[kind].types).join(",");
+// Images accept any format the browser decodes; imageFit converts them.
+export const acceptedTypes = (kind: UploadKind) =>
+  kind === "cv" ? Object.keys(UPLOAD_KINDS.cv.types).join(",") : "image/*";
 
 // Same checks as the route, so most mistakes fail before any request.
 export const checkFile = (
@@ -60,12 +62,4 @@ export const uploadFile = async (
   } catch (error) {
     throw new UploadError("failed", error instanceof Error ? error.message : String(error));
   }
-};
-
-// Intrinsic size of an image file, stored for width/height attributes.
-export const imageSize = async (file: File): Promise<{ width: number; height: number }> => {
-  const bitmap = await createImageBitmap(file);
-  const size = { width: bitmap.width, height: bitmap.height };
-  bitmap.close();
-  return size;
 };

@@ -5,13 +5,19 @@ import { Label } from "@/components/ui/label";
 import heroImage from "@/assets/hugo-hero.webp";
 import { getTranslation } from "@/config/translations";
 import { loadSettings, saveSiteFiles, type ExistingSettings } from "./adminContent";
-import { acceptedTypes, imageSize, maxMegabytes, uploadFile, UploadError } from "./blobUpload";
+import { UPLOAD_KINDS } from "@/content/uploadPolicy";
+import { acceptedTypes, maxMegabytes, uploadFile, UploadError } from "./blobUpload";
+import { fitImage, fitNote, ImageFitError } from "./imageFit";
+import CropField from "./CropField";
+import { PROFILE_ASPECTS, type CropChoice } from "./cropModel";
 import { useAdminT, type AdminStringKey } from "./adminStrings";
 
 type Notice = { kind: "status" | "alert"; text: string } | null;
 
 const problemKey = (error: unknown): AdminStringKey =>
-  error instanceof UploadError ? `upload.${error.problem}` : "upload.failed";
+  error instanceof UploadError || error instanceof ImageFitError
+    ? `upload.${error.problem}`
+    : "upload.failed";
 
 const describeError = (t: (key: AdminStringKey) => string, error: unknown) => {
   const detail = error instanceof UploadError && error.problem === "failed" ? ` ${error.message}` : "";
@@ -69,6 +75,7 @@ const FilesPanel = () => {
   const [cvBusy, setCvBusy] = useState(false);
 
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoCrop, setPhotoCrop] = useState<CropChoice | null>(null);
   const [altEn, setAltEn] = useState("");
   const [altPt, setAltPt] = useState("");
   const [altError, setAltError] = useState(false);
@@ -125,19 +132,23 @@ const FilesPanel = () => {
       return;
     }
     setPhotoBusy(true);
-    setPhotoNotice(photoFile ? { kind: "status", text: t("upload.uploading") } : null);
+    setPhotoNotice(photoFile ? { kind: "status", text: t("upload.preparing") } : null);
+    let note = "";
     try {
       let file = current ? { url: current.url, width: current.width, height: current.height } : null;
       if (photoFile) {
-        const size = await imageSize(photoFile);
-        file = { url: await uploadFile("profile", photoFile, "hugo-viegas"), ...size };
+        const fitted = await fitImage(photoFile, UPLOAD_KINDS.profile.maxBytes, { crop: photoCrop?.rect });
+        note = fitNote(t("upload.compressedFrom"), fitted);
+        setPhotoNotice({ kind: "status", text: `${t("upload.uploading")}${note}` });
+        const url = await uploadFile("profile", fitted.file, "hugo-viegas");
+        file = { url, width: fitted.width, height: fitted.height };
       }
       await saveSiteFiles(
         { profilePhoto: { ...file!, alt, version: (current?.version ?? 0) + 1 } },
         settings ?? null,
       );
       await load();
-      setPhotoNotice({ kind: "status", text: t("upload.saved") });
+      setPhotoNotice({ kind: "status", text: `${t("upload.saved")}${note}` });
     } catch (error) {
       setPhotoNotice({ kind: "alert", text: describeError(t, error) });
     } finally {
@@ -206,10 +217,11 @@ const FilesPanel = () => {
         <FileField
           id={`${ids}-photo`}
           label={t("files.photoFile")}
-          hint={`${t("files.imageLimit")} ${maxMegabytes("profile")} MB. ${t("files.publicHint")}`}
+          hint={`${t("files.imageLimit")} ${maxMegabytes("profile")} MB. ${t("files.autoCompress")} ${t("files.publicHint")}`}
           accept={acceptedTypes("profile")}
           onChange={setPhotoFile}
         />
+        <CropField file={photoFile} aspects={PROFILE_ASPECTS} value={photoCrop} onChange={setPhotoCrop} />
         <div className="grid gap-4 lg:grid-cols-2">
           {(
             [

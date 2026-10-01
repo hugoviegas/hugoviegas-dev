@@ -6,7 +6,11 @@ import { Label } from "@/components/ui/label";
 import { contentImages, resolveContentImage } from "@/content/images";
 import type { FieldDef } from "./collectionConfig";
 import { fieldId } from "./editorModel";
-import { acceptedTypes, imageSize, maxMegabytes, uploadFile, UploadError } from "./blobUpload";
+import { UPLOAD_KINDS } from "@/content/uploadPolicy";
+import { acceptedTypes, maxMegabytes, uploadFile, UploadError } from "./blobUpload";
+import { fitImage, fitNote, ImageFitError } from "./imageFit";
+import CropField from "./CropField";
+import { PROJECT_ASPECTS, type CropChoice } from "./cropModel";
 import { useAdminT } from "./adminStrings";
 
 const selectClass =
@@ -21,6 +25,7 @@ const ProjectImageField = ({ def, path }: { def: FieldDef; path: string }) => {
   const docId = (watch("id") as string) ?? "";
   const { error } = getFieldState(path, formState);
   const [file, setFile] = useState<File | null>(null);
+  const [crop, setCrop] = useState<CropChoice | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<{ kind: "status" | "alert"; text: string } | null>(null);
 
@@ -35,16 +40,18 @@ const ProjectImageField = ({ def, path }: { def: FieldDef; path: string }) => {
       return;
     }
     setBusy(true);
-    setNotice({ kind: "status", text: t("upload.uploading") });
+    setNotice({ kind: "status", text: t("upload.preparing") });
     try {
-      const size = await imageSize(file);
-      const url = await uploadFile("project", file, "cover", docId);
+      const fitted = await fitImage(file, UPLOAD_KINDS.project.maxBytes, { crop: crop?.rect });
+      const note = fitNote(t("upload.compressedFrom"), fitted);
+      setNotice({ kind: "status", text: `${t("upload.uploading")}${note}` });
+      const url = await uploadFile("project", fitted.file, "cover", docId);
       setValue(path, url, { shouldDirty: true });
-      setValue("imageWidth", size.width, { shouldDirty: true });
-      setValue("imageHeight", size.height, { shouldDirty: true });
-      setNotice({ kind: "status", text: t("upload.readyToSave") });
+      setValue("imageWidth", fitted.width, { shouldDirty: true });
+      setValue("imageHeight", fitted.height, { shouldDirty: true });
+      setNotice({ kind: "status", text: `${t("upload.readyToSave")}${note}` });
     } catch (err) {
-      const problem = err instanceof UploadError ? err.problem : "failed";
+      const problem = err instanceof UploadError || err instanceof ImageFitError ? err.problem : "failed";
       const detail = problem === "failed" && err instanceof Error ? ` ${err.message}` : "";
       setNotice({ kind: "alert", text: `${t(`upload.${problem}`)}${detail}` });
     } finally {
@@ -101,8 +108,9 @@ const ProjectImageField = ({ def, path }: { def: FieldDef; path: string }) => {
           </Button>
         </div>
         <p id={`${fileId}-hint`} className="text-xs text-muted-foreground">
-          {t("files.imageLimit")} {maxMegabytes("project")} MB. {t("files.projectHint")}
+          {t("files.imageLimit")} {maxMegabytes("project")} MB. {t("files.autoCompress")} {t("files.projectHint")}
         </p>
+        <CropField file={file} aspects={PROJECT_ASPECTS} value={crop} onChange={setCrop} />
         <div aria-live="polite">
           {notice && (
             <p role={notice.kind} className={notice.kind === "alert" ? "text-sm text-destructive" : "text-sm"}>
