@@ -1,14 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { buildSeed } from "@/content/seed";
+import { fixtureDocs } from "@/test/contentFixtures";
 import { schemaByCollection } from "@/content/schema";
 import type { DocMeta, ProjectDetailDoc, SkillDoc } from "@/content/types";
 import { ADMIN_COLLECTIONS } from "../collectionConfig";
 import { cleanDoc, newDoc, reorderChanges, restoredDoc } from "../editorModel";
 
-const seedDocs = (collection: string) =>
-  buildSeed()
-    .filter((entry) => entry.collection === collection)
-    .map((entry) => entry.doc);
+const seedDocs = (collection: Parameters<typeof fixtureDocs>[0]) => fixtureDocs(collection) as DocMeta[];
 
 describe("editor model", () => {
   it("creates empty drafts that pass the schema once given an id", () => {

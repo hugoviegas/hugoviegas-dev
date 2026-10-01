@@ -17,7 +17,7 @@ import {
 } from "./adminContent";
 import { collectionDefs, rowTitle } from "./collectionConfig";
 import { newDoc, reorderChanges, sortByOrder } from "./editorModel";
-import type { ExistingDoc } from "./importPlan";
+import type { ExistingDoc } from "./storedDoc";
 import ConfirmDialog from "./ConfirmDialog";
 import DocEditor from "./DocEditor";
 import HistoryPanel from "./HistoryPanel";

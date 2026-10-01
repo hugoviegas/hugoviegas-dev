@@ -1,5 +1,5 @@
-// Content model shared by the public site, the admin, the snapshot script, and
-// the seed. Firestore docs carry `en` and `ptBR` blocks plus the meta fields;
+// Content model shared by the public site, the admin, and the snapshot script.
+// Firestore docs carry `en` and `ptBR` blocks plus the meta fields;
 // the public snapshot keeps only published docs.
 import type { LanguageCode } from "../config/languages";
 
@@ -144,8 +144,9 @@ export interface CoreContent {
 }
 
 export interface CoreSnapshot extends CoreContent {
-  // settings/site.updatedAt at generation time; null when generated from seed.
+  // settings/site.updatedAt at generation time; null for a test fixture.
   siteUpdatedAt: string | null;
+  // "seed" is only used by test fixtures since the cutover.
   source: "seed" | "firestore";
   files: SiteFiles;
 }

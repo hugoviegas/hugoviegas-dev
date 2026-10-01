@@ -54,5 +54,3 @@ export const parseSiteFiles = (doc: unknown): SiteFiles => {
     profilePhoto: parseProfilePhoto(data?.profilePhoto),
   };
 };
-
-export const NO_SITE_FILES: SiteFiles = { cv: null, profilePhoto: null };

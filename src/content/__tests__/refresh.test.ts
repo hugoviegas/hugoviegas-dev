@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decodeDocument } from "../rest";
-import { buildSeed } from "../seed";
-import { buildSnapshots, mergeCore } from "../snapshotBuild";
+import { fixtureCore } from "@/test/contentFixtures";
+import { mergeCore } from "../snapshotBuild";
 import type { CoreSnapshot } from "../types";
 import { BLOB_STORE_HOST } from "../uploadPolicy";
 
@@ -18,7 +18,7 @@ vi.mock("../rest", async (importOriginal) => ({
 import { refreshCore } from "../refresh";
 import { fetchSiteSettings, isNewer, shouldRefresh } from "../remoteCheck";
 
-const seedCore = (): CoreSnapshot => buildSnapshots(buildSeed(), null, "seed").core;
+const seedCore = fixtureCore;
 const site = (updatedAt: string, useRemote = true) => ({
   useRemote,
   updatedAt,

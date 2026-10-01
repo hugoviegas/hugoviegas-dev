@@ -5,7 +5,6 @@ import { loadExistingContent } from "./adminContent";
 import { ADMIN_COLLECTIONS, collectionDefs } from "./collectionConfig";
 import CollectionPanel from "./CollectionPanel";
 import FilesPanel from "./FilesPanel";
-import SeedImport from "./SeedImport";
 import SettingsPanel from "./SettingsPanel";
 import { useAdminT } from "./adminStrings";
 
@@ -84,7 +83,6 @@ const AdminDashboard = () => {
         ))}
         <TabsTrigger value="files">{t("tab.files")}</TabsTrigger>
         <TabsTrigger value="settings">{t("tab.settings")}</TabsTrigger>
-        <TabsTrigger value="import">{t("tab.import")}</TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
         <Overview />
@@ -99,9 +97,6 @@ const AdminDashboard = () => {
       </TabsContent>
       <TabsContent value="settings">
         <SettingsPanel />
-      </TabsContent>
-      <TabsContent value="import">
-        <SeedImport />
       </TabsContent>
     </Tabs>
   );

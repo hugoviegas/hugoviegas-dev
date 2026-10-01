@@ -23,13 +23,7 @@ import {
   type SiteFiles,
 } from "@/content/types";
 import { getFirebase } from "./firebase";
-import {
-  pendingItems,
-  storedFields,
-  type ExistingDoc,
-  type ExistingDocs,
-  type ImportPlan,
-} from "./importPlan";
+import { storedFields, type ExistingDoc, type ExistingDocs } from "./storedDoc";
 
 export interface ExistingSettings extends SiteFiles {
   useRemote: boolean;
@@ -249,23 +243,4 @@ export const listDeletedIds = async (name: ContentCollection, currentIds: Set<st
   );
   const ids = new Set(snapshot.docs.map((item) => String(item.data().docId)));
   return [...ids].filter((id) => !currentIds.has(id)).sort();
-};
-
-// Applies the import plan in one atomic batch. A rules rejection fails it all.
-export const applyImportPlan = async (
-  plan: ImportPlan,
-  existing: ExistingDocs,
-  settings: ExistingSettings | null,
-) => {
-  const items = pendingItems(plan);
-  const changed = items.filter((item) => item.status === "changed");
-  const batch = writeBatch(getFirebase().db);
-  for (const item of items) {
-    writeDoc(batch, item.collection, item.id, item.fields, existing[item.collection]?.[item.id] ?? null);
-  }
-  if (settings) addHistory(batch, "settings", "site", settings);
-  // A first import turns remote content on; later imports keep the switch.
-  bumpSettings(batch, settings);
-  await commit(batch, items.length + changed.length + (settings ? 2 : 1));
-  return items.length;
 };
