@@ -15,17 +15,17 @@ import {
   writeBatch,
   type WriteBatch,
 } from "firebase/firestore/lite";
-import { CONTENT_COLLECTIONS, type ContentCollection, type DocMeta } from "@/content/types";
-import { getFirebase } from "./firebase";
+import { parseSiteFiles } from "@/content/siteFiles";
 import {
-  pendingItems,
-  storedFields,
-  type ExistingDoc,
-  type ExistingDocs,
-  type ImportPlan,
-} from "./importPlan";
+  CONTENT_COLLECTIONS,
+  type ContentCollection,
+  type DocMeta,
+  type SiteFiles,
+} from "@/content/types";
+import { getFirebase } from "./firebase";
+import { storedFields, type ExistingDoc, type ExistingDocs } from "./storedDoc";
 
-export interface ExistingSettings {
+export interface ExistingSettings extends SiteFiles {
   useRemote: boolean;
   version: number;
   updatedAt: string | null;
@@ -64,6 +64,7 @@ export const loadSettings = async (): Promise<ExistingSettings | null> => {
         useRemote: Boolean(data.useRemote),
         version: Number(data.version ?? 0),
         updatedAt: isoOrNull(data.updatedAt),
+        ...parseSiteFiles(data),
         data,
       }
     : null;
@@ -112,15 +113,25 @@ const writeDoc = (
   });
 };
 
+// Absent file fields mean "use the bundled fallback", so null is not stored.
+const filesToStore = (files: SiteFiles) =>
+  Object.fromEntries(Object.entries(files).filter(([, value]) => value !== null));
+
+// Rewrites settings/site, keeping the uploaded files unless `files` replaces them.
 const bumpSettings = (
   batch: WriteBatch,
   settings: ExistingSettings | null,
   useRemote = settings ? settings.useRemote : true,
+  files: SiteFiles = {
+    cv: settings?.cv ?? null,
+    profilePhoto: settings?.profilePhoto ?? null,
+  },
 ) => {
   batch.set(doc(getFirebase().db, "settings", "site"), {
     useRemote,
     updatedAt: serverTimestamp(),
     version: (settings?.version ?? 0) + 1,
+    ...filesToStore(files),
   });
 };
 
@@ -180,6 +191,22 @@ export const saveSettings = async (useRemote: boolean, settings: ExistingSetting
   await commit(batch, 2);
 };
 
+// Points the site at a newly uploaded CV or photo (or back to the bundled
+// file with null). The previous settings go to history.
+export const saveSiteFiles = async (
+  changes: Partial<SiteFiles>,
+  settings: ExistingSettings | null,
+) => {
+  const batch = writeBatch(getFirebase().db);
+  if (settings) addHistory(batch, "settings", "site", settings);
+  bumpSettings(batch, settings, settings ? settings.useRemote : true, {
+    cv: settings?.cv ?? null,
+    profilePhoto: settings?.profilePhoto ?? null,
+    ...changes,
+  });
+  await commit(batch, 2);
+};
+
 export interface HistoryEntry {
   entryId: string;
   version: number;
@@ -216,23 +243,4 @@ export const listDeletedIds = async (name: ContentCollection, currentIds: Set<st
   );
   const ids = new Set(snapshot.docs.map((item) => String(item.data().docId)));
   return [...ids].filter((id) => !currentIds.has(id)).sort();
-};
-
-// Applies the import plan in one atomic batch. A rules rejection fails it all.
-export const applyImportPlan = async (
-  plan: ImportPlan,
-  existing: ExistingDocs,
-  settings: ExistingSettings | null,
-) => {
-  const items = pendingItems(plan);
-  const changed = items.filter((item) => item.status === "changed");
-  const batch = writeBatch(getFirebase().db);
-  for (const item of items) {
-    writeDoc(batch, item.collection, item.id, item.fields, existing[item.collection]?.[item.id] ?? null);
-  }
-  if (settings) addHistory(batch, "settings", "site", settings);
-  // A first import turns remote content on; later imports keep the switch.
-  bumpSettings(batch, settings);
-  await commit(batch, items.length + changed.length + (settings ? 2 : 1));
-  return items.length;
 };

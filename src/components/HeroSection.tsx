@@ -31,10 +31,17 @@ import {
 } from "@/components/ui/dialog";
 import { getCurrentGreeting } from "@/lib/time-utils";
 import heroImage from "@/assets/hugo-hero.webp";
+import { useContentLang, useSiteFiles } from "@/content/store";
+
+// Used until a CV is uploaded through the admin (settings/site.cv).
+const FALLBACK_CV_URL =
+  "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
 
 const HeroSection = () => {
   const [currentGreeting, setCurrentGreeting] = useState("");
   const { t, language } = useLanguage();
+  const lang = useContentLang();
+  const { cv, profilePhoto } = useSiteFiles();
 
   // Update greeting when component mounts or language changes
   useEffect(() => {
@@ -54,9 +61,7 @@ const HeroSection = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Resume URL from Vercel Storage
-  const resumeUrl =
-    "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
+  const resumeUrl = cv?.url ?? FALLBACK_CV_URL;
 
   // Hero Brick Explosion component
   const HERO_BRICK_IMAGES = [
@@ -264,10 +269,11 @@ const HeroSection = () => {
                   {/* image fills the frame (no smaller inner square) */}
                   <div className="relative z-10 w-full h-full">
                     <LazyImage
-                      src={heroImage}
-                      alt={t("heroImageAlt")}
-                      width={800}
-                      height={800}
+                      src={profilePhoto?.url ?? heroImage}
+                      fallbackSrc={heroImage}
+                      alt={profilePhoto?.alt[lang] ?? t("heroImageAlt")}
+                      width={profilePhoto?.width ?? 800}
+                      height={profilePhoto?.height ?? 800}
                       priority
                       className="object-cover w-full h-full shadow-2xl"
                       placeholder="Loading profile..."

@@ -1,6 +1,7 @@
 // First step of the runtime refresh: one public read of settings/site. Kept
 // free of Zod so a visit with nothing new downloads almost nothing.
 import { getPublicDocument } from "./rest";
+import { parseSiteFiles } from "./siteFiles";
 import type { SiteSettings } from "./types";
 
 export const parseSiteSettings = (doc: unknown): SiteSettings | null => {
@@ -9,7 +10,7 @@ export const parseSiteSettings = (doc: unknown): SiteSettings | null => {
   if (typeof useRemote !== "boolean" || typeof version !== "number") return null;
   const stamp = typeof updatedAt === "string" ? updatedAt : updatedAt === null ? null : undefined;
   if (stamp === undefined) return null;
-  return { useRemote, updatedAt: stamp, version };
+  return { useRemote, updatedAt: stamp, version, ...parseSiteFiles(doc) };
 };
 
 export const fetchSiteSettings = async (): Promise<SiteSettings | null> =>

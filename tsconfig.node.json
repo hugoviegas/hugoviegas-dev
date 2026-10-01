@@ -18,5 +18,6 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "api", "src/server", "src/content/uploadPolicy.ts"],
+  "exclude": ["src/server/__tests__"]
 }

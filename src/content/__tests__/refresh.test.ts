@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decodeDocument } from "../rest";
-import { buildSeed } from "../seed";
-import { buildSnapshots, mergeCore } from "../snapshotBuild";
+import { fixtureCore } from "@/test/contentFixtures";
+import { mergeCore } from "../snapshotBuild";
 import type { CoreSnapshot } from "../types";
+import { BLOB_STORE_HOST } from "../uploadPolicy";
 
 const rest = vi.hoisted(() => ({
   getPublicDocument: vi.fn(),
@@ -17,8 +18,22 @@ vi.mock("../rest", async (importOriginal) => ({
 import { refreshCore } from "../refresh";
 import { fetchSiteSettings, isNewer, shouldRefresh } from "../remoteCheck";
 
-const seedCore = (): CoreSnapshot => buildSnapshots(buildSeed(), null, "seed").core;
-const site = (updatedAt: string, useRemote = true) => ({ useRemote, updatedAt, version: 1 });
+const seedCore = fixtureCore;
+const site = (updatedAt: string, useRemote = true) => ({
+  useRemote,
+  updatedAt,
+  version: 1,
+  cv: null,
+  profilePhoto: null,
+});
+const cvUrl = `https://${BLOB_STORE_HOST}/cv/hugo-viegas-cv-Ab12Cd34.pdf`;
+const photo = {
+  url: `https://${BLOB_STORE_HOST}/profile/hugo-viegas-Ab12Cd34.webp`,
+  width: 800,
+  height: 800,
+  alt: { en: "Hugo Viegas", ptBR: "Hugo Viegas" },
+  version: 2,
+};
 
 beforeEach(() => {
   rest.getPublicDocument.mockReset();
@@ -77,6 +92,21 @@ describe("remote check", () => {
     expect(await fetchSiteSettings()).toEqual(site("2026-10-02T00:00:00.000Z"));
   });
 
+  it("reads uploaded files and drops ones that are not from the Blob store", async () => {
+    rest.getPublicDocument.mockResolvedValueOnce({
+      ...site("2026-10-02T00:00:00.000Z"),
+      cv: { url: cvUrl, version: 1 },
+      profilePhoto: photo,
+    });
+    expect(await fetchSiteSettings()).toMatchObject({ cv: { url: cvUrl, version: 1 }, profilePhoto: photo });
+    rest.getPublicDocument.mockResolvedValueOnce({
+      ...site("2026-10-02T00:00:00.000Z"),
+      cv: { url: "https://evil.example.com/cv/x.pdf", version: 1 },
+      profilePhoto: { ...photo, alt: { en: "Hugo", ptBR: " " } },
+    });
+    expect(await fetchSiteSettings()).toMatchObject({ cv: null, profilePhoto: null });
+  });
+
   it("propagates network errors so the caller keeps the snapshot", async () => {
     rest.getPublicDocument.mockRejectedValue(new Error("offline"));
     await expect(fetchSiteSettings()).rejects.toThrow("offline");
@@ -102,6 +132,18 @@ describe("refreshCore", () => {
     expect(next.experience[0].en.title).toBe("Edited title");
     expect(next.projects).toEqual(current.projects);
   });
+
+  it("takes the uploaded files from settings/site", async () => {
+    rest.listPublished.mockResolvedValue([]);
+    const current = seedCore();
+    expect(current.files).toEqual({ cv: null, profilePhoto: null });
+    const next = await refreshCore(current, {
+      ...site("2026-10-02T00:00:00.000Z"),
+      cv: { url: cvUrl, version: 3 },
+      profilePhoto: photo,
+    });
+    expect(next.files).toEqual({ cv: { url: cvUrl, version: 3 }, profilePhoto: photo });
+  });
 });
 
 describe("mergeCore", () => {
@@ -112,6 +154,7 @@ describe("mergeCore", () => {
       current,
       { education: [{ ...a, order: 50 }, { ...b, published: false }, current.education[2]] },
       null,
+      current.files,
     );
     expect(merged.education.map((doc) => doc.id)).toEqual(["unicnec", "cct-college"]);
   });

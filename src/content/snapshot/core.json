@@ -1,5 +1,5 @@
 {
-  "siteUpdatedAt": "2026-10-01T11:51:28.204Z",
+  "siteUpdatedAt": "2026-10-01T17:02:31.781Z",
   "source": "firestore",
   "experience": [
     {
@@ -244,40 +244,11 @@
   ],
   "projects": [
     {
-      "id": "darcy-mcgees",
-      "published": true,
-      "order": 0,
-      "updatedAt": "2026-10-01T11:51:28.204Z",
-      "version": 1,
-      "image": "darcy-mcgees",
-      "imageWidth": 1280,
-      "imageHeight": 720,
-      "technologies": [
-        "HTML5",
-        "CSS3",
-        "ReactJs",
-        "Responsive Design"
-      ],
-      "liveUrl": "https://www.darcymcgeespub.com/",
-      "githubUrl": "",
-      "detailPath": "/projects/darcy-mcgees",
-      "en": {
-        "title": "D'Arcy McGee's Irish Pub",
-        "description": "Restaurant website & admin dashboard (demo)",
-        "imageAlt": "D'Arcy McGee's Irish Pub"
-      },
-      "ptBR": {
-        "title": "D'Arcy McGee's Irish Pub",
-        "description": "Site de restaurante e painel administrativo (demo)",
-        "imageAlt": "D'Arcy McGee's Irish Pub"
-      }
-    },
-    {
       "id": "big-bang-duel",
       "published": true,
-      "order": 10,
-      "updatedAt": "2026-10-01T11:51:28.204Z",
-      "version": 1,
+      "order": 0,
+      "updatedAt": "2026-10-01T12:24:43.471Z",
+      "version": 2,
       "image": "big-bang-duel",
       "imageWidth": 864,
       "imageHeight": 557,
@@ -301,6 +272,35 @@
         "title": "Big Bang Duel",
         "description": "Jogo de duelo estratégico interativo com entrada de convidado, gameplay solo com IA e uma jornada simples para contas de jogadores.",
         "imageAlt": "Big Bang Duel"
+      }
+    },
+    {
+      "id": "darcy-mcgees",
+      "published": true,
+      "order": 10,
+      "updatedAt": "2026-10-01T12:24:43.471Z",
+      "version": 2,
+      "image": "darcy-mcgees",
+      "imageWidth": 1280,
+      "imageHeight": 720,
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "ReactJs",
+        "Responsive Design"
+      ],
+      "liveUrl": "https://www.darcymcgeespub.com/",
+      "githubUrl": "",
+      "detailPath": "/projects/darcy-mcgees",
+      "en": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "description": "Restaurant website & admin dashboard (demo)",
+        "imageAlt": "D'Arcy McGee's Irish Pub"
+      },
+      "ptBR": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "description": "Site de restaurante e painel administrativo (demo)",
+        "imageAlt": "D'Arcy McGee's Irish Pub"
       }
     }
   ],
@@ -711,6 +711,21 @@
       }
     },
     {
+      "id": "it-active-directory-group-policy-dns-dhcp",
+      "published": true,
+      "order": 70,
+      "updatedAt": "2026-10-01T12:23:55.913Z",
+      "version": 2,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Active Directory (Group Policy, DNS, DHCP)"
+      },
+      "ptBR": {
+        "label": "Active Directory (Group Policy, DNS, DHCP)"
+      }
+    },
+    {
       "id": "programming-vue-js",
       "published": true,
       "order": 70,
@@ -799,6 +814,126 @@
       "ptBR": {
         "label": "SQL"
       }
+    },
+    {
+      "id": "programming-react-js",
+      "published": true,
+      "order": 110,
+      "updatedAt": "2026-10-01T12:24:03.969Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "React.js"
+      },
+      "ptBR": {
+        "label": "React.js"
+      }
+    },
+    {
+      "id": "programming-node-js",
+      "published": true,
+      "order": 120,
+      "updatedAt": "2026-10-01T12:24:05.134Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Node.js"
+      },
+      "ptBR": {
+        "label": "Node.js"
+      }
+    },
+    {
+      "id": "programming-google-apis",
+      "published": true,
+      "order": 160,
+      "updatedAt": "2026-10-01T12:24:08.350Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Google APIs"
+      },
+      "ptBR": {
+        "label": "Google APIs"
+      }
+    },
+    {
+      "id": "programming-firebase",
+      "published": true,
+      "order": 170,
+      "updatedAt": "2026-10-01T12:24:09.732Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Firebase"
+      },
+      "ptBR": {
+        "label": "Firebase"
+      }
+    },
+    {
+      "id": "programming-powershell",
+      "published": true,
+      "order": 180,
+      "updatedAt": "2026-10-01T12:24:10.984Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "PowerShell"
+      },
+      "ptBR": {
+        "label": "PowerShell"
+      }
+    },
+    {
+      "id": "programming-sql-mysql",
+      "published": true,
+      "order": 190,
+      "updatedAt": "2026-10-01T12:24:11.709Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "SQL / MySQL"
+      },
+      "ptBR": {
+        "label": "SQL / MySQL"
+      }
+    },
+    {
+      "id": "programming-git-version-control",
+      "published": true,
+      "order": 200,
+      "updatedAt": "2026-10-01T12:24:12.739Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Git version control"
+      },
+      "ptBR": {
+        "label": "Controle de versão Git"
+      }
+    },
+    {
+      "id": "programming-software-testing-documentation",
+      "published": true,
+      "order": 210,
+      "updatedAt": "2026-10-01T12:24:14.346Z",
+      "version": 2,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Software testing documentation"
+      },
+      "ptBR": {
+        "label": "Documentação de testes de software"
+      }
     }
   ],
   "about": [
@@ -859,5 +994,21 @@
         "fullStory": "Há muito tempo encontrei uma faísca. Aos oito anos, um primeiro celular virou meu pequeno droide de treino — baixar joguinhos .jar, mexer em configurações e personalizar tudo foram meus primeiros experimentos com sistemas (meu droide fazia mais bipes que milagres). Aos onze, a curiosidade virou missão: um campeonato escolar de robótica Lego. Construímos e programamos um robô com uma linguagem de arrastar e soltar, vencemos a etapa regional e chegamos ao nacional. As ferramentas eram simples, mas a lição ficou clara: como um jovem Padawan, encontrei um caminho a ser dominado (sem túnicas, por enquanto).\n\nAnos depois, aos dezessete, o primeiro emprego como aprendiz de supermercado financiou meu primeiro notebook (meu primeiro cockpit). Com ele vieram edição de imagem e vídeo, restaurações de sistema e a obsessão por entender como as coisas funcionam por baixo do capô. Aos dezoito, a formação em Análise e Desenvolvimento de Sistemas deu estrutura a essa curiosidade — lógica de programação, matemática, bancos de dados e desenvolvimento web tornaram‑se a base para construir sistemas reais.\n\nEm 2021, com um amigo e meu irmão mais velho, nasceu um pequeno estúdio de videomaker e social media (meu irmão, o co‑piloto sábio). Isso aprimorou a narrativa e o design, mas também revelou um chamado mais profundo — resolver problemas operacionais com código. Em TI, numa empresa de prestação de serviços, nas horas vagas o AppSheet sobre Google Sheets virou o motor de um app interno que simplificou processos diários (uma pequena rebelião contra processos lentos). Aprendi os fluxos de RH e financeiro ponta a ponta para desenhá‑lo bem. O resultado: o fechamento de ponto de mais de 400 colaboradores caiu de quatro dias para cerca de um. Curiosidade virou impacto; transformar processos caóticos em soluções simples virou minha marca.\n\nVeio então a Irlanda. Um ano de economias tornou a mudança possível, em busca de melhores oportunidades e imersão no inglês. Dois anos na hospitalidade aceleraram a fluência e o entendimento cultural. Em setembro de 2024, a jornada se intensificou: um Higher Diploma em Science of Computing no CCT College e um cargo de TI no Erin College começaram no mesmo mês. O esforço acadêmico rendeu First‑Class. No trabalho, as automações em planilhas evoluíram com prompting de IA e lógica de programação mais robusta — projetos em vários departamentos foram otimizados e, a cada semana, surgia uma nova camada de automação possível dentro do ecossistema Google.\n\nParalelamente, um desafio prático do restaurante onde trabalhava levou à construção do site do D'Arcy McGee's. Com ferramentas de IA, estudo de UX e engenharia prática, saiu um site rápido e funcional — prova de que entregar valor com rapidez é uma habilidade repetível (quase um sabre de luz em pixels). Hoje procuro uma vaga front‑end ou full‑stack que valorize essa combinação de curiosidade, senso de produto e capacidade de transformar processos complexos em soluções elegantes e mensuráveis. A motivação é a mesma daquele garoto de onze anos na mesa de robótica: aprender rápido, construir bem e seguir em frente."
       }
     }
-  ]
+  ],
+  "files": {
+    "cv": {
+      "url": "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/cv/hugo-viegas-cv-DV8iQhVoca092YgbQM91ezgf2QGIun.pdf",
+      "version": 1
+    },
+    "profilePhoto": {
+      "url": "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/profile/hugo-viegas-Yk9MJSxDc8Y2AQQpLbUTCD5cKiOaJ6.webp",
+      "width": 1086,
+      "height": 1086,
+      "alt": {
+        "en": "Hugo Viegas, Software Developer",
+        "ptBR": "Hugo Viegas, Desenvolvedor de Software"
+      },
+      "version": 1
+    }
+  }
 }

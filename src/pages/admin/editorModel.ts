@@ -2,7 +2,7 @@
 // reorder, and restore. Kept free of React and Firebase so they are easy to test.
 import type { ContentCollection, DocMeta } from "@/content/types";
 import { collectionDefs, type FieldDef } from "./collectionConfig";
-import { storedFields, type ExistingDoc } from "./importPlan";
+import { storedFields, type ExistingDoc } from "./storedDoc";
 
 // DOM id for a form field path ("en.title" -> "field-en-title").
 export const fieldId = (path: string) => `field-${path.replace(/\./g, "-")}`;
