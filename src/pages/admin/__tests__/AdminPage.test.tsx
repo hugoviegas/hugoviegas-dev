@@ -31,6 +31,9 @@ vi.mock("../adminAuth", () => ({
   isDismissedPopup: () => false,
 }));
 
+// The dashboard has its own tests; here only access control matters.
+vi.mock("../AdminDashboard", () => ({ default: () => <p>Admin dashboard</p> }));
+
 import AdminPage from "../AdminPage";
 
 const owner: AdminUser = { uid: "owner-uid", email: "owner@example.com" };
@@ -66,7 +69,7 @@ describe("AdminPage", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(adminStrings.denied.EN);
     expect(screen.queryByText("stranger@example.com")).not.toBeInTheDocument();
     expect(screen.queryByText(adminStrings.granted.EN)).not.toBeInTheDocument();
-    expect(screen.queryByText(adminStrings.seedTitle.EN)).not.toBeInTheDocument();
+    expect(screen.queryByText("Admin dashboard")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign in with Google" })).toBeInTheDocument();
   });
 
@@ -76,7 +79,7 @@ describe("AdminPage", () => {
 
     expect(await screen.findByText(owner.email!)).toBeInTheDocument();
     expect(screen.getByText(adminStrings.granted.EN)).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: adminStrings.seedTitle.EN })).toBeInTheDocument();
+    expect(screen.getByText("Admin dashboard")).toBeInTheDocument();
     expect(auth.signOutAdmin).not.toHaveBeenCalled();
   });
 
