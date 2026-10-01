@@ -23,10 +23,19 @@ const metaPattern = (attr: "name" | "property", key: string) =>
 const metaTag = (attr: "name" | "property", key: string, content: string) =>
   `<meta ${attr}="${key}" content="${escapeHtml(content)}" />`;
 
+// Head tags only the homepage needs (the hero photo preload). Pages built
+// from index.html for other routes drop them.
+const HOME_ONLY = /\n?[ \t]*<link [^>]*data-home-only[^>]*>/g;
+
+export const stripHomeOnly = (html: string) => html.replace(HOME_ONLY, "");
+
+export const heroPreloadTag = (url: string) =>
+  `<link rel="preload" as="image" href="${escapeHtml(url)}" fetchpriority="high" data-home-only />`;
+
 // Rewrites the head of the built index.html for one route. The body is left
 // untouched so the SPA boots as usual.
 export const injectRouteHead = (html: string, head: ResolvedRouteHead) => {
-  let out = html;
+  let out = stripHomeOnly(html);
   out = replaceOnce(
     out,
     /<title>[\s\S]*?<\/title>/,

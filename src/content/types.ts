@@ -1,7 +1,7 @@
 // Content model shared by the public site, the admin, the snapshot script, and
 // the seed. Firestore docs carry `en` and `ptBR` blocks plus the meta fields;
 // the public snapshot keeps only published docs.
-import type { LanguageCode } from "@/config/languages";
+import type { LanguageCode } from "../config/languages";
 
 export type ContentLang = "en" | "ptBR";
 
@@ -38,7 +38,8 @@ export interface ProjectText {
 }
 
 export interface ProjectDoc extends DocMeta, Localized<ProjectText> {
-  // Key of a bundled image (src/content/images.ts); "" when there is none.
+  // Key of a bundled image (src/content/images.ts), an uploaded Blob URL, or
+  // "" when there is none.
   image: string;
   imageWidth: number;
   imageHeight: number;
@@ -96,7 +97,27 @@ export interface ProjectDetailDoc extends DocMeta, Localized<ProjectDetailText> 
   stack: string[];
 }
 
-export interface SiteSettings {
+// Files uploaded to the public Vercel Blob store through the admin.
+export interface CvFile {
+  url: string;
+  version: number;
+}
+
+export interface ProfilePhoto {
+  url: string;
+  width: number;
+  height: number;
+  alt: Localized<string>;
+  version: number;
+}
+
+// null means "use the bundled fallback".
+export interface SiteFiles {
+  cv: CvFile | null;
+  profilePhoto: ProfilePhoto | null;
+}
+
+export interface SiteSettings extends SiteFiles {
   useRemote: boolean;
   updatedAt: string | null;
   version: number;
@@ -126,6 +147,7 @@ export interface CoreSnapshot extends CoreContent {
   // settings/site.updatedAt at generation time; null when generated from seed.
   siteUpdatedAt: string | null;
   source: "seed" | "firestore";
+  files: SiteFiles;
 }
 
 export interface DetailsSnapshot {

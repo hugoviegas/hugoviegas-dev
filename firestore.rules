@@ -53,6 +53,13 @@ service cloud.firestore {
       return data.keys().hasOnly(keys) && data.keys().hasAll(keys);
     }
 
+    // A file in the public Vercel Blob store. `path` is a regex for the part
+    // after the host. Mirrors src/content/uploadPolicy.ts: change both together.
+    function blobUrl(value, path) {
+      return str(value, 300)
+        && value.matches('^https://sb7cb98htp9acpqo[.]public[.]blob[.]vercel-storage[.]com/' + path + '$');
+    }
+
     // updatedAt is the server time of this write; version goes 1, 2, 3...
     // so a stale admin tab cannot overwrite a newer edit.
     function validMeta(data) {
@@ -98,12 +105,19 @@ service cloud.firestore {
       return filled(t.title) && filled(t.description) && filled(t.imageAlt);
     }
 
+    // A bundled image key, or an image uploaded for a project.
+    function validProjectImage(image) {
+      return image == ''
+        || (image is string && image.matches('^[a-z0-9-]{1,100}$'))
+        || blobUrl(image, 'projects/[a-z0-9-]{1,100}/[A-Za-z0-9-]{1,120}[.](webp|avif|jpg|png)');
+    }
+
     function validProject(data) {
       return exactKeys(data, contentKeys([
           'image', 'imageWidth', 'imageHeight', 'technologies',
           'liveUrl', 'githubUrl', 'detailPath']))
         && validMeta(data)
-        && str(data.image, 120)
+        && validProjectImage(data.image)
         && data.imageWidth is int && data.imageWidth >= 0 && data.imageWidth <= 10000
         && data.imageHeight is int && data.imageHeight >= 0 && data.imageHeight <= 10000
         && strList(data.technologies, 30)
@@ -159,8 +173,32 @@ service cloud.firestore {
             && filled(data.ptBR.title) && filled(data.ptBR.summary)));
     }
 
+    function validCv(file) {
+      return file is map
+        && exactKeys(file, ['url', 'version'])
+        && blobUrl(file.url, 'cv/[A-Za-z0-9-]{1,120}[.]pdf')
+        && file.version is int && file.version >= 1;
+    }
+
+    function validPhoto(file) {
+      return file is map
+        && exactKeys(file, ['url', 'width', 'height', 'alt', 'version'])
+        && blobUrl(file.url, 'profile/[A-Za-z0-9-]{1,120}[.](webp|avif|jpg|png)')
+        && file.width is int && file.width >= 1 && file.width <= 10000
+        && file.height is int && file.height >= 1 && file.height <= 10000
+        && file.alt is map && exactKeys(file.alt, ['en', 'ptBR'])
+        && str(file.alt.en, 200) && filled(file.alt.en)
+        && str(file.alt.ptBR, 200) && filled(file.alt.ptBR)
+        && file.version is int && file.version >= 1;
+    }
+
+    // cv and profilePhoto are optional; when absent the site uses the
+    // bundled photo and the current CV link.
     function validSettings(data) {
-      return exactKeys(data, ['useRemote', 'updatedAt', 'version'])
+      return data.keys().hasAll(['useRemote', 'updatedAt', 'version'])
+        && data.keys().hasOnly(['useRemote', 'updatedAt', 'version', 'cv', 'profilePhoto'])
+        && (!('cv' in data) || validCv(data.cv))
+        && (!('profilePhoto' in data) || validPhoto(data.profilePhoto))
         && data.useRemote is bool
         && data.updatedAt == request.time
         && data.version is int
@@ -222,7 +260,8 @@ service cloud.firestore {
       allow delete: if isOwner();
     }
 
-    // Site-wide switches (useRemote kill switch). Public, no content.
+    // Site-wide switches (useRemote kill switch) and the public CV and
+    // profile photo URLs. Public: everything here is shown on the site.
     // Every admin save bumps updatedAt so the public refresh notices.
     match /settings/site {
       allow read: if true;

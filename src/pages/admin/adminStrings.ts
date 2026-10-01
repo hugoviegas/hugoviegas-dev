@@ -36,6 +36,7 @@ const adminStrings = {
 
   // Dashboard and collections
   "tab.overview": { EN: "Overview", PT: "Visão geral" },
+  "tab.files": { EN: "Files", PT: "Arquivos" },
   "tab.settings": { EN: "Settings", PT: "Configurações" },
   "tab.import": { EN: "Import", PT: "Importar" },
   "col.experience": { EN: "Experience", PT: "Experiência" },
@@ -217,6 +218,95 @@ const adminStrings = {
   "seedStatus.new": { EN: "New", PT: "Novo" },
   "seedStatus.changed": { EN: "Changed", PT: "Alterado" },
   "seedStatus.unchanged": { EN: "Unchanged", PT: "Sem mudança" },
+  "files.intro": {
+    EN: "Files are uploaded to the public Vercel Blob store and appear on the site right after saving. Replacing a file does not delete the old one; remove old files in the Vercel dashboard.",
+    PT: "Os arquivos vão para a store pública do Vercel Blob e aparecem no site logo depois de salvar. Substituir um arquivo não apaga o antigo; remova os antigos no painel da Vercel.",
+  },
+  "files.cvTitle": { EN: "CV (PDF)", PT: "Currículo (PDF)" },
+  "files.cvCurrent": { EN: "Open the current CV", PT: "Abrir o currículo atual" },
+  "files.cvFallback": {
+    EN: "No CV uploaded yet. The site uses the CV link built into the code.",
+    PT: "Nenhum currículo enviado ainda. O site usa o link de currículo que está no código.",
+  },
+  "files.cvFile": { EN: "New CV file", PT: "Novo arquivo do currículo" },
+  "files.pdfLimit": { EN: "PDF only, up to", PT: "Somente PDF, até" },
+  "files.imageLimit": { EN: "Stored as WebP, AVIF, JPEG or PNG, up to", PT: "Salva como WebP, AVIF, JPEG ou PNG, até" },
+  "files.autoCompress": {
+    EN: "Any image works: larger files and other formats are compressed automatically, keeping the highest quality that fits.",
+    PT: "Qualquer imagem serve: arquivos maiores e outros formatos são comprimidos automaticamente, com a maior qualidade que couber.",
+  },
+  "files.publicHint": {
+    EN: "Anyone with the link can open the file.",
+    PT: "Qualquer pessoa com o link pode abrir o arquivo.",
+  },
+  "files.uploadSave": { EN: "Upload and use", PT: "Enviar e usar" },
+  "files.photoTitle": { EN: "Profile photo", PT: "Foto de perfil" },
+  "files.photoCurrent": { EN: "Current photo:", PT: "Foto atual:" },
+  "files.photoFallback": {
+    EN: "No photo uploaded yet. The site uses the photo built into the code.",
+    PT: "Nenhuma foto enviada ainda. O site usa a foto que está no código.",
+  },
+  "files.photoFile": { EN: "New photo file (optional when only editing the alt text)", PT: "Novo arquivo de foto (opcional se for só editar o texto alternativo)" },
+  "files.altRequired": {
+    EN: "Alt text is required in both languages.",
+    PT: "O texto alternativo é obrigatório nos dois idiomas.",
+  },
+  "files.savePhoto": { EN: "Save photo", PT: "Salvar foto" },
+  "files.projectFile": { EN: "Upload a new image", PT: "Enviar uma nova imagem" },
+  "files.projectHint": {
+    EN: "Width and height are filled in from the file. Save the project to use it.",
+    PT: "A largura e a altura são preenchidas a partir do arquivo. Salve o projeto para usá-la.",
+  },
+  "files.upload": { EN: "Upload", PT: "Enviar" },
+  "files.uploadedImage": { EN: "Uploaded image", PT: "Imagem enviada" },
+  "upload.chooseFile": { EN: "Choose a file first.", PT: "Escolha um arquivo primeiro." },
+  "upload.uploading": { EN: "Uploading…", PT: "Enviando…" },
+  "crop.title": { EN: "Crop the image", PT: "Recortar a imagem" },
+  "crop.description": {
+    EN: "Drag the image or use the arrow keys to position it, and use the slider or + and − to zoom. The preview shows exactly what will be uploaded.",
+    PT: "Arraste a imagem ou use as setas para posicionar, e use o controle deslizante ou + e − para dar zoom. A prévia mostra exatamente o que será enviado.",
+  },
+  "crop.previewLabel": { EN: "Crop preview", PT: "Prévia do recorte" },
+  "crop.loading": { EN: "Loading the image…", PT: "Carregando a imagem…" },
+  "crop.zoom": { EN: "Zoom", PT: "Zoom" },
+  "crop.aspect": { EN: "Shape", PT: "Formato" },
+  "crop.aspect.square": { EN: "Square (1:1)", PT: "Quadrado (1:1)" },
+  "crop.aspect.wide": { EN: "Wide (16:9)", PT: "Panorâmico (16:9)" },
+  "crop.aspect.classic": { EN: "Classic (4:3)", PT: "Clássico (4:3)" },
+  "crop.aspect.original": { EN: "Original shape", PT: "Formato original" },
+  "crop.result": { EN: "Result:", PT: "Resultado:" },
+  "crop.reset": { EN: "Reset", PT: "Redefinir" },
+  "crop.apply": { EN: "Apply crop", PT: "Aplicar recorte" },
+  "crop.adjust": { EN: "Adjust crop", PT: "Ajustar recorte" },
+  "crop.summary": { EN: "Crop:", PT: "Recorte:" },
+  "crop.none": { EN: "No crop: the whole image will be used.", PT: "Sem recorte: a imagem inteira será usada." },
+  "upload.preparing": { EN: "Preparing the image…", PT: "Preparando a imagem…" },
+  "upload.compressedFrom": { EN: "Compressed:", PT: "Comprimida:" },
+  "upload.decode": {
+    EN: "The browser can't read this image. Try JPEG, PNG or WebP.",
+    PT: "O navegador não consegue ler esta imagem. Tente JPEG, PNG ou WebP.",
+  },
+  "upload.sourceSize": {
+    EN: "Images over 40 MB are too large to compress here. Reduce it first.",
+    PT: "Imagens acima de 40 MB são grandes demais para comprimir aqui. Reduza antes.",
+  },
+  "upload.noFit": {
+    EN: "Could not compress the image enough to fit the limit.",
+    PT: "Não foi possível comprimir a imagem o bastante para caber no limite.",
+  },
+  "upload.saved": { EN: "Uploaded and saved.", PT: "Enviado e salvo." },
+  "upload.readyToSave": {
+    EN: "Uploaded. Save the project to use the new image.",
+    PT: "Enviado. Salve o projeto para usar a nova imagem.",
+  },
+  "upload.type": { EN: "This file type is not allowed here.", PT: "Este tipo de arquivo não é permitido aqui." },
+  "upload.size": { EN: "The file is larger than the limit.", PT: "O arquivo é maior que o limite." },
+  "upload.name": {
+    EN: "Set a valid id first (lowercase letters, numbers and hyphens).",
+    PT: "Defina um id válido primeiro (letras minúsculas, números e hífens).",
+  },
+  "upload.auth": { EN: "Your session ended. Sign in again.", PT: "Sua sessão terminou. Entre novamente." },
+  "upload.failed": { EN: "Upload failed.", PT: "O envio falhou." },
 } satisfies Record<string, Translation>;
 
 export type AdminStringKey = keyof typeof adminStrings;

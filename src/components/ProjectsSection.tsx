@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
 import { Link } from "react-router-dom";
 import LegoButton from "./LegoButton";
-import { contentImages } from "@/content/images";
+import { resolveContentImage } from "@/content/images";
 import { useContentLang, useCoreContent } from "@/content/store";
 import redFront from "@/assets/lego-bricks/red-front.webp";
 import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
@@ -44,7 +44,7 @@ const ProjectsSection = () => {
     id: doc.id,
     title: doc[lang].title,
     description: doc[lang].description,
-    image: contentImages[doc.image],
+    image: resolveContentImage(doc.image),
     imageAlt: doc[lang].imageAlt,
     imageWidth: doc.imageWidth || undefined,
     imageHeight: doc.imageHeight || undefined,

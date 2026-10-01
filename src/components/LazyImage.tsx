@@ -10,6 +10,8 @@ interface LazyImageProps {
   priority?: boolean;
   width?: number;
   height?: number;
+  // Shown instead when src fails to load (e.g. an uploaded file was removed).
+  fallbackSrc?: string;
 }
 
 export const LazyImage = ({
@@ -20,11 +22,18 @@ export const LazyImage = ({
   priority = false,
   width,
   height,
+  fallbackSrc,
 }: LazyImageProps) => {
   const { t } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
+
+  useEffect(() => {
+    setUseFallback(false);
+    setHasError(false);
+  }, [src]);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
@@ -51,6 +60,10 @@ export const LazyImage = ({
   };
 
   const handleError = () => {
+    if (fallbackSrc && !useFallback && fallbackSrc !== src) {
+      setUseFallback(true);
+      return;
+    }
     setHasError(true);
     setIsLoaded(true);
   };
@@ -66,7 +79,7 @@ export const LazyImage = ({
       )}
       {isInView && !hasError && (
         <img
-          src={src}
+          src={useFallback ? fallbackSrc : src}
           alt={alt}
           width={width}
           height={height}

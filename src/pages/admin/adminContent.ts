@@ -15,7 +15,13 @@ import {
   writeBatch,
   type WriteBatch,
 } from "firebase/firestore/lite";
-import { CONTENT_COLLECTIONS, type ContentCollection, type DocMeta } from "@/content/types";
+import { parseSiteFiles } from "@/content/siteFiles";
+import {
+  CONTENT_COLLECTIONS,
+  type ContentCollection,
+  type DocMeta,
+  type SiteFiles,
+} from "@/content/types";
 import { getFirebase } from "./firebase";
 import {
   pendingItems,
@@ -25,7 +31,7 @@ import {
   type ImportPlan,
 } from "./importPlan";
 
-export interface ExistingSettings {
+export interface ExistingSettings extends SiteFiles {
   useRemote: boolean;
   version: number;
   updatedAt: string | null;
@@ -64,6 +70,7 @@ export const loadSettings = async (): Promise<ExistingSettings | null> => {
         useRemote: Boolean(data.useRemote),
         version: Number(data.version ?? 0),
         updatedAt: isoOrNull(data.updatedAt),
+        ...parseSiteFiles(data),
         data,
       }
     : null;
@@ -112,15 +119,25 @@ const writeDoc = (
   });
 };
 
+// Absent file fields mean "use the bundled fallback", so null is not stored.
+const filesToStore = (files: SiteFiles) =>
+  Object.fromEntries(Object.entries(files).filter(([, value]) => value !== null));
+
+// Rewrites settings/site, keeping the uploaded files unless `files` replaces them.
 const bumpSettings = (
   batch: WriteBatch,
   settings: ExistingSettings | null,
   useRemote = settings ? settings.useRemote : true,
+  files: SiteFiles = {
+    cv: settings?.cv ?? null,
+    profilePhoto: settings?.profilePhoto ?? null,
+  },
 ) => {
   batch.set(doc(getFirebase().db, "settings", "site"), {
     useRemote,
     updatedAt: serverTimestamp(),
     version: (settings?.version ?? 0) + 1,
+    ...filesToStore(files),
   });
 };
 
@@ -177,6 +194,22 @@ export const saveSettings = async (useRemote: boolean, settings: ExistingSetting
   const batch = writeBatch(getFirebase().db);
   if (settings) addHistory(batch, "settings", "site", settings);
   bumpSettings(batch, settings, useRemote);
+  await commit(batch, 2);
+};
+
+// Points the site at a newly uploaded CV or photo (or back to the bundled
+// file with null). The previous settings go to history.
+export const saveSiteFiles = async (
+  changes: Partial<SiteFiles>,
+  settings: ExistingSettings | null,
+) => {
+  const batch = writeBatch(getFirebase().db);
+  if (settings) addHistory(batch, "settings", "site", settings);
+  bumpSettings(batch, settings, settings ? settings.useRemote : true, {
+    cv: settings?.cv ?? null,
+    profilePhoto: settings?.profilePhoto ?? null,
+    ...changes,
+  });
   await commit(batch, 2);
 };
 

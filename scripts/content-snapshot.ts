@@ -62,7 +62,10 @@ const fromFirestore = async () => {
     ),
   );
   const details = strictDocs("projectDetails", await listPublished("projectDetails", 15000));
-  const core = mergeCore(readCurrent(), Object.fromEntries(lists), site.updatedAt);
+  const core = mergeCore(readCurrent(), Object.fromEntries(lists), site.updatedAt, {
+    cv: site.cv,
+    profilePhoto: site.profilePhoto,
+  });
   const currentDetails = JSON.parse(fs.readFileSync(detailsPath, "utf-8")) as DetailsSnapshot;
   write(core, {
     projectDetails:

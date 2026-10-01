@@ -29,6 +29,9 @@ export const replaceCoreContent = (next: CoreSnapshot, newer = true) => {
 export const useCoreContent = () => useSyncExternalStore(subscribe, getCoreContent);
 export const useRemoteNewer = () => useSyncExternalStore(subscribe, isRemoteNewer);
 
+// Uploaded CV and profile photo; null fields mean the bundled fallback.
+export const useSiteFiles = () => useCoreContent().files;
+
 // The active language's block of a bilingual doc.
 export const useContentLang = () => contentLang(useLanguage().language);
 

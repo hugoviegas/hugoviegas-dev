@@ -4,7 +4,8 @@ import fs from "fs";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { resolveRouteHead, staticHeadFile, staticHeadRoutes } from "./src/config/seo";
-import { injectRouteHead } from "./src/config/seoHtml";
+import { heroPreloadTag, injectRouteHead, stripHomeOnly } from "./src/config/seoHtml";
+import { parseProfilePhoto } from "./src/content/siteFiles";
 import { getTranslation } from "./src/config/translations";
 
 // Emit dist/404.html from the built index.html. Vercel serves it with a real
@@ -21,8 +22,7 @@ const notFoundPage = (): Plugin => {
     closeBundle() {
       const indexPath = path.join(outDir, "index.html");
       if (!fs.existsSync(indexPath)) return;
-      const html = fs
-        .readFileSync(indexPath, "utf-8")
+      const html = stripHomeOnly(fs.readFileSync(indexPath, "utf-8"))
         .replace(
           /<title>[\s\S]*?<\/title>/,
           "<title>Page Not Found | Hugo Viegas</title>",
@@ -35,6 +35,22 @@ const notFoundPage = (): Plugin => {
     },
   };
 };
+
+// Preload the uploaded hero photo from the content snapshot (written by
+// prebuild). Without one, the bundled photo loads as before. A new upload
+// reaches this tag on the next deploy; the page itself updates at runtime.
+const heroPhotoPreload = (): Plugin => ({
+  name: "hero-photo-preload",
+  apply: "build",
+  transformIndexHtml(html) {
+    const snapshotPath = path.resolve(__dirname, "src/content/snapshot/core.json");
+    const snapshot = JSON.parse(fs.readFileSync(snapshotPath, "utf-8"));
+    const photo = parseProfilePhoto(snapshot.files?.profilePhoto);
+    if (!photo) return html;
+    return html.replace("</head>", `  ${heroPreloadTag(photo.url)}
+  </head>`);
+  },
+});
 
 // Write a head-only HTML file per public route (title, description, canonical,
 // Open Graph, BreadcrumbList) so the raw HTML is correct for scrapers that do
@@ -77,6 +93,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       mode === "development" && componentTagger(),
+      heroPhotoPreload(),
       notFoundPage(),
       routeHeadPages(),
     ].filter(Boolean),
