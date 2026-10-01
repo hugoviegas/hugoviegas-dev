@@ -1,5 +1,5 @@
 {
-  "siteUpdatedAt": "2026-10-01T12:24:43.471Z",
+  "siteUpdatedAt": "2026-10-01T17:02:31.781Z",
   "source": "firestore",
   "experience": [
     {
@@ -996,7 +996,19 @@
     }
   ],
   "files": {
-    "cv": null,
-    "profilePhoto": null
+    "cv": {
+      "url": "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/cv/hugo-viegas-cv-DV8iQhVoca092YgbQM91ezgf2QGIun.pdf",
+      "version": 1
+    },
+    "profilePhoto": {
+      "url": "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/profile/hugo-viegas-Yk9MJSxDc8Y2AQQpLbUTCD5cKiOaJ6.webp",
+      "width": 1086,
+      "height": 1086,
+      "alt": {
+        "en": "Hugo Viegas, Software Developer",
+        "ptBR": "Hugo Viegas, Desenvolvedor de Software"
+      },
+      "version": 1
+    }
   }
 }

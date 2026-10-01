@@ -1,0 +1,1610 @@
+[
+  {
+    "collection": "experience",
+    "doc": {
+      "id": "erin-college",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "IT Support Specialist | System Administrator",
+        "organization": "Erin College, Dublin",
+        "location": "Dublin, Ireland",
+        "period": "Sep 2024 – Present",
+        "description": "Designed, developed, and maintain a full-stack internal ERP platform alongside IT infrastructure and system administration for an educational institution in Dublin.",
+        "bullets": [
+          "Designed, developed, and maintain a full-stack ERP (HR, payroll, finance, student management, ticketing) with React, TypeScript, and Google Apps Script, supporting 120+ users",
+          "Build automation tools and data pipelines to reduce manual work and improve process efficiency",
+          "Provide hands-on technical support and system administration to 120+ users",
+          "Manage Google Workspace enterprise environment with user accounts and access controls",
+          "Administer Active Directory user accounts, permissions, and Group Policy configurations",
+          "Configure and manage network services ensuring campus-wide connectivity",
+          "Create comprehensive technical documentation and user guides",
+          "Implement security policies following information security best practices"
+        ]
+      },
+      "ptBR": {
+        "title": "Especialista em Suporte de TI | Administrador de Sistemas",
+        "organization": "Erin College, Dublin",
+        "location": "Dublin, Irlanda",
+        "period": "Set 2024 – Atual",
+        "description": "Projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack, além de cuidar da infraestrutura de TI e da administração de sistemas de uma instituição de ensino em Dublin.",
+        "bullets": [
+          "Projetei, desenvolvi e mantenho um ERP full-stack (RH, folha de pagamento, finanças, gestão de alunos, chamados) com React, TypeScript e Google Apps Script, atendendo 120+ usuários",
+          "Construo ferramentas de automação e pipelines de dados para reduzir trabalho manual e melhorar a eficiência dos processos",
+          "Presto suporte técnico prático e administração de sistemas para 120+ usuários",
+          "Gerencio o ambiente corporativo do Google Workspace, com contas de usuários e controles de acesso",
+          "Administro contas de usuários, permissões e configurações de Group Policy no Active Directory",
+          "Configuro e gerencio serviços de rede para garantir conectividade em todo o campus",
+          "Crio documentação técnica e guias de usuário completos",
+          "Implemento políticas de segurança seguindo boas práticas de segurança da informação"
+        ]
+      }
+    }
+  },
+  {
+    "collection": "experience",
+    "doc": {
+      "id": "freelance-web-developer",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Web Developer",
+        "organization": "Self-employed",
+        "location": "Dublin, Ireland",
+        "period": "Jun 2023 – Mar 2024",
+        "description": "Freelance web development for a restaurant client in Dublin, from requirements through launch and ongoing maintenance.",
+        "bullets": [
+          "Designed, developed, and deployed a website for a restaurant client, from requirements through launch",
+          "Provided about 10 months of post-launch maintenance, including bug fixes, content updates, and minor feature improvements"
+        ]
+      },
+      "ptBR": {
+        "title": "Desenvolvedor Web",
+        "organization": "Autônomo",
+        "location": "Dublin, Irlanda",
+        "period": "Jun 2023 – Mar 2024",
+        "description": "Desenvolvimento web freelance para um restaurante cliente em Dublin, dos requisitos ao lançamento e à manutenção contínua.",
+        "bullets": [
+          "Projetei, desenvolvi e publiquei um site para um restaurante cliente, dos requisitos ao lançamento",
+          "Fiz cerca de 10 meses de manutenção após o lançamento, incluindo correções de bugs, atualizações de conteúdo e pequenas melhorias de funcionalidades"
+        ]
+      }
+    }
+  },
+  {
+    "collection": "experience",
+    "doc": {
+      "id": "etal",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "IT Systems Support Specialist",
+        "organization": "ETAL Prestação de Serviços LTDA",
+        "location": "Belo Horizonte, Brazil",
+        "period": "May 2020 – Jun 2022",
+        "description": "Managed IT systems and built internal workflow tools for a services company in Brazil, combining technical support with software development to streamline operations.",
+        "bullets": [
+          "Built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one",
+          "Provided technical support for a Windows Server environment supporting employees across multiple departments",
+          "Managed user accounts, permissions, and access controls",
+          "Performed system maintenance including hardware troubleshooting and workstation configurations",
+          "Created technical documentation and standard operating procedures",
+          "Achieved high first-call resolution rates through systematic troubleshooting"
+        ]
+      },
+      "ptBR": {
+        "title": "Especialista em Suporte a Sistemas de TI",
+        "organization": "ETAL Prestação de Serviços LTDA",
+        "location": "Belo Horizonte, Brasil",
+        "period": "Mai 2020 – Jun 2022",
+        "description": "Gerenciei sistemas de TI e construí ferramentas internas de fluxo de trabalho para uma empresa de prestação de serviços no Brasil, combinando suporte técnico e desenvolvimento de software para simplificar operações.",
+        "bullets": [
+          "Construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um",
+          "Prestei suporte técnico a um ambiente Windows Server que atendia colaboradores de vários departamentos",
+          "Gerenciei contas de usuários, permissões e controles de acesso",
+          "Realizei manutenção de sistemas, incluindo diagnóstico de hardware e configuração de estações de trabalho",
+          "Criei documentação técnica e procedimentos operacionais padrão",
+          "Alcancei altas taxas de resolução no primeiro contato por meio de diagnóstico sistemático"
+        ]
+      }
+    }
+  },
+  {
+    "collection": "experience",
+    "doc": {
+      "id": "dabliumusic",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Digital Designer | Web Developer",
+        "organization": "DabliuMusic",
+        "location": "Betim, Brazil",
+        "period": "2020 – 2021",
+        "description": "Handled web development and digital branding for a creative studio, delivering client-facing websites and marketing materials.",
+        "bullets": [
+          "Designed and developed business websites using HTML, CSS, and JavaScript",
+          "Created visual identities and digital marketing materials",
+          "Managed web hosting configurations and performed technical website maintenance",
+          "Supported client portfolio development and brand strategy"
+        ]
+      },
+      "ptBR": {
+        "title": "Designer Digital | Desenvolvedor Web",
+        "organization": "DabliuMusic",
+        "location": "Betim, Brasil",
+        "period": "2020 – 2021",
+        "description": "Cuidei do desenvolvimento web e da identidade digital de um estúdio criativo, entregando sites para clientes e materiais de marketing.",
+        "bullets": [
+          "Projetei e desenvolvi sites empresariais com HTML, CSS e JavaScript",
+          "Criei identidades visuais e materiais de marketing digital",
+          "Gerenciei configurações de hospedagem web e fiz a manutenção técnica dos sites",
+          "Apoiei o desenvolvimento de portfólios de clientes e a estratégia de marca"
+        ]
+      }
+    }
+  },
+  {
+    "collection": "education",
+    "doc": {
+      "id": "cct-college",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Higher Diploma in Science in Computing",
+        "organization": "CCT College Dublin",
+        "location": "Dublin, Ireland",
+        "period": "Sep 2024 – Sep 2025",
+        "description": "Completed with a First Class final grade (EQF level 8), covering software development, system architecture, database management, and web technologies.",
+        "bullets": [
+          "Software Development and System Architecture",
+          "Database Management and Web Technologies",
+          "Linux and Windows Server Administration",
+          "Cloud Computing and Network Fundamentals",
+          "Information Security and Algorithms & Data Structures",
+          "Combining academic study with professional IT practice"
+        ]
+      },
+      "ptBR": {
+        "title": "Higher Diploma in Science in Computing",
+        "organization": "CCT College Dublin",
+        "location": "Dublin, Irlanda",
+        "period": "Set 2024 – Set 2025",
+        "description": "Concluído com nota final First Class (EQF nível 8), abordando desenvolvimento de software, arquitetura de sistemas, gestão de bancos de dados e tecnologias web.",
+        "bullets": [
+          "Desenvolvimento de Software e Arquitetura de Sistemas",
+          "Gestão de Bancos de Dados e Tecnologias Web",
+          "Administração de Linux e Windows Server",
+          "Computação em Nuvem e Fundamentos de Redes",
+          "Segurança da Informação e Algoritmos e Estruturas de Dados",
+          "Combinação de estudo acadêmico com prática profissional em TI"
+        ]
+      }
+    }
+  },
+  {
+    "collection": "education",
+    "doc": {
+      "id": "icot",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Professional English Language Programme (Level C1 – Advanced)",
+        "organization": "ICOT",
+        "location": "Dublin, Ireland",
+        "period": "Aug 2022 – Apr 2024",
+        "description": "Completed a professional English language programme in Dublin, reaching C1 (Advanced) level.",
+        "bullets": []
+      },
+      "ptBR": {
+        "title": "Programa Profissional de Língua Inglesa (Nível C1 – Avançado)",
+        "organization": "ICOT",
+        "location": "Dublin, Irlanda",
+        "period": "Ago 2022 – Abr 2024",
+        "description": "Concluí um programa profissional de língua inglesa em Dublin, atingindo o nível C1 (Avançado).",
+        "bullets": []
+      }
+    }
+  },
+  {
+    "collection": "education",
+    "doc": {
+      "id": "unicnec",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "title": "Technologist Degree in Analysis and Systems Development",
+        "organization": "UNICNEC",
+        "location": "Itaúna, Brazil",
+        "period": "Mar 2018 – Jul 2021",
+        "description": "Completed higher education technology diploma with focus on software engineering and systems development. Key subjects included system analysis, database design, and network configuration.",
+        "bullets": [
+          "Software Engineering and System Analysis",
+          "Database Design and Implementation",
+          "Object-Oriented Programming",
+          "Linux Server Administration (practical coursework)",
+          "Network Configuration and Web Development",
+          "Project Management and Technical Communication"
+        ]
+      },
+      "ptBR": {
+        "title": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+        "organization": "UNICNEC",
+        "location": "Itaúna, Brasil",
+        "period": "Mar 2018 – Jul 2021",
+        "description": "Concluí a graduação tecnológica com foco em engenharia de software e desenvolvimento de sistemas. As principais disciplinas incluíram análise de sistemas, modelagem de bancos de dados e configuração de redes.",
+        "bullets": [
+          "Engenharia de Software e Análise de Sistemas",
+          "Modelagem e Implementação de Bancos de Dados",
+          "Programação Orientada a Objetos",
+          "Administração de Servidores Linux (disciplina prática)",
+          "Configuração de Redes e Desenvolvimento Web",
+          "Gestão de Projetos e Comunicação Técnica"
+        ]
+      }
+    }
+  },
+  {
+    "collection": "projects",
+    "doc": {
+      "id": "darcy-mcgees",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "image": "darcy-mcgees",
+      "imageWidth": 1280,
+      "imageHeight": 720,
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "ReactJs",
+        "Responsive Design"
+      ],
+      "liveUrl": "https://www.darcymcgeespub.com/",
+      "githubUrl": "",
+      "detailPath": "/projects/darcy-mcgees",
+      "en": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "description": "Restaurant website & admin dashboard (demo)",
+        "imageAlt": "D'Arcy McGee's Irish Pub"
+      },
+      "ptBR": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "description": "Site de restaurante e painel administrativo (demo)",
+        "imageAlt": "D'Arcy McGee's Irish Pub"
+      }
+    }
+  },
+  {
+    "collection": "projects",
+    "doc": {
+      "id": "big-bang-duel",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "image": "big-bang-duel",
+      "imageWidth": 864,
+      "imageHeight": 557,
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "Zustand",
+        "Firebase"
+      ],
+      "liveUrl": "https://duel.hugoviegas.dev",
+      "githubUrl": "https://github.com/hugoviegas/Big-bang-Duel",
+      "detailPath": "/projects/big-bang-duel",
+      "en": {
+        "title": "Big Bang Duel",
+        "description": "Interactive strategy duel game with guest entry, AI/solo play, and a smooth path for player accounts.",
+        "imageAlt": "Big Bang Duel"
+      },
+      "ptBR": {
+        "title": "Big Bang Duel",
+        "description": "Jogo de duelo estratégico interativo com entrada de convidado, gameplay solo com IA e uma jornada simples para contas de jogadores.",
+        "imageAlt": "Big Bang Duel"
+      }
+    }
+  },
+  {
+    "collection": "projects",
+    "doc": {
+      "id": "etal-automation",
+      "published": false,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "image": "",
+      "imageWidth": 0,
+      "imageHeight": 0,
+      "technologies": [
+        "AppSheet",
+        "Google Sheets"
+      ],
+      "liveUrl": "",
+      "githubUrl": "",
+      "detailPath": "",
+      "en": {
+        "title": "Business Process Automation System",
+        "description": "Internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one.",
+        "imageAlt": "Business Process Automation System"
+      },
+      "ptBR": {
+        "title": "Sistema de Automação de Processos",
+        "description": "App interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um.",
+        "imageAlt": "Sistema de Automação de Processos"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-html5",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "html",
+      "en": {
+        "label": "HTML5"
+      },
+      "ptBR": {
+        "label": "HTML5"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-css3",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "css",
+      "en": {
+        "label": "CSS3"
+      },
+      "ptBR": {
+        "label": "CSS3"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-javascript",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "javascript",
+      "en": {
+        "label": "JavaScript"
+      },
+      "ptBR": {
+        "label": "JavaScript"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-php",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "php",
+      "en": {
+        "label": "PHP"
+      },
+      "ptBR": {
+        "label": "PHP"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-java",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "java",
+      "en": {
+        "label": "Java"
+      },
+      "ptBR": {
+        "label": "Java"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-python",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "python",
+      "en": {
+        "label": "Python"
+      },
+      "ptBR": {
+        "label": "Python"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-c",
+      "published": true,
+      "order": 60,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "c",
+      "en": {
+        "label": "C"
+      },
+      "ptBR": {
+        "label": "C"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-vue-js",
+      "published": true,
+      "order": 70,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "vue",
+      "en": {
+        "label": "Vue.js"
+      },
+      "ptBR": {
+        "label": "Vue.js"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-react",
+      "published": true,
+      "order": 80,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "react",
+      "en": {
+        "label": "React"
+      },
+      "ptBR": {
+        "label": "React"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-shell-bash",
+      "published": true,
+      "order": 90,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "shell",
+      "en": {
+        "label": "Shell/Bash"
+      },
+      "ptBR": {
+        "label": "Shell/Bash"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-sql",
+      "published": true,
+      "order": 100,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "sql",
+      "en": {
+        "label": "SQL"
+      },
+      "ptBR": {
+        "label": "SQL"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-active-directory",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "active-directory",
+      "en": {
+        "label": "Active Directory"
+      },
+      "ptBR": {
+        "label": "Active Directory"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-google-workspace",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "google-workspace",
+      "en": {
+        "label": "Google Workspace"
+      },
+      "ptBR": {
+        "label": "Google Workspace"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-windows-server",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "windows-server",
+      "en": {
+        "label": "Windows Server"
+      },
+      "ptBR": {
+        "label": "Windows Server"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-linux",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "linux",
+      "en": {
+        "label": "Linux"
+      },
+      "ptBR": {
+        "label": "Linux"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-docker",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "docker",
+      "en": {
+        "label": "Docker"
+      },
+      "ptBR": {
+        "label": "Docker"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-network",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "network",
+      "en": {
+        "label": "Network"
+      },
+      "ptBR": {
+        "label": "Redes"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-google-workspace-administration",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Google Workspace Administration"
+      },
+      "ptBR": {
+        "label": "Administração do Google Workspace"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-active-directory-management",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Active Directory Management"
+      },
+      "ptBR": {
+        "label": "Gestão de Active Directory"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-windows-server-administration",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Windows Server Administration"
+      },
+      "ptBR": {
+        "label": "Administração do Windows Server"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-javascript-node-js-express-js",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "JavaScript (Node.js, Express.js)"
+      },
+      "ptBR": {
+        "label": "JavaScript (Node.js, Express.js)"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-google-apps-script",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Google Apps Script"
+      },
+      "ptBR": {
+        "label": "Google Apps Script"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-mysql-database-management",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "MySQL Database Management"
+      },
+      "ptBR": {
+        "label": "Gestão de Banco de Dados MySQL"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-system-monitoring-troubleshooting",
+      "published": true,
+      "order": 60,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "System Monitoring & Troubleshooting"
+      },
+      "ptBR": {
+        "label": "Monitoramento e Diagnóstico de Sistemas"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-information-security-best-practices",
+      "published": true,
+      "order": 70,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Information Security Best Practices"
+      },
+      "ptBR": {
+        "label": "Boas Práticas de Segurança da Informação"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-technical-documentation-process-optimization",
+      "published": true,
+      "order": 80,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "Technical Documentation & Process Optimization"
+      },
+      "ptBR": {
+        "label": "Documentação Técnica e Otimização de Processos"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "certification-html5-css3-development",
+      "published": true,
+      "order": 90,
+      "updatedAt": null,
+      "version": 0,
+      "group": "certification",
+      "iconKey": "",
+      "en": {
+        "label": "HTML5 & CSS3 Development"
+      },
+      "ptBR": {
+        "label": "Desenvolvimento HTML5 e CSS3"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "focus-active-directory",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Active Directory"
+      },
+      "ptBR": {
+        "label": "Active Directory"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "focus-google-workspace",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Google Workspace"
+      },
+      "ptBR": {
+        "label": "Google Workspace"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "focus-system-administration",
+      "published": true,
+      "order": 20,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "System Administration"
+      },
+      "ptBR": {
+        "label": "Administração de Sistemas"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "focus-process-automation",
+      "published": true,
+      "order": 30,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Process Automation"
+      },
+      "ptBR": {
+        "label": "Automação de Processos"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "focus-technical-support",
+      "published": true,
+      "order": 40,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Technical Support"
+      },
+      "ptBR": {
+        "label": "Suporte Técnico"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "focus-infrastructure-management",
+      "published": true,
+      "order": 50,
+      "updatedAt": null,
+      "version": 0,
+      "group": "focus",
+      "iconKey": "",
+      "en": {
+        "label": "Infrastructure Management"
+      },
+      "ptBR": {
+        "label": "Gestão de Infraestrutura"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-react-js",
+      "published": false,
+      "order": 110,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "React.js"
+      },
+      "ptBR": {
+        "label": "React.js"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-node-js",
+      "published": false,
+      "order": 120,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Node.js"
+      },
+      "ptBR": {
+        "label": "Node.js"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-bootstrap",
+      "published": false,
+      "order": 130,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Bootstrap"
+      },
+      "ptBR": {
+        "label": "Bootstrap"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-html",
+      "published": false,
+      "order": 140,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "HTML"
+      },
+      "ptBR": {
+        "label": "HTML"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-css",
+      "published": false,
+      "order": 150,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "CSS"
+      },
+      "ptBR": {
+        "label": "CSS"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-google-apis",
+      "published": false,
+      "order": 160,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Google APIs"
+      },
+      "ptBR": {
+        "label": "Google APIs"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-firebase",
+      "published": false,
+      "order": 170,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Firebase"
+      },
+      "ptBR": {
+        "label": "Firebase"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-powershell",
+      "published": false,
+      "order": 180,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "PowerShell"
+      },
+      "ptBR": {
+        "label": "PowerShell"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-sql-mysql",
+      "published": false,
+      "order": 190,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "SQL / MySQL"
+      },
+      "ptBR": {
+        "label": "SQL / MySQL"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-git-version-control",
+      "published": false,
+      "order": 200,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Git version control"
+      },
+      "ptBR": {
+        "label": "Controle de versão Git"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "programming-software-testing-documentation",
+      "published": false,
+      "order": 210,
+      "updatedAt": null,
+      "version": 0,
+      "group": "programming",
+      "iconKey": "",
+      "en": {
+        "label": "Software testing documentation"
+      },
+      "ptBR": {
+        "label": "Documentação de testes de software"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-windows-server-environments",
+      "published": false,
+      "order": 60,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Windows Server environments"
+      },
+      "ptBR": {
+        "label": "Ambientes Windows Server"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-active-directory-group-policy-dns-dhcp",
+      "published": false,
+      "order": 70,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Active Directory (Group Policy, DNS, DHCP)"
+      },
+      "ptBR": {
+        "label": "Active Directory (Group Policy, DNS, DHCP)"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-microsoft-365-administration",
+      "published": false,
+      "order": 80,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Microsoft 365 Administration"
+      },
+      "ptBR": {
+        "label": "Administração do Microsoft 365"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-backup-disaster-recovery",
+      "published": false,
+      "order": 90,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Backup & Disaster Recovery"
+      },
+      "ptBR": {
+        "label": "Backup e Recuperação de Desastres"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-linux-server-administration",
+      "published": false,
+      "order": 100,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Linux Server Administration"
+      },
+      "ptBR": {
+        "label": "Administração de Servidores Linux"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-network-administration-tcp-ip-dns-dhcp-fundamentals",
+      "published": false,
+      "order": 110,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Network administration (TCP/IP, DNS, DHCP fundamentals)"
+      },
+      "ptBR": {
+        "label": "Administração de redes (fundamentos de TCP/IP, DNS, DHCP)"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-network-troubleshooting-and-connectivity-management",
+      "published": false,
+      "order": 120,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Network troubleshooting and connectivity management"
+      },
+      "ptBR": {
+        "label": "Diagnóstico de redes e gestão de conectividade"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-information-security-best-practices-and-access-controls",
+      "published": false,
+      "order": 130,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Information security best practices and access controls"
+      },
+      "ptBR": {
+        "label": "Boas práticas de segurança da informação e controles de acesso"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-security-policy-implementation-and-user-authentication",
+      "published": false,
+      "order": 140,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Security policy implementation and user authentication"
+      },
+      "ptBR": {
+        "label": "Implementação de políticas de segurança e autenticação de usuários"
+      }
+    }
+  },
+  {
+    "collection": "skills",
+    "doc": {
+      "id": "it-firewall-management-basics",
+      "published": false,
+      "order": 150,
+      "updatedAt": null,
+      "version": 0,
+      "group": "it",
+      "iconKey": "",
+      "en": {
+        "label": "Firewall management basics"
+      },
+      "ptBR": {
+        "label": "Noções de gestão de firewall"
+      }
+    }
+  },
+  {
+    "collection": "about",
+    "doc": {
+      "id": "main",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "en": {
+        "summary": [
+          "Software Developer with 5+ years of combined experience in full-stack development and IT infrastructure. I started at ETAL in Belo Horizonte, Brazil, in 2020, where I worked in IT support and built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one.",
+          "Since September 2024 I have worked at Erin College in Dublin as IT Support Specialist | System Administrator. There I designed, developed, and maintain a full-stack internal ERP platform covering HR, payroll, finance, student management, and ticketing, built with React, TypeScript, and Google Apps Script and supporting operational workflows for 120+ users. In parallel, I completed a Higher Diploma in Science in Computing at CCT College Dublin (EQF level 8) with a First Class final grade in September 2025."
+        ],
+        "highlights": [
+          {
+            "title": "5+ Years Experience",
+            "description": "Full-stack development and IT infrastructure"
+          },
+          {
+            "title": "Timesheet Close: 4 Days to ~1",
+            "description": "Internal AppSheet app on Google Sheets at ETAL, serving 400+ employees"
+          },
+          {
+            "title": "Internal ERP Platform",
+            "description": "Full-stack ERP with HR, payroll, finance, student management, and ticketing modules for 120+ users"
+          },
+          {
+            "title": "First Class Higher Diploma",
+            "description": "Higher Diploma in Science in Computing, CCT College Dublin (EQF level 8), 2025"
+          }
+        ],
+        "fullStory": "A long time ago I found a spark. At eight years old, a first phone became my training droid — downloading .jar games, tweaking settings and customizing things were my first experiments with systems (my tiny training droid did more beeps than features). At eleven, curiosity became a mission: a Lego robotics championship at school. We built and programmed a robot with a drag‑and‑drop language, won regionals and reached nationals. Tools were humble, but the lesson was clear: like a young Padawan, I had found a path worth mastering (no robes required).\n\nYears later, at seventeen, a first job as a supermarket apprentice funded my first laptop (my first cockpit). With it came image and video editing, system restores, and an obsession with how things work under the hood. At eighteen, formal training in Analysis and Systems Development gave structure to that curiosity — programming logic, mathematics, databases and web development became the foundation for building real systems.\n\nIn 2021 a small venture took shape with a friend and my older brother: a videomaker and social media studio (my brother the wise co‑pilot). It sharpened storytelling and design, but it also revealed a deeper calling — solving operational problems with code. In IT at a services company, in stolen hours, AppSheet on top of Google Sheets became the engine for an internal app that simplified daily processes (a small rebellion against slow processes). I learned HR and finance workflows end‑to‑end to design it properly. The result: the timesheet close for 400+ employees fell from four days to about one. Curiosity met impact; making messy workflows simple became my signature.\n\nIreland came next. A year of saving made the move possible for better opportunities and full English immersion. Two years in hospitality accelerated fluency and cultural understanding. In September 2024, the path doubled down: a Higher Diploma in Science of Computing at CCT College and an IT role at Erin College began the same month. The academic effort paid off with First‑Class results. At work, spreadsheet automation evolved with AI prompting and sharper programming logic — projects across departments were streamlined and each week revealed another layer of automation possible within Google's ecosystem.\n\nAlongside this, a practical challenge from the restaurant job led to building the D'Arcy McGee's website. With AI tooling, UX study and hands‑on engineering, a fast, functional site shipped — proof that delivering quick, reliable value is a repeatable skill (almost a pixel‑perfect lightsaber, but not quite). Today I seek a front‑end or full‑stack role that values curiosity, product sense and the ability to turn complex processes into elegant, measurable solutions. The drive is the same as that eleven‑year‑old at the robotics table: learn fast, build well, and keep moving.\n"
+      },
+      "ptBR": {
+        "summary": [
+          "Desenvolvedor de Software com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Comecei na ETAL, em Belo Horizonte, em 2020, onde atuei em suporte de TI e construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um.",
+          "Desde setembro de 2024 trabalho no Erin College, em Dublin, como IT Support Specialist | System Administrator. Lá projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados, construída com React, TypeScript e Google Apps Script e que apoia os fluxos operacionais de 120+ usuários. Em paralelo, concluí o Higher Diploma in Science in Computing no CCT College Dublin (EQF nível 8) com nota final First Class em setembro de 2025."
+        ],
+        "highlights": [
+          {
+            "title": "5+ Anos de Experiência",
+            "description": "Desenvolvimento full-stack e infraestrutura de TI"
+          },
+          {
+            "title": "Fechamento de Ponto: 4 Dias para ~1",
+            "description": "App interno em AppSheet sobre Google Sheets na ETAL, para mais de 400 colaboradores"
+          },
+          {
+            "title": "Plataforma ERP Interna",
+            "description": "ERP full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados para 120+ usuários"
+          },
+          {
+            "title": "Higher Diploma com First Class",
+            "description": "Higher Diploma in Science in Computing, CCT College Dublin (EQF nível 8), 2025"
+          }
+        ],
+        "fullStory": "Há muito tempo encontrei uma faísca. Aos oito anos, um primeiro celular virou meu pequeno droide de treino — baixar joguinhos .jar, mexer em configurações e personalizar tudo foram meus primeiros experimentos com sistemas (meu droide fazia mais bipes que milagres). Aos onze, a curiosidade virou missão: um campeonato escolar de robótica Lego. Construímos e programamos um robô com uma linguagem de arrastar e soltar, vencemos a etapa regional e chegamos ao nacional. As ferramentas eram simples, mas a lição ficou clara: como um jovem Padawan, encontrei um caminho a ser dominado (sem túnicas, por enquanto).\n\nAnos depois, aos dezessete, o primeiro emprego como aprendiz de supermercado financiou meu primeiro notebook (meu primeiro cockpit). Com ele vieram edição de imagem e vídeo, restaurações de sistema e a obsessão por entender como as coisas funcionam por baixo do capô. Aos dezoito, a formação em Análise e Desenvolvimento de Sistemas deu estrutura a essa curiosidade — lógica de programação, matemática, bancos de dados e desenvolvimento web tornaram‑se a base para construir sistemas reais.\n\nEm 2021, com um amigo e meu irmão mais velho, nasceu um pequeno estúdio de videomaker e social media (meu irmão, o co‑piloto sábio). Isso aprimorou a narrativa e o design, mas também revelou um chamado mais profundo — resolver problemas operacionais com código. Em TI, numa empresa de prestação de serviços, nas horas vagas o AppSheet sobre Google Sheets virou o motor de um app interno que simplificou processos diários (uma pequena rebelião contra processos lentos). Aprendi os fluxos de RH e financeiro ponta a ponta para desenhá‑lo bem. O resultado: o fechamento de ponto de mais de 400 colaboradores caiu de quatro dias para cerca de um. Curiosidade virou impacto; transformar processos caóticos em soluções simples virou minha marca.\n\nVeio então a Irlanda. Um ano de economias tornou a mudança possível, em busca de melhores oportunidades e imersão no inglês. Dois anos na hospitalidade aceleraram a fluência e o entendimento cultural. Em setembro de 2024, a jornada se intensificou: um Higher Diploma em Science of Computing no CCT College e um cargo de TI no Erin College começaram no mesmo mês. O esforço acadêmico rendeu First‑Class. No trabalho, as automações em planilhas evoluíram com prompting de IA e lógica de programação mais robusta — projetos em vários departamentos foram otimizados e, a cada semana, surgia uma nova camada de automação possível dentro do ecossistema Google.\n\nParalelamente, um desafio prático do restaurante onde trabalhava levou à construção do site do D'Arcy McGee's. Com ferramentas de IA, estudo de UX e engenharia prática, saiu um site rápido e funcional — prova de que entregar valor com rapidez é uma habilidade repetível (quase um sabre de luz em pixels). Hoje procuro uma vaga front‑end ou full‑stack que valorize essa combinação de curiosidade, senso de produto e capacidade de transformar processos complexos em soluções elegantes e mensuráveis. A motivação é a mesma daquele garoto de onze anos na mesa de robótica: aprender rápido, construir bem e seguir em frente."
+      }
+    }
+  },
+  {
+    "collection": "projectDetails",
+    "doc": {
+      "id": "darcy-mcgees",
+      "published": true,
+      "order": 0,
+      "updatedAt": null,
+      "version": 0,
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind",
+        "shadcn/ui",
+        "Supabase (real) / localStorage (demo)"
+      ],
+      "en": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "summary": "Restaurant website and admin dashboard demo for a modern Irish pub experience.",
+        "sections": [],
+        "faq": [],
+        "storyTitle": "",
+        "storyIntro": "",
+        "story": ""
+      },
+      "ptBR": {
+        "title": "D'Arcy McGee's Irish Pub",
+        "summary": "Demonstração de site e painel administrativo para a experiência de um pub irlandês moderno.",
+        "sections": [],
+        "faq": [],
+        "storyTitle": "",
+        "storyIntro": "",
+        "story": ""
+      }
+    }
+  },
+  {
+    "collection": "projectDetails",
+    "doc": {
+      "id": "big-bang-duel",
+      "published": true,
+      "order": 10,
+      "updatedAt": null,
+      "version": 0,
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "Zustand",
+        "Firebase Authentication",
+        "Firestore",
+        "Firebase Realtime Database"
+      ],
+      "en": {
+        "title": "Big Bang Duel",
+        "summary": "A fast strategy duel game that can be tried immediately as a guest before continuing with Google sign-in for returning players.",
+        "sections": [
+          {
+            "id": "try",
+            "title": "What you can try",
+            "body": "The game is designed to be approachable from the first click, with a guest path that opens the AI/solo experience immediately and a Google sign-in route for returning players.",
+            "items": [
+              "Guest entry for an immediate AI/solo experience",
+              "Google sign-in for returning players",
+              "A clear account journey that stays understandable at a high level",
+              "Full game access at duel.hugoviegas.dev"
+            ]
+          },
+          {
+            "id": "built",
+            "title": "What I built",
+            "body": "",
+            "items": [
+              "Designed the public-facing game experience around a low-friction entry flow.",
+              "Built the product work needed to support a playable game, identity flow, and user progression model.",
+              "Worked across the game experience and the system behind it so the first visit feels responsive and approachable."
+            ]
+          },
+          {
+            "id": "challenges",
+            "title": "Key challenges",
+            "body": "",
+            "items": [
+              "Keeping fast game interactions responsive while the game state updates smoothly.",
+              "Managing guest access without overstating permanent account or multiplayer capabilities.",
+              "Separating real-time game concerns from player profile and progression concerns.",
+              "Making the game easy to try without friction, even for players who do not want to commit immediately."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "How did Big Bang Duel begin?",
+            "answer": "The idea started from a childhood card game, then turned into a browser-based duel experience built and iterated by Hugo in a focused development sprint."
+          },
+          {
+            "question": "What inspired the visual identity?",
+            "answer": "The visual direction combines a cartoon look with a Wild West mood, shaped through early AI concept exploration and a clear desire for a game that feels complete but easy to understand."
+          },
+          {
+            "question": "How does the game work?",
+            "answer": "Each match is turn-based, each player starts with four health points, and each round is built around choosing one of five actions while managing ammunition, risk, and the opponent's pattern."
+          },
+          {
+            "question": "What do Reload, Shoot, Dodge, Counterattack, and Double Shot do?",
+            "answer": "Reload gains one ammunition; Shoot spends one ammunition and deals damage if the opponent does not defend; Dodge avoids a normal shot and reduces damage from a Double Shot; Counterattack spends one ammunition and returns damage in specific situations; Double Shot spends two ammunition and is a stronger attack with a two-use match limit."
+          },
+          {
+            "question": "What are the six classes and how does mastery affect them?",
+            "answer": "The six classes are Sharpshooter, Strategist, Sneak, Ricochet, Bloodthirsty, and Healer. Each class has a chance-based effect linked to its mastery level, which makes class specialization matter as players level up."
+          },
+          {
+            "question": "How does progression work?",
+            "answer": "Players unlock and buy characters through progression, complete achievements, and tackle daily, weekly, and monthly missions that reward in-game currency and keep the game varied."
+          },
+          {
+            "question": "What can a guest try?",
+            "answer": "Guests can choose one of the first three characters, play solo against the AI, and learn the main mechanics without committing to an account immediately. Guests cannot play online, access every character, or access the global ranking."
+          },
+          {
+            "question": "What was Hugo's role in the project?",
+            "answer": "Hugo built the complete game concept and experience, from rules and art direction to frontend, backend, authentication, progression, and solo AI behaviour, with his brother contributing to early ideas, testing, and balancing feedback."
+          },
+          {
+            "question": "What was the biggest technical and design challenge?",
+            "answer": "The biggest challenge was balancing the rules and making the AI hard to exploit while still fair. Hugo had to revisit design choices when the AI became too dominant or too predictable."
+          },
+          {
+            "question": "What comes next for the game?",
+            "answer": "The project is still evolving, with more rules, refinement, and deeper systems planned as the game continues to grow beyond the playable prototype stage."
+          }
+        ],
+        "storyTitle": "The story behind Big Bang Duel",
+        "storyIntro": "A guest-first game concept that turns a quick browser session into a full strategic duel experience.",
+        "story": "# Big Bang Duel\n\n## The idea\n\nBig Bang Duel began as a simple, fast, browser-first idea: a strategy card game that could be picked up in seconds, but still feel rich enough to reward repeated plays.\n\nThe original goal was to make the first session feel immediate. A player could step in as a guest, see the core loop quickly, and choose whether to keep exploring the game or continue with a more personal account path later.\n\n## Why guests matter\n\nThe project was designed around a low-friction experience. Guest access removes the need for a full account setup before the player understands the game’s value. It keeps the first click playful and focused on action, while the Google sign-in flow supports returning players without making the experience feel heavy.\n\n## The rules and progression\n\nThe design centers on a short duel loop: decide on a class, build a strategy around your chosen tools, and manage tempo against an opponent. Each match is meant to teach the player the game’s rhythm quickly, while progression rewards better decisions and stronger card combinations over time.\n\nThe project also introduced a clear hierarchy of classes, tactical choices, and progression goals. The challenge was not just making the game fun in isolation, but making the systems readable from a phone-sized screen without overwhelming the player.\n\n## The technical challenge\n\nThe main difficulty was balancing accessibility with depth. A fast tactical game needs to feel responsive, readable, and easy to grasp on mobile, while still giving enough room for meaningful decisions and a sense of progression.\n\nThis meant keeping the interface clear, reducing friction, and ensuring the guest-first flow and account path felt coherent instead of bolted together.\n\n## Hugo's role\n\nHugo shaped the product direction across the game concept, UI flow, player onboarding, and the deployment-focused polish needed to make the experience feel complete. The work focused on practical product decisions as much as on the game systems themselves: how a player enters, learns, and returns to the game.\n\n## The result\n\nBig Bang Duel is meant to feel approachable, quick to understand, and memorable on first contact. It brings together a clear strategic fantasy, a guest-first onboarding model, and a sustainable progression path that can continue to grow as more features are added.\n"
+      },
+      "ptBR": {
+        "title": "Big Bang Duel",
+        "summary": "Um jogo de duelo estratégico e rápido que pode ser testado imediatamente como visitante antes de continuar com login do Google para jogadores recorrentes.",
+        "sections": [
+          {
+            "id": "try",
+            "title": "O que você pode testar",
+            "body": "O jogo foi pensado para ser acessível desde o primeiro clique, com um caminho de convidado que abre imediatamente a experiência solo com IA e uma rota de login com Google para jogadores recorrentes.",
+            "items": [
+              "Acesso de convidado para uma experiência imediata solo contra a IA",
+              "Login com Google para jogadores recorrentes",
+              "Uma jornada de conta clara e fácil de compreender em alto nível",
+              "Acesso ao jogo completo em duel.hugoviegas.dev"
+            ]
+          },
+          {
+            "id": "built",
+            "title": "O que eu construí",
+            "body": "",
+            "items": [
+              "Desenhei a experiência pública do jogo em torno de um fluxo de entrada simples e acessível.",
+              "Construí o trabalho de produto necessário para suportar um jogo jogável, fluxo de identidade e modelo de progressão do utilizador.",
+              "Trabalhei em toda a experiência do jogo e no sistema por detrás dela para que a primeira visita seja responsiva e acessível."
+            ]
+          },
+          {
+            "id": "challenges",
+            "title": "Principais desafios",
+            "body": "",
+            "items": [
+              "Manter as interações rápidas do jogo responsivas enquanto o estado do jogo se atualiza sem problemas.",
+              "Gerir o acesso de convidado sem exagerar as capacidades permanentes de conta ou multijogador.",
+              "Separar as questões de jogo em tempo real das preocupações de perfil e progressão do jogador.",
+              "Fazer com que o jogo seja fácil de experimentar sem fricção, mesmo para jogadores que não querem comprometer-se imediatamente."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "Como começou o Big Bang Duel?",
+            "answer": "A ideia começou num jogo de cartas de infância e depois evoluiu para uma experiência de duelo online construída e iterada pelo Hugo numa sprint de desenvolvimento focada."
+          },
+          {
+            "question": "O que inspirou a identidade visual?",
+            "answer": "A direção visual combina um visual cartoon com um ambiente de Velho Oeste, moldado por exploração inicial de conceitos com IA e pelo desejo de criar um jogo completo mas fácil de compreender."
+          },
+          {
+            "question": "Como funciona o jogo?",
+            "answer": "Cada partida é por turnos, cada jogador começa com quatro pontos de vida e cada ronda envolve escolher uma de cinco ações enquanto gere munição, risco e o padrão do adversário."
+          },
+          {
+            "question": "O que fazem Recarregar, Atirar, Esquivar, Contra-golpe e Tiro duplo?",
+            "answer": "Recarregar ganha uma munição; Atirar gasta uma munição e causa dano se o adversário não se defender; Esquivar evita um tiro normal e reduz dano de Tiro duplo; Contra-golpe gasta uma munição e devolve dano em situações específicas; Tiro duplo gasta duas munições e é um ataque mais forte com um limite de duas utilizações por partida."
+          },
+          {
+            "question": "Quais são as seis classes e como a maestria afeta cada uma?",
+            "answer": "As seis classes são Atirador, Estrategista, Sorrateiro, Ricochete, Sanguinário e Curandeiro. Cada classe tem um efeito baseado em probabilidade associado ao nível de maestria, o que faz com que a especialização em classes passe a importar à medida que o jogador evolui."
+          },
+          {
+            "question": "Como funciona a progressão?",
+            "answer": "Os jogadores desbloqueiam e compram personagens por progressão, completam conquistas e realizam missões diárias, semanais e mensais que recompensam moeda do jogo e mantêm o jogo variado."
+          },
+          {
+            "question": "O que um visitante pode testar como convidado?",
+            "answer": "Os convidados podem escolher um dos três primeiros personagens, jogar em modo solo contra a IA e aprender as mecânicas principais sem criar imediatamente uma conta. Os convidados não podem jogar online, usar todos os personagens nem aceder ao ranking global."
+          },
+          {
+            "question": "Qual foi o papel do Hugo no projeto?",
+            "answer": "O Hugo construiu o conceito e a experiência completa do jogo, desde as regras e direção artística até frontend, backend, autenticação, progressão e comportamento da IA solo, com o seu irmão a contribuir para ideias iniciais, testes e feedback de equilíbrio."
+          },
+          {
+            "question": "Qual foi o maior desafio técnico e de design?",
+            "answer": "O maior desafio foi equilibrar as regras e criar uma IA desafiante sem ser injusta. O Hugo teve de rever escolhas de design quando a IA ficou demasiado dominante ou demasiado previsível."
+          },
+          {
+            "question": "O que vem a seguir para o jogo?",
+            "answer": "O projeto continua em evolução, com mais regras, refinamentos e sistemas mais profundos planeados à medida que o jogo cresce para além do estado de protótipo jogável."
+          }
+        ],
+        "storyTitle": "A história por trás do Big Bang Duel",
+        "storyIntro": "Um conceito de jogo pensado para começar rapidamente em navegador e evoluir para uma experiência de duelo estratégico completa.",
+        "story": "# Big Bang Duel\n\n## A ideia\n\nO Big Bang Duel começou como uma ideia simples, rápida e pensada para navegador: um jogo de duelo estratégico com cartas que podia ser experimentado em segundos, mas que ainda assim parecia rico o suficiente para recompensar jogadas repetidas.\n\nO objetivo inicial era fazer a primeira sessão parecer imediata. O jogador podia entrar como convidado, ver o loop principal do jogo rapidamente e decidir se queria continuar explorando a experiência ou avançar depois para um caminho com conta pessoal.\n\n## Por que os convidados importam\n\nO projeto foi desenhado com foco em uma experiência de baixa fricção. O acesso como convidado remove a necessidade de criar uma conta completa antes de o jogador entender o valor do jogo. Isso mantém o primeiro clique divertido e focado na ação, enquanto o fluxo de login com Google ajuda jogadores recorrentes sem tornar a experiência pesada.\n\n## As regras e a progressão\n\nO design gira em torno de um loop de duelo curto: escolher uma classe, construir uma estratégia ao redor das ferramentas escolhidas e gerenciar o ritmo contra um oponente. Cada partida pretende ensinar rapidamente o ritmo do jogo, enquanto a progressão recompensa decisões melhores e combinações mais fortes ao longo do tempo.\n\nO projeto também introduziu uma hierarquia clara de classes, escolhas táticas e objetivos de progressão. O desafio não era apenas tornar o jogo divertido isoladamente, mas também deixar os sistemas legíveis em uma tela de celular sem sobrecarregar o jogador.\n\n## O desafio técnico\n\nA dificuldade principal foi equilibrar acessibilidade com profundidade. Um jogo tático e rápido precisa parecer responsivo, legível e fácil de entender em mobile, ao mesmo tempo em que oferece espaço para decisões significativas e uma sensação de progresso.\n\nIsso exigiu manter a interface clara, reduzir atritos e garantir que o fluxo de convidado e o caminho com conta se sentissem coerentes em vez de montados de maneira improvisada.\n\n## O papel do Hugo\n\nO Hugo ajudou a definir a direção do produto em torno do conceito do jogo, do fluxo de interface, da introdução do jogador e do polimento final voltado para entrega, para que a experiência parecesse completa. O trabalho se concentrou em decisões práticas de produto tanto quanto nos próprios sistemas do jogo: como o jogador entra, aprende e retorna ao jogo.\n\n## O resultado\n\nO Big Bang Duel busca ser acessível, rápido de entender e memorável no primeiro contato. Ele reúne uma fantasia estratégica clara, um modelo de onboarding focado em convidado e um caminho de progressão que pode continuar crescendo conforme mais recursos forem adicionados.\n"
+      }
+    }
+  }
+]

@@ -1,16 +1,16 @@
 // Writes the public content snapshot (src/content/snapshot/*.json).
 //
-//   npm run content:snapshot          Firestore -> snapshot (keeps the current
-//                                     files if Firestore is unreachable,
-//                                     invalid, or settings/site.useRemote is off)
-//   npm run content:snapshot -- --seed  hard-coded seed -> snapshot
+//   npm run content:snapshot   Firestore -> snapshot. Keeps the committed files
+//                              if Firestore is unreachable, invalid, or
+//                              settings/site.useRemote is off.
 //
+// Firestore is the content source of truth; the committed snapshot is the
+// fallback and first-paint copy.
 // Runs before every production build. Uses public REST reads only: no service
 // account, no secrets.
 import fs from "node:fs";
 import path from "node:path";
-import { buildSeed } from "../src/content/seed";
-import { buildSnapshots, mergeCore, publishedSorted } from "../src/content/snapshotBuild";
+import { mergeCore, publishedSorted } from "../src/content/snapshotBuild";
 import { listPublished } from "../src/content/rest";
 import {
   coreSnapshotSchema,
@@ -77,12 +77,6 @@ const fromFirestore = async () => {
 };
 
 const main = async () => {
-  if (process.argv.includes("--seed")) {
-    const { core, details } = buildSnapshots(buildSeed(), null, "seed");
-    write(core, details);
-    console.log("content:snapshot: written from the hard-coded seed.");
-    return;
-  }
   try {
     await fromFirestore();
   } catch (error) {

@@ -39,14 +39,6 @@ export const translations: Translations = {
   downloadResume: { EN: "Download Resume", PT: "Baixar Currículo" },
 
   // About Section
-  journeySummary1: {
-    EN: "Software Developer with 5+ years of combined experience in full-stack development and IT infrastructure. I started at ETAL in Belo Horizonte, Brazil, in 2020, where I worked in IT support and built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one.",
-    PT: "Desenvolvedor de Software com 5+ anos de experiência combinada em desenvolvimento full-stack e infraestrutura de TI. Comecei na ETAL, em Belo Horizonte, em 2020, onde atuei em suporte de TI e construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um.",
-  },
-  journeySummary2: {
-    EN: "Since September 2024 I have worked at Erin College in Dublin as IT Support Specialist | System Administrator. There I designed, developed, and maintain a full-stack internal ERP platform covering HR, payroll, finance, student management, and ticketing, built with React, TypeScript, and Google Apps Script and supporting operational workflows for 120+ users. In parallel, I completed a Higher Diploma in Science in Computing at CCT College Dublin (EQF level 8) with a First Class final grade in September 2025.",
-    PT: "Desde setembro de 2024 trabalho no Erin College, em Dublin, como IT Support Specialist | System Administrator. Lá projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados, construída com React, TypeScript e Google Apps Script e que apoia os fluxos operacionais de 120+ usuários. Em paralelo, concluí o Higher Diploma in Science in Computing no CCT College Dublin (EQF nível 8) com nota final First Class em setembro de 2025.",
-  },
   readFullStory: { EN: "Read Full Story", PT: "Ler História Completa" },
   fullStoryTitle: { EN: "My Complete Journey", PT: "Minha Jornada Completa" },
 
@@ -92,39 +84,6 @@ export const translations: Translations = {
   },
   myJourney: { EN: "Professional Background", PT: "Histórico Profissional" },
 
-  // Highlights
-  highlight1Title: {
-    EN: "5+ Years Experience",
-    PT: "5+ Anos de Experiência",
-  },
-  highlight1Desc: {
-    EN: "Full-stack development and IT infrastructure",
-    PT: "Desenvolvimento full-stack e infraestrutura de TI",
-  },
-  highlight2Title: {
-    EN: "Timesheet Close: 4 Days to ~1",
-    PT: "Fechamento de Ponto: 4 Dias para ~1",
-  },
-  highlight2Desc: {
-    EN: "Internal AppSheet app on Google Sheets at ETAL, serving 400+ employees",
-    PT: "App interno em AppSheet sobre Google Sheets na ETAL, para mais de 400 colaboradores",
-  },
-  highlight3Title: {
-    EN: "Internal ERP Platform",
-    PT: "Plataforma ERP Interna",
-  },
-  highlight3Desc: {
-    EN: "Full-stack ERP with HR, payroll, finance, student management, and ticketing modules for 120+ users",
-    PT: "ERP full-stack com módulos de RH, folha de pagamento, finanças, gestão de alunos e chamados para 120+ usuários",
-  },
-  highlight4Title: {
-    EN: "First Class Higher Diploma",
-    PT: "Higher Diploma com First Class",
-  },
-  highlight4Desc: {
-    EN: "Higher Diploma in Science in Computing, CCT College Dublin (EQF level 8), 2025",
-    PT: "Higher Diploma in Science in Computing, CCT College Dublin (EQF nível 8), 2025",
-  },
 
   technicalSkills: { EN: "Technical Skills", PT: "Habilidades Técnicas" },
   languagesTitle: { EN: "Languages", PT: "Idiomas" },
@@ -145,37 +104,13 @@ export const translations: Translations = {
   "category.Mobile": { EN: "Mobile", PT: "Mobile" },
 
   // Individual projects (titles, descriptions, metrics)
-  "project.1.title": {
-    EN: "D'Arcy McGee's Irish Pub",
-    PT: "D'Arcy McGee's Irish Pub",
-  },
-  "project.1.description": {
-    EN: "Restaurant website & admin dashboard (demo)",
-    PT: "Site de restaurante e painel administrativo (demo)",
-  },
   "project.1.metrics": { EN: "Live Client Website", PT: "Site do Cliente" },
 
-  "project.2.title": {
-    EN: "Business Process Automation System",
-    PT: "Sistema de Automação de Processos",
-  },
-  "project.2.description": {
-    EN: "Internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one.",
-    PT: "App interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um.",
-  },
   "project.2.metrics": {
     EN: "Four days to about one",
     PT: "De quatro dias para cerca de um",
   },
 
-  "project.5.title": {
-    EN: "Big Bang Duel",
-    PT: "Big Bang Duel",
-  },
-  "project.5.description": {
-    EN: "Interactive strategy duel game with guest entry, AI/solo play, and a smooth path for player accounts.",
-    PT: "Jogo de duelo estratégico interativo com entrada de convidado, gameplay solo com IA e uma jornada simples para contas de jogadores.",
-  },
   "project.5.metrics": {
     EN: "Playable game",
     PT: "Jogo jogável",
@@ -195,10 +130,6 @@ export const translations: Translations = {
   darcyTitle: {
     EN: "D'Arcy McGee's Irish Pub",
     PT: "D'Arcy McGee's Irish Pub",
-  },
-  darcySummary: {
-    EN: "Restaurant website and admin dashboard demo for a modern Irish pub experience.",
-    PT: "Demonstração de site e painel administrativo para a experiência de um pub irlandês moderno.",
   },
   darcyStack: { EN: "Stack", PT: "Tecnologias" },
   darcyDemoButton: { EN: "View embedded demo", PT: "Ver demo incorporada" },
@@ -284,10 +215,6 @@ export const translations: Translations = {
     EN: "Big Bang Duel",
     PT: "Big Bang Duel",
   },
-  bigBangSummary: {
-    EN: "A fast strategy duel game that can be tried immediately as a guest before continuing with Google sign-in for returning players.",
-    PT: "Um jogo de duelo estratégico e rápido que pode ser testado imediatamente como visitante antes de continuar com login do Google para jogadores recorrentes.",
-  },
   bigBangStack: { EN: "Stack", PT: "Tecnologias" },
   bigBangOpenFull: { EN: "Play full game", PT: "Jogar jogo completo" },
   bigBangReadStory: { EN: "Read full story", PT: "Ler história completa" },
@@ -296,14 +223,6 @@ export const translations: Translations = {
   bigBangStoryTitle: {
     EN: "The story behind Big Bang Duel",
     PT: "A história por trás do Big Bang Duel",
-  },
-  bigBangStoryIntro: {
-    EN: "A guest-first game concept that turns a quick browser session into a full strategic duel experience.",
-    PT: "Um conceito de jogo pensado para começar rapidamente em navegador e evoluir para uma experiência de duelo estratégico completa.",
-  },
-  bigBangStoryLoading: {
-    EN: "Loading story...",
-    PT: "A carregar a história...",
   },
   bigBangStoryError: {
     EN: "The story could not be loaded right now. Please try again later.",
@@ -378,22 +297,6 @@ export const translations: Translations = {
     EN: "What were the main challenges?",
     PT: "Quais foram os principais desafios?",
   },
-  bigBangTryTitle: {
-    EN: "What you can try",
-    PT: "O que você pode testar",
-  },
-  bigBangTryBody: {
-    EN: "The game is designed to be approachable from the first click, with a guest path that opens the AI/solo experience immediately and a Google sign-in route for returning players.",
-    PT: "O jogo foi pensado para ser acessível desde o primeiro clique, com um caminho de convidado que abre imediatamente a experiência solo com IA e uma rota de login com Google para jogadores recorrentes.",
-  },
-  bigBangBuiltTitle: {
-    EN: "What I built",
-    PT: "O que eu construí",
-  },
-  bigBangChallengesTitle: {
-    EN: "Key challenges",
-    PT: "Principais desafios",
-  },
   bigBangTechTitle: {
     EN: "Technology overview",
     PT: "Visão geral da tecnologia",
@@ -403,113 +306,11 @@ export const translations: Translations = {
     EN: "Everything you need to know about the project, the game flow, and the guest experience.",
     PT: "Tudo o que precisa saber sobre o projeto, o fluxo do jogo e a experiência de convidado.",
   },
-  bigBangTechReact: { EN: "React", PT: "React" },
-  bigBangTechTypeScript: { EN: "TypeScript", PT: "TypeScript" },
-  bigBangTechVite: { EN: "Vite", PT: "Vite" },
-  bigBangTechTailwind: { EN: "Tailwind CSS", PT: "Tailwind CSS" },
-  bigBangTechZustand: { EN: "Zustand", PT: "Zustand" },
-  bigBangTechFirebaseAuth: { EN: "Firebase Authentication", PT: "Firebase Authentication" },
-  bigBangTechFirestore: { EN: "Firestore", PT: "Firestore" },
-  bigBangTechRealtime: { EN: "Firebase Realtime Database", PT: "Firebase Realtime Database" },
-  bigBangTryItemGuest: {
-    EN: "Guest entry for an immediate AI/solo experience",
-    PT: "Acesso de convidado para uma experiência imediata solo contra a IA",
-  },
-  bigBangTryItemGoogle: {
-    EN: "Google sign-in for returning players",
-    PT: "Login com Google para jogadores recorrentes",
-  },
-  bigBangTryItemJourney: {
-    EN: "A clear account journey that stays understandable at a high level",
-    PT: "Uma jornada de conta clara e fácil de compreender em alto nível",
-  },
-  bigBangTryItemAccess: {
-    EN: "Full game access at duel.hugoviegas.dev",
-    PT: "Acesso ao jogo completo em duel.hugoviegas.dev",
-  },
-  bigBangBuiltItemExperience: {
-    EN: "Designed the public-facing game experience around a low-friction entry flow.",
-    PT: "Desenhei a experiência pública do jogo em torno de um fluxo de entrada simples e acessível.",
-  },
-  bigBangBuiltItemProduct: {
-    EN: "Built the product work needed to support a playable game, identity flow, and user progression model.",
-    PT: "Construí o trabalho de produto necessário para suportar um jogo jogável, fluxo de identidade e modelo de progressão do utilizador.",
-  },
-  bigBangBuiltItemFlow: {
-    EN: "Worked across the game experience and the system behind it so the first visit feels responsive and approachable.",
-    PT: "Trabalhei em toda a experiência do jogo e no sistema por detrás dela para que a primeira visita seja responsiva e acessível.",
-  },
-  bigBangChallengeResponsive: {
-    EN: "Keeping fast game interactions responsive while the game state updates smoothly.",
-    PT: "Manter as interações rápidas do jogo responsivas enquanto o estado do jogo se atualiza sem problemas.",
-  },
-  bigBangChallengeGuest: {
-    EN: "Managing guest access without overstating permanent account or multiplayer capabilities.",
-    PT: "Gerir o acesso de convidado sem exagerar as capacidades permanentes de conta ou multijogador.",
-  },
-  bigBangChallengeSystems: {
-    EN: "Separating real-time game concerns from player profile and progression concerns.",
-    PT: "Separar as questões de jogo em tempo real das preocupações de perfil e progressão do jogador.",
-  },
-  bigBangChallengeFriction: {
-    EN: "Making the game easy to try without friction, even for players who do not want to commit immediately.",
-    PT: "Fazer com que o jogo seja fácil de experimentar sem fricção, mesmo para jogadores que não querem comprometer-se imediatamente.",
-  },
   bigBangActionReload: { EN: "Reload", PT: "Recarregar" },
   bigBangActionShoot: { EN: "Shoot", PT: "Atirar" },
   bigBangActionDodge: { EN: "Dodge", PT: "Esquivar" },
   bigBangActionCounter: { EN: "Counterattack", PT: "Contra-golpe" },
   bigBangActionDouble: { EN: "Double Shot", PT: "Tiro duplo" },
-  "bigBangFaq.q1": { EN: "How did Big Bang Duel begin?", PT: "Como começou o Big Bang Duel?" },
-  "bigBangFaq.a1": {
-    EN: "The idea started from a childhood card game, then turned into a browser-based duel experience built and iterated by Hugo in a focused development sprint.",
-    PT: "A ideia começou num jogo de cartas de infância e depois evoluiu para uma experiência de duelo online construída e iterada pelo Hugo numa sprint de desenvolvimento focada.",
-  },
-  "bigBangFaq.q2": { EN: "What inspired the visual identity?", PT: "O que inspirou a identidade visual?" },
-  "bigBangFaq.a2": {
-    EN: "The visual direction combines a cartoon look with a Wild West mood, shaped through early AI concept exploration and a clear desire for a game that feels complete but easy to understand.",
-    PT: "A direção visual combina um visual cartoon com um ambiente de Velho Oeste, moldado por exploração inicial de conceitos com IA e pelo desejo de criar um jogo completo mas fácil de compreender.",
-  },
-  "bigBangFaq.q3": { EN: "How does the game work?", PT: "Como funciona o jogo?" },
-  "bigBangFaq.a3": {
-    EN: "Each match is turn-based, each player starts with four health points, and each round is built around choosing one of five actions while managing ammunition, risk, and the opponent's pattern.",
-    PT: "Cada partida é por turnos, cada jogador começa com quatro pontos de vida e cada ronda envolve escolher uma de cinco ações enquanto gere munição, risco e o padrão do adversário.",
-  },
-  "bigBangFaq.q4": { EN: "What do Reload, Shoot, Dodge, Counterattack, and Double Shot do?", PT: "O que fazem Recarregar, Atirar, Esquivar, Contra-golpe e Tiro duplo?" },
-  "bigBangFaq.a4": {
-    EN: "Reload gains one ammunition; Shoot spends one ammunition and deals damage if the opponent does not defend; Dodge avoids a normal shot and reduces damage from a Double Shot; Counterattack spends one ammunition and returns damage in specific situations; Double Shot spends two ammunition and is a stronger attack with a two-use match limit.",
-    PT: "Recarregar ganha uma munição; Atirar gasta uma munição e causa dano se o adversário não se defender; Esquivar evita um tiro normal e reduz dano de Tiro duplo; Contra-golpe gasta uma munição e devolve dano em situações específicas; Tiro duplo gasta duas munições e é um ataque mais forte com um limite de duas utilizações por partida.",
-  },
-  "bigBangFaq.q5": { EN: "What are the six classes and how does mastery affect them?", PT: "Quais são as seis classes e como a maestria afeta cada uma?" },
-  "bigBangFaq.a5": {
-    EN: "The six classes are Sharpshooter, Strategist, Sneak, Ricochet, Bloodthirsty, and Healer. Each class has a chance-based effect linked to its mastery level, which makes class specialization matter as players level up.",
-    PT: "As seis classes são Atirador, Estrategista, Sorrateiro, Ricochete, Sanguinário e Curandeiro. Cada classe tem um efeito baseado em probabilidade associado ao nível de maestria, o que faz com que a especialização em classes passe a importar à medida que o jogador evolui.",
-  },
-  "bigBangFaq.q6": { EN: "How does progression work?", PT: "Como funciona a progressão?" },
-  "bigBangFaq.a6": {
-    EN: "Players unlock and buy characters through progression, complete achievements, and tackle daily, weekly, and monthly missions that reward in-game currency and keep the game varied.",
-    PT: "Os jogadores desbloqueiam e compram personagens por progressão, completam conquistas e realizam missões diárias, semanais e mensais que recompensam moeda do jogo e mantêm o jogo variado.",
-  },
-  "bigBangFaq.q7": { EN: "What can a guest try?", PT: "O que um visitante pode testar como convidado?" },
-  "bigBangFaq.a7": {
-    EN: "Guests can choose one of the first three characters, play solo against the AI, and learn the main mechanics without committing to an account immediately. Guests cannot play online, access every character, or access the global ranking.",
-    PT: "Os convidados podem escolher um dos três primeiros personagens, jogar em modo solo contra a IA e aprender as mecânicas principais sem criar imediatamente uma conta. Os convidados não podem jogar online, usar todos os personagens nem aceder ao ranking global.",
-  },
-  "bigBangFaq.q8": { EN: "What was Hugo's role in the project?", PT: "Qual foi o papel do Hugo no projeto?" },
-  "bigBangFaq.a8": {
-    EN: "Hugo built the complete game concept and experience, from rules and art direction to frontend, backend, authentication, progression, and solo AI behaviour, with his brother contributing to early ideas, testing, and balancing feedback.",
-    PT: "O Hugo construiu o conceito e a experiência completa do jogo, desde as regras e direção artística até frontend, backend, autenticação, progressão e comportamento da IA solo, com o seu irmão a contribuir para ideias iniciais, testes e feedback de equilíbrio.",
-  },
-  "bigBangFaq.q9": { EN: "What was the biggest technical and design challenge?", PT: "Qual foi o maior desafio técnico e de design?" },
-  "bigBangFaq.a9": {
-    EN: "The biggest challenge was balancing the rules and making the AI hard to exploit while still fair. Hugo had to revisit design choices when the AI became too dominant or too predictable.",
-    PT: "O maior desafio foi equilibrar as regras e criar uma IA desafiante sem ser injusta. O Hugo teve de rever escolhas de design quando a IA ficou demasiado dominante ou demasiado previsível.",
-  },
-  "bigBangFaq.q10": { EN: "What comes next for the game?", PT: "O que vem a seguir para o jogo?" },
-  "bigBangFaq.a10": {
-    EN: "The project is still evolving, with more rules, refinement, and deeper systems planned as the game continues to grow beyond the playable prototype stage.",
-    PT: "O projeto continua em evolução, com mais regras, refinamentos e sistemas mais profundos planeados à medida que o jogo cresce para além do estado de protótipo jogável.",
-  },
 
   // Contact
   sendMessageTitle: { EN: "Send a Message", PT: "Enviar uma Mensagem" },
@@ -652,224 +453,12 @@ export const translations: Translations = {
     PT: "Educação",
   },
 
-  // Self-employed web development entry
-  "exp.freelance.period": { EN: "Jun 2023 – Mar 2024", PT: "Jun 2023 – Mar 2024" },
-  "exp.freelance.title": { EN: "Web Developer", PT: "Desenvolvedor Web" },
-  "exp.freelance.company": { EN: "Self-employed", PT: "Autônomo" },
-  "exp.freelance.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
-  "exp.freelance.description": {
-    EN: "Freelance web development for a restaurant client in Dublin, from requirements through launch and ongoing maintenance.",
-    PT: "Desenvolvimento web freelance para um restaurante cliente em Dublin, dos requisitos ao lançamento e à manutenção contínua.",
-  },
-  "exp.freelance.a1": {
-    EN: "Designed, developed, and deployed a website for a restaurant client, from requirements through launch",
-    PT: "Projetei, desenvolvi e publiquei um site para um restaurante cliente, dos requisitos ao lançamento",
-  },
-  "exp.freelance.a2": {
-    EN: "Provided about 10 months of post-launch maintenance, including bug fixes, content updates, and minor feature improvements",
-    PT: "Fiz cerca de 10 meses de manutenção após o lançamento, incluindo correções de bugs, atualizações de conteúdo e pequenas melhorias de funcionalidades",
-  },
 
-  // ICOT education entry
-  "edu.icot.period": { EN: "Aug 2022 – Apr 2024", PT: "Ago 2022 – Abr 2024" },
-  "edu.icot.title": {
-    EN: "Professional English Language Programme (Level C1 – Advanced)",
-    PT: "Programa Profissional de Língua Inglesa (Nível C1 – Avançado)",
-  },
-  "edu.icot.company": { EN: "ICOT", PT: "ICOT" },
-  "edu.icot.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
-  "edu.icot.description": {
-    EN: "Completed a professional English language programme in Dublin, reaching C1 (Advanced) level.",
-    PT: "Concluí um programa profissional de língua inglesa em Dublin, atingindo o nível C1 (Avançado).",
-  },
 
-  // Work experience entries
-  "exp.erin.period": { EN: "Sep 2024 – Present", PT: "Set 2024 – Atual" },
-  "exp.erin.title": {
-    EN: "IT Support Specialist | System Administrator",
-    PT: "Especialista em Suporte de TI | Administrador de Sistemas",
-  },
-  "exp.erin.company": { EN: "Erin College, Dublin", PT: "Erin College, Dublin" },
-  "exp.erin.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
-  "exp.erin.description": {
-    EN: "Designed, developed, and maintain a full-stack internal ERP platform alongside IT infrastructure and system administration for an educational institution in Dublin.",
-    PT: "Projetei, desenvolvi e mantenho uma plataforma ERP interna full-stack, além de cuidar da infraestrutura de TI e da administração de sistemas de uma instituição de ensino em Dublin.",
-  },
-  "exp.erin.a1": {
-    EN: "Designed, developed, and maintain a full-stack ERP (HR, payroll, finance, student management, ticketing) with React, TypeScript, and Google Apps Script, supporting 120+ users",
-    PT: "Projetei, desenvolvi e mantenho um ERP full-stack (RH, folha de pagamento, finanças, gestão de alunos, chamados) com React, TypeScript e Google Apps Script, atendendo 120+ usuários",
-  },
-  "exp.erin.a2": {
-    EN: "Build automation tools and data pipelines to reduce manual work and improve process efficiency",
-    PT: "Construo ferramentas de automação e pipelines de dados para reduzir trabalho manual e melhorar a eficiência dos processos",
-  },
-  "exp.erin.a3": {
-    EN: "Provide hands-on technical support and system administration to 120+ users",
-    PT: "Presto suporte técnico prático e administração de sistemas para 120+ usuários",
-  },
-  "exp.erin.a4": {
-    EN: "Manage Google Workspace enterprise environment with user accounts and access controls",
-    PT: "Gerencio o ambiente corporativo do Google Workspace, com contas de usuários e controles de acesso",
-  },
-  "exp.erin.a5": {
-    EN: "Administer Active Directory user accounts, permissions, and Group Policy configurations",
-    PT: "Administro contas de usuários, permissões e configurações de Group Policy no Active Directory",
-  },
-  "exp.erin.a6": {
-    EN: "Configure and manage network services ensuring campus-wide connectivity",
-    PT: "Configuro e gerencio serviços de rede para garantir conectividade em todo o campus",
-  },
-  "exp.erin.a7": {
-    EN: "Create comprehensive technical documentation and user guides",
-    PT: "Crio documentação técnica e guias de usuário completos",
-  },
-  "exp.erin.a8": {
-    EN: "Implement security policies following information security best practices",
-    PT: "Implemento políticas de segurança seguindo boas práticas de segurança da informação",
-  },
 
-  "exp.etal.period": { EN: "May 2020 – Jun 2022", PT: "Mai 2020 – Jun 2022" },
-  "exp.etal.title": {
-    EN: "IT Systems Support Specialist",
-    PT: "Especialista em Suporte a Sistemas de TI",
-  },
-  "exp.etal.company": {
-    EN: "ETAL Prestação de Serviços LTDA",
-    PT: "ETAL Prestação de Serviços LTDA",
-  },
-  "exp.etal.location": {
-    EN: "Belo Horizonte, Brazil",
-    PT: "Belo Horizonte, Brasil",
-  },
-  "exp.etal.description": {
-    EN: "Managed IT systems and built internal workflow tools for a services company in Brazil, combining technical support with software development to streamline operations.",
-    PT: "Gerenciei sistemas de TI e construí ferramentas internas de fluxo de trabalho para uma empresa de prestação de serviços no Brasil, combinando suporte técnico e desenvolvimento de software para simplificar operações.",
-  },
-  "exp.etal.a1": {
-    EN: "Built an internal AppSheet app on Google Sheets that cut the timesheet close for 400+ employees from four days to about one",
-    PT: "Construí um app interno em AppSheet sobre Google Sheets que reduziu o fechamento de ponto de mais de 400 colaboradores de quatro dias para cerca de um",
-  },
-  "exp.etal.a2": {
-    EN: "Provided technical support for a Windows Server environment supporting employees across multiple departments",
-    PT: "Prestei suporte técnico a um ambiente Windows Server que atendia colaboradores de vários departamentos",
-  },
-  "exp.etal.a3": {
-    EN: "Managed user accounts, permissions, and access controls",
-    PT: "Gerenciei contas de usuários, permissões e controles de acesso",
-  },
-  "exp.etal.a4": {
-    EN: "Performed system maintenance including hardware troubleshooting and workstation configurations",
-    PT: "Realizei manutenção de sistemas, incluindo diagnóstico de hardware e configuração de estações de trabalho",
-  },
-  "exp.etal.a5": {
-    EN: "Created technical documentation and standard operating procedures",
-    PT: "Criei documentação técnica e procedimentos operacionais padrão",
-  },
-  "exp.etal.a6": {
-    EN: "Achieved high first-call resolution rates through systematic troubleshooting",
-    PT: "Alcancei altas taxas de resolução no primeiro contato por meio de diagnóstico sistemático",
-  },
 
-  "exp.dabliu.period": { EN: "2020 – 2021", PT: "2020 – 2021" },
-  "exp.dabliu.title": {
-    EN: "Digital Designer | Web Developer",
-    PT: "Designer Digital | Desenvolvedor Web",
-  },
-  "exp.dabliu.company": { EN: "DabliuMusic", PT: "DabliuMusic" },
-  "exp.dabliu.location": { EN: "Betim, Brazil", PT: "Betim, Brasil" },
-  "exp.dabliu.description": {
-    EN: "Handled web development and digital branding for a creative studio, delivering client-facing websites and marketing materials.",
-    PT: "Cuidei do desenvolvimento web e da identidade digital de um estúdio criativo, entregando sites para clientes e materiais de marketing.",
-  },
-  "exp.dabliu.a1": {
-    EN: "Designed and developed business websites using HTML, CSS, and JavaScript",
-    PT: "Projetei e desenvolvi sites empresariais com HTML, CSS e JavaScript",
-  },
-  "exp.dabliu.a2": {
-    EN: "Created visual identities and digital marketing materials",
-    PT: "Criei identidades visuais e materiais de marketing digital",
-  },
-  "exp.dabliu.a3": {
-    EN: "Managed web hosting configurations and performed technical website maintenance",
-    PT: "Gerenciei configurações de hospedagem web e fiz a manutenção técnica dos sites",
-  },
-  "exp.dabliu.a4": {
-    EN: "Supported client portfolio development and brand strategy",
-    PT: "Apoiei o desenvolvimento de portfólios de clientes e a estratégia de marca",
-  },
 
-  // Education entries
-  "edu.cct.period": { EN: "Sep 2024 – Sep 2025", PT: "Set 2024 – Set 2025" },
-  "edu.cct.title": {
-    EN: "Higher Diploma in Science in Computing",
-    PT: "Higher Diploma in Science in Computing",
-  },
-  "edu.cct.company": { EN: "CCT College Dublin", PT: "CCT College Dublin" },
-  "edu.cct.location": { EN: "Dublin, Ireland", PT: "Dublin, Irlanda" },
-  "edu.cct.description": {
-    EN: "Completed with a First Class final grade (EQF level 8), covering software development, system architecture, database management, and web technologies.",
-    PT: "Concluído com nota final First Class (EQF nível 8), abordando desenvolvimento de software, arquitetura de sistemas, gestão de bancos de dados e tecnologias web.",
-  },
-  "edu.cct.a1": {
-    EN: "Software Development and System Architecture",
-    PT: "Desenvolvimento de Software e Arquitetura de Sistemas",
-  },
-  "edu.cct.a2": {
-    EN: "Database Management and Web Technologies",
-    PT: "Gestão de Bancos de Dados e Tecnologias Web",
-  },
-  "edu.cct.a3": {
-    EN: "Linux and Windows Server Administration",
-    PT: "Administração de Linux e Windows Server",
-  },
-  "edu.cct.a4": {
-    EN: "Cloud Computing and Network Fundamentals",
-    PT: "Computação em Nuvem e Fundamentos de Redes",
-  },
-  "edu.cct.a5": {
-    EN: "Information Security and Algorithms & Data Structures",
-    PT: "Segurança da Informação e Algoritmos e Estruturas de Dados",
-  },
-  "edu.cct.a6": {
-    EN: "Combining academic study with professional IT practice",
-    PT: "Combinação de estudo acadêmico com prática profissional em TI",
-  },
 
-  "edu.unicnec.period": { EN: "Mar 2018 – Jul 2021", PT: "Mar 2018 – Jul 2021" },
-  "edu.unicnec.title": {
-    EN: "Technologist Degree in Analysis and Systems Development",
-    PT: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
-  },
-  "edu.unicnec.company": { EN: "UNICNEC", PT: "UNICNEC" },
-  "edu.unicnec.location": { EN: "Itaúna, Brazil", PT: "Itaúna, Brasil" },
-  "edu.unicnec.description": {
-    EN: "Completed higher education technology diploma with focus on software engineering and systems development. Key subjects included system analysis, database design, and network configuration.",
-    PT: "Concluí a graduação tecnológica com foco em engenharia de software e desenvolvimento de sistemas. As principais disciplinas incluíram análise de sistemas, modelagem de bancos de dados e configuração de redes.",
-  },
-  "edu.unicnec.a1": {
-    EN: "Software Engineering and System Analysis",
-    PT: "Engenharia de Software e Análise de Sistemas",
-  },
-  "edu.unicnec.a2": {
-    EN: "Database Design and Implementation",
-    PT: "Modelagem e Implementação de Bancos de Dados",
-  },
-  "edu.unicnec.a3": {
-    EN: "Object-Oriented Programming",
-    PT: "Programação Orientada a Objetos",
-  },
-  "edu.unicnec.a4": {
-    EN: "Linux Server Administration (practical coursework)",
-    PT: "Administração de Servidores Linux (disciplina prática)",
-  },
-  "edu.unicnec.a5": {
-    EN: "Network Configuration and Web Development",
-    PT: "Configuração de Redes e Desenvolvimento Web",
-  },
-  "edu.unicnec.a6": {
-    EN: "Project Management and Technical Communication",
-    PT: "Gestão de Projetos e Comunicação Técnica",
-  },
 
   // ---------------------------------------------------------------- Hero
   loadingProfile: { EN: "Loading profile...", PT: "Carregando perfil..." },

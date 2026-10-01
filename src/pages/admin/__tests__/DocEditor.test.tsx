@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { buildSeed } from "@/content/seed";
+import { fixtureDocs } from "@/test/contentFixtures";
 import type { ExperienceDoc } from "@/content/types";
 import DocEditor from "../DocEditor";
 import { adminStrings } from "../adminStrings";
 
-const erin = buildSeed().find((entry) => entry.doc.id === "erin-college")!.doc as ExperienceDoc;
+const erin = fixtureDocs("experience").find((doc) => doc.id === "erin-college") as ExperienceDoc;
 
 const renderEditor = (initial: ExperienceDoc, isNew = false, onSave = vi.fn()) => {
   render(

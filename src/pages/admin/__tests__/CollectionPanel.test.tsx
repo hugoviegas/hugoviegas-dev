@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { buildSeed } from "@/content/seed";
-import { storedFields } from "../importPlan";
+import { fixtureDocs } from "@/test/contentFixtures";
+import { storedFields } from "../storedDoc";
 import { adminStrings } from "../adminStrings";
 
 // Firestore boundary mocked; the rules are checked live and in the Playground.
@@ -22,9 +22,7 @@ vi.mock("../adminContent", async (importOriginal) => ({
 import CollectionPanel from "../CollectionPanel";
 
 const stored = Object.fromEntries(
-  buildSeed()
-    .filter((entry) => entry.collection === "experience")
-    .map(({ doc }) => [doc.id, { version: 1, data: { ...storedFields(doc), version: 1 } }]),
+  fixtureDocs("experience").map((doc) => [doc.id, { version: 1, data: { ...storedFields(doc), version: 1 } }]),
 );
 const settings = { useRemote: true, version: 3, updatedAt: null, data: {} };
 

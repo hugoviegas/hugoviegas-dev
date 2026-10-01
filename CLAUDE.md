@@ -206,7 +206,7 @@ Hero requirements:
 - Before making any change involving authentication, private routes, environment variables, server-side APIs, Firebase, or Vercel configuration, explain the security impact and ask Hugo for approval.
 
 ## Content Backend and Hidden Admin (Firebase)
-Active work, approved by Hugo in October 2026. Delivered in PRs: (1) foundation, (2) content layer, (3) admin editors, (4) file uploads, then a cutover cleanup after Hugo approves the preview. Each starts only after the previous one is merged.
+Approved by Hugo and delivered in October 2026 in five PRs: foundation, content layer, admin editors, file uploads, and the cutover cleanup. Firestore is now the only source for the content listed under "Content split".
 
 Project:
 - Firebase project ID: `assistente-virtual-e4322` (public identifier). Do not share it with Big Bang Duel.
@@ -242,20 +242,19 @@ Content layer (`src/content/`):
 - The schemas are used by the admin, the snapshot script, the lazy refresh, and tests. Never import Zod or the Firebase SDK into the homepage entry.
 - `snapshot/core.json` holds the homepage collections and ships in the entry. `snapshot/details.json` holds `projectDetails` and ships in the project-page chunk.
 - Both snapshot files are committed and contain published docs only. `npm run content:snapshot` regenerates them from Firestore through public REST reads. The `prebuild` script runs it on every build.
-- If Firestore is unreachable or invalid, or `useRemote` is off, the script keeps the committed files. `npm run content:snapshot -- --seed` regenerates them from the hard-coded seed.
+- If Firestore is unreachable or invalid, or `useRemote` is off, the script keeps the committed files.
 - Runtime: the snapshot renders first. After idle, `remoteCheck.ts` reads `settings/site` once (no Zod).
 - Only when `useRemote` is on and `settings/site.updatedAt` is newer than the snapshot does `refresh.ts` (with Zod) load the published docs and swap them in. Invalid docs are dropped.
 - A core collection that comes back empty keeps its snapshot docs.
 - Every admin write must also bump `settings/site.updatedAt`, or the public refresh will not notice it.
-- `seed.ts` builds the seed from `translations.ts` plus `legacy.ts`, which holds the arrays formerly inside the components. CV-only skills are seeded as unpublished drafts.
-- The admin "Import seed" action shows a dry-run diff and writes in one batch. Changed docs are copied to `contentHistory` first.
+- Recovery: published content is in the committed snapshot, and every earlier version (drafts included) is in `contentHistory`, restorable from the admin. There is no hard-coded seed or import tool any more.
 - Admin editors (`src/pages/admin/`):
-  - `AdminDashboard.tsx` has tabs for the overview, each collection, files (CV and photo, `FilesPanel.tsx`), settings, and import. Project images upload from the project editor (`ProjectImageField.tsx`). `collectionConfig.ts` declares each collection's fields.
+  - `AdminDashboard.tsx` has tabs for the overview, each collection, files (CV and photo, `FilesPanel.tsx`), and settings. Project images upload from the project editor (`ProjectImageField.tsx`). `collectionConfig.ts` declares each collection's fields.
   - `DocEditor.tsx` is a side-by-side EN and PT-BR form built with React Hook Form and validated by the same Zod schema, so publishing with an empty language is blocked.
   - `CollectionPanel.tsx` handles create, edit, publish, reorder (per skill group), delete, history, and restore.
   - Every write goes through `adminContent.ts`, which copies the previous version to `contentHistory` and bumps `settings/site`. Deleted docs stay restorable from history.
   - Skill icon keys live in `src/content/skillIcons.ts`; `SkillsSection.tsx` must map every key.
-- `src/content/__tests__/dualRun.test.tsx` compares the data-driven render with the pre-migration render (`__fixtures__/legacy-render.json`) in EN and PT-BR.
+- Tests use `src/test/contentFixtures.ts`, a frozen test-only copy of the first imported docs (`src/test/fixtures/content-docs.json`), not the committed snapshot, which changes whenever content is edited.
 File uploads (Vercel Blob):
 - Flow: the admin asks `POST /api/blob-upload` for a client token, sending the Firebase ID token as `Authorization: Bearer`. The browser then uploads straight to Blob, and the admin saves the URL to Firestore through the normal owner-only writes (with history).
 - `api/blob-upload.ts` verifies the ID token before reading the body: RS256 signature against Google's public keys (`jose`), `aud` and `iss` for the project, expiry, `sub` equal to Hugo's UID, `email_verified`, and the `google.com` provider (`src/server/ownerToken.ts`, mirroring `isOwner()`). Anything else gets 401. There is no service account and no Admin SDK, so a revoked session's token stays valid until it expires (at most one hour).
@@ -266,7 +265,7 @@ File uploads (Vercel Blob):
 - The admin loads `@vercel/blob/client` only when an upload starts.
 - Images: before upload the admin opens a canvas crop editor (`CropDialog.tsx`, square for the profile photo; 16:9, 4:3, 1:1 or original for projects). `imageFit.ts` then re-encodes any decodable image that is cropped, too large, or in another format as WebP, keeping the highest quality that fits (quality 0.92 down to 0.8, then the smallest needed downscale). Files up to 40 MB are accepted as input. No image library is used.
 
-- Hard-coded content (`legacy.ts`, the content translation keys, `public/projects/big-bang-duel/*.md`) stays as the seed source and dual-run reference until Hugo approves deleting it after cutover. Keep the `darcyTitle` and `bigBangTitle` keys, which SEO breadcrumbs use.
+- Cutover (October 2026): `legacy.ts`, `seed.ts`, the content translation keys, the Big Bang Duel story Markdown files, the import tool, and the dual-run test were removed. Do not reintroduce content in code or translations; edit it in the admin. Kept translation keys that are UI chrome or SEO: `darcyTitle`, `bigBangTitle`, `bigBangStoryTitle`, `bigBangStoryError`, `bigBangTechTitle`, `bigBangFaqTitle`, `bigBangFaqIntro`, `fullStoryTitle`.
 
 ## Chatbot
 - Keep the existing chatbot only until its redesign is explicitly scheduled.
@@ -343,7 +342,7 @@ Observed during the September 2026 audit. Re-verify before relying on them.
 - Commands:
   - Dev: `npm run dev` (Vite on port 5173; `.claude/launch.json` currently says 8080).
   - Build: `npm run build` (its `prebuild` refreshes the content snapshot from Firestore). For audits, build outside the repo: `npx vite build --outDir <tmp> --emptyOutDir`, which skips the snapshot refresh.
-  - Content snapshot: `npm run content:snapshot` (from Firestore) or `npm run content:snapshot -- --seed` (from the hard-coded seed).
+  - Content snapshot: `npm run content:snapshot` (from Firestore).
   - Tests: `npx vitest run --dir src` (limit to `src` so `.claude/worktrees` is not picked up).
   - Types: `npx tsc --noEmit -p tsconfig.app.json`.
   - Lint: `npx eslint src`.

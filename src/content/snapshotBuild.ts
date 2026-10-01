@@ -1,11 +1,8 @@
 // Turns content docs into the public snapshot: published docs only, sorted by
 // `order`. Pure, so the script, the admin, and tests share it.
-import type { SeedEntry } from "./seed";
-import { NO_SITE_FILES } from "./siteFiles";
 import {
   CORE_COLLECTIONS,
   type CoreSnapshot,
-  type DetailsSnapshot,
   type DocMeta,
   type SiteFiles,
 } from "./types";
@@ -33,28 +30,4 @@ export const mergeCore = (
     }
   }
   return next;
-};
-
-export const buildSnapshots = (
-  entries: SeedEntry[],
-  siteUpdatedAt: string | null,
-  source: CoreSnapshot["source"],
-): { core: CoreSnapshot; details: DetailsSnapshot } => {
-  const docsOf = (collection: string) =>
-    entries.filter((entry) => entry.collection === collection).map((entry) => entry.doc);
-
-  const core = { siteUpdatedAt, source, files: NO_SITE_FILES } as CoreSnapshot;
-  for (const collection of CORE_COLLECTIONS) {
-    (core as unknown as Record<string, DocMeta[]>)[collection] = publishedSorted(
-      docsOf(collection),
-    );
-  }
-  return {
-    core,
-    details: {
-      projectDetails: publishedSorted(
-        docsOf("projectDetails") as DetailsSnapshot["projectDetails"],
-      ),
-    },
-  };
 };

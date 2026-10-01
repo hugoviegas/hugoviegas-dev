@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { act, render, screen } from "@testing-library/react";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { useLanguage } from "@/hooks/useLanguage";
-import { translations } from "@/config/translations";
+import core from "@/content/snapshot/core.json";
 
 let setLanguage: ReturnType<typeof useLanguage>["setLanguage"];
 
@@ -20,15 +20,14 @@ const renderSection = () =>
   );
 
 describe("ExperienceSection entries", () => {
-  it("has EN and PT-BR values for every experience and education key", () => {
-    const keys = Object.keys(translations).filter(
-      (key) => key.startsWith("exp.") || key.startsWith("edu."),
-    );
-
-    expect(keys.length).toBeGreaterThan(0);
-    for (const key of keys) {
-      expect(translations[key].EN.trim()).not.toBe("");
-      expect(translations[key].PT.trim()).not.toBe("");
+  it("ships EN and PT-BR text for every experience and education entry", () => {
+    const docs = [...core.experience, ...core.education];
+    expect(docs.length).toBeGreaterThan(0);
+    for (const doc of docs) {
+      for (const field of ["title", "organization", "period"] as const) {
+        expect(doc.en[field].trim(), `${doc.id} en.${field}`).not.toBe("");
+        expect(doc.ptBR[field].trim(), `${doc.id} ptBR.${field}`).not.toBe("");
+      }
     }
   });
 
