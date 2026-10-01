@@ -78,6 +78,10 @@ describe("seed", () => {
     );
   });
 
+  it("does not depend on the checkout's line endings", () => {
+    expect(text).not.toContain("\\r");
+  });
+
   it("includes certifications and keeps the ETAL project as a draft", () => {
     const certifications = (docs("skills") as SkillDoc[]).filter(
       (s) => s.group === "certification",

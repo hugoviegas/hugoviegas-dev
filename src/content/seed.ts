@@ -150,6 +150,9 @@ const about: AboutDoc[] = [
 
 const noStory = { storyTitle: "", storyIntro: "", story: "" };
 
+// The seed must not depend on the checkout's line endings (autocrlf on Windows).
+const lf = (text: string) => text.replace(/\r\n/g, "\n");
+
 const projectDetails: ProjectDetailDoc[] = [
   {
     ...meta("darcy-mcgees", 0),
@@ -175,8 +178,8 @@ const projectDetails: ProjectDetailDoc[] = [
       "bigBangTechFirestore",
       "bigBangTechRealtime",
     ].map((key) => getTranslation(key, "EN")),
-    en: { ...bigBangText("EN"), story: storyEn },
-    ptBR: { ...bigBangText("PT"), story: storyPt },
+    en: { ...bigBangText("EN"), story: lf(storyEn) },
+    ptBR: { ...bigBangText("PT"), story: lf(storyPt) },
   },
 ];
 
