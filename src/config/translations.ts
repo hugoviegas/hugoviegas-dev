@@ -1048,6 +1048,14 @@ export const translations: Translations = {
     EN: "Starship Demo (archived) | Hugo Viegas",
     PT: "Demo de Nave Espacial (arquivado) | Hugo Viegas",
   },
+  "seo.admin.title": {
+    EN: "Admin | Hugo Viegas",
+    PT: "Admin | Hugo Viegas",
+  },
+  "seo.admin.description": {
+    EN: "Private area. Not part of the public portfolio.",
+    PT: "Área privada. Não faz parte do portfólio público.",
+  },
   "seo.notFound.title": {
     EN: "Page Not Found | Hugo Viegas",
     PT: "Página Não Encontrada | Hugo Viegas",
