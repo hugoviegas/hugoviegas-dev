@@ -113,19 +113,27 @@ const writeDoc = (
   });
 };
 
+const siteFilesOf = (settings: ExistingSettings | null): SiteFiles => ({
+  cv: settings?.cv ?? null,
+  profilePhoto: settings?.profilePhoto ?? null,
+  avatarMinifig: settings?.avatarMinifig ?? null,
+  avatarFirst: settings?.avatarFirst ?? "photo",
+});
+
 // Absent file fields mean "use the bundled fallback", so null is not stored.
-const filesToStore = (files: SiteFiles) =>
-  Object.fromEntries(Object.entries(files).filter(([, value]) => value !== null));
+// The photo-first default is not stored either, so a settings write stays
+// valid under rules that predate the avatar fields.
+const filesToStore = ({ avatarFirst, ...files }: SiteFiles) => ({
+  ...Object.fromEntries(Object.entries(files).filter(([, value]) => value !== null)),
+  ...(avatarFirst === "minifig" ? { avatarFirst } : {}),
+});
 
 // Rewrites settings/site, keeping the uploaded files unless `files` replaces them.
 const bumpSettings = (
   batch: WriteBatch,
   settings: ExistingSettings | null,
   useRemote = settings ? settings.useRemote : true,
-  files: SiteFiles = {
-    cv: settings?.cv ?? null,
-    profilePhoto: settings?.profilePhoto ?? null,
-  },
+  files: SiteFiles = siteFilesOf(settings),
 ) => {
   batch.set(doc(getFirebase().db, "settings", "site"), {
     useRemote,
@@ -200,10 +208,18 @@ export const saveSiteFiles = async (
   const batch = writeBatch(getFirebase().db);
   if (settings) addHistory(batch, "settings", "site", settings);
   bumpSettings(batch, settings, settings ? settings.useRemote : true, {
-    cv: settings?.cv ?? null,
-    profilePhoto: settings?.profilePhoto ?? null,
+    ...siteFilesOf(settings),
     ...changes,
   });
+  await commit(batch, 2);
+};
+
+// Puts an earlier settings version back (remote switch and files). Only the
+// fields that still parse are restored; the current version goes to history.
+export const restoreSettings = async (data: Record<string, unknown>, settings: ExistingSettings | null) => {
+  const batch = writeBatch(getFirebase().db);
+  if (settings) addHistory(batch, "settings", "site", settings);
+  bumpSettings(batch, settings, data.useRemote !== false, parseSiteFiles(data));
   await commit(batch, 2);
 };
 
@@ -215,7 +231,7 @@ export interface HistoryEntry {
 }
 
 // Newest first. Two equality filters need no composite index.
-export const listHistory = async (name: ContentCollection, id: string) => {
+export const listHistory = async (name: ContentCollection | "settings", id: string) => {
   const snapshot = await getDocs(
     query(
       collection(getFirebase().db, "contentHistory"),
@@ -236,11 +252,32 @@ export const listHistory = async (name: ContentCollection, id: string) => {
     .sort((a, b) => (b.savedAt ?? "").localeCompare(a.savedAt ?? "") || b.version - a.version);
 };
 
-// Ids that have history but no current doc: deleted docs that can be restored.
-export const listDeletedIds = async (name: ContentCollection, currentIds: Set<string>) => {
+export interface DeletedDoc {
+  id: string;
+  deletedAt: string | null;
+  // The last stored version, used for the title and preview.
+  data: Record<string, unknown>;
+}
+
+// Docs that have history but no current doc, newest deletion first. The
+// latest history entry of a deleted doc is the copy written when it was deleted.
+export const listDeleted = async (name: ContentCollection, currentIds: Set<string>): Promise<DeletedDoc[]> => {
   const snapshot = await getDocs(
     query(collection(getFirebase().db, "contentHistory"), where("collection", "==", name)),
   );
-  const ids = new Set(snapshot.docs.map((item) => String(item.data().docId)));
-  return [...ids].filter((id) => !currentIds.has(id)).sort();
+  const latest = new Map<string, DeletedDoc & { version: number }>();
+  for (const item of snapshot.docs) {
+    const entry = item.data();
+    const id = String(entry.docId);
+    if (currentIds.has(id)) continue;
+    const savedAt = isoOrNull(entry.savedAt);
+    const version = Number(entry.version ?? 0);
+    const previous = latest.get(id);
+    if (!previous || (savedAt ?? "") > (previous.deletedAt ?? "") || ((savedAt ?? "") === (previous.deletedAt ?? "") && version > previous.version)) {
+      latest.set(id, { id, deletedAt: savedAt, version, data: (entry.data ?? {}) as Record<string, unknown> });
+    }
+  }
+  return [...latest.values()]
+    .map(({ id, deletedAt, data }) => ({ id, deletedAt, data }))
+    .sort((a, b) => (b.deletedAt ?? "").localeCompare(a.deletedAt ?? ""));
 };

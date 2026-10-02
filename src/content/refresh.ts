@@ -3,6 +3,7 @@
 import { getPublicDocument, listPublished } from "./rest";
 import { schemaByCollection } from "./schema";
 import { mergeCore } from "./snapshotBuild";
+import { pickSiteFiles } from "./siteFiles";
 import {
   CORE_COLLECTIONS,
   type ContentCollection,
@@ -33,10 +34,7 @@ export const refreshCore = async (
         [collection, validDocs(collection, await listPublished(collection))] as const,
     ),
   );
-  return mergeCore(current, Object.fromEntries(lists), site.updatedAt, {
-    cv: site.cv,
-    profilePhoto: site.profilePhoto,
-  });
+  return mergeCore(current, Object.fromEntries(lists), site.updatedAt, pickSiteFiles(site));
 };
 
 export const fetchProjectDetail = async (id: string): Promise<ProjectDetailDoc | null> => {

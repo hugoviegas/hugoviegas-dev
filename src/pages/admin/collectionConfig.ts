@@ -10,7 +10,7 @@ import {
 } from "@/content/types";
 import type { AdminStringKey } from "./adminStrings";
 
-export type FieldKind = "text" | "textarea" | "lines" | "number" | "select" | "objects" | "image";
+export type FieldKind = "text" | "textarea" | "lines" | "number" | "select" | "objects" | "image" | "markdown" | "icon";
 
 export interface FieldDef {
   name: string;
@@ -21,6 +21,16 @@ export interface FieldDef {
   // Sub-fields of each item in an "objects" list.
   fields?: FieldDef[];
   hint?: AdminStringKey;
+  // Edited inside another field's block (project image alt text sits with the image).
+  inImage?: boolean;
+  // Label for one item of an "objects" list ("Section", "Question").
+  itemLabel?: AdminStringKey;
+  // Label of the add button of an "objects" list.
+  addLabel?: AdminStringKey;
+  // Number of grid columns the field spans in the shared block.
+  wide?: boolean;
+  // Placeholder text, when it helps.
+  placeholder?: string;
 }
 
 export interface CollectionDef {
@@ -75,16 +85,15 @@ export const collectionDefs: Record<ContentCollection, CollectionDef> = {
     localized: [
       { name: "title", label: "field.title", kind: "text" },
       { name: "description", label: "field.description", kind: "textarea", rows: 3 },
-      { name: "imageAlt", label: "field.imageAlt", kind: "text" },
+      { name: "imageAlt", label: "field.imageAlt", kind: "text", inImage: true },
     ],
+    // imageWidth and imageHeight are set from the image, not typed.
     shared: [
-      { name: "image", label: "field.image", kind: "image" },
-      { name: "imageWidth", label: "field.imageWidth", kind: "number" },
-      { name: "imageHeight", label: "field.imageHeight", kind: "number" },
+      { name: "image", label: "field.image", kind: "image", wide: true },
       { name: "technologies", label: "field.technologies", kind: "lines", rows: 4, hint: "hint.onePerLine" },
-      { name: "liveUrl", label: "field.liveUrl", kind: "text", hint: "hint.httpsOrEmpty" },
-      { name: "githubUrl", label: "field.githubUrl", kind: "text", hint: "hint.httpsOrEmpty" },
-      { name: "detailPath", label: "field.detailPath", kind: "text", hint: "hint.detailPath" },
+      { name: "detailPath", label: "field.detailPath", kind: "text", hint: "hint.detailPath", placeholder: "/projects/…" },
+      { name: "liveUrl", label: "field.liveUrl", kind: "text", hint: "hint.httpsOrEmpty", placeholder: "https://" },
+      { name: "githubUrl", label: "field.githubUrl", kind: "text", hint: "hint.httpsOrEmpty", placeholder: "https://github.com/…" },
     ],
     empty: () => ({
       image: "",
@@ -109,6 +118,8 @@ export const collectionDefs: Record<ContentCollection, CollectionDef> = {
         name: "sections",
         label: "field.sections",
         kind: "objects",
+        itemLabel: "item.section",
+        addLabel: "add.section",
         fields: [
           { name: "id", label: "field.sectionId", kind: "text", hint: "hint.sectionId" },
           { name: "title", label: "field.title", kind: "text" },
@@ -120,6 +131,8 @@ export const collectionDefs: Record<ContentCollection, CollectionDef> = {
         name: "faq",
         label: "field.faq",
         kind: "objects",
+        itemLabel: "item.question",
+        addLabel: "add.question",
         fields: [
           { name: "question", label: "field.question", kind: "text" },
           { name: "answer", label: "field.answer", kind: "textarea", rows: 3 },
@@ -127,9 +140,9 @@ export const collectionDefs: Record<ContentCollection, CollectionDef> = {
       },
       { name: "storyTitle", label: "field.storyTitle", kind: "text" },
       { name: "storyIntro", label: "field.storyIntro", kind: "textarea", rows: 2 },
-      { name: "story", label: "field.story", kind: "textarea", rows: 12, hint: "hint.markdown" },
+      { name: "story", label: "field.story", kind: "markdown", rows: 12, hint: "hint.markdown" },
     ],
-    shared: [{ name: "stack", label: "field.stack", kind: "lines", rows: 4, hint: "hint.onePerLine" }],
+    shared: [{ name: "stack", label: "field.stack", kind: "lines", rows: 4, hint: "hint.onePerLine", wide: true }],
     empty: () => {
       const text = { title: "", summary: "", sections: [], faq: [], storyTitle: "", storyIntro: "", story: "" };
       return { stack: [], en: { ...text }, ptBR: { ...text } };
@@ -140,8 +153,8 @@ export const collectionDefs: Record<ContentCollection, CollectionDef> = {
     label: "col.skills",
     localized: [{ name: "label", label: "field.label", kind: "text" }],
     shared: [
-      { name: "group", label: "field.group", kind: "select", options: SKILL_GROUPS },
-      { name: "iconKey", label: "field.iconKey", kind: "select", options: ["", ...SKILL_ICON_KEYS] },
+      { name: "group", label: "field.group", kind: "select", options: SKILL_GROUPS, hint: "hint.group" },
+      { name: "iconKey", label: "field.iconKey", kind: "icon", options: ["", ...SKILL_ICON_KEYS] },
     ],
     empty: () => ({ group: "programming", iconKey: "", en: { label: "" }, ptBR: { label: "" } }),
     scope: (doc) => String((doc as DocByCollection["skills"]).group),
@@ -155,6 +168,8 @@ export const collectionDefs: Record<ContentCollection, CollectionDef> = {
         name: "highlights",
         label: "field.highlights",
         kind: "objects",
+        itemLabel: "item.highlight",
+        addLabel: "add.highlight",
         fields: [
           { name: "title", label: "field.title", kind: "text" },
           { name: "description", label: "field.description", kind: "text" },

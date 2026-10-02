@@ -182,13 +182,67 @@ export const PageHeading = ({
   actions?: ReactNode;
   id?: string;
 }) => (
-  <div className="mb-6 mt-2 flex flex-wrap items-end justify-between gap-4">
+  <div className="mb-6 mt-2 flex flex-wrap items-end justify-between gap-4 max-sm:gap-3">
     <div className="min-w-0">
       <h1 id={id} className="break-words text-[26px] font-extrabold leading-tight tracking-[-0.02em] sm:text-[32px]">
         {title}
       </h1>
       {sub && <p className="mt-1.5 max-w-[68ch] text-[15px] text-ink-2">{sub}</p>}
     </div>
-    {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+    {actions && <div className="flex flex-wrap items-center gap-2 max-sm:w-full">{actions}</div>}
   </div>
+);
+
+// On/off switch drawn as a brick. Labelled by a heading or label plus the
+// visible value, so screen readers hear "Published, On".
+export const BrickSwitch = ({
+  checked,
+  onClick,
+  labelledBy,
+  valueId,
+  valueText,
+  disabled,
+}: {
+  checked: boolean;
+  onClick: () => void;
+  labelledBy: string;
+  valueId: string;
+  valueText: string;
+  disabled?: boolean;
+}) => (
+  <button
+    type="button"
+    role="switch"
+    aria-checked={checked}
+    aria-labelledby={`${labelledBy} ${valueId}`}
+    disabled={disabled}
+    onClick={onClick}
+    className={cn("group flex min-h-11 items-center gap-3 rounded-lg text-left text-sm font-semibold disabled:opacity-60", focusRing)}
+  >
+    <span
+      aria-hidden="true"
+      className={cn(
+        "relative h-7 w-12 shrink-0 rounded-lg transition-colors duration-fast",
+        checked ? "bg-primary shadow-[inset_0_-3px_0_hsl(var(--primary-pressed))]" : "bg-surface-3 shadow-[inset_0_-3px_0_hsl(var(--line-strong))]",
+      )}
+    >
+      <span
+        className={cn(
+          "absolute left-[3px] top-[3px] h-[19px] w-[22px] rounded-[5px] bg-card shadow-[0_0_0_1px_hsl(var(--line-strong))] transition-transform duration-base ease-out before:absolute before:-top-[3px] before:left-1.5 before:h-[3px] before:w-2.5 before:rounded-t-[2px] before:bg-card before:shadow-[0_0_0_1px_hsl(var(--line-strong))]",
+          checked && "translate-x-5",
+        )}
+      />
+    </span>
+    <span id={valueId}>{valueText}</span>
+  </button>
+);
+
+// Native progress bar, styled without inline widths.
+export const UploadProgress = ({ value, label }: { value: number; label: string }) => (
+  <progress
+    aria-label={label}
+    max={100}
+    value={Math.round(value)}
+    className="block h-2 w-full appearance-none overflow-hidden rounded bg-surface-2 [&::-moz-progress-bar]:bg-primary [&::-webkit-progress-bar]:bg-surface-2 [&::-webkit-progress-value]:bg-primary"
+  />
 );

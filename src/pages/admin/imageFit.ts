@@ -143,11 +143,3 @@ export const fitImage = async (
     bitmap.close?.();
   }
 };
-
-export const megabytes = (bytes: number) => (bytes / (1024 * 1024)).toFixed(1);
-
-// "Compressed from 7.4 MB to 2.9 MB (3000 × 2000 px)." or "" when untouched.
-export const fitNote = (label: string, fitted: FittedImage) =>
-  fitted.originalBytes === undefined
-    ? ""
-    : ` ${label} ${megabytes(fitted.originalBytes)} MB → ${megabytes(fitted.file.size)} MB (${fitted.width} × ${fitted.height} px).`;

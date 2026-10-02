@@ -127,6 +127,11 @@ const Overview = () => {
               t("overview.photo"),
               settings?.profilePhoto ? `${t("overview.uploaded")} · v${settings.profilePhoto.version}` : t("overview.bundled"),
             )}
+            {fileRow(
+              t("overview.minifig"),
+              settings?.avatarMinifig ? `${t("overview.uploaded")} · v${settings.avatarMinifig.version}` : t("overview.bundled"),
+            )}
+            {fileRow(t("overview.shownFirst"), settings?.avatarFirst === "minifig" ? t("overview.minifig") : t("overview.photo"))}
           </dl>
           <OpenLink to={{ section: "files" }} label={t("overview.openFiles")} />
         </section>

@@ -148,6 +148,9 @@ export const profilePhotoSchema = z.object({
 export const siteFilesSchema = z.object({
   cv: cvFileSchema.nullable(),
   profilePhoto: profilePhotoSchema.nullable(),
+  // Added in October 2026; older snapshots and settings docs lack them.
+  avatarMinifig: profilePhotoSchema.nullable().default(null),
+  avatarFirst: z.enum(["photo", "minifig"]).default("photo"),
 });
 
 export const siteSettingsSchema = siteFilesSchema.extend({

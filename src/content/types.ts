@@ -111,10 +111,16 @@ export interface ProfilePhoto {
   version: number;
 }
 
+export type AvatarFace = "photo" | "minifig";
+
 // null means "use the bundled fallback".
 export interface SiteFiles {
   cv: CvFile | null;
+  // The hero avatar's two faces: the photo and the minifigure.
   profilePhoto: ProfilePhoto | null;
+  avatarMinifig: ProfilePhoto | null;
+  // Which face the hero shows first.
+  avatarFirst: AvatarFace;
 }
 
 export interface SiteSettings extends SiteFiles {

@@ -4,18 +4,12 @@ import { Button } from "@/components/ui/button";
 import IsoBrick from "@/components/brand/IsoBrick";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useContentLang, useSiteFiles } from "@/content/store";
+import { FALLBACK_CV_URL } from "@/content/siteFiles";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hugo-hero.webp";
 import minifigImage from "@/assets/brand/hugo-minifig.webp";
 import sceneImage from "@/assets/brand/desk-scene.webp";
 import sceneImageSmall from "@/assets/brand/desk-scene-800.webp";
-
-// Used until a CV is uploaded through the admin (settings/site.cv).
-const FALLBACK_CV_URL =
-  "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
-
-// Which avatar face is shown first. The other face is one flip away.
-export const AVATAR_FIRST: "photo" | "minifig" = "photo";
 
 type Face = "photo" | "minifig";
 
@@ -25,19 +19,24 @@ const linkClass =
 const HeroSection = () => {
   const { t } = useLanguage();
   const lang = useContentLang();
-  const { cv, profilePhoto } = useSiteFiles();
+  const { cv, profilePhoto, avatarMinifig, avatarFirst } = useSiteFiles();
   const [flipped, setFlipped] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const [photoFailed, setPhotoFailed] = useState(false);
+  const [minifigFailed, setMinifigFailed] = useState(false);
 
   const resumeUrl = cv?.url ?? FALLBACK_CV_URL;
   // Fall back to the bundled photo if the uploaded one fails to load.
   const photoSrc = !photoFailed && profilePhoto?.url ? profilePhoto.url : heroImage;
   const faces: Record<Face, { src: string; label: string }> = {
     photo: { src: photoSrc, label: profilePhoto?.alt[lang] ?? t("heroFacePhoto") },
-    minifig: { src: minifigImage, label: t("heroFaceMinifig") },
+    minifig: {
+      src: !minifigFailed && avatarMinifig?.url ? avatarMinifig.url : minifigImage,
+      label: avatarMinifig?.alt[lang] ?? t("heroFaceMinifig"),
+    },
   };
-  const front: Face = AVATAR_FIRST;
+  // Which face is shown first is set in the admin (settings/site.avatarFirst).
+  const front: Face = avatarFirst === "minifig" ? "minifig" : "photo";
   const back: Face = front === "photo" ? "minifig" : "photo";
   const showing = flipped ? back : front;
 
@@ -84,8 +83,8 @@ const HeroSection = () => {
                 alt=""
                 width={368}
                 height={368}
-                fetchPriority={front === "photo" ? "high" : undefined}
-                onError={front === "photo" ? () => setPhotoFailed(true) : undefined}
+                fetchPriority="high"
+                onError={() => (front === "photo" ? setPhotoFailed(true) : setMinifigFailed(true))}
                 className="h-full w-full object-cover"
               />
             </span>
@@ -96,7 +95,7 @@ const HeroSection = () => {
                 width={368}
                 height={368}
                 loading="lazy"
-                onError={back === "photo" ? () => setPhotoFailed(true) : undefined}
+                onError={() => (back === "photo" ? setPhotoFailed(true) : setMinifigFailed(true))}
                 className="h-full w-full object-cover"
               />
             </span>
