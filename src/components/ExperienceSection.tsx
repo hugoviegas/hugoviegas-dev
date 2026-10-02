@@ -1,340 +1,95 @@
-import React, { useState } from "react";
-import {
-  MapPin,
-  Calendar,
-  BookOpen,
-  Award,
-  Briefcase,
-  GraduationCap,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { useLanguage } from "../hooks/useLanguage";
-import coinIcon from "@/assets/lego-bricks/gold-coin-2d.webp";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import FlatBrick from "@/components/brand/FlatBrick";
+import { SectionHeading, sectionContainer } from "@/components/sections/Section";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useContentLang, useCoreContent } from "@/content/store";
-import type { SkillGroup, TimelineText } from "@/content/types";
+import { cn } from "@/lib/utils";
 
-interface TimelineEntry {
-  period: string;
-  title: string;
-  company: string;
-  location: string;
-  description: string;
-  achievements: string[];
-}
-
-// Defined at module level so its identity is stable across renders; an inline
-// component would remount on every toggle and drop keyboard focus.
-function TimelineItem({
-  exp,
-  cardKey,
-  isExpanded,
-  onToggle,
-}: {
-  exp: TimelineEntry;
-  cardKey: string;
-  isExpanded: boolean;
-  onToggle: () => void;
-}) {
-  const { t } = useLanguage();
-  const visibleAchievements = isExpanded
-    ? exp.achievements
-    : exp.achievements.slice(0, 3);
-
-  return (
-    <div className="relative pl-16 pb-8 last:pb-0">
-      <div className="absolute left-5 w-3 h-3 bg-primary rounded-full border-2 border-background shadow-lg"></div>
-      <div className="glass p-4 rounded-lg hover:glass-strong transition-all duration-300">
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          <Badge
-            variant="outline"
-            className="text-primary border-primary/50 text-xs px-2 py-0"
-          >
-            <Calendar className="w-2.5 h-2.5 mr-1" />
-            {exp.period}
-          </Badge>
-          <Badge
-            variant="outline"
-            className="text-secondary border-secondary/50 text-xs px-2 py-0"
-          >
-            <MapPin className="w-2.5 h-2.5 mr-1" />
-            {exp.location}
-          </Badge>
-        </div>
-
-        <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-1">
-          {exp.title}
-        </h4>
-        <h5 className="text-sm text-primary font-semibold mb-2">
-          {exp.company}
-        </h5>
-        <p className="text-sm text-muted-foreground mb-3 leading-relaxed text-left">
-          {exp.description}
-        </p>
-
-        {exp.achievements.length > 0 && (
-          <div id={`${cardKey}-achievements`} className="space-y-1.5">
-            {visibleAchievements.map((achievement, achIndex) => (
-              <div
-                key={`${cardKey}-ach-${achIndex}`}
-                className="flex items-start gap-2"
-              >
-                <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <span className="text-sm text-muted-foreground">
-                  {achievement}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {exp.achievements.length > 3 && (
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-expanded={isExpanded}
-            aria-controls={`${cardKey}-achievements`}
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-          >
-            <img
-              src={coinIcon}
-              alt=""
-              className={`w-4 h-4 object-contain transition-transform duration-300 ${
-                isExpanded ? "rotate-180" : ""
-              }`}
-            />
-            {isExpanded ? t("experienceShowLess") : t("experienceShowMore")}
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-const toEntry = (text: TimelineText): TimelineEntry => ({
-  period: text.period,
-  title: text.title,
-  company: text.organization,
-  location: text.location,
-  description: text.description,
-  achievements: text.bullets,
-});
-
+// Concise timeline: title, organisation, dates and the highest-impact line.
+// "Show more" reveals the summary and remaining bullets. Education sits in
+// a smaller block beside it.
 export function ExperienceSection() {
   const { t } = useLanguage();
   const lang = useContentLang();
-  const content = useCoreContent();
-
-  const workExperiences = content.experience.map((doc) => toEntry(doc[lang]));
-  const education = content.education.map((doc) => toEntry(doc[lang]));
-  const skillLabels = (group: SkillGroup) =>
-    content.skills
-      .filter((skill) => skill.group === group)
-      .map((skill) => skill[lang].label);
-  const certifications = skillLabels("certification");
-  const focusAreas = skillLabels("focus");
-
-  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>(
-    {},
-  );
-
-  const toggleCard = (key: string) => {
-    setExpandedCards((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
+  const { experience, education } = useCoreContent();
+  const [open, setOpen] = useState<Record<string, boolean>>({});
 
   return (
-    <section id="experience" className="py-20 bg-muted/3 relative w-full">
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="mb-16 fade-in">
-          <h2 className="heading-section mb-6 text-center">
-            {t("experienceTitle")}
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-center leading-relaxed">
-            {t("experienceIntro")}
-          </p>
-        </div>
+    <section id="experience" aria-labelledby="experience-title" className="relative z-10 pt-[72px] lg:pt-24">
+      <div className={sectionContainer}>
+        <SectionHeading id="experience-title" index="02" title={t("experienceHeading")} />
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-12">
+          <ol className="relative before:absolute before:bottom-2 before:left-[9px] before:top-2 before:w-0.5 before:bg-border">
+            {experience.map((doc, i) => {
+              const item = doc[lang];
+              const isOpen = !!open[doc.id];
+              const [lead, ...rest] = item.bullets.length > 0 ? item.bullets : [item.description];
+              const more = item.bullets.length > 0 ? [item.description, ...rest].filter(Boolean) : [];
+              const panelId = `experience-more-${doc.id}`;
+              return (
+                <li key={doc.id} className="relative pb-8 pl-11 last:pb-0 max-sm:pl-9">
+                  <span className="absolute left-0 top-1">
+                    <FlatBrick studs={1} pitch={20} color={i === 0 ? "green" : "lightGray"} />
+                  </span>
+                  <h3 className="text-lg font-bold text-foreground">
+                    <span>{item.title}</span> <span className="font-medium text-ink-2">· </span>
+                    <span className="font-medium text-ink-2">{item.organization}</span>
+                  </h3>
+                  <p className="mt-1 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">
+                    <span>{item.period}</span>
+                    {item.location && <span> · {item.location}</span>}
+                  </p>
+                  {lead && <p className="mt-2 max-w-[62ch] text-ink-2">{lead}</p>}
+                  {more.length > 0 && (
+                    <>
+                      <button
+                        type="button"
+                        aria-expanded={isOpen}
+                        aria-controls={panelId}
+                        onClick={() => setOpen((prev) => ({ ...prev, [doc.id]: !isOpen }))}
+                        className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-sm text-sm font-semibold text-primary hover:text-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        {isOpen ? t("experienceShowLess") : t("experienceShowMore")}
+                        <ChevronDown
+                          aria-hidden="true"
+                          className={cn("h-4 w-4 transition-transform duration-base", isOpen && "rotate-180")}
+                        />
+                      </button>
+                      <ul id={panelId} hidden={!isOpen} className="mt-1 max-w-[62ch] list-disc space-y-1 pl-5 text-ink-2">
+                        {more.map((line, j) => (
+                          <li key={j}>{line}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
 
-        {/* Work Experience & Education - Side by Side */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          {/* Work Experience Section */}
-          <div>
-            <div className="flex items-center gap-2 mb-6 slide-up">
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
-                <Briefcase className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-xl lg:text-2xl font-bold text-blue-500">
-                {t("workExperienceTitle")}
-              </h3>
-            </div>
-
-            <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-blue-500/30"></div>
-              <div className="space-y-0">
-                {workExperiences.map((exp, index) => {
-                  const cardKey = `work-${index}`;
-                  return (
-                    <TimelineItem
-                      key={cardKey}
-                      exp={exp}
-                      cardKey={cardKey}
-                      isExpanded={Boolean(expandedCards[cardKey])}
-                      onToggle={() => toggleCard(cardKey)}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Education Section */}
-          <div>
-            <div className="flex items-center gap-2 mb-6 slide-up">
-              <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
-                <GraduationCap className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-xl lg:text-2xl font-bold text-purple-500">
+          {education.length > 0 && (
+            <aside aria-labelledby="education-title" className="rounded-lg border border-border bg-card p-6 shadow-e2">
+              <h3 id="education-title" className="mb-4 text-base font-bold text-foreground">
                 {t("educationTitle")}
               </h3>
-            </div>
-
-            <div className="relative">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-blue-500/30"></div>
-              <div className="space-y-0">
-                {education.map((edu, index) => {
-                  const cardKey = `edu-${index}`;
+              <ul>
+                {education.map((doc) => {
+                  const item = doc[lang];
                   return (
-                    <TimelineItem
-                      key={cardKey}
-                      exp={edu}
-                      cardKey={cardKey}
-                      isExpanded={Boolean(expandedCards[cardKey])}
-                      onToggle={() => toggleCard(cardKey)}
-                    />
+                    <li key={doc.id} className="border-t border-border py-3 last:pb-0">
+                      <p className="text-[15px] font-semibold text-foreground">{item.title}</p>
+                      <p className="text-sm text-ink-3">{item.organization}</p>
+                      <p className="mt-1 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">{item.period}</p>
+                    </li>
                   );
                 })}
-              </div>
-            </div>
-          </div>
+              </ul>
+            </aside>
+          )}
         </div>
-
-        {/* Skills & Certifications Section */}
-        <SkillsSection certifications={certifications} focusAreas={focusAreas} t={t} />
       </div>
     </section>
-  );
-}
-
-// Skills & Certifications Component with independent expand/collapse
-function SkillsSection({
-  certifications,
-  focusAreas,
-  t,
-}: {
-  certifications: string[];
-  focusAreas: string[];
-  t: (key: string) => string;
-}) {
-  const [isCertsExpanded, setIsCertsExpanded] = useState(true);
-  const [isFocusExpanded, setIsFocusExpanded] = useState(true);
-
-  return (
-    <div className="mt-12">
-      <div className="grid lg:grid-cols-2 gap-4">
-        {/* Certifications - Collapsible */}
-        <div className="glass-strong rounded-lg p-4 slide-up">
-          <button
-            type="button"
-            onClick={() => setIsCertsExpanded(!isCertsExpanded)}
-            aria-expanded={isCertsExpanded}
-            aria-controls="experience-certifications"
-            className="w-full flex items-center justify-between mb-0 hover:opacity-80 transition-opacity"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
-                <Award className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-base lg:text-lg font-bold text-green-700 dark:text-green-500">
-                {t("certificationsTitle")}
-              </h3>
-            </div>
-            <img
-              src={coinIcon}
-              alt=""
-              className={`w-4 h-4 object-contain transition-transform duration-300 ${
-                isCertsExpanded ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-
-          {isCertsExpanded && (
-            <div
-              id="experience-certifications"
-              className="grid grid-cols-1 gap-1 mt-3 animate-in fade-in duration-300"
-            >
-              {certifications.map((cert, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 p-1.5 rounded hover:bg-muted/20 transition-colors"
-                >
-                  <div className="w-1 h-1 bg-green-500 rounded-full"></div>
-                  <span className="text-xs text-muted-foreground">{cert}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Current Focus - Collapsible */}
-        <div className="glass-strong rounded-lg p-4 slide-up delay-150">
-          <button
-            type="button"
-            onClick={() => setIsFocusExpanded(!isFocusExpanded)}
-            aria-expanded={isFocusExpanded}
-            aria-controls="experience-focus"
-            className="w-full flex items-center justify-between mb-0 hover:opacity-80 transition-opacity"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
-                <BookOpen className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-base lg:text-lg font-bold text-orange-700 dark:text-orange-500">
-                {t("currentFocusLabel")}
-              </h3>
-            </div>
-            <img
-              src={coinIcon}
-              alt=""
-              className={`w-4 h-4 object-contain transition-transform duration-300 ${
-                isFocusExpanded ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-
-          {isFocusExpanded && (
-            <div
-              id="experience-focus"
-              className="mt-3 animate-in fade-in duration-300"
-            >
-              <p className="text-xs text-muted-foreground mb-3 leading-relaxed text-left">
-                {t("currentFocusText")}
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {focusAreas.map((focus, index) => (
-                  <Badge
-                    key={index}
-                    className="bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/30 text-xs px-2 py-0.5"
-                  >
-                    {focus}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
   );
 }
 

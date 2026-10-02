@@ -44,18 +44,16 @@ describe("experience toggles", () => {
     expect(toggle).toHaveFocus();
   });
 
-  it("expose aria-expanded on the skills and focus panels", () => {
+  it("point every Show more toggle at its collapsible panel", () => {
     render(<ExperienceSection />);
 
-    const panelToggles = screen
-      .getAllByRole("button")
-      .filter((button) => button.hasAttribute("aria-controls"))
-      .filter((button) => !/show (more|less)/i.test(button.textContent ?? ""));
-
-    expect(panelToggles).toHaveLength(2);
-    panelToggles.forEach((button) =>
-      expect(button).toHaveAttribute("aria-expanded", "true"),
-    );
+    const toggles = screen.getAllByRole("button", { name: /show more/i });
+    expect(toggles.length).toBeGreaterThan(0);
+    toggles.forEach((button) => {
+      const panelId = button.getAttribute("aria-controls");
+      expect(panelId).toBeTruthy();
+      expect(document.getElementById(panelId as string)).toBeInTheDocument();
+    });
   });
 });
 

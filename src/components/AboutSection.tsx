@@ -10,7 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
-import SkillsSection from "@/components/SkillsSection";
 import redFront from "@/assets/lego-bricks/red-front.webp";
 import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
 import blueFront from "@/assets/lego-bricks/blue-front.webp";
@@ -155,19 +154,6 @@ const AboutSection = () => {
 
           {/* Skills Column */}
           <div className="space-y-8 slide-up delay-300">
-            <div className="glass-strong rounded-3xl p-8 lg:p-10">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-                  <Code className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-blue-500">
-                  {t("technicalSkills")}
-                </h3>
-              </div>
-
-              <SkillsSection />
-            </div>
-
             {/* Languages Card */}
             <div className="glass-strong rounded-3xl p-8">
               <div className="flex items-center gap-4 mb-6">

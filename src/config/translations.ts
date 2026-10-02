@@ -73,6 +73,19 @@ export const translations: Translations = {
 
   // Projects Section
   projectsTitle: { EN: "Featured Projects", PT: "Projetos em Destaque" },
+  projectsHeading: { EN: "Projects", PT: "Projetos" },
+  projectsLead: { EN: "Selected work.", PT: "Trabalhos selecionados." },
+  projectPage: { EN: "Project page", PT: "Página do projeto" },
+  projectLive: { EN: "Live site", PT: "Ver site" },
+  projectCode: { EN: "Code", PT: "Código" },
+  projectsPrev: { EN: "Previous projects", PT: "Projetos anteriores" },
+  projectsNext: { EN: "Next projects", PT: "Próximos projetos" },
+  projectsPage: { EN: "Show project", PT: "Mostrar projeto" },
+  projectsCarousel: { EN: "carousel", PT: "carrossel" },
+  experienceHeading: { EN: "Experience", PT: "Experiência" },
+  skillsHeading: { EN: "Skills", PT: "Habilidades" },
+  skillsProgramming: { EN: "Programming", PT: "Programação" },
+  skillsIt: { EN: "IT and infrastructure", PT: "TI e infraestrutura" },
   viewProject: { EN: "View Project", PT: "Ver Projeto" },
   viewCode: { EN: "View Code", PT: "Ver Código" },
 

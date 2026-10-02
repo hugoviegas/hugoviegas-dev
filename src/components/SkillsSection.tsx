@@ -1,4 +1,7 @@
 import { Code2 } from "lucide-react";
+import FlatBrick from "@/components/brand/FlatBrick";
+import type { BrickColor } from "@/components/brand/brickColors";
+import { SectionHeading, sectionContainer } from "@/components/sections/Section";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useContentLang, useCoreContent } from "@/content/store";
 import type { SkillGroup } from "@/content/types";
@@ -354,7 +357,7 @@ const NetworkIcon = ({ className = "" }: { className?: string }) => (
 
 interface SkillIcon {
   icon: React.FC<{ className?: string }>;
-  tint: string; // tailwind bg tint for the card
+  tint: string; // legacy card tint, unused by the compact tags
 }
 
 // Content docs reference an icon by `iconKey`; skills without one get a generic icon.
@@ -379,7 +382,7 @@ const skillIcons: Record<SkillIconKey, SkillIcon> = {
 };
 
 const GenericIcon = ({ className = "" }: { className?: string }) => (
-  <Code2 className={`${className} text-primary`} aria-hidden="true" />
+  <Code2 className={`${className} text-ink-3`} aria-hidden="true" />
 );
 const fallbackIcon: SkillIcon = { icon: GenericIcon, tint: "bg-muted/30" };
 
@@ -391,19 +394,14 @@ interface Skill extends SkillIcon {
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 
-const SkillCard = ({ skill }: { skill: Skill }) => {
+// Compact grouped list of small tags. Wraps cleanly down to 320px.
+const SkillTag = ({ skill }: { skill: Skill }) => {
   const Icon = skill.icon;
   return (
-    <div
-      className={`glass rounded-xl p-4 flex flex-col items-center gap-2
-                  hover:scale-105 transition-transform duration-200
-                  ${skill.tint}`}
-    >
-      <Icon className="w-10 h-10" />
-      <span className="text-sm font-medium text-foreground text-center leading-tight">
-        {skill.name}
-      </span>
-    </div>
+    <li className="inline-flex min-h-8 max-w-full items-center gap-1.5 rounded-full bg-surface-2 py-1 pl-2 pr-3 text-sm font-medium text-ink-2">
+      <Icon className="h-4 w-4 shrink-0" />
+      <span className="break-words">{skill.name}</span>
+    </li>
   );
 };
 
@@ -418,35 +416,49 @@ const SkillsSection = () => {
         name: skill[lang].label,
         ...(skillIcons[skill.iconKey as SkillIconKey] ?? fallbackIcon),
       }));
-  const programmingSkills = skillsOf("programming");
-  const itSkills = skillsOf("it");
+
+  const groups: { title: string; brick: BrickColor; items: Skill[] }[] = [
+    { title: t("skillsProgramming"), brick: "green", items: skillsOf("programming") },
+    { title: t("skillsIt"), brick: "darkGray", items: skillsOf("it") },
+  ];
 
   return (
-    <div className="space-y-10">
-      {/* Programming Languages & Tools */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">
-          {t("programmingSkillsTitle")}
-        </h3>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {programmingSkills.map((skill) => (
-            <SkillCard key={skill.name} skill={skill} />
-          ))}
+    <section id="skills" aria-labelledby="skills-title" className="relative z-10 pt-[72px] lg:pt-24">
+      <div className={sectionContainer}>
+        <SectionHeading id="skills-title" index="03" title={t("skillsHeading")} />
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {groups.map((group) =>
+            group.items.length > 0 ? (
+              <div key={group.title} className="rounded-lg border border-border bg-card p-6 shadow-e2">
+                <h3 className="mb-4 flex items-center gap-2 text-[15px] font-bold text-foreground">
+                  <FlatBrick studs={1} pitch={14} color={group.brick} />
+                  {group.title}
+                </h3>
+                <ul className="flex flex-wrap gap-2">
+                  {group.items.map((skill) => (
+                    <SkillTag key={skill.name} skill={skill} />
+                  ))}
+                </ul>
+              </div>
+            ) : null,
+          )}
+          <div className="rounded-lg border border-border bg-card p-6 shadow-e2 md:col-span-2 lg:col-span-1">
+            <h3 className="mb-4 flex items-center gap-2 text-[15px] font-bold text-foreground">
+              <FlatBrick studs={1} pitch={14} color="lightGray" />
+              {t("languagesTitle")}
+            </h3>
+            <ul className="flex flex-wrap gap-2">
+              <li className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-surface-2 px-3 py-1 text-sm font-medium text-ink-2">
+                {t("portuguese")} · {t("native")}
+              </li>
+              <li className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-surface-2 px-3 py-1 text-sm font-medium text-ink-2">
+                {t("english")} · {t("c1Proficiency")}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-
-      {/* IT & Infrastructure */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">
-          {t("itSkillsTitle")}
-        </h3>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {itSkills.map((skill) => (
-            <SkillCard key={skill.name} skill={skill} />
-          ))}
-        </div>
-      </div>
-    </div>
+    </section>
   );
 };
 
