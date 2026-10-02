@@ -3,7 +3,7 @@ import { fixtureDocs } from "@/test/contentFixtures";
 import { schemaByCollection } from "@/content/schema";
 import type { DocMeta, ProjectDetailDoc, SkillDoc } from "@/content/types";
 import { ADMIN_COLLECTIONS } from "../collectionConfig";
-import { cleanDoc, newDoc, reorderChanges, restoredDoc } from "../editorModel";
+import { cleanDoc, moveToChanges, newDoc, publishProblems, reorderChanges, restoredDoc } from "../editorModel";
 
 const seedDocs = (collection: Parameters<typeof fixtureDocs>[0]) => fixtureDocs(collection) as DocMeta[];
 
@@ -63,5 +63,33 @@ describe("editor model", () => {
   it("turns a history entry back into a doc without stale meta", () => {
     const restored = restoredDoc("etal", { published: true, order: 20, version: 4, updatedAt: "x" });
     expect(restored).toEqual({ id: "etal", published: true, order: 20, version: 0, updatedAt: null });
+  });
+});
+
+describe("moveToChanges and publishProblems", () => {
+  const docs = seedDocs("experience");
+
+  it("moves a doc to another doc's place and renumbers in steps of 10", () => {
+    const changes = moveToChanges(docs, docs[0].id, docs[2].id, {});
+    const orders = Object.fromEntries(changes.map((c) => [c.value.id, c.value.order]));
+    expect(orders[docs[0].id]).toBe(20);
+    expect(orders[docs[1].id]).toBe(0);
+  });
+
+  it("never moves across scopes", () => {
+    expect(moveToChanges(docs, docs[0].id, docs[1].id, {}, (doc) => doc.id)).toEqual([]);
+  });
+
+  it("names each missing required field per language", () => {
+    const first = docs[0] as DocMeta & { ptBR: Record<string, unknown> };
+    const doc = { ...first, published: false, ptBR: { ...first.ptBR, title: "", period: "" } } as DocMeta;
+    const problems = publishProblems("experience", doc);
+    expect(problems).toEqual(
+      expect.arrayContaining([
+        { lang: "ptBR", field: "title", kind: "missing" },
+        { lang: "ptBR", field: "period", kind: "missing" },
+      ]),
+    );
+    expect(publishProblems("experience", docs[0])).toEqual([]);
   });
 });

@@ -1,5 +1,6 @@
 // Pure helpers behind the admin editors: defaults, cleanup before validation,
 // reorder, and restore. Kept free of React and Firebase so they are easy to test.
+import { schemaByCollection } from "@/content/schema";
 import type { ContentCollection, DocMeta } from "@/content/types";
 import { collectionDefs, type FieldDef } from "./collectionConfig";
 import { storedFields, type ExistingDoc } from "./storedDoc";
@@ -88,3 +89,54 @@ export const reorderChanges = (
 // A history entry turned back into an app doc, ready to validate and save.
 export const restoredDoc = (id: string, data: Record<string, unknown>): DocMeta =>
   ({ ...storedFields(data), id, updatedAt: null, version: 0 }) as DocMeta;
+
+// Moves one doc to the position of another (drag and drop) within its scope,
+// renumbering that scope in steps of 10. Returns only changed docs.
+export const moveToChanges = (
+  docs: DocMeta[],
+  id: string,
+  targetId: string,
+  stored: Record<string, ExistingDoc>,
+  scope?: (doc: DocMeta) => string,
+): DocChange[] => {
+  const moving = docs.find((doc) => doc.id === id);
+  const target = docs.find((doc) => doc.id === targetId);
+  if (!moving || !target || id === targetId) return [];
+  if (scope && scope(moving) !== scope(target)) return [];
+  const inScope = sortByOrder(docs.filter((doc) => !scope || scope(doc) === scope(moving)));
+  const from = inScope.findIndex((doc) => doc.id === id);
+  const to = inScope.findIndex((doc) => doc.id === targetId);
+  const moved = [...inScope];
+  const [item] = moved.splice(from, 1);
+  moved.splice(to, 0, item);
+  return moved.flatMap((doc, index) => {
+    const order = index * 10;
+    return doc.order === order ? [] : [{ value: { ...doc, order }, current: stored[doc.id] ?? null }];
+  });
+};
+
+export interface PublishProblem {
+  lang: "en" | "ptBR" | null;
+  field: string;
+  kind: "missing" | "invalid";
+}
+
+// What stops a doc from being published: the same Zod schema the site uses,
+// run as if Published were on. Missing required text is reported per language.
+export const publishProblems = (name: ContentCollection, doc: DocMeta): PublishProblem[] => {
+  const result = schemaByCollection[name].safeParse(
+    cleanDoc(name, { ...doc, published: true } as unknown as Record<string, unknown>),
+  );
+  if (result.success) return [];
+  const seen = new Set<string>();
+  return result.error.issues.flatMap((issue): PublishProblem[] => {
+    const [first, second] = issue.path.map(String);
+    const lang = first === "en" || first === "ptBR" ? first : null;
+    const field = lang ? second ?? "" : first ?? "";
+    const kind = issue.code === "custom" ? "missing" : "invalid";
+    const key = `${lang}.${field}.${kind}`;
+    if (seen.has(key)) return [];
+    seen.add(key);
+    return [{ lang, field, kind }];
+  });
+};
