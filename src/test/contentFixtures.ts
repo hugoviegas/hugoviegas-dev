@@ -20,7 +20,7 @@ export const fixtureDocs = <C extends ContentCollection>(collection: C): DocByCo
 
 // A snapshot as the build would write it from these docs.
 export const fixtureCore = (): CoreSnapshot => {
-  const core = { siteUpdatedAt: null, source: "seed", files: { cv: null, profilePhoto: null } } as CoreSnapshot;
+  const core = { siteUpdatedAt: null, source: "seed", files: { cv: null, profilePhoto: null, avatarMinifig: null, avatarFirst: "photo" } } as CoreSnapshot;
   for (const collection of CORE_COLLECTIONS) {
     (core as unknown as Record<string, DocMeta[]>)[collection] = publishedSorted(fixtureDocs(collection));
   }

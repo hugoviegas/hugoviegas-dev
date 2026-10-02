@@ -1,7 +1,7 @@
 // Reads the uploaded CV and profile photo from settings/site without Zod, so
 // the runtime check stays small. Anything malformed becomes null, and the
 // site falls back to the bundled photo and the current CV link.
-import type { CvFile, ProfilePhoto, SiteFiles } from "./types";
+import type { AvatarFace, CvFile, ProfilePhoto, SiteFiles } from "./types";
 import { isStoredBlobUrl } from "./uploadPolicy";
 
 const record = (value: unknown): Record<string, unknown> | null =>
@@ -47,10 +47,22 @@ export const parseProfilePhoto = (value: unknown): ProfilePhoto | null => {
   };
 };
 
+export const parseAvatarFirst = (value: unknown): AvatarFace => (value === "minifig" ? "minifig" : "photo");
+
 export const parseSiteFiles = (doc: unknown): SiteFiles => {
   const data = record(doc);
   return {
     cv: parseCvFile(data?.cv),
     profilePhoto: parseProfilePhoto(data?.profilePhoto),
+    avatarMinifig: parseProfilePhoto(data?.avatarMinifig),
+    avatarFirst: parseAvatarFirst(data?.avatarFirst),
   };
 };
+
+// The file fields of a settings doc, for the snapshot and the runtime refresh.
+export const pickSiteFiles = (site: SiteFiles): SiteFiles => ({
+  cv: site.cv,
+  profilePhoto: site.profilePhoto,
+  avatarMinifig: site.avatarMinifig ?? null,
+  avatarFirst: site.avatarFirst ?? "photo",
+});

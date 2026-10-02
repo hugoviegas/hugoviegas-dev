@@ -234,7 +234,7 @@ Config and secrets:
 Content split:
 - Moves to Firestore: experience, education, projects, project detail pages (stack, lists, FAQ, story), skills and certifications, and About (summary, highlights, full story). Collections: `experience`, `education`, `projects`, `projectDetails`, `skills`, `about`, `settings/site`, `contentHistory`.
 - Every content doc has `en` and `ptBR` blocks, `published`, `order`, `updatedAt`, and `version`. Publishing is blocked when either language is empty.
-- In `settings/site`: the CV link (`cv`) and the hero profile photo (`profilePhoto`: URL, width, height, EN and PT-BR alt text, version). When absent, the site uses the CV URL in `HeroSection.tsx` and the bundled `src/assets/hugo-hero.webp`.
+- In `settings/site`: the CV link (`cv`), the hero's two avatar faces (`profilePhoto` and `avatarMinifig`: URL, width, height, EN and PT-BR alt text, version) and which face is shown first (`avatarFirst`, `photo` or `minifig`; only `minifig` is stored, absent means `photo`). When absent, the site uses the CV URL in `HeroSection.tsx`, the bundled `src/assets/hugo-hero.webp` and `src/assets/brand/hugo-minifig.webp`. The hero preload follows the first face.
 - Stays in code: hero copy, contact and social links, SEO titles and descriptions (`seo.*`, read at build time), UI chrome strings (section headings, buttons, chatbot prompts), `currentFocusText`, the languages card, chatbot context, Fun Stuff, and archived pages.
 - A project's `image` is either a key that maps to a bundled asset (`src/content/images.ts`) or the URL of an image uploaded to Blob. Skills store an `iconKey` mapped in `SkillsSection.tsx`.
 - `public/og-image.jpg` stays in the repository: social scrapers need a fixed URL. JSON-LD and Open Graph keep using it.

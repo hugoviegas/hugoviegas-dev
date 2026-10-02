@@ -46,6 +46,8 @@ const settings: ExistingSettings = {
   updatedAt: null,
   cv,
   profilePhoto,
+  avatarMinifig: null,
+  avatarFirst: "photo",
   data: { useRemote: true, version: 7, cv, profilePhoto },
 };
 const siteWrite = () => fs.writes.find((write) => write.path === "settings/site")?.data;
@@ -79,5 +81,15 @@ describe("settings/site writes", () => {
   it("store no file fields when none were uploaded", async () => {
     await saveSettings(true, { ...settings, cv: null, profilePhoto: null, data: {} });
     expect(Object.keys(siteWrite()!)).toEqual(["useRemote", "updatedAt", "version"]);
+  });
+
+  it("store the minifigure and the first face only when set", async () => {
+    const minifig = { ...profilePhoto, url: profilePhoto.url.replace("hugo", "minifig") };
+    await saveSiteFiles({ avatarMinifig: minifig, avatarFirst: "minifig" }, settings);
+    expect(siteWrite()).toMatchObject({ cv, profilePhoto, avatarMinifig: minifig, avatarFirst: "minifig" });
+
+    fs.writes.length = 0;
+    await saveSiteFiles({ avatarFirst: "photo" }, { ...settings, avatarMinifig: minifig, avatarFirst: "minifig" });
+    expect(siteWrite()).toEqual({ useRemote: true, updatedAt: "<server time>", version: 8, cv, profilePhoto, avatarMinifig: minifig });
   });
 });
