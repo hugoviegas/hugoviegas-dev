@@ -31,9 +31,7 @@ const Index = () => {
       <div className="relative z-10">
         {/* Section ids live on the section components themselves */}
         <main id="main-content" tabIndex={-1} className="focus:outline-none">
-          <div id="hero">
-            <HeroSection />
-          </div>
+          <HeroSection />
           <div className="pt-16">
             <ExperienceSection />
           </div>
