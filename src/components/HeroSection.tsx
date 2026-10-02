@@ -1,301 +1,185 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Briefcase, Download, MapPin, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowDown,
-  Github,
-  Linkedin,
-  Mail,
-  FileText,
-  Download,
-} from "lucide-react";
-import { LazyImage } from "@/components/LazyImage";
-import LegoButton from "./LegoButton";
+import IsoBrick from "@/components/brand/IsoBrick";
 import { useLanguage } from "@/hooks/useLanguage";
-import redFront from "@/assets/lego-bricks/red-front.webp";
-import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
-import blueFront from "@/assets/lego-bricks/blue-front.webp";
-import whiteFront from "@/assets/lego-bricks/white-front.webp";
-import goldCoin2d from "@/assets/lego-bricks/gold-coin-2d.webp";
-import goldCoinFront from "@/assets/lego-bricks/gold-coin-front.webp";
-import goldCoinTop from "@/assets/lego-bricks/gold-coin-top.webp";
-import redTop from "@/assets/lego-bricks/red-top.webp";
-import whiteTop from "@/assets/lego-bricks/white-top.webp";
-import whiteTopSingle from "@/assets/lego-bricks/white-top-single.webp";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { getCurrentGreeting } from "@/lib/time-utils";
-import heroImage from "@/assets/hugo-hero.webp";
 import { useContentLang, useSiteFiles } from "@/content/store";
+import { cn } from "@/lib/utils";
+import heroImage from "@/assets/hugo-hero.webp";
+import minifigImage from "@/assets/brand/hugo-minifig.webp";
+import sceneImage from "@/assets/brand/desk-scene.webp";
+import sceneImageSmall from "@/assets/brand/desk-scene-800.webp";
 
 // Used until a CV is uploaded through the admin (settings/site.cv).
 const FALLBACK_CV_URL =
   "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
 
+// Which avatar face is shown first. The other face is one flip away.
+export const AVATAR_FIRST: "photo" | "minifig" = "photo";
+
+type Face = "photo" | "minifig";
+
+const linkClass =
+  "rounded-sm text-sm font-semibold text-primary underline-offset-4 hover:text-primary-hover hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+
 const HeroSection = () => {
-  const [currentGreeting, setCurrentGreeting] = useState("");
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const lang = useContentLang();
   const { cv, profilePhoto } = useSiteFiles();
-
-  // Update greeting when component mounts or language changes
-  useEffect(() => {
-    const greeting = getCurrentGreeting();
-    setCurrentGreeting(greeting.text[language]);
-  }, [language]);
-
-  const scrollToProjects = () => {
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const scrollToAbout = () => {
-    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
+  const [flipped, setFlipped] = useState(false);
+  const [announcement, setAnnouncement] = useState("");
+  const [photoFailed, setPhotoFailed] = useState(false);
 
   const resumeUrl = cv?.url ?? FALLBACK_CV_URL;
+  // Fall back to the bundled photo if the uploaded one fails to load.
+  const photoSrc = !photoFailed && profilePhoto?.url ? profilePhoto.url : heroImage;
+  const faces: Record<Face, { src: string; label: string }> = {
+    photo: { src: photoSrc, label: profilePhoto?.alt[lang] ?? t("heroFacePhoto") },
+    minifig: { src: minifigImage, label: t("heroFaceMinifig") },
+  };
+  const front: Face = AVATAR_FIRST;
+  const back: Face = front === "photo" ? "minifig" : "photo";
+  const showing = flipped ? back : front;
 
-  // Hero Brick Explosion component
-  const HERO_BRICK_IMAGES = [
-    redFront,
-    yellowFront,
-    blueFront,
-    whiteFront,
-    whiteTop,
-    whiteTopSingle,
-    redTop,
-    goldCoin2d,
-    goldCoinFront,
-    goldCoinTop,
-  ];
-
-  const HeroBrickExplosion = () => {
-    // Reduce the number of bricks for both mobile and desktop
-    const count = 10; // Adjusted from 20 to 10
-    return (
-      <>
-        {Array.from({ length: count }).map((_, i) => {
-          const img =
-            HERO_BRICK_IMAGES[
-              Math.floor(Math.random() * HERO_BRICK_IMAGES.length)
-            ];
-          const size = 12 + Math.floor(Math.random() * 20); // Adjusted size range
-          const left = Math.random() * 100; // percent
-          const top = Math.random() * 100; // percent
-          const rotate = -30 + Math.random() * 60; // degrees
-          const delay = Math.random() * 300; // ms stagger
-          const moveX = Math.round(-60 + Math.random() * 120); // Adjusted movement range
-          const moveY = Math.round(-80 + Math.random() * 40); // Adjusted movement range
-
-          return (
-            <img
-              key={i}
-              src={img}
-              alt=""
-              className="hero-brick-explosion-item"
-              style={{
-                width: `${size}px`,
-                height: "auto",
-                left: `${left}%`,
-                top: `${top}%`,
-                // initial rotation and per-item CSS vars used by hover animation
-                ...({
-                  ["--hero-delay"]: `${delay}ms`,
-                  ["--hero-rand-rot"]: `${rotate}deg`,
-                  ["--hero-move-x"]: `${moveX}px`,
-                  ["--hero-move-y"]: `${moveY}px`,
-                } as React.CSSProperties),
-              }}
-            />
-          );
-        })}
-      </>
-    );
+  const flip = () => {
+    const next = flipped ? front : back;
+    setFlipped(!flipped);
+    setAnnouncement(`${t("heroNowShowing")} ${faces[next].label}`);
   };
 
+  const scrollToProjects = (event: React.MouseEvent) => {
+    const el = document.getElementById("projects");
+    if (!el) return;
+    event.preventDefault();
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: "smooth" });
+  };
+
+  const faceClass =
+    "absolute inset-0 overflow-hidden rounded-full shadow-[0_0_0_4px_hsl(var(--card)),0_0_0_5px_hsl(var(--border))] [backface-visibility:hidden]";
+
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-24 lg:pt-0 w-full">
-      {/* Animated Background */}
-      <div className="absolute inset-0 opacity-20" aria-hidden="true">
-        <div className="absolute top-20 left-20 w-40 h-40 bg-primary rounded-full blur-3xl subtle-pulse"></div>
-        <div className="absolute bottom-40 right-32 w-28 h-28 bg-secondary rounded-full blur-2xl subtle-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-accent rounded-full blur-xl subtle-pulse delay-2000"></div>
-      </div>
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 wide-container">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Content Column */}
-          <div className="space-y-8 fade-in">
-            <div className="space-y-4">
-              <div className="text-primary font-mono text-sm sm:text-base lg:text-lg">
-                {currentGreeting}
-              </div>
-              <h1 className="heading-hero leading-tight mb-2">Hugo Viegas</h1>
-              <div className="h-16 sm:h-20 lg:h-24 flex items-center">
-                <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-muted-foreground font-mono">
-                  {t("role")}
-                </h2>
-              </div>
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-[min(960px,92vw)] leading-relaxed mt-4">
-                {t("description")}
-              </p>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center items-center">
-              <LegoButton onClick={scrollToProjects}>
-                {t("viewProjects")}
-              </LegoButton>
-              <LegoButton onClick={scrollToContact} brickColor="yellow">
-                {t("getInTouch")}
-              </LegoButton>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:space-x-6 lg:gap-0">
-              <a
-                href="https://github.com/hugoviegas/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={t("a11y.githubProfile")}
-                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-              >
-                <Github
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-primary"
-                  aria-hidden="true"
-                />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/hviegas/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={t("a11y.linkedinProfile")}
-                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-              >
-                <Linkedin
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-primary"
-                  aria-hidden="true"
-                />
-              </a>
-              <a
-                href="mailto:hugoviegas3.1@gmail.com"
-                aria-label={t("a11y.emailHugo")}
-                className="p-2 sm:p-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-              >
-                <Mail
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-primary"
-                  aria-hidden="true"
-                />
-              </a>
-
-              {/* Resume Dialog Button */}
-              <Dialog>
-                <DialogTrigger asChild>
-                  <button
-                    className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-3 glass rounded-full hover:scale-110 hover:neon-glow transition-all duration-300"
-                    aria-label={t("seeResume")}
-                    title={t("seeResume")}
-                  >
-                    <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-                    <span className="text-primary font-medium text-sm sm:text-base">
-                      {t("seeResume")}
-                    </span>
-                  </button>
-                </DialogTrigger>
-                <DialogContent className="max-w-[min(1400px,95vw)] w-full h-[85vh] sm:h-[90vh] p-0">
-                  <DialogHeader className="p-4 sm:p-6 pb-0">
-                    <DialogTitle className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-2">
-                      <span className="text-sm sm:text-base">
-                        Hugo Viegas - CV 2025
-                      </span>
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="sm:ml-4"
-                      >
-                        <a
-                          href={resumeUrl}
-                          download="Hugo_Viegas_CV_2025.pdf"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2"
-                        >
-                          <Download className="w-4 h-4" />
-                          {t("downloadResume")}
-                        </a>
-                      </Button>
-                    </DialogTitle>
-                  </DialogHeader>
-
-                  {/* PDF Viewer */}
-                  <div className="flex-1 p-6 pt-0">
-                    <iframe
-                      src={`${resumeUrl}#toolbar=1&navpanes=0&scrollbar=1`}
-                      className="w-full h-full rounded-lg border"
-                      title="Hugo Viegas CV 2025"
-                      style={{ minHeight: "600px" }}
-                    />
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-
-          {/* Image Column */}
-          <div className="relative lg:justify-self-end fade-in delay-300">
-            <div className="relative mx-auto">
-              {/* Hero image wrapper with brick explosion effect */}
-              <div className="hero-image-wrapper relative">
-                {/* Brick explosion layer sits behind the image */}
-                <div className="hero-brick-explosion-layer pointer-events-none">
-                  <HeroBrickExplosion />
-                </div>
-
-                {/* Glassmorphism Frame - responsive square container for profile image
-                    Uses clamp() for fluid sizing: min 200px, preferred 70vw, max 384px */}
-                <div className="hero-profile-frame glass-strong rounded-3xl relative overflow-hidden aspect-square mx-auto transition-all duration-300">
-                  {/* subtle gradient overlay for depth */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none"></div>
-
-                  {/* image fills the frame (no smaller inner square) */}
-                  <div className="relative z-10 w-full h-full">
-                    <LazyImage
-                      src={profilePhoto?.url ?? heroImage}
-                      fallbackSrc={heroImage}
-                      alt={profilePhoto?.alt[lang] ?? t("heroImageAlt")}
-                      width={profilePhoto?.width ?? 800}
-                      height={profilePhoto?.height ?? 800}
-                      priority
-                      className="object-cover w-full h-full shadow-2xl"
-                      placeholder="Loading profile..."
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Section footer: scroll indicator placed here to avoid overlapping mobile content */}
-        <div className="mt-6 sm:mt-8 flex justify-center">
-          <button
-            onClick={scrollToAbout}
-            aria-label="Scroll to about section"
-            className="animate-bounce p-2 rounded-full glass hover:scale-110 transition-transform"
+    <section
+      id="hero"
+      aria-labelledby="hero-title"
+      className="relative z-10 mx-auto grid w-full max-w-[1344px] items-center px-5 pt-[84px] sm:px-10 lg:min-h-[640px] lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:gap-8 lg:px-12 lg:pt-32 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,0.95fr)] xl:px-[72px] [@media(max-height:500px)]:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] [@media(max-height:500px)]:gap-4 [@media(max-height:500px)]:pt-[72px]"
+    >
+      {/* Profile card: avatar beside the info; on phones the avatar sits centred above the card. */}
+      <div className="relative mx-auto mt-24 flex w-full max-w-[680px] flex-col items-center rounded-3xl border border-border bg-card px-5 pb-6 pt-28 text-center shadow-e3 sm:mt-0 sm:flex-row sm:items-center sm:gap-6 sm:p-6 sm:text-left lg:mx-0 xl:gap-8 xl:p-8 max-[359px]:px-4 max-[359px]:pt-[104px] [@media(max-height:500px)]:mt-0 [@media(max-height:500px)]:flex-row [@media(max-height:500px)]:p-6 [@media(max-height:500px)]:text-left">
+        <button
+          type="button"
+          onClick={flip}
+          aria-pressed={flipped}
+          aria-label={`${t("heroFlipLabel")} ${faces[showing].label}`}
+          className="group absolute -top-[92px] left-1/2 h-[184px] w-[184px] -translate-x-1/2 shrink-0 rounded-full [perspective:800px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-8 focus-visible:ring-offset-card sm:relative sm:left-auto sm:top-auto sm:h-[148px] sm:w-[148px] sm:translate-x-0 xl:h-[184px] xl:w-[184px] max-[359px]:-top-[84px] max-[359px]:h-[168px] max-[359px]:w-[168px] [@media(max-height:500px)]:relative [@media(max-height:500px)]:left-auto [@media(max-height:500px)]:top-auto [@media(max-height:500px)]:h-[120px] [@media(max-height:500px)]:w-[120px] [@media(max-height:500px)]:translate-x-0"
+        >
+          <span
+            className={cn(
+              "absolute inset-0 transition-transform duration-flip ease-inout [transform-style:preserve-3d]",
+              flipped && "[transform:rotateY(180deg)]",
+            )}
           >
-            <ArrowDown className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-          </button>
+            <span className={faceClass}>
+              <img
+                src={faces[front].src}
+                alt=""
+                width={368}
+                height={368}
+                fetchPriority={front === "photo" ? "high" : undefined}
+                onError={front === "photo" ? () => setPhotoFailed(true) : undefined}
+                className="h-full w-full object-cover"
+              />
+            </span>
+            <span className={cn(faceClass, "[transform:rotateY(180deg)]")}>
+              <img
+                src={faces[back].src}
+                alt=""
+                width={368}
+                height={368}
+                loading="lazy"
+                onError={back === "photo" ? () => setPhotoFailed(true) : undefined}
+                className="h-full w-full object-cover"
+              />
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+            className={cn(
+              "absolute bottom-1.5 right-0.5 z-10 grid h-10 w-10 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_0_0_3px_hsl(var(--card))] transition-transform duration-base ease-snap group-hover:-rotate-[25deg] group-hover:scale-105",
+              flipped && "rotate-180 group-hover:rotate-[155deg]",
+            )}
+          >
+            <RefreshCw className="h-5 w-5" strokeWidth={2} />
+          </span>
+          <span
+            aria-hidden="true"
+            className="absolute -bottom-8 left-1/2 hidden -translate-x-1/2 whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink-3 lg:block"
+          >
+            {t("heroFlipHint")}
+          </span>
+        </button>
+
+        <div className="min-w-0">
+          <h1
+            id="hero-title"
+            className="whitespace-nowrap text-[36px] font-extrabold leading-none tracking-[-0.025em] text-foreground sm:text-[44px] lg:text-[48px] xl:text-[56px] max-[359px]:text-[32px]"
+          >
+            Hugo Viegas
+          </h1>
+          <p className="mt-2.5 text-xl font-bold text-primary max-[359px]:text-lg">{t("role")}</p>
+          <p className="mx-auto mt-3 max-w-[34ch] text-[17px] text-ink-2 sm:mx-0">{t("heroValue")}</p>
+          <p className="mt-3 flex items-center justify-center gap-1.5 text-sm text-ink-3 sm:justify-start [@media(max-height:500px)]:justify-start">
+            <MapPin className="h-4 w-4" aria-hidden="true" />
+            {t("heroLocation")}
+          </p>
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap [@media(max-height:500px)]:flex-row">
+            <Button asChild variant="primary" size="lg">
+              <a href="#projects" onClick={scrollToProjects}>
+                <Briefcase aria-hidden="true" className="!size-[18px]" />
+                {t("viewProjects")}
+              </a>
+            </Button>
+            <Button asChild variant="neutral" size="lg">
+              <a href={resumeUrl} download="Hugo_Viegas_CV.pdf" target="_blank" rel="noopener noreferrer">
+                <Download aria-hidden="true" className="!size-[18px]" />
+                {t("heroDownloadCv")}
+              </a>
+            </Button>
+          </div>
+          <p className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:justify-start [@media(max-height:500px)]:justify-start">
+            <a href="https://github.com/hugoviegas/" target="_blank" rel="noopener noreferrer" className={linkClass} aria-label={t("a11y.githubProfile")}>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/hviegas/" target="_blank" rel="noopener noreferrer" className={linkClass} aria-label={t("a11y.linkedinProfile")}>
+              LinkedIn
+            </a>
+            <a href="mailto:hugoviegas3.1@gmail.com" className={linkClass} aria-label={t("a11y.emailHugo")}>
+              hugoviegas3.1@gmail.com
+            </a>
+          </p>
         </div>
+
+        <IsoBrick shape="1x1" color="green" className="pointer-events-none absolute -top-[22px] right-10 hidden w-[30px] sm:block" />
       </div>
+
+      {/* Desk scene: soft feathered edge (alpha mask) so it blends into either theme. */}
+      <div className="relative -mx-5 mt-[-12px] min-h-[260px] self-stretch sm:mx-0 sm:mt-[-8px] sm:min-h-[400px] lg:mt-0 lg:min-h-[520px] [@media(max-height:500px)]:m-0 [@media(max-height:500px)]:min-h-[260px]">
+        <img
+          src={sceneImage}
+          srcSet={`${sceneImageSmall} 800w, ${sceneImage} 1400w`}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          alt={t("heroSceneAlt")}
+          width={1400}
+          height={788}
+          decoding="async"
+          className="absolute inset-y-[-6%] left-[-2%] h-[112%] w-[104%] max-w-none object-cover [-webkit-mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_58%,transparent_100%)] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_58%,transparent_100%)] dark:brightness-[.82] dark:saturate-[.95] lg:left-[-4%] lg:w-[118%]"
+        />
+        <IsoBrick shape="2x4" color="green" className="pointer-events-none absolute bottom-[10%] left-[4%] hidden w-[104px] sm:block" />
+        <IsoBrick shape="1x2" color="white" className="pointer-events-none absolute right-[6%] top-[8%] hidden w-[54px] sm:block" />
+      </div>
+
+      <p className="sr-only" aria-live="polite">
+        {announcement}
+      </p>
     </section>
   );
 };
