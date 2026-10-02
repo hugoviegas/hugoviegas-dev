@@ -4,15 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  ChatError,
   sendChatMessage,
-  checkRateLimit,
   type ChatMessage,
 } from "@/lib/chatbot-service";
+import type { ChatProjectId } from "@/lib/chatLanguage";
 import { useLanguage } from "@/hooks/useLanguage";
 import redFront from "@/assets/lego-bricks/red-front.webp";
 
 interface ChatBotProps {
-  projectId?: string;
+  projectId?: ChatProjectId;
   initialPrompt?: string;
   embedded?: boolean;
   onClose?: () => void;
@@ -51,21 +52,9 @@ const ChatBot = ({
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [rateInfo, setRateInfo] = useState({
-    minuteRemaining: 15,
-    dayRemaining: 100,
-  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastInitialPromptRef = useRef<string>();
-
-  const updateRateInfo = useCallback(() => {
-    const info = checkRateLimit();
-    setRateInfo({
-      minuteRemaining: info.minuteRemaining,
-      dayRemaining: info.dayRemaining,
-    });
-  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -74,15 +63,8 @@ const ChatBot = ({
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus();
-      updateRateInfo();
     }
-  }, [isOpen, updateRateInfo]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const interval = setInterval(updateRateInfo, 10000);
-    return () => clearInterval(interval);
-  }, [isOpen, updateRateInfo]);
+  }, [isOpen]);
 
   const sendMessage = useCallback(async (prompt: string) => {
     const trimmedInput = prompt.trim();
@@ -106,16 +88,15 @@ const ChatBot = ({
       });
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: response, timestamp: Date.now() },
+        { role: "assistant", content: response.reply, timestamp: Date.now(), sources: response.sources },
       ]);
-      updateRateInfo();
     } catch (requestError) {
-      console.error("Failed to get response:", requestError);
+      if (!(requestError instanceof ChatError)) console.error("Failed to get response:", requestError);
       setError(true);
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, language, messages, projectId, updateRateInfo]);
+  }, [isLoading, language, messages, projectId]);
 
   useEffect(() => {
     if (initialPrompt && initialPrompt !== lastInitialPromptRef.current) {
@@ -214,12 +195,6 @@ const ChatBot = ({
           </div>
         )}
       </ScrollArea>
-
-      <div className="border-t border-neutral-800/50 bg-neutral-900/50 px-4 py-1.5 text-xs text-neutral-500">
-        <span>{rateInfo.dayRemaining}/100</span>
-        <span className="mx-2">•</span>
-        <span>{rateInfo.minuteRemaining}/15</span>
-      </div>
 
       <form
         onSubmit={handleSendMessage}

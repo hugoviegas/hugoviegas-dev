@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import fs from "fs";
 import path from "path";
@@ -81,8 +81,49 @@ const routeHeadPages = (): Plugin => {
   };
 };
 
+// Dev only: serve POST /api/chat from api/chat.ts so `npm run dev` can talk
+// to the assistant. GEMINI_API_KEY is read here from .env.local on the dev
+// machine and stays server-side (it is not a VITE_* variable).
+const devChatApi = (env: Record<string, string>): Plugin => ({
+  name: "dev-chat-api",
+  apply: "serve",
+  configureServer(server) {
+    server.middlewares.use("/api/chat", async (req, res) => {
+      try {
+        const chunks: Buffer[] = [];
+        for await (const chunk of req) chunks.push(chunk as Buffer);
+        const headers = new Headers();
+        for (const [key, value] of Object.entries(req.headers)) {
+          if (typeof value === "string") headers.set(key, value);
+        }
+        const request = new Request(`http://localhost${req.url ?? ""}`, {
+          method: req.method,
+          headers,
+          body: req.method === "POST" ? Buffer.concat(chunks) : undefined,
+        });
+        const mod = await server.ssrLoadModule("/api/chat.ts");
+        const { RateLimiter } = await server.ssrLoadModule("/src/server/chat/rateLimit.ts");
+        const response: Response = await mod.handleChat(request, {
+          apiKey: env.GEMINI_API_KEY,
+          allowedOrigins: mod.allowedOriginsFromEnv({ VERCEL_ENV: "development" }),
+          limiter: (globalThis as { __devChatLimiter?: unknown }).__devChatLimiter ??= new RateLimiter(),
+        });
+        res.statusCode = response.status;
+        response.headers.forEach((value, key) => res.setHeader(key, value));
+        res.end(await response.text());
+      } catch (error) {
+        server.config.logger.error(`dev /api/chat failed: ${(error as Error).message}`);
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: "dev_server_error" }));
+      }
+    });
+  },
+});
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  // All env vars (not just VITE_*), for the dev-only chat middleware.
+  const serverEnv = loadEnv(mode, process.cwd(), "");
   return {
     server: {
       host: "::",
@@ -93,6 +134,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       mode === "development" && componentTagger(),
+      devChatApi(serverEnv),
       heroPhotoPreload(),
       notFoundPage(),
       routeHeadPages(),
