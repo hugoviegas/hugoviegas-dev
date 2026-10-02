@@ -571,6 +571,40 @@ export const translations: Translations = {
   "aria.closeMenu": { EN: "Close menu", PT: "Fechar menu" },
   "aria.navigateTo": { EN: "Navigate to", PT: "Ir para" },
   "aria.backToTop": { EN: "Back to top", PT: "Voltar ao topo" },
+  "nav.skills": { EN: "Skills", PT: "Habilidades" },
+  "nav.allProjects": { EN: "All projects", PT: "Todos os projetos" },
+  "nav.sections": { EN: "Sections", PT: "Seções" },
+  "nav.currentSection": { EN: "Current section", PT: "Seção atual" },
+  "nav.openSections": { EN: "Open section menu", PT: "Abrir menu de seções" },
+  "nav.projectTypeBigBang": { EN: "Browser strategy game", PT: "Jogo de estratégia no navegador" },
+  "nav.projectTypeDarcy": { EN: "Client website · Irish pub", PT: "Site de cliente · pub irlandês" },
+
+  // -------------------------------------------------------- Top controls
+  "controls.settings": { EN: "Site settings", PT: "Configurações do site" },
+  "controls.languageLabelEn": {
+    EN: "Language: English. Switch to Portuguese (Mudar para português)",
+    PT: "Language: English. Switch to Portuguese (Mudar para português)",
+  },
+  "controls.languageLabelPt": {
+    EN: "Idioma: português. Mudar para inglês (Switch to English)",
+    PT: "Idioma: português. Mudar para inglês (Switch to English)",
+  },
+  "controls.darkTheme": { EN: "Dark theme", PT: "Tema escuro" },
+  "controls.darkOn": { EN: "Dark theme on", PT: "Tema escuro ativado" },
+  "controls.lightOn": { EN: "Light theme on", PT: "Tema claro ativado" },
+  "controls.spaceship": { EN: "Background spaceship", PT: "Nave ao fundo" },
+  "controls.spaceshipShow": { EN: "Show the spaceship", PT: "Mostrar a nave" },
+  "controls.spaceshipHide": { EN: "Hide the spaceship", PT: "Esconder a nave" },
+  "controls.spaceshipDarkOnly": {
+    EN: "Show the spaceship (it flies in the dark theme)",
+    PT: "Mostrar a nave (ela voa no tema escuro)",
+  },
+  "controls.spaceshipReduced": {
+    EN: "Off while your device prefers reduced motion",
+    PT: "Desligada enquanto seu dispositivo prefere menos movimento",
+  },
+  "controls.spaceshipOnMsg": { EN: "Spaceship on", PT: "Nave ligada" },
+  "controls.spaceshipOffMsg": { EN: "Spaceship off", PT: "Nave desligada" },
 
   // -------------------------------------------------------------- Not found
   "notFound.title": {

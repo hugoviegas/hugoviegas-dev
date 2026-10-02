@@ -70,6 +70,9 @@ export type BackgroundXWingProps = {
   bobAmplitude?: number;
   bobFrequency?: number;
   pauseWhenHidden?: boolean;
+  // Draw the WebGL star field and planets behind the ship. The redesign keeps
+  // this off: the page draws its own CSS star field and the canvas stays clear.
+  withBackdrop?: boolean;
 };
 
 type BackgroundColorInfo = {
@@ -715,6 +718,7 @@ const BackgroundCanvas: React.FC<BackgroundXWingProps> = ({
   bobAmplitude = 0.28,
   bobFrequency = 1.2,
   pauseWhenHidden = true,
+  withBackdrop = false,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<WebGLRenderer | null>(null);
@@ -730,6 +734,7 @@ const BackgroundCanvas: React.FC<BackgroundXWingProps> = ({
         containerRef.current,
         fallbackColor
       );
+      if (!withBackdrop) gl.setClearColor(info.color, 0);
       setShowStars(info.luminance < 0.32);
     };
 
@@ -749,12 +754,12 @@ const BackgroundCanvas: React.FC<BackgroundXWingProps> = ({
       observer.disconnect();
       scheme?.removeEventListener?.("change", schemeHandler);
     };
-  }, [fallbackColor]);
+  }, [fallbackColor, withBackdrop]);
 
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 z-[4]"
+      className="pointer-events-none fixed inset-0 z-[4] opacity-70"
       aria-hidden
     >
       <Canvas
@@ -769,14 +774,15 @@ const BackgroundCanvas: React.FC<BackgroundXWingProps> = ({
             containerRef.current,
             fallbackColor
           );
+          if (!withBackdrop) rendererRef.current.setClearColor(info.color, 0);
           setShowStars(info.luminance < 0.32);
         }}
       >
         <ambientLight intensity={0.55} />
         <directionalLight position={[6, 8, 4]} intensity={0.85} />
         <Suspense fallback={null}>
-          <StarField show={showStars} depth={zDepth - 4} />
-          <MiniPlanets show={showStars} depth={zDepth - 5} />
+          <StarField show={withBackdrop && showStars} depth={zDepth - 4} />
+          <MiniPlanets show={withBackdrop && showStars} depth={zDepth - 5} />
           <XWingFlight
             direction={direction}
             baseAltitude={baseAltitude}
