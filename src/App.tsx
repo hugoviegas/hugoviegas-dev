@@ -9,6 +9,8 @@ import DynamicSidebar from "@/components/DynamicSidebar";
 import TopControls from "@/components/TopControls";
 import RouteSeo from "@/components/RouteSeo";
 import SkipLink from "@/components/SkipLink";
+import StarField from "@/components/background/StarField";
+import SpaceshipLayer from "@/components/background/SpaceshipLayer";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { ADMIN_PATH } from "@/config/admin";
@@ -55,6 +57,8 @@ const App = () => {
           <BrowserRouter>
             <RouteSeo />
             <SkipLink />
+            <StarField />
+            <SpaceshipLayer />
             <DynamicSidebar />
             <TopControls />
             <Suspense fallback={null}>
