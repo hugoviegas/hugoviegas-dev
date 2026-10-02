@@ -6,6 +6,8 @@ import ProjectsSection from "@/components/ProjectsSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import SkillsSection from "@/components/SkillsSection";
+import { SectionDivider } from "@/components/sections/Section";
 
 const ChatBot = lazy(() => import("@/components/ChatBot"));
 const WidgetsSection = lazy(() => import("@/components/WidgetsSection"));
@@ -32,18 +34,13 @@ const Index = () => {
         {/* Section ids live on the section components themselves */}
         <main id="main-content" tabIndex={-1} className="focus:outline-none">
           <HeroSection />
-          <div className="pt-16">
-            <ExperienceSection />
-          </div>
-          <div className="pt-16">
-            <AboutSection />
-          </div>
-          <div className="pt-16">
-            <ProjectsSection />
-          </div>
-          <div className="pt-16">
-            <ContactSection />
-          </div>
+          <SectionDivider />
+          <ProjectsSection />
+          <ExperienceSection />
+          <SkillsSection />
+          <AboutSection />
+          <SectionDivider variant="b" />
+          <ContactSection />
           <Suspense fallback={null}>
             <WidgetsSection />
           </Suspense>

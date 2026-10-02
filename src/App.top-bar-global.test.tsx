@@ -23,7 +23,7 @@ describe("global application header", () => {
 
     expect(screen.getAllByRole("navigation")).toHaveLength(1);
     expect(screen.getAllByRole("button", { name: /switch to/i })).toHaveLength(1);
-    expect(screen.getAllByLabelText(/^Projects$/i)).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: /^Projects$/i })).toHaveLength(1);
 
     unmount();
   });
@@ -34,7 +34,7 @@ describe("global application header", () => {
 
     render(<App />);
 
-    await user.click(screen.getByLabelText(/^Projects$/i));
+    await user.click(screen.getByRole("button", { name: /^Projects$/i }));
 
     const projectsMenu = screen.getByRole("menu", { name: /^Projects$/i });
 
@@ -50,7 +50,7 @@ describe("global application header", () => {
 
     render(<App />);
 
-    const trigger = screen.getByLabelText(/^Projects$/i);
+    const trigger = screen.getByRole("button", { name: /^Projects$/i });
     await user.click(trigger);
 
     const projectsMenu = screen.getByRole("menu", { name: /^Projects$/i });
@@ -68,10 +68,10 @@ describe("global application header", () => {
 
     render(<App />);
 
-    expect(screen.getByLabelText(/^Projects$/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Projects$/i })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /switch to portuguese/i }));
 
-    expect(await screen.findByLabelText(/^Projetos$/i)).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /^Projetos$/i })).toBeInTheDocument();
   });
 });
