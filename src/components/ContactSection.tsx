@@ -1,519 +1,202 @@
 import React, { useState } from "react";
+import { AlertCircle, CheckCircle2, Github, Linkedin, Send } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import {
-  Mail,
-  MapPin,
-  Clock,
-  Linkedin,
-  Github,
-  Send,
-  Instagram,
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import LegoButton from "./LegoButton";
+import BrickLoader from "@/components/brand/BrickLoader";
+import { SectionHeading, sectionContainer } from "@/components/sections/Section";
+import { cn } from "@/lib/utils";
 
 const FIELD_ORDER = ["name", "email", "subject", "message"] as const;
+type Field = (typeof FIELD_ORDER)[number];
+type Status = "idle" | "sending" | "success" | "failure";
 
-const fieldClass = (hasError: boolean) =>
-  `glass border-white/20 bg-card/50 focus:border-primary transition-all duration-300 ${
-    hasError ? "border-red-500 focus:border-red-500" : ""
-  }`;
+const EMAIL = "hugoviegas3.1@gmail.com";
+const WHATSAPP_URL = "https://api.whatsapp.com/send?phone=3530830865984";
+
+const inputClass = (hasError: boolean) =>
+  cn(
+    "min-h-12 w-full rounded-md border bg-card px-3.5 py-3 text-base text-foreground transition-[border-color,box-shadow] duration-fast placeholder:text-ink-3 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary-tint-2 disabled:border-border disabled:bg-surface-2 disabled:text-ink-3",
+    hasError ? "border-destructive ring-1 ring-destructive" : "border-line-strong",
+  );
+
+const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z" />
+    <path d="M9 9.5c0 3 2.5 5.5 5.5 5.5" />
+  </svg>
+);
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-    // Honeypot field for spam protection
-    _honeypot: "",
-  });
   const { t } = useLanguage();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const { toast } = useToast();
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "", _honeypot: "" });
+  const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
+  const [status, setStatus] = useState<Status>("idle");
 
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = t("validation.nameRequired") || "Name is required";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = t("validation.emailRequired") || "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email =
-        t("validation.emailInvalid") || "Please enter a valid email";
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject =
-        t("validation.subjectRequired") || "Subject is required";
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message =
-        t("validation.messageRequired") || "Message is required";
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message =
-        t("validation.messageTooShort") ||
-        "Message must be at least 10 characters";
-    }
-
-    setErrors(newErrors);
-    return newErrors;
+  const validate = () => {
+    const next: Partial<Record<Field, string>> = {};
+    if (!formData.name.trim()) next.name = t("validation.nameRequired");
+    if (!formData.email.trim()) next.email = t("validation.emailRequired");
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) next.email = t("validation.emailInvalid");
+    if (!formData.subject.trim()) next.subject = t("validation.subjectRequired");
+    if (!formData.message.trim()) next.message = t("validation.messageRequired");
+    else if (formData.message.trim().length < 10) next.message = t("validation.messageTooShort");
+    setErrors(next);
+    return next;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const validationErrors = validateForm();
-    const firstInvalid = FIELD_ORDER.find((field) => validationErrors[field]);
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (status === "sending") return;
+    const found = validate();
+    const firstInvalid = FIELD_ORDER.find((field) => found[field]);
     if (firstInvalid) {
+      setStatus("idle");
       document.getElementById(`contact-${firstInvalid}`)?.focus();
-      toast({
-        title: t("validation.errorTitle") || "Validation Error",
-        description:
-          t("validation.errorMessage") ||
-          "Please fix the errors and try again.",
-        variant: "destructive",
-      });
       return;
     }
-
-    // Check for spam (honeypot field should be empty)
+    // Honeypot: bots fill the hidden field.
     if (formData._honeypot) {
-      toast({
-        title: t("send.errorTitle") || "Error",
-        description: "Spam detected. Please try again.",
-        variant: "destructive",
-      });
+      setStatus("failure");
       return;
     }
-
-    setIsSubmitting(true);
-
+    setStatus("sending");
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append(
-        "access_key",
-        "c40cf7dd-eb73-4c03-9a22-30647387e501",
-      );
-      formDataToSend.append("name", formData.name.trim());
-      formDataToSend.append("email", formData.email.trim());
-      formDataToSend.append("subject", formData.subject.trim());
-      formDataToSend.append("message", formData.message.trim());
-
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formDataToSend,
-      });
-
+      const body = new FormData();
+      body.append("access_key", "c40cf7dd-eb73-4c03-9a22-30647387e501");
+      body.append("name", formData.name.trim());
+      body.append("email", formData.email.trim());
+      body.append("subject", formData.subject.trim());
+      body.append("message", formData.message.trim());
+      const response = await fetch("https://api.web3forms.com/submit", { method: "POST", body });
       const data = await response.json();
-
-      if (data.success) {
-        toast({
-          title: t("send.successTitle") || "Message Sent!",
-          description:
-            t("send.successMessage") ||
-            "Thank you for reaching out. I'll get back to you within 24 hours.",
-        });
-        setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-          _honeypot: "",
-        });
-        setErrors({});
-      } else {
-        throw new Error(data.message || "Failed to send message");
-      }
+      if (!data.success) throw new Error(data.message || "Failed to send message");
+      setFormData({ name: "", email: "", subject: "", message: "", _honeypot: "" });
+      setErrors({});
+      setStatus("success");
     } catch (error) {
       console.error("Form submission error:", error);
-      toast({
-        title: t("send.errorTitle") || "Error",
-        description:
-          t("send.errorMessage") ||
-          "Failed to send message. Please try again or contact me directly.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+      setStatus("failure");
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Clear error for this field when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name as Field]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const contactInfo = [
-    {
-      icon: Mail,
-      labelKey: "contactEmailLabel",
-      value: "hugoviegas3.1@gmail.com",
-      link: "mailto:hugoviegas3.1@gmail.com",
-    },
-    {
-      icon: MapPin,
-      labelKey: "contactLocationLabel",
-      valueKey: "contactLocationValue",
-      link: null,
-    },
-    {
-      icon: Clock,
-      labelKey: "contactResponseLabel",
-      valueKey: "contactResponseValue",
-      link: null,
-    },
-  ];
+  const sending = status === "sending";
 
-  // Official SVG icon components (adapted from provided SVG markup)
-  const TelegramIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 60 60"
-      fill="none"
-      {...props}
-    >
-      <rect height="60" rx={10} width="60" />
-      <path
-        d="M49.281,11.425,9.305,26.417a2.01,2.01,0,0,0-.087,3.73l9.471,4.059,19.9-13.268a.5.5,0,0,1,.634.774l-14.5,14.5V46.268l6.031-6.031,9.6,8a2.01,2.01,0,0,0,3.237-1.057L51.938,13.8A2.011,2.011,0,0,0,49.281,11.425Z"
-        fill="#f1f3f4"
-      />
-      <path
-        d="M41.634,50.207a3.493,3.493,0,0,1-2.241-.816l-8.549-7.124-5.063,5.062a1.5,1.5,0,0,1-2.56-1.06V36.217a1.5,1.5,0,0,1,.439-1.061l7.382-7.382-11.521,7.68a1.5,1.5,0,0,1-1.422.131L8.628,31.526a3.51,3.51,0,0,1,.15-6.513L48.755,10.021a3.511,3.511,0,0,1,4.638,4.138L45.046,47.546a3.49,3.49,0,0,1-2.316,2.485A3.553,3.553,0,0,1,41.634,50.207ZM30.752,38.737a1.5,1.5,0,0,1,.96.348l9.6,8a.506.506,0,0,0,.486.094.5.5,0,0,0,.337-.362l8.346-33.386a.51.51,0,0,0-.673-.6h0L9.831,27.821a.511.511,0,0,0-.021.948l8.723,3.738L37.759,19.69a2,2,0,0,1,2.526,3.082L26.221,36.838v5.809l3.47-3.47A1.5,1.5,0,0,1,30.752,38.737ZM49.281,11.426h0Z"
-        fill="#8d9cf4"
-      />
-      <path
-        d="M9.305,27.917a1.5,1.5,0,0,1-.527-2.9L48.755,10.021a3.511,3.511,0,0,1,4.638,4.138,1.5,1.5,0,0,1-2.911-.726.511.511,0,0,0-.673-.6L9.831,27.821A1.476,1.476,0,0,1,9.305,27.917Z"
-        fill="#7bcdd1"
-      />
-    </svg>
+  const field = (name: Field, label: string, input: React.ReactNode) => (
+    <div className="grid gap-1.5">
+      <label htmlFor={`contact-${name}`} className="text-sm font-semibold text-foreground">
+        {label}
+      </label>
+      {input}
+      {errors[name] && (
+        <p id={`contact-${name}-error`} className="flex items-center gap-1.5 text-[13px] font-medium text-destructive">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          {errors[name]}
+        </p>
+      )}
+    </div>
   );
 
-  const WhatsAppIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      {...props}
-    >
-      <path
-        d="M3.50002 12C3.50002 7.30558 7.3056 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C10.3278 20.5 8.77127 20.0182 7.45798 19.1861C7.21357 19.0313 6.91408 18.9899 6.63684 19.0726L3.75769 19.9319L4.84173 17.3953C4.96986 17.0955 4.94379 16.7521 4.77187 16.4751C3.9657 15.176 3.50002 13.6439 3.50002 12ZM12 1.5C6.20103 1.5 1.50002 6.20101 1.50002 12C1.50002 13.8381 1.97316 15.5683 2.80465 17.0727L1.08047 21.107C0.928048 21.4637 0.99561 21.8763 1.25382 22.1657C1.51203 22.4552 1.91432 22.5692 2.28599 22.4582L6.78541 21.1155C8.32245 21.9965 10.1037 22.5 12 22.5C17.799 22.5 22.5 17.799 22.5 12C22.5 6.20101 17.799 1.5 12 1.5ZM14.2925 14.1824L12.9783 15.1081C12.3628 14.7575 11.6823 14.2681 10.9997 13.5855C10.2901 12.8759 9.76402 12.1433 9.37612 11.4713L10.2113 10.7624C10.5697 10.4582 10.6678 9.94533 10.447 9.53028L9.38284 7.53028C9.23954 7.26097 8.98116 7.0718 8.68115 7.01654C8.38113 6.96129 8.07231 7.046 7.84247 7.24659L7.52696 7.52195C6.76823 8.18414 6.3195 9.2723 6.69141 10.3741C7.07698 11.5163 7.89983 13.314 9.58552 14.9997C11.3991 16.8133 13.2413 17.5275 14.3186 17.8049C15.1866 18.0283 16.008 17.7288 16.5868 17.2572L17.1783 16.7752C17.4313 16.5691 17.5678 16.2524 17.544 15.9269C17.5201 15.6014 17.3389 15.308 17.0585 15.1409L15.3802 14.1409C15.0412 13.939 14.6152 13.9552 14.2925 14.1824Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-
-  type IconComp = React.ComponentType<React.SVGProps<SVGSVGElement>>;
-
-  const socialLinks: {
-    icon: IconComp | React.ComponentType<unknown>;
-    label: string;
-    url: string;
-    color: string;
-  }[] = [
-    {
-      icon: Linkedin,
-      label: "LinkedIn",
-      url: "https://www.linkedin.com/in/hviegas/",
-      color: "text-blue-400",
-    },
-    {
-      icon: Github,
-      label: "GitHub",
-      url: "https://github.com/hugoviegas/",
-      color: "text-primary",
-    },
-    {
-      icon: Mail,
-      label: "Email",
-      url: "mailto:hugoviegas3.1@gmail.com",
-      color: "text-secondary",
-    },
-    {
-      icon: Instagram,
-      label: "Instagram",
-      url: "https://www.instagram.com/_hviegas",
-      color: "text-pink-400",
-    },
-    {
-      icon: TelegramIcon,
-      label: "Telegram",
-      url: "https://t.me/Hviegas",
-      color: "text-cyan-400",
-    },
-    {
-      icon: WhatsAppIcon,
-      label: "WhatsApp",
-      url: "https://api.whatsapp.com/send?phone=3530830865984",
-      color: "text-green-400",
-    },
-  ];
+  const fieldProps = (name: Field) => ({
+    id: `contact-${name}`,
+    name,
+    value: formData[name],
+    onChange: handleChange,
+    required: true,
+    disabled: sending,
+    "aria-invalid": Boolean(errors[name]),
+    "aria-describedby": errors[name] ? `contact-${name}-error` : undefined,
+    className: inputClass(Boolean(errors[name])),
+  });
 
   return (
-    <section id="contact" className="py-20 w-full">
-      <div className="container mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">{t("contactTitle")}</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {t("contactDescription")}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
-          {/* Contact Form */}
-          <div className="space-y-8 slide-up">
-            <div>
-              <h3 className="text-3xl font-bold text-gradient mb-4">
-                {t("sendMessageTitle")}
-              </h3>
-              <p className="text-muted-foreground">{t("contactPrompt")}</p>
-            </div>
-
-            <form onSubmit={handleSubmit} noValidate className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="contact-name" className="mb-2 block">
-                    {t("label.name")}
-                  </Label>
-                  <Input
-                    id="contact-name"
-                    name="name"
-                    autoComplete="name"
-                    placeholder={t("placeholder.name")}
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    aria-invalid={Boolean(errors.name)}
-                    aria-describedby={errors.name ? "contact-name-error" : undefined}
-                    className={fieldClass(Boolean(errors.name))}
-                  />
-                  {errors.name && (
-                    <p
-                      id="contact-name-error"
-                      className="text-red-600 dark:text-red-400 text-sm mt-1"
-                    >
-                      {errors.name}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="contact-email" className="mb-2 block">
-                    {t("label.email")}
-                  </Label>
-                  <Input
-                    id="contact-email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder={t("placeholder.email")}
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    aria-invalid={Boolean(errors.email)}
-                    aria-describedby={errors.email ? "contact-email-error" : undefined}
-                    className={fieldClass(Boolean(errors.email))}
-                  />
-                  {errors.email && (
-                    <p
-                      id="contact-email-error"
-                      className="text-red-600 dark:text-red-400 text-sm mt-1"
-                    >
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="contact-subject" className="mb-2 block">
-                  {t("label.subject")}
-                </Label>
-                <Input
-                  id="contact-subject"
-                  name="subject"
-                  autoComplete="off"
-                  placeholder={t("placeholder.subject")}
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  aria-invalid={Boolean(errors.subject)}
-                  aria-describedby={errors.subject ? "contact-subject-error" : undefined}
-                  className={fieldClass(Boolean(errors.subject))}
-                />
-                {errors.subject && (
-                  <p
-                    id="contact-subject-error"
-                    className="text-red-600 dark:text-red-400 text-sm mt-1"
-                  >
-                    {errors.subject}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="contact-message" className="mb-2 block">
-                  {t("label.message")}
-                </Label>
-                <Textarea
-                  id="contact-message"
-                  name="message"
-                  autoComplete="off"
-                  placeholder={t("placeholder.project")}
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={6}
-                  aria-invalid={Boolean(errors.message)}
-                  aria-describedby={errors.message ? "contact-message-error" : undefined}
-                  className={fieldClass(Boolean(errors.message))}
-                />
-                {errors.message && (
-                  <p
-                    id="contact-message-error"
-                    className="text-red-600 dark:text-red-400 text-sm mt-1"
-                  >
-                    {errors.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Honeypot field for spam protection */}
-              <input
-                type="text"
-                name="_honeypot"
-                value={formData._honeypot}
-                onChange={handleChange}
-                style={{ display: "none" }}
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-              />
-
-              <LegoButton
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full"
-              >
-                {isSubmitting ? (
-                  t("send.sending")
-                ) : (
-                  <>
-                    <Send className="w-5 h-5 mr-2" />
-                    {t("send.sendMessage")}
-                  </>
-                )}
-              </LegoButton>
-            </form>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-6 slide-up delay-300">
-            <div>
-              <h3 className="text-3xl font-bold text-gradient mb-4">
-                {t("getInTouch")}
-              </h3>
-              <p className="text-muted-foreground">{t("connectWithMe")}</p>
-            </div>
-
-            {/* Contact Information */}
-            <div className="space-y-4">
-              {contactInfo.map((info, index) => (
-                <div
-                  key={index}
-                  className="glass p-6 rounded-xl hover:glass-strong transition-all duration-300"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-primary/10 rounded-full">
-                      <info.icon className="w-6 h-6 text-primary" aria-hidden="true" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-sm text-muted-foreground">
-                        {t(info.labelKey)}
-                      </div>
-                      {info.link ? (
-                        <a
-                          href={info.link}
-                          className="text-lg font-semibold text-foreground hover:text-primary transition-colors break-all"
-                        >
-                          {info.valueKey ? t(info.valueKey) : info.value}
-                        </a>
-                      ) : (
-                        <div className="text-lg font-semibold text-foreground">
-                          {info.valueKey ? t(info.valueKey) : info.value}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Social Links */}
-            <div className="glass p-6 rounded-xl">
-              <h4 className="text-xl font-semibold text-gradient mb-4">
-                {t("connectWithMe")}
-              </h4>
-              <div className="flex flex-wrap gap-4">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 hover:scale-105 transition-all duration-300 group"
-                  >
-                    {React.createElement(
-                      social.icon as React.ComponentType<
-                        React.SVGProps<SVGSVGElement>
-                      >,
-                      {
-                        className: `w-5 h-5 ${social.color} group-hover:scale-110 transition-transform`,
-                      },
-                    )}
-                    <span className="text-muted-foreground group-hover:text-primary transition-colors">
-                      {social.label}
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Availability Status */}
-            <div className="glass p-6 rounded-xl border border-accent/30">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-3 h-3 bg-accent rounded-full animate-pulse"></div>
-                <Badge className="bg-accent/10 text-foreground border-accent/30">
-                  {t("availableForWork")}
-                </Badge>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {t("availabilityText")}
-              </p>
+    <section id="contact" aria-labelledby="contact-title" className="relative z-10 pt-12">
+      <div className={sectionContainer}>
+        <SectionHeading id="contact-title" index="05" title={t("contactHeading")} lead={t("contactLead")} />
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12">
+          <div>
+            <p className="mb-2 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">{t("contactEmailLabel")}</p>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="break-all rounded-sm text-[19px] font-bold text-foreground underline decoration-brand-decor decoration-[3px] underline-offset-[6px] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring min-[360px]:text-[22px] sm:text-[28px]"
+            >
+              {EMAIL}
+            </a>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild variant="neutral" size="lg" className="max-sm:flex-[1_1_calc(50%-6px)] max-[359px]:basis-full">
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                  <WhatsAppIcon aria-hidden="true" />
+                  WhatsApp
+                </a>
+              </Button>
+              <Button asChild variant="neutral" size="lg" className="max-sm:flex-[1_1_calc(50%-6px)] max-[359px]:basis-full">
+                <a href="https://www.linkedin.com/in/hviegas/" target="_blank" rel="noopener noreferrer">
+                  <Linkedin aria-hidden="true" />
+                  LinkedIn
+                </a>
+              </Button>
+              <Button asChild variant="neutral" size="lg" className="max-sm:flex-[1_1_calc(50%-6px)] max-[359px]:basis-full">
+                <a href="https://github.com/hugoviegas/" target="_blank" rel="noopener noreferrer">
+                  <Github aria-hidden="true" />
+                  GitHub
+                </a>
+              </Button>
             </div>
           </div>
+
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            aria-describedby="contact-status"
+            className="grid gap-5 rounded-lg border border-border bg-card p-5 shadow-e2 sm:p-8"
+          >
+            <div className="grid gap-5 md:grid-cols-2">
+              {field("name", t("label.name"), <input {...fieldProps("name")} autoComplete="name" />)}
+              {field("email", t("label.email"), <input {...fieldProps("email")} type="email" inputMode="email" autoComplete="email" />)}
+            </div>
+            {field("subject", t("label.subject"), <input {...fieldProps("subject")} autoComplete="off" />)}
+            {field("message", t("label.message"), <textarea {...fieldProps("message")} rows={5} autoComplete="off" />)}
+            <input
+              type="text"
+              name="_honeypot"
+              value={formData._honeypot}
+              onChange={handleChange}
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
+            <div id="contact-status" aria-live="polite">
+              {status === "success" && (
+                <p className="flex items-start gap-2.5 rounded-md bg-primary-tint px-3.5 py-3 text-sm text-foreground">
+                  <CheckCircle2 className="mt-px h-[18px] w-[18px] shrink-0 text-primary" aria-hidden="true" />
+                  {t("send.successMessage")}
+                </p>
+              )}
+              {status === "failure" && (
+                <p className="flex items-start gap-2.5 rounded-md bg-error-tint px-3.5 py-3 text-sm text-foreground">
+                  <AlertCircle className="mt-px h-[18px] w-[18px] shrink-0 text-destructive" aria-hidden="true" />
+                  <span>
+                    {t("send.errorMessage")}{" "}
+                    <a href={`mailto:${EMAIL}`} className="font-semibold text-primary underline">
+                      {EMAIL}
+                    </a>
+                  </span>
+                </p>
+              )}
+            </div>
+            <div>
+              <Button type="submit" variant="primary" size="lg" aria-busy={sending} aria-disabled={sending}>
+                {sending ? <BrickLoader /> : <Send aria-hidden="true" />}
+                {sending ? t("send.sending") : t("send.sendMessage")}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

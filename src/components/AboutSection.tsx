@@ -1,21 +1,23 @@
-import {
-  Code,
-  Globe,
-  BookOpen,
-  TrendingUp,
-  Target,
-  Brain,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useLanguage } from "@/hooks/useLanguage";
-import redFront from "@/assets/lego-bricks/red-front.webp";
-import yellowFront from "@/assets/lego-bricks/yellow-front.webp";
-import blueFront from "@/assets/lego-bricks/blue-front.webp";
-import whiteFront from "@/assets/lego-bricks/white-front.webp";
+import FlatBrick from "@/components/brand/FlatBrick";
+import { brickColorClass, type BrickColor } from "@/components/brand/brickColors";
+import { SectionHeading, sectionContainer } from "@/components/sections/Section";
 import StarWarsCrawlOverlay from "@/components/StarWarsCrawl";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useContentLang, useCoreContent } from "@/content/store";
+import { cn } from "@/lib/utils";
+
+// Short summary, a few highlight chips and an opt-in entry to the full story.
+// The opening-crawl story is the only Star Wars moment on the page and never
+// auto-plays; reduced motion opens it as static, scrollable text.
+
+const BOOKS: { color: BrickColor; size: string; tilt?: boolean }[] = [
+  { color: "darkGray", size: "h-[92px] w-6" },
+  { color: "white", size: "h-[110px] w-7" },
+  { color: "green", size: "h-[124px] w-8" },
+  { color: "lightGray", size: "h-[98px] w-[22px]" },
+  { color: "green", size: "h-[104px] w-[26px] ml-1.5", tilt: true },
+];
 
 const AboutSection = () => {
   const { t, language } = useLanguage();
@@ -27,169 +29,59 @@ const AboutSection = () => {
     language === "PT"
       ? "Há muito tempo, em uma galáxia não muito distante..."
       : "A long time ago in a galaxy far, far away....";
-  // Icon styles cycle when there are more highlights than styles.
-  const highlightStyles = [
-    {
-      icon: TrendingUp,
-      color: "text-green-400",
-      bgColor: "bg-green-400/10",
-    },
-    {
-      icon: Globe,
-      color: "text-blue-400",
-      bgColor: "bg-blue-400/10",
-    },
-    {
-      icon: Target,
-      color: "text-purple-400",
-      bgColor: "bg-purple-400/10",
-    },
-    {
-      icon: Brain,
-      color: "text-orange-400",
-      bgColor: "bg-orange-400/10",
-    },
-  ];
-
-  // Decorative LEGO bricks component
-  const DecoLegoBricks = () => {
-    const bricks = [
-      { img: redFront, size: 24, top: "10%", left: "5%", rotation: -15 },
-      { img: yellowFront, size: 28, top: "25%", right: "8%", rotation: 20 },
-      { img: blueFront, size: 20, top: "60%", left: "3%", rotation: -10 },
-      { img: whiteFront, size: 32, top: "80%", right: "5%", rotation: 25 },
-    ];
-
-    return (
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {bricks.map((brick, i) => (
-          <img
-            key={i}
-            src={brick.img}
-            alt=""
-            className="absolute opacity-20 transition-all duration-700 hover:opacity-30"
-            style={{
-              width: `${brick.size}px`,
-              height: "auto",
-              top: brick.top,
-              left: brick.left,
-              right: brick.right,
-              transform: `rotate(${brick.rotation}deg)`,
-              filter: "drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))",
-            }}
-          />
-        ))}
-      </div>
-    );
-  };
 
   return (
-    <section id="about" className="py-20 bg-muted/3 relative w-full">
-      <DecoLegoBricks />
-
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="mb-12 text-center fade-in">
-          <h2 className="heading-section">{t("aboutTitle")}</h2>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Journey Column */}
-          <div className="space-y-8 slide-up">
-            <div className="glass-strong rounded-3xl p-8 lg:p-10 space-y-6">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-blue-500">
-                  {t("myJourney")}
-                </h3>
-              </div>
-
-              <div className="space-y-4">
-                {about?.summary.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="text-base lg:text-lg text-foreground/80 leading-relaxed"
+    <section id="about" aria-labelledby="about-title" className="relative z-10 pt-[72px] lg:pt-24">
+      <div className={sectionContainer}>
+        <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12">
+          <div>
+            <SectionHeading id="about-title" index="04" title={t("aboutHeading")} />
+            {about?.summary[0] && <p className="-mt-2 max-w-[60ch] text-[17px] text-ink-2 sm:text-lg">{about.summary[0]}</p>}
+            {about && about.highlights.length > 0 && (
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {about.highlights.map((item) => (
+                  <li
+                    key={item.title}
+                    className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-surface-2 py-1 pl-2.5 pr-3 text-sm font-medium text-ink-2"
                   >
-                    {paragraph}
-                  </p>
+                    <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-[2px] bg-brand-decor" />
+                    {item.title}
+                  </li>
                 ))}
-              </div>
-
-              <Button
-                variant="outline"
-                className="glass-strong border-primary/30 hover:bg-primary/5"
-                onClick={() => setIsCrawlOpen(true)}
-              >
-                <BookOpen className="w-4 h-4 mr-2" />
-                {t("readFullStory")}
-              </Button>
-            </div>
-
-            {/* Highlights Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {about?.highlights.map((item, index) => {
-                const highlight = highlightStyles[index % highlightStyles.length];
-                return (
-                  <div
-                    key={index}
-                    className="glass-strong rounded-2xl p-6 transition-all duration-300 hover:shadow-lg group"
-                  >
-                    <div
-                      className={`w-12 h-12 rounded-xl ${highlight.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <highlight.icon className={`w-6 h-6 ${highlight.color}`} />
-                    </div>
-                    <h4 className="font-semibold text-lg mb-2 text-foreground">
-                      {item.title}
-                    </h4>
-                    <p className="text-sm text-foreground/70 leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
+              </ul>
+            )}
           </div>
 
-          {/* Skills Column */}
-          <div className="space-y-8 slide-up delay-300">
-            {/* Languages Card */}
-            <div className="glass-strong rounded-3xl p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                  <Globe className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="text-xl font-semibold text-foreground">
-                  {t("languagesTitle")}
-                </h4>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 rounded-xl bg-muted/30">
-                  <span className="font-medium text-foreground">
-                    {t("portuguese")}
-                  </span>
-                  <Badge
-                    variant="secondary"
-                    className="bg-green-500/10 text-green-800 dark:text-green-400 border-green-500/30"
-                  >
-                    {t("native")}
-                  </Badge>
-                </div>
-                <div className="flex justify-between items-center p-4 rounded-xl bg-muted/30">
-                  <span className="font-medium text-foreground">
-                    {t("english")}
-                  </span>
-                  <Badge
-                    variant="secondary"
-                    className="bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30"
-                  >
-                    {t("c1Proficiency")}
-                  </Badge>
-                </div>
-              </div>
-            </div>
-          </div>
+          {about?.fullStory && (
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => setIsCrawlOpen(true)}
+              className="flex w-full flex-col items-start gap-6 rounded-lg border border-border bg-card p-6 text-left text-foreground shadow-e2 transition-[transform,box-shadow] duration-base ease-out hover:-translate-y-[3px] hover:shadow-e3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:flex-row sm:items-end"
+            >
+              {/* A LEGO book on a shelf */}
+              <span aria-hidden="true" className="relative h-[150px] w-[168px] shrink-0">
+                <span className="absolute inset-x-3 bottom-[7px] flex items-end gap-[3px]">
+                  {BOOKS.map((book, i) => (
+                    <span
+                      key={i}
+                      className={cn(
+                        "relative rounded-t-[3px] rounded-b-[1px] bg-[var(--bl)] shadow-[inset_0_1px_0_var(--be),inset_-5px_0_0_var(--br),0_0_0_0.5px_var(--bo)] before:absolute before:left-1 before:right-[9px] before:top-3.5 before:h-[3px] before:bg-[var(--be)] before:opacity-70 after:absolute after:bottom-3.5 after:left-1 after:right-[9px] after:h-[3px] after:bg-[var(--be)] after:opacity-70",
+                        brickColorClass[book.color],
+                        book.size,
+                        book.tilt && "origin-bottom-left -rotate-[8deg]",
+                      )}
+                    />
+                  ))}
+                </span>
+                <FlatBrick studs={14} pitch={12} plate color="darkGray" className="absolute inset-x-0 bottom-0" />
+              </span>
+              <span>
+                <span className="block text-lg font-bold">{t("storyCta")}</span>
+                <span className="mt-1 block text-sm text-ink-3">{t("storySub")}</span>
+              </span>
+            </button>
+          )}
         </div>
       </div>
       <StarWarsCrawlOverlay
