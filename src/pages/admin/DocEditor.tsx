@@ -16,7 +16,7 @@ import { FieldInput, FieldShell, MissingTag } from "./FieldInputs";
 import { fill, formatAdminDate } from "./format";
 import { problemLabel } from "./problemLabels";
 import { useAdminT } from "./adminStrings";
-import { cardClass, focusRing, inputClass, Notice, PageHeading } from "./ui";
+import { BrickSwitch, cardClass, focusRing, inputClass, Notice, PageHeading } from "./ui";
 
 interface DocEditorProps {
   collection: ContentCollection;
@@ -268,30 +268,13 @@ const DocEditor = ({
             <span id="doc-status-label" className="text-sm font-semibold">
               {t("list.status")}
             </span>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={published}
-              aria-labelledby="doc-status-label doc-status-value"
+            <BrickSwitch
+              checked={published}
               onClick={togglePublished}
-              className={cn("group flex min-h-11 items-center gap-3 rounded-lg text-left text-sm font-semibold", focusRing)}
-            >
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "relative h-7 w-12 shrink-0 rounded-lg transition-colors duration-fast",
-                  published ? "bg-primary shadow-[inset_0_-3px_0_hsl(var(--primary-pressed))]" : "bg-surface-3 shadow-[inset_0_-3px_0_hsl(var(--line-strong))]",
-                )}
-              >
-                <span
-                  className={cn(
-                    "absolute left-[3px] top-[3px] h-[19px] w-[22px] rounded-[5px] bg-card shadow-[0_0_0_1px_hsl(var(--line-strong))] transition-transform duration-base ease-out before:absolute before:-top-[3px] before:left-1.5 before:h-[3px] before:w-2.5 before:rounded-t-[2px] before:bg-card before:shadow-[0_0_0_1px_hsl(var(--line-strong))]",
-                    published && "translate-x-5",
-                  )}
-                />
-              </span>
-              <span id="doc-status-value">{t(published ? "editor.pubOn" : "editor.pubOff")}</span>
-            </button>
+              labelledBy="doc-status-label"
+              valueId="doc-status-value"
+              valueText={t(published ? "editor.pubOn" : "editor.pubOff")}
+            />
           </div>
         </div>
 

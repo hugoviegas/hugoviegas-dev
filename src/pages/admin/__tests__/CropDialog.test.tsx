@@ -1,35 +1,25 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useState } from "react";
 import { adminStrings } from "../adminStrings";
-import CropField from "../CropField";
+import CropDialog from "../CropDialog";
 import { PROJECT_ASPECTS, type CropChoice } from "../cropModel";
 
 const s = adminStrings;
-const onChange = vi.fn();
+const onApply = vi.fn();
+const onCancel = vi.fn();
 
 // jsdom has no image decoding; the editor only needs the size.
 beforeEach(() => {
-  onChange.mockReset();
+  onApply.mockReset();
+  onCancel.mockReset();
   vi.stubGlobal("createImageBitmap", vi.fn(async () => ({ width: 4000, height: 3000, close: vi.fn() })));
 });
 afterEach(() => vi.unstubAllGlobals());
 
-const Harness = ({ file }: { file: File }) => {
-  const [value, setValue] = useState<CropChoice | null>(null);
-  return (
-    <CropField
-      file={file}
-      aspects={PROJECT_ASPECTS}
-      value={value}
-      onChange={(choice) => {
-        onChange(choice);
-        setValue(choice);
-      }}
-    />
-  );
-};
+const Harness = ({ file }: { file: File }) => (
+  <CropDialog file={file} aspects={PROJECT_ASPECTS} initial={null} onApply={onApply} onCancel={onCancel} />
+);
 
 const file = new File(["x"], "cover.jpg", { type: "image/jpeg" });
 
@@ -53,16 +43,14 @@ describe("crop editor", () => {
     await user.keyboard("{Shift>}{ArrowLeft}{/Shift}");
     await user.click(screen.getByRole("button", { name: s["crop.apply"].EN }));
 
-    const choice = onChange.mock.calls.at(-1)[0] as CropChoice;
+    const choice = onApply.mock.calls.at(-1)[0] as CropChoice;
     expect(choice.aspect.label).toBe("crop.aspect.wide");
     expect(choice.rect.sw).toBe(2000);
     // Centered would be sx 1000; ArrowLeft shows more of the left side.
     expect(choice.rect.sx).toBeLessThan(1000);
-    expect(screen.queryByRole("dialog")).toBeNull();
-    expect(screen.getByText(/Crop: 2000 × 1125 px/)).toBeInTheDocument();
   });
 
-  it("changes the shape and keeps the whole image when cancelled", async () => {
+  it("changes the shape and cancels with Escape", async () => {
     const user = userEvent.setup();
     render(<Harness file={file} />);
     await screen.findByText(/4000 × 2250 px/);
@@ -70,8 +58,7 @@ describe("crop editor", () => {
     expect(screen.getByText(/3000 × 3000 px/)).toBeInTheDocument();
 
     await user.keyboard("{Escape}");
-    expect(screen.queryByRole("dialog")).toBeNull();
-    expect(screen.getByText(s["crop.none"].EN)).toBeInTheDocument();
-    expect(onChange).not.toHaveBeenCalledWith(expect.objectContaining({ rect: expect.anything() }));
+    expect(onCancel).toHaveBeenCalled();
+    expect(onApply).not.toHaveBeenCalled();
   });
 });
