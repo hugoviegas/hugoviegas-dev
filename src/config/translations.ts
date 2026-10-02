@@ -194,36 +194,61 @@ export const translations: Translations = {
     PT: "Pergunte sobre os objetivos, o fluxo de trabalho ou o impacto do projeto D'Arcy McGee's.",
   },
   darcyCloseChat: { EN: "Close chat", PT: "Fechar chat" },
-  darcyLoadingResponse: {
-    EN: "Loading response...",
-    PT: "A carregar resposta...",
-  },
-  darcyChatError: {
-    EN: "We couldn't get a response. Please try again.",
-    PT: "Não foi possível obter uma resposta. Tente novamente.",
-  },
   darcySafetyNote: {
     EN: "Answers use the approved project context and do not expose source code or real operational data.",
     PT: "As respostas usam o contexto aprovado do projeto e não expõem código-fonte nem dados operacionais reais.",
   },
-  chatOpen: { EN: "Open chat", PT: "Abrir chat" },
-  chatClose: { EN: "Close chat", PT: "Fechar chat" },
-  chatGreeting: { EN: "Hi! 👋", PT: "Olá! 👋" },
-  chatDescription: {
-    EN: "I'm Hugo's assistant. Ask about technology, projects, or skills.",
-    PT: "Sou o assistente do Hugo. Pergunte sobre tecnologia, projetos ou habilidades.",
+  // ------------------------------------------------ Portfolio assistant
+  "assistant.title": { EN: "Portfolio assistant", PT: "Assistente do portfólio" },
+  "assistant.projectTitle": { EN: "Project assistant", PT: "Assistente do projeto" },
+  "assistant.ai": { EN: "AI", PT: "IA" },
+  "assistant.notHugo": {
+    EN: "Not Hugo",
+    PT: "Não é o Hugo",
   },
-  chatQuestionLabel: { EN: "Question", PT: "Pergunta" },
-  chatInputPlaceholder: {
-    EN: "Type your question...",
-    PT: "Digite sua pergunta...",
+  "assistant.welcomeTitle": { EN: "Ask about Hugo's work", PT: "Pergunte sobre o trabalho do Hugo" },
+  "assistant.welcomeText": {
+    EN: "I'm an AI assistant, not Hugo. I answer from his approved portfolio notes: projects, experience, skills and education.",
+    PT: "Sou um assistente de IA, não o Hugo. Respondo com base nas notas aprovadas do portfólio: projetos, experiência, habilidades e formação.",
   },
-  chatSend: { EN: "Send question", PT: "Enviar pergunta" },
-  chatLoading: { EN: "Loading response...", PT: "A carregar resposta..." },
-  chatError: {
-    EN: "An error occurred. Please try again.",
-    PT: "Ocorreu um erro. Tente novamente.",
+  "assistant.projectWelcomeText": {
+    EN: "I'm an AI assistant, not Hugo. I answer from the approved notes for this project.",
+    PT: "Sou um assistente de IA, não o Hugo. Respondo com base nas notas aprovadas deste projeto.",
   },
+  "assistant.placeholder": { EN: "Ask about Hugo's work…", PT: "Pergunte sobre o trabalho do Hugo…" },
+  "assistant.projectPlaceholder": { EN: "Ask about this project…", PT: "Pergunte sobre este projeto…" },
+  "assistant.limitPlaceholder": { EN: "Question limit reached", PT: "Limite de perguntas atingido" },
+  "assistant.inputLabel": { EN: "Ask a question about Hugo's work", PT: "Faça uma pergunta sobre o trabalho do Hugo" },
+  "assistant.send": { EN: "Send question", PT: "Enviar pergunta" },
+  "assistant.who": { EN: "Assistant", PT: "Assistente" },
+  "assistant.you": { EN: "You", PT: "Você" },
+  "assistant.from": { EN: "From", PT: "Fonte" },
+  "assistant.answering": { EN: "Looking through Hugo's notes…", PT: "Consultando as notas do Hugo…" },
+  "assistant.error": {
+    EN: "I couldn't get an answer just now. Check your connection and try again.",
+    PT: "Não consegui responder agora. Verifique sua conexão e tente novamente.",
+  },
+  "assistant.retry": { EN: "Try again", PT: "Tentar novamente" },
+  "assistant.limit": {
+    EN: "You've reached the question limit for now. Email Hugo at hugoviegas3.1@gmail.com or try again later.",
+    PT: "Você atingiu o limite de perguntas por enquanto. Escreva para o Hugo em hugoviegas3.1@gmail.com ou tente mais tarde.",
+  },
+  "assistant.disclaimer": {
+    EN: "AI answers can be wrong. Check the CV or contact Hugo for details.",
+    PT: "Respostas de IA podem errar. Confira o currículo ou fale com o Hugo.",
+  },
+  "assistant.newChat": { EN: "Start a new chat", PT: "Começar nova conversa" },
+  "assistant.open": { EN: "Open portfolio assistant", PT: "Abrir assistente do portfólio" },
+  "assistant.close": { EN: "Close portfolio assistant", PT: "Fechar assistente do portfólio" },
+  "assistant.tooltip": { EN: "Ask the portfolio assistant", PT: "Pergunte ao assistente do portfólio" },
+  "assistant.context": { EN: "Context", PT: "Contexto" },
+  "assistant.start": { EN: "Start a conversation", PT: "Começar uma conversa" },
+  "assistant.hide": { EN: "Hide assistant", PT: "Esconder assistente" },
+  "assistant.conversation": { EN: "Conversation", PT: "Conversa" },
+  "assistant.suggest1": { EN: "What does Hugo do at Erin College?", PT: "O que o Hugo faz no Erin College?" },
+  "assistant.suggest2": { EN: "Which projects can I try?", PT: "Quais projetos posso testar?" },
+  "assistant.suggest3": { EN: "What is Hugo's main tech stack?", PT: "Qual é a stack principal do Hugo?" },
+  "assistant.suggest4": { EN: "How can I contact Hugo?", PT: "Como posso falar com o Hugo?" },
   darcyQuestionProblem: {
     EN: "What problem did this project solve?",
     PT: "Que problema este projeto resolveu?",
@@ -302,14 +327,6 @@ export const translations: Translations = {
   bigBangSafetyNote: {
     EN: "Answers use the approved game context and do not expose source code, Firebase configuration, or internal implementation details.",
     PT: "As respostas usam o contexto aprovado do jogo e não expõem código-fonte, configuração do Firebase nem detalhes internos de implementação.",
-  },
-  bigBangLoadingResponse: {
-    EN: "Loading answer...",
-    PT: "A carregar resposta...",
-  },
-  bigBangChatError: {
-    EN: "We couldn't get a response. Please try again.",
-    PT: "Não foi possível obter uma resposta. Tente novamente.",
   },
   bigBangQuestionGuest: {
     EN: "What can I try as a guest?",
