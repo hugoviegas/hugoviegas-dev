@@ -42,6 +42,7 @@ export const uploadFile = async (
   file: File,
   name: string,
   projectId?: string,
+  onProgress?: (percentage: number) => void,
 ): Promise<string> => {
   const pathname = checkFile(kind, file, name, projectId);
   const user = getFirebase().auth.currentUser;
@@ -56,6 +57,7 @@ export const uploadFile = async (
       headers: { authorization: `Bearer ${idToken}` },
       contentType: file.type,
       multipart: false,
+      onUploadProgress: onProgress ? ({ percentage }) => onProgress(percentage) : undefined,
     });
     if (!isStoredBlobUrl(kind, blob.url)) throw new Error(`Unexpected file URL: ${blob.url}`);
     return blob.url;
