@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { lazy, Suspense, useEffect } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import DynamicSidebar from "@/components/DynamicSidebar";
 import TopControls from "@/components/TopControls";
 import RouteSeo from "@/components/RouteSeo";
@@ -99,6 +100,7 @@ const App = () => {
               </Routes>
             </Suspense>
           </BrowserRouter>
+          <SpeedInsights />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
