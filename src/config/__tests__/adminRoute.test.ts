@@ -23,16 +23,27 @@ describe("hidden admin route", () => {
     });
   });
 
-  it("sends X-Robots-Tag noindex, nofollow", () => {
-    const entry = vercel.headers.find((h) => h.source === ADMIN_PATH);
-    expect(entry?.headers).toContainEqual({
-      key: "X-Robots-Tag",
-      value: "noindex, nofollow",
+  it("rewrites every admin view to the SPA shell", () => {
+    expect(vercel.rewrites).toContainEqual({
+      source: `${ADMIN_PATH}/(.*)`,
+      destination: "/index.html",
     });
+  });
+
+  it("sends X-Robots-Tag noindex, nofollow on the admin and its views", () => {
+    for (const source of [ADMIN_PATH, `${ADMIN_PATH}/(.*)`]) {
+      const entry = vercel.headers.find((h) => h.source === source);
+      expect(entry?.headers).toContainEqual({
+        key: "X-Robots-Tag",
+        value: "noindex, nofollow",
+      });
+    }
   });
 
   it("is noindex and gets no static head page", () => {
     expect(getRouteSeo(ADMIN_PATH).noindex).toBe(true);
+    expect(getRouteSeo(`${ADMIN_PATH}/projects/big-bang-duel`).noindex).toBe(true);
+    expect(getRouteSeo(`${ADMIN_PATH}/files`).titleKey).toBe("seo.admin.title");
     expect(staticHeadRoutes()).not.toContain(ADMIN_PATH);
   });
 

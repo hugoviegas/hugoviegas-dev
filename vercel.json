@@ -34,6 +34,10 @@
     {
       "source": "/admin-1af7c92887b0dc73",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/admin-1af7c92887b0dc73/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ],
   "rewrites": [
@@ -45,6 +49,7 @@
     { "source": "/lightsaber", "destination": "/index.html" },
     { "source": "/micro-falcon", "destination": "/index.html" },
     { "source": "/starship-demo", "destination": "/index.html" },
-    { "source": "/admin-1af7c92887b0dc73", "destination": "/index.html" }
+    { "source": "/admin-1af7c92887b0dc73", "destination": "/index.html" },
+    { "source": "/admin-1af7c92887b0dc73/(.*)", "destination": "/index.html" }
   ]
 }

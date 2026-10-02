@@ -222,7 +222,7 @@ Security model:
 - Public reads are allowed only for docs with `published == true`. `settings/site` is public. `admin/ping` and `contentHistory` are owner-only. Everything else is implicitly denied.
 - Writes are owner-only and validated per collection: exact keys, length limits, `updatedAt == request.time`, and sequential `version`.
 - The admin page checks access by reading `admin/ping`. On `permission-denied` it signs the user out immediately. The client never decides who is allowed.
-- The admin route is an unguessable slug in `src/config/admin.ts`, repeated in `vercel.json` (a test keeps them in sync). It is unlinked, `noindex` (route SEO config plus `X-Robots-Tag`), and absent from the sitemap and `robots.txt`. This is obscurity only; the rules are the protection.
+- The admin route is an unguessable slug in `src/config/admin.ts`, repeated in `vercel.json` for the slug and every view under it (`<slug>/(.*)`: rewrite plus `X-Robots-Tag`; a test keeps them in sync). Each admin view has its own address (`src/pages/admin/adminRoutes.ts`). It is unlinked, `noindex` (route SEO config plus `X-Robots-Tag`), and absent from the sitemap and `robots.txt`. This is obscurity only; the rules are the protection.
 - The admin page and the Firebase SDK load only in the lazy admin chunk (`src/pages/admin/`). Public pages must never import the Firebase SDK. Public content is read through the Firestore REST API.
 - Hugo runs the Firebase CLI, console steps, rule deploys, and sign-in himself.
 
@@ -251,7 +251,9 @@ Content layer (`src/content/`):
 - Every admin write must also bump `settings/site.updatedAt`, or the public refresh will not notice it.
 - Recovery: published content is in the committed snapshot, and every earlier version (drafts included) is in `contentHistory`, restorable from the admin. There is no hard-coded seed or import tool any more.
 - Admin editors (`src/pages/admin/`):
-  - `AdminDashboard.tsx` has tabs for the overview, each collection, files (CV and photo, `FilesPanel.tsx`), and settings. Project images upload from the project editor (`ProjectImageField.tsx`). `collectionConfig.ts` declares each collection's fields.
+  - The admin is a separate shell (`AdminShell.tsx`): its own header, a left rail from 1024 px and a section sheet below; the public navigation, controls and background layers are not rendered on the admin route (`App.tsx`). Sign-in screens are in `AdminGate.tsx`.
+  - `AdminNavigation.tsx` drives the view from the address and holds any move away from unsaved changes (links, Back, Cancel, browser back) behind a Keep editing / Save and leave / Discard dialog; reload and closing the tab use `beforeunload`.
+  - `AdminDashboard.tsx` picks the view for the address: the overview (counts, settings and files status), each collection, files (CV and photo, `FilesPanel.tsx`), and settings. Project images upload from the project editor (`ProjectImageField.tsx`). `collectionConfig.ts` declares each collection's fields.
   - `DocEditor.tsx` is a side-by-side EN and PT-BR form built with React Hook Form and validated by the same Zod schema, so publishing with an empty language is blocked.
   - `CollectionPanel.tsx` handles create, edit, publish, reorder (per skill group), delete, history, and restore.
   - Every write goes through `adminContent.ts`, which copies the previous version to `contentHistory` and bumps `settings/site`. Deleted docs stay restorable from history.
