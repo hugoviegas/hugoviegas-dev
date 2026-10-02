@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { lazy, Suspense, useEffect } from "react";
 import DynamicSidebar from "@/components/DynamicSidebar";
@@ -14,6 +14,7 @@ import SpaceshipLayer from "@/components/background/SpaceshipLayer";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { ADMIN_PATH } from "@/config/admin";
+import AdminLoading from "@/components/AdminLoading";
 import { scheduleContentRefresh } from "@/content/store";
 
 // Secondary routes load on demand so the homepage critical path stays small
@@ -31,6 +32,21 @@ const MicroFalcon = lazy(() => import("./pages/MicroFalcon"));
 const AdminPage = lazy(() => import("./pages/admin/AdminPage"));
 
 const queryClient = new QueryClient();
+
+// The public navigation, controls and background layers. The admin has its
+// own shell, so none of them render on the admin route.
+const PublicChrome = () => {
+  const { pathname } = useLocation();
+  if (pathname === ADMIN_PATH || pathname.startsWith(`${ADMIN_PATH}/`)) return null;
+  return (
+    <>
+      <StarField />
+      <SpaceshipLayer />
+      <DynamicSidebar />
+      <TopControls />
+    </>
+  );
+};
 
 const App = () => {
   useEffect(() => {
@@ -57,10 +73,7 @@ const App = () => {
           <BrowserRouter>
             <RouteSeo />
             <SkipLink />
-            <StarField />
-            <SpaceshipLayer />
-            <DynamicSidebar />
-            <TopControls />
+            <PublicChrome />
             <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -72,7 +85,14 @@ const App = () => {
                 <Route path="/projects/darcy-mcgees" element={<DarcyProject />} />
                 <Route path="/projects/big-bang-duel" element={<BigBangDuelProject />} />
                 <Route path="/projects/big-bang-duel/story" element={<BigBangDuelStoryPage />} />
-                <Route path={ADMIN_PATH} element={<AdminPage />} />
+                <Route
+                  path={`${ADMIN_PATH}/*`}
+                  element={
+                    <Suspense fallback={<AdminLoading />}>
+                      <AdminPage />
+                    </Suspense>
+                  }
+                />
 
                 {/* ADD ALL OTHER CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

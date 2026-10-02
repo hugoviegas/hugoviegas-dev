@@ -84,8 +84,12 @@ export const notFoundSeo: RouteSeoConfig = {
 export const normalizePath = (pathname: string) =>
   pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
 
-export const getRouteSeo = (pathname: string): RouteSeoConfig =>
-  routeSeo[normalizePath(pathname)] ?? notFoundSeo;
+export const getRouteSeo = (pathname: string): RouteSeoConfig => {
+  const path = normalizePath(pathname);
+  // Every admin view shares the admin's noindex config.
+  if (path.startsWith(`${ADMIN_PATH}/`)) return routeSeo[ADMIN_PATH];
+  return routeSeo[path] ?? notFoundSeo;
+};
 
 export interface ResolvedBreadcrumb {
   name: string;

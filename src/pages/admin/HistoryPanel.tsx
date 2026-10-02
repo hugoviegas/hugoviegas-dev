@@ -89,8 +89,9 @@ const HistoryPanel = ({ collection, docId, onRestore, onBack }: HistoryPanelProp
       )}
       <ConfirmDialog
         open={pending !== null}
-        title="confirmRestoreTitle"
-        body="confirmRestoreBody"
+        title={t("confirmRestoreTitle")}
+        body={t("confirmRestoreBody")}
+        confirmLabel={t("restore")}
         onConfirm={() => pending && void restore(pending)}
         onCancel={() => setPending(null)}
       />

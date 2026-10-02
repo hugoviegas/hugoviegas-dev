@@ -287,6 +287,82 @@ const adminStrings = {
   },
   "upload.auth": { EN: "Your session ended. Sign in again.", PT: "Sua sessão terminou. Entre novamente." },
   "upload.failed": { EN: "Upload failed.", PT: "O envio falhou." },
+
+  // Shell (admin redesign)
+  "shell.admin": { EN: "Admin", PT: "Admin" },
+  "shell.content": { EN: "Content", PT: "Conteúdo" },
+  "shell.site": { EN: "Site", PT: "Site" },
+  "shell.breadcrumb": { EN: "Breadcrumb", PT: "Trilha de navegação" },
+  "shell.brandLabel": { EN: "hugoviegas.dev admin, go to the overview", PT: "Admin do hugoviegas.dev, ir para a visão geral" },
+  "shell.backToSite": { EN: "Back to site", PT: "Voltar ao site" },
+  "shell.preferences": { EN: "Language and theme", PT: "Idioma e tema" },
+  "shell.account": { EN: "Account", PT: "Conta" },
+  "shell.changeSection": { EN: "Change section", PT: "Mudar de seção" },
+  "shell.sections": { EN: "Admin sections", PT: "Seções do admin" },
+  "shell.navFoot": {
+    EN: "Published changes reach visitors on their next page load. Page titles and social previews update on the next deploy.",
+    PT: "Alterações publicadas chegam aos visitantes no próximo carregamento. Títulos de página e prévias sociais atualizam no próximo deploy.",
+  },
+  "shell.goTo": { EN: "Go to", PT: "Ir para" },
+  "shell.close": { EN: "Close", PT: "Fechar" },
+  dismiss: { EN: "Dismiss", PT: "Fechar" },
+  notFound: { EN: "Page not found", PT: "Página não encontrada" },
+  notFoundBody: {
+    EN: "This admin address does not exist, or the item was deleted.",
+    PT: "Este endereço do admin não existe, ou o item foi excluído.",
+  },
+
+  // Sign-in gate
+  "gate.unconfiguredTitle": { EN: "The admin isn’t set up for this build", PT: "O admin não está configurado nesta build" },
+  "gate.unconfiguredNote": { EN: "Nothing else on the site is affected.", PT: "Nada mais no site é afetado." },
+  "gate.deniedTitle": { EN: "This account doesn’t have access", PT: "Esta conta não tem acesso" },
+  "gate.otherAccount": { EN: "Sign in with another account", PT: "Entrar com outra conta" },
+  "gate.errorTitle": { EN: "Couldn’t check access", PT: "Não foi possível verificar o acesso" },
+  "gate.signedInTitle": { EN: "Signed in", PT: "Conectado" },
+  "gate.checkingBody": {
+    EN: "Checking that this account can open the admin.",
+    PT: "Verificando se esta conta pode abrir o admin.",
+  },
+  "gate.busyBody": { EN: "Finish signing in in the Google window.", PT: "Termine o login na janela do Google." },
+  "gate.waiting": { EN: "Waiting for Google…", PT: "Aguardando o Google…" },
+  "gate.popupHint": {
+    EN: "Didn’t see a window? Allow pop-ups for this site, then try again.",
+    PT: "Não viu a janela? Permita pop-ups para este site e tente de novo.",
+  },
+  "gate.signInHint": {
+    EN: "A Google window opens. Only one account has access.",
+    PT: "Uma janela do Google se abre. Só uma conta tem acesso.",
+  },
+
+  // Unsaved changes
+  "unsaved.title": { EN: "Leave without saving?", PT: "Sair sem salvar?" },
+  "unsaved.body": {
+    EN: "You have unsaved changes to “{x}”. If you leave now, they are lost.",
+    PT: "Você tem alterações não salvas em “{x}”. Se sair agora, elas se perdem.",
+  },
+  "unsaved.thisItem": { EN: "this item", PT: "este item" },
+  "unsaved.discard": { EN: "Discard changes", PT: "Descartar alterações" },
+  "unsaved.saveLeave": { EN: "Save and leave", PT: "Salvar e sair" },
+  "unsaved.keep": { EN: "Keep editing", PT: "Continuar editando" },
+
+  // Overview
+  "overview.sub": {
+    EN: "What is live on the site, what is still a draft, and the state of your files.",
+    PT: "O que está no ar, o que ainda é rascunho e a situação dos seus arquivos.",
+  },
+  "overview.open": { EN: "Open", PT: "Abrir" },
+  "overview.siteSettings": { EN: "Site settings", PT: "Configurações do site" },
+  "overview.remote": { EN: "Remote content", PT: "Conteúdo remoto" },
+  "overview.on": { EN: "On", PT: "Ligado" },
+  "overview.off": { EN: "Off", PT: "Desligado" },
+  "overview.lastChange": { EN: "Last content change", PT: "Última alteração de conteúdo" },
+  "overview.cv": { EN: "CV", PT: "Currículo" },
+  "overview.photo": { EN: "Avatar photo", PT: "Foto do avatar" },
+  "overview.uploaded": { EN: "Uploaded", PT: "Enviada" },
+  "overview.bundled": { EN: "Bundled default", PT: "Padrão do site" },
+  "overview.openSettings": { EN: "Open settings", PT: "Abrir configurações" },
+  "overview.openFiles": { EN: "Open files", PT: "Abrir arquivos" },
+  "overview.goOverview": { EN: "Go to the overview", PT: "Ir para a visão geral" },
 } satisfies Record<string, Translation>;
 
 export type AdminStringKey = keyof typeof adminStrings;

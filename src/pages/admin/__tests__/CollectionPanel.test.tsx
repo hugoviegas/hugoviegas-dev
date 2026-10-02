@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { fixtureDocs } from "@/test/contentFixtures";
 import { storedFields } from "../storedDoc";
@@ -20,6 +20,8 @@ vi.mock("../adminContent", async (importOriginal) => ({
 }));
 
 import CollectionPanel from "../CollectionPanel";
+import { ADMIN_PATH } from "@/config/admin";
+import { renderAdmin } from "./adminTestUtils";
 
 const stored = Object.fromEntries(
   fixtureDocs("experience").map((doc) => [doc.id, { version: 1, data: { ...storedFields(doc), version: 1 } }]),
@@ -40,7 +42,7 @@ const rowOf = async (text: RegExp) => (await screen.findByText(text)).closest("l
 
 describe("CollectionPanel", () => {
   it("lists docs in order with their status, and deleted ids to restore", async () => {
-    render(<CollectionPanel collection="experience" />);
+    renderAdmin(<CollectionPanel collection="experience" route={{ view: "list" }} />, `${ADMIN_PATH}/experience`);
     const rows = await screen.findAllByRole("listitem");
     expect(rows[0]).toHaveTextContent(/Erin College/);
     expect(rows[0]).toHaveTextContent(adminStrings.statusPublished.EN);
@@ -49,7 +51,7 @@ describe("CollectionPanel", () => {
 
   it("unpublishes with a versioned save that bumps settings", async () => {
     const user = userEvent.setup();
-    render(<CollectionPanel collection="experience" />);
+    renderAdmin(<CollectionPanel collection="experience" route={{ view: "list" }} />, `${ADMIN_PATH}/experience`);
     const row = await rowOf(/DabliuMusic/);
     await user.click(within(row).getByRole("button", { name: /^Unpublish:/ }));
 
@@ -64,7 +66,7 @@ describe("CollectionPanel", () => {
 
   it("moves a doc down by swapping orders with its neighbour", async () => {
     const user = userEvent.setup();
-    render(<CollectionPanel collection="experience" />);
+    renderAdmin(<CollectionPanel collection="experience" route={{ view: "list" }} />, `${ADMIN_PATH}/experience`);
     const row = await rowOf(/Erin College/);
     await user.click(within(row).getByRole("button", { name: /^Move down:/ }));
 
@@ -77,12 +79,13 @@ describe("CollectionPanel", () => {
 
   it("deletes only after confirmation", async () => {
     const user = userEvent.setup();
-    render(<CollectionPanel collection="experience" />);
+    renderAdmin(<CollectionPanel collection="experience" route={{ view: "list" }} />, `${ADMIN_PATH}/experience`);
     const row = await rowOf(/ETAL/);
     await user.click(within(row).getByRole("button", { name: /^Delete:/ }));
     expect(api.deleteContentDoc).not.toHaveBeenCalled();
 
-    await user.click(await screen.findByRole("button", { name: adminStrings.confirm.EN }));
+    const dialog = await screen.findByRole("alertdialog");
+    await user.click(within(dialog).getByRole("button", { name: adminStrings.delete.EN }));
     expect(api.deleteContentDoc).toHaveBeenCalledWith("experience", "etal", stored.etal, settings);
   });
 
@@ -90,7 +93,7 @@ describe("CollectionPanel", () => {
     const { FirebaseError } = await import("firebase/app");
     api.saveContentDoc.mockRejectedValue(new FirebaseError("permission-denied", "denied"));
     const user = userEvent.setup();
-    render(<CollectionPanel collection="experience" />);
+    renderAdmin(<CollectionPanel collection="experience" route={{ view: "list" }} />, `${ADMIN_PATH}/experience`);
     const row = await rowOf(/DabliuMusic/);
     await user.click(within(row).getByRole("button", { name: /^Unpublish:/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent(adminStrings.staleError.EN);

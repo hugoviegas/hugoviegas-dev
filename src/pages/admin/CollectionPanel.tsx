@@ -19,14 +19,12 @@ import { collectionDefs, rowTitle } from "./collectionConfig";
 import { newDoc, reorderChanges, sortByOrder } from "./editorModel";
 import type { ExistingDoc } from "./storedDoc";
 import ConfirmDialog from "./ConfirmDialog";
+import { useAdminNav } from "./AdminNavigation";
+import { useAdminSummary } from "./AdminSummary";
+import { ABOUT_DOC_ID, type CollectionView } from "./adminRoutes";
 import DocEditor from "./DocEditor";
 import HistoryPanel from "./HistoryPanel";
 import { useAdminT, type AdminStringKey } from "./adminStrings";
-
-type Mode =
-  | { view: "list" }
-  | { view: "edit"; doc: DocMeta; isNew: boolean }
-  | { view: "history"; id: string };
 
 interface Loaded {
   stored: Record<string, ExistingDoc>;
@@ -36,13 +34,14 @@ interface Loaded {
 }
 
 // List, create, edit, publish, reorder, delete, and restore for one collection.
-const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
+const CollectionPanel = ({ collection, route }: { collection: ContentCollection; route: CollectionView }) => {
   const t = useAdminT();
+  const { go, setDirty, registerSave } = useAdminNav();
+  const { reportCounts } = useAdminSummary();
   const lang = useContentLang();
   const def = collectionDefs[collection];
   const [data, setData] = useState<Loaded | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [mode, setMode] = useState<Mode>({ view: "list" });
   const [notice, setNotice] = useState<{ kind: "status" | "alert"; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [toDelete, setToDelete] = useState<DocMeta | null>(null);
@@ -56,10 +55,11 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
       );
       const deletedIds = await listDeletedIds(collection, new Set(Object.keys(stored)));
       setData({ stored, docs, settings, deletedIds });
+      reportCounts(collection, docs.map((doc) => doc.published));
     } catch (error) {
       setLoadError(error instanceof Error ? error.message : String(error));
     }
-  }, [collection]);
+  }, [collection, reportCounts]);
 
   useEffect(() => {
     void load();
@@ -95,8 +95,14 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
       () => saveContentDoc(collection, value, current(value.id), data?.settings ?? null),
       "saved",
     );
-    if (ok) setMode({ view: "list" });
+    if (ok) leaveEditor();
+    return ok;
   };
+
+  // About is a single doc, so its editor returns to the overview.
+  const listRoute = () =>
+    collection === "about" ? ({ section: "overview" } as const) : ({ section: collection, view: "list" } as const);
+  const leaveEditor = () => go(listRoute(), { force: true });
 
   const togglePublish = (doc: DocMeta) => {
     const next = { ...doc, published: !doc.published };
@@ -126,7 +132,7 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
       () => saveContentDoc(collection, value, current(value.id), data?.settings ?? null),
       "restored",
     );
-    if (ok) setMode({ view: "list" });
+    if (ok) go({ section: collection, view: "edit", id: value.id }, { force: true });
   };
 
   // Skills are listed (and reordered) per group.
@@ -160,32 +166,50 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
     </p>
   );
 
-  if (mode.view === "edit") {
+  if (route.view === "edit" || route.view === "new") {
+    const existing = route.view === "edit" ? data.docs.find((doc) => doc.id === route.id) : undefined;
+    // The About doc is created on first save if it does not exist yet.
+    const startsNew = route.view === "new" || (!existing && collection === "about");
+    if (route.view === "edit" && !existing && !startsNew) {
+      return (
+        <div className="space-y-4">
+          <p role="alert">{t("notFound")}</p>
+          <Button type="button" variant="neutral" onClick={() => go(listRoute())}>
+            {t("back")}
+          </Button>
+        </div>
+      );
+    }
+    const initial = existing ?? { ...newDoc(collection, data.docs), ...(collection === "about" ? { id: ABOUT_DOC_ID } : {}) };
     return (
       <div className="space-y-4">
         {noticeEl}
         <DocEditor
-          key={mode.doc.id || "new"}
+          key={existing?.id ?? "new"}
           collection={collection}
-          initial={mode.doc}
-          isNew={mode.isNew}
+          initial={initial}
+          isNew={startsNew}
           existingIds={new Set(Object.keys(data.stored))}
           onSave={save}
-          onCancel={() => setMode({ view: "list" })}
+          onCancel={() => go(listRoute())}
+          onDirtyChange={(dirty) => setDirty(dirty, rowTitle(collection, initial, lang) || initial.id)}
+          registerSave={registerSave}
         />
       </div>
     );
   }
 
-  if (mode.view === "history") {
+  if (route.view === "history") {
     return (
       <div className="space-y-4">
         {noticeEl}
         <HistoryPanel
           collection={collection}
-          docId={mode.id}
+          docId={route.id}
           onRestore={restore}
-          onBack={() => setMode({ view: "list" })}
+          onBack={() =>
+            go(collection === "about" || data.stored[route.id] ? { section: collection, view: "edit", id: route.id } : listRoute())
+          }
         />
       </div>
     );
@@ -200,7 +224,7 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
         <Button
           type="button"
           disabled={busy}
-          onClick={() => setMode({ view: "edit", doc: newDoc(collection, data.docs), isNew: true })}
+          onClick={() => go({ section: collection, view: "new" })}
         >
           {t("newDoc")}
         </Button>
@@ -235,7 +259,7 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
                     <Button
                       type="button"
                       size="sm"
-                      onClick={() => setMode({ view: "edit", doc, isNew: false })}
+                      onClick={() => go({ section: collection, view: "edit", id: doc.id })}
                       aria-label={`${t("edit")}: ${title}`}
                       disabled={busy}
                     >
@@ -275,7 +299,7 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
                       type="button"
                       size="sm"
                       variant="outline"
-                      onClick={() => setMode({ view: "history", id: doc.id })}
+                      onClick={() => go({ section: collection, view: "history", id: doc.id })}
                       aria-label={`${t("history")}: ${title}`}
                       disabled={busy}
                     >
@@ -311,7 +335,7 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
                   type="button"
                   size="sm"
                   variant="outline"
-                  onClick={() => setMode({ view: "history", id })}
+                  onClick={() => go({ section: collection, view: "history", id })}
                   aria-label={`${t("history")}: ${id}`}
                 >
                   <code>{id}</code>
@@ -324,8 +348,11 @@ const CollectionPanel = ({ collection }: { collection: ContentCollection }) => {
 
       <ConfirmDialog
         open={toDelete !== null}
-        title="confirmDeleteTitle"
-        body="confirmDeleteBody"
+        tone="danger"
+        title={t("confirmDeleteTitle")}
+        body={t("confirmDeleteBody")}
+        confirmLabel={t("delete")}
+        item={toDelete ? { title: rowTitle(collection, toDelete, lang), meta: toDelete.id } : undefined}
         onConfirm={() => toDelete && remove(toDelete)}
         onCancel={() => setToDelete(null)}
       />

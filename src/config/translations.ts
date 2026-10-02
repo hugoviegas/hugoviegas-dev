@@ -683,6 +683,7 @@ export const translations: Translations = {
     PT: "A página que você procura não existe.",
   },
   "notFound.cta": { EN: "Return to Home", PT: "Voltar ao Início" },
+  adminLoading: { EN: "Loading…", PT: "Carregando…" },
 
   // ---------------------------------------------------------------- SEO
   "seo.breadcrumbHome": { EN: "Home", PT: "Início" },

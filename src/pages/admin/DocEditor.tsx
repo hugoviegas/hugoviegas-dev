@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -17,8 +17,10 @@ interface DocEditorProps {
   initial: DocMeta;
   isNew: boolean;
   existingIds: Set<string>;
-  onSave: (value: DocMeta) => Promise<void>;
+  onSave: (value: DocMeta) => Promise<boolean | void>;
   onCancel: () => void;
+  onDirtyChange?: (dirty: boolean) => void;
+  registerSave?: (save: (() => Promise<boolean>) | null) => void;
 }
 
 type FormValues = DocMeta & Record<string, unknown>;
@@ -26,7 +28,16 @@ type FormValues = DocMeta & Record<string, unknown>;
 // Side-by-side EN / PT-BR editor. Validation is the same Zod schema the public
 // refresh uses, so a doc that saves here also renders there; publishing with
 // an empty language fails it.
-const DocEditor = ({ collection, initial, isNew, existingIds, onSave, onCancel }: DocEditorProps) => {
+const DocEditor = ({
+  collection,
+  initial,
+  isNew,
+  existingIds,
+  onSave,
+  onCancel,
+  onDirtyChange,
+  registerSave,
+}: DocEditorProps) => {
   const t = useAdminT();
   const def = collectionDefs[collection];
   const [saving, setSaving] = useState(false);
@@ -40,17 +51,42 @@ const DocEditor = ({ collection, initial, isNew, existingIds, onSave, onCancel }
   });
   const { handleSubmit, register, control, setError, formState } = form;
 
-  const submit = handleSubmit(async (value) => {
+  const saveValue = async (value: FormValues) => {
     if (isNew && existingIds.has(value.id)) {
       setError("id", { type: "idTaken" }, { shouldFocus: true });
-      return;
+      return false;
     }
     setSaving(true);
     try {
-      await onSave(value);
+      return (await onSave(value)) !== false;
     } finally {
       setSaving(false);
     }
+  };
+  const submit = handleSubmit(async (value) => {
+    await saveValue(value);
+  });
+
+  // A new doc always counts as unsaved; an existing one once a field changes.
+  const dirty = isNew || formState.isDirty;
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
+  useEffect(() => () => onDirtyChange?.(false), [onDirtyChange]);
+
+  // Lets the unsaved-changes dialog run "Save and leave".
+  useEffect(() => {
+    if (!registerSave) return;
+    registerSave(
+      () =>
+        new Promise<boolean>((resolve) => {
+          void handleSubmit(
+            async (value) => resolve(await saveValue(value)),
+            () => resolve(false),
+          )();
+        }),
+    );
+    return () => registerSave(null);
   });
 
   const idError = formState.errors.id;

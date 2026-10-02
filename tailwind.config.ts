@@ -141,6 +141,7 @@ export default {
           from: { transform: "translateY(12px)", opacity: "0" },
           to: { transform: "none", opacity: "1" },
         },
+        "admin-toast": { to: { transform: "scaleX(0)" } },
         "brick-stack": {
           "0%": { transform: "translateY(-6px)", opacity: "0" },
           "40%, 100%": { transform: "none", opacity: "1" },
@@ -233,6 +234,7 @@ export default {
         },
       },
       animation: {
+        "admin-toast": "admin-toast 5s linear forwards",
         "flag-shake": "flag-shake 450ms cubic-bezier(.65,0,.35,1)",
         "flag-out": "flag-out 350ms cubic-bezier(.2,.8,.2,1) forwards",
         "flag-in": "flag-in 250ms cubic-bezier(.2,.8,.2,1)",
