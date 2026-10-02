@@ -16,8 +16,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
-        inter: ["Inter", "system-ui", "sans-serif"],
+        sans: ["Plus Jakarta Sans", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+        // Legacy alias: `font-inter` now resolves to the redesign UI font.
+        inter: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "SFMono-Regular", "monospace"],
       },
       colors: {
@@ -29,7 +30,22 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          hover: "hsl(var(--primary-hover))",
+          pressed: "hsl(var(--primary-pressed))",
+          tint: "hsl(var(--primary-tint))",
+          "tint-2": "hsl(var(--primary-tint-2))",
         },
+        // Redesign neutrals and brand details (see src/styles/theme-tokens.css)
+        "surface-2": "hsl(var(--surface-2))",
+        "surface-3": "hsl(var(--surface-3))",
+        stage: "hsl(var(--stage))",
+        "line-strong": "hsl(var(--line-strong))",
+        "ink-2": "hsl(var(--ink-2))",
+        "ink-3": "hsl(var(--ink-3))",
+        "brand-decor": "hsl(var(--brand-decor))",
+        "shadow-hard": "hsl(var(--shadow-hard))",
+        dot: "hsl(var(--dot))",
+        "error-tint": "hsl(var(--error-tint))",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -72,6 +88,25 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+      // Stacked-plate elevation: hard offset, zero blur, flat colour.
+      boxShadow: {
+        e1: "0 1px 0 hsl(var(--border))",
+        e2: "0 3px 0 hsl(var(--shadow-hard))",
+        e3: "0 5px 0 hsl(var(--shadow-hard))",
+        btn: "0 3px 0 hsl(var(--primary-pressed))",
+        "btn-neutral": "0 3px 0 hsl(var(--shadow-hard))",
+      },
+      transitionTimingFunction: {
+        out: "cubic-bezier(.2,.8,.2,1)",
+        inout: "cubic-bezier(.65,0,.35,1)",
+        snap: "cubic-bezier(.34,1.56,.64,1)",
+      },
+      transitionDuration: {
+        fast: "120ms",
+        base: "200ms",
+        slow: "320ms",
+        flip: "600ms",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -81,6 +116,39 @@ export default {
         xs: "480px",
       },
       keyframes: {
+        // Redesign motion (reduced motion is handled globally in index.css)
+        "flag-shake": {
+          "0%, 100%": { transform: "none" },
+          "20%": { transform: "translateX(-3px) rotate(-6deg)" },
+          "40%": { transform: "translateX(3px) rotate(6deg)" },
+          "60%": { transform: "translateX(-2px) rotate(-4deg)" },
+          "80%": { transform: "translateX(2px) rotate(3deg)" },
+        },
+        "flag-out": { to: { transform: "scale(1.7)", opacity: "0" } },
+        "flag-in": {
+          from: { transform: "scale(.8)", opacity: "0" },
+          to: { transform: "none", opacity: "1" },
+        },
+        "coin-in": {
+          from: { transform: "scale(.4) rotateY(90deg)" },
+          to: { transform: "none" },
+        },
+        "label-up": {
+          from: { transform: "translateY(10px)", opacity: "0" },
+          to: { transform: "none", opacity: "1" },
+        },
+        "sheet-in": {
+          from: { transform: "translateY(12px)", opacity: "0" },
+          to: { transform: "none", opacity: "1" },
+        },
+        "brick-stack": {
+          "0%": { transform: "translateY(-6px)", opacity: "0" },
+          "40%, 100%": { transform: "none", opacity: "1" },
+        },
+        twinkle: {
+          "0%, 100%": { opacity: ".35" },
+          "50%": { opacity: "1" },
+        },
         "accordion-down": {
           from: {
             height: "0",
@@ -165,6 +233,14 @@ export default {
         },
       },
       animation: {
+        "flag-shake": "flag-shake 450ms cubic-bezier(.65,0,.35,1)",
+        "flag-out": "flag-out 350ms cubic-bezier(.2,.8,.2,1) forwards",
+        "flag-in": "flag-in 250ms cubic-bezier(.2,.8,.2,1)",
+        "coin-in": "coin-in 320ms cubic-bezier(.34,1.56,.64,1)",
+        "label-up": "label-up 220ms cubic-bezier(.2,.8,.2,1)",
+        "sheet-in": "sheet-in 200ms cubic-bezier(.2,.8,.2,1)",
+        "brick-stack": "brick-stack 900ms cubic-bezier(.34,1.56,.64,1) infinite",
+        twinkle: "twinkle 4s ease-in-out infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fadeIn 1s ease-out forwards",

@@ -1,8 +1,11 @@
 /* Theme tokens bridge
- * Maps the design-system palette (design-tokens.css) onto the semantic
- * variables Tailwind/shadcn utilities consume (bg-background, text-muted-foreground,
- * border-border, ...). Without this file every semantic Tailwind color resolves
- * to an undefined var and the declaration is dropped by the browser.
+ * Maps the redesign palette onto the semantic variables Tailwind/shadcn
+ * utilities consume (bg-background, text-muted-foreground, border-border, ...).
+ * Values are HSL channels so Tailwind opacity modifiers keep working.
+ *
+ * Palette (Claude Design, October 2026): one professional green per theme,
+ * everything else neutral, flat colours only. Hex values are noted beside
+ * each token; contrast ratios are in docs/redesign/README.md.
  *
  * next-themes writes `class="dark"` or `class="light"` on <html>.
  * `:root` holds the dark defaults, `.light` overrides them.
@@ -11,92 +14,132 @@
 :root,
 :root.dark {
   /* Surfaces */
-  --background: 220 13% 10%;
-  --foreground: 210 40% 98%;
-  --card: 217 33% 17%;
-  --card-foreground: 210 40% 98%;
-  --popover: 221 39% 11%;
-  --popover-foreground: 210 40% 98%;
+  --background: 206 24.1% 5.7%; /* #0b0f12 page + star field */
+  --foreground: 204 17.2% 94.3%; /* #eef1f3 ink */
+  --card: 207 19.1% 9.2%; /* #13181c surface */
+  --card-foreground: 204 17.2% 94.3%;
+  --popover: 207 19.1% 9.2%;
+  --popover-foreground: 204 17.2% 94.3%;
+  --surface-2: 207 16.4% 13.1%; /* #1c2227 tags, hover fills */
+  --surface-3: 208 14.6% 17.5%; /* #262d33 pressed fills */
+  --stage: 200 9.7% 93.9%; /* #eef0f1 neutral stage behind LEGO renders */
 
-  /* Brand */
-  --primary: 174 100% 42%;
-  --primary-foreground: 221 39% 11%;
-  --secondary: 262 83% 67%;
-  --secondary-foreground: 210 40% 98%;
-  --brand-accent: 120 100% 60%;
-  --brand-accent-foreground: 221 39% 11%;
+  /* Text */
+  --ink-2: 210 11.1% 78.8%; /* #c3c9cf lead lines */
+  --ink-3: 210 9.5% 67.1%; /* #a3abb3 meta, captions */
+
+  /* Brand green */
+  --primary: 145 60.5% 52.4%; /* #3ccf7a */
+  --primary-foreground: 141 68.4% 7.5%; /* #06200f, 8.5:1 on primary */
+  --primary-hover: 145 62.6% 60.2%; /* #5ad98e */
+  --primary-pressed: 146 61.3% 43.5%; /* #2bb365 */
+  --primary-tint: 147 35.7% 11%; /* #12261b active nav, success */
+  --primary-tint-2: 146 36.8% 14.9%; /* #183424 input focus halo */
+  --brand-decor: 145 60.5% 52.4%; /* studs and dots, never text */
+
+  /* Legacy shadcn slots, now neutral */
+  --secondary: 207 16.4% 13.1%;
+  --secondary-foreground: 204 17.2% 94.3%;
+  --brand-accent: 145 60.5% 52.4%;
+  --brand-accent-foreground: 141 68.4% 7.5%;
 
   /* Neutral surfaces / states */
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 14% 65%;
-  --accent: 217 33% 24%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
-  --success: 142 76% 45%;
+  --muted: 207 16.4% 13.1%;
+  --muted-foreground: 210 9.5% 67.1%;
+  --accent: 207 16.4% 13.1%;
+  --accent-foreground: 204 17.2% 94.3%;
+  --destructive: 7 100% 73.9%; /* #ff8a7a */
+  --destructive-foreground: 8 40% 11.8%;
+  --error-tint: 8 40% 11.8%; /* #2a1512 */
+  --success: 145 60.5% 52.4%;
   --warning: 45 93% 58%;
 
-  /* Lines & focus */
-  --border: 215 25% 27%;
-  --input: 215 25% 27%;
-  --ring: 174 100% 42%;
+  /* Lines, focus, elevation */
+  --border: 208 14.6% 17.5%; /* #262d33 hairlines */
+  --line-strong: 212 7.8% 52.4%; /* #7c858f input + outline borders */
+  --input: 212 7.8% 52.4%;
+  --ring: 145 60.5% 52.4%;
+  --shadow-hard: 200 23.1% 2.5%; /* #050708 flat offset shadow */
+  --dot: 210 7% 45.1%; /* #6b737b inactive nav dot */
+
+  /* Gold: coin markers only */
+  --coin: 44 96% 48%; /* #f2b705 */
+  --coin-rim: 43 89% 38%; /* #b8860b */
 
   /* Radius scale consumed by tailwind borderRadius */
-  --radius: 0.75rem;
+  --radius: 1rem;
 
   /* Sidebar (shadcn sidebar primitive) */
-  --sidebar-background: 217 33% 17%;
-  --sidebar-foreground: 210 40% 98%;
-  --sidebar-primary: 174 100% 42%;
-  --sidebar-primary-foreground: 221 39% 11%;
-  --sidebar-accent: 217 33% 24%;
-  --sidebar-accent-foreground: 210 40% 98%;
-  --sidebar-border: 215 25% 27%;
-  --sidebar-ring: 174 100% 42%;
+  --sidebar-background: 207 19.1% 9.2%;
+  --sidebar-foreground: 204 17.2% 94.3%;
+  --sidebar-primary: 145 60.5% 52.4%;
+  --sidebar-primary-foreground: 141 68.4% 7.5%;
+  --sidebar-accent: 207 16.4% 13.1%;
+  --sidebar-accent-foreground: 204 17.2% 94.3%;
+  --sidebar-border: 208 14.6% 17.5%;
+  --sidebar-ring: 145 60.5% 52.4%;
 
   /* Charts */
-  --chart-1: 174 100% 42%;
-  --chart-2: 262 83% 67%;
+  --chart-1: 145 60.5% 52.4%;
+  --chart-2: 210 9.5% 67.1%;
   --chart-3: 45 93% 58%;
   --chart-4: 199 89% 48%;
   --chart-5: 340 82% 62%;
 }
 
 .light {
-  --background: 0 0% 100%;
-  --foreground: 221 39% 11%;
+  --background: 0 0% 96.5%; /* #f6f6f6 */
+  --foreground: 207 18.4% 9.6%; /* #14191d, 16.4:1 */
   --card: 0 0% 100%;
-  --card-foreground: 221 39% 11%;
+  --card-foreground: 207 18.4% 9.6%;
   --popover: 0 0% 100%;
-  --popover-foreground: 221 39% 11%;
+  --popover-foreground: 207 18.4% 9.6%;
+  --surface-2: 240 2.9% 93.1%; /* #ededee */
+  --surface-3: 220 5.5% 89.2%; /* #e2e3e5 */
+  --stage: 210 7.7% 94.9%; /* #f1f2f3 */
 
-  /* Darkened brand tones so text stays legible on light surfaces */
-  --primary: 174 100% 27%;
+  --ink-2: 214 11.8% 26.7%; /* #3c434c, 9.3:1 */
+  --ink-3: 218 12.5% 34.5%; /* #4d5563, 7.1:1 */
+
+  --primary: 146 90.6% 25.1%; /* #067a38, 5.1:1 on bg, white on it 5.5:1 */
   --primary-foreground: 0 0% 100%;
-  --secondary: 262 70% 52%;
-  --secondary-foreground: 0 0% 100%;
-  --brand-accent: 120 70% 30%;
+  --primary-hover: 145 90.8% 21.4%; /* #05682f */
+  --primary-pressed: 148 91% 17.5%; /* #04552a */
+  --primary-tint: 148 35.1% 92.7%; /* #e6f3ec */
+  --primary-tint-2: 146 35.2% 86.1%; /* #cfe8da */
+  --brand-decor: 146 91.2% 35.7%; /* #08ae51, no text */
+
+  --secondary: 240 2.9% 93.1%;
+  --secondary-foreground: 207 18.4% 9.6%;
+  --brand-accent: 146 91.2% 35.7%;
   --brand-accent-foreground: 0 0% 100%;
 
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 20% 40%;
-  --accent: 210 40% 94%;
-  --accent-foreground: 221 39% 11%;
-  --destructive: 0 72% 45%;
+  --muted: 240 2.9% 93.1%;
+  --muted-foreground: 218 12.5% 34.5%;
+  --accent: 240 2.9% 93.1%;
+  --accent-foreground: 207 18.4% 9.6%;
+  --destructive: 4 76.5% 40%; /* #b42318 */
   --destructive-foreground: 0 0% 100%;
-  --success: 142 71% 32%;
+  --error-tint: 6 82.6% 95.5%; /* #fdecea */
+  --success: 146 90.6% 25.1%;
   --warning: 38 92% 40%;
 
-  --border: 214 32% 88%;
-  --input: 214 32% 88%;
-  --ring: 174 100% 27%;
+  --border: 0 0% 89.4%; /* #e4e4e4 */
+  --line-strong: 216 4.5% 43.9%; /* #6b6f75, 5.0:1 */
+  --input: 216 4.5% 43.9%;
+  --ring: 146 90.6% 25.1%;
+  --shadow-hard: 216 7.7% 87.3%; /* #dcdee1 */
+  --dot: 210 6.3% 62.7%; /* #9aa0a6 */
 
   --sidebar-background: 0 0% 100%;
-  --sidebar-foreground: 221 39% 11%;
-  --sidebar-primary: 174 100% 27%;
+  --sidebar-foreground: 207 18.4% 9.6%;
+  --sidebar-primary: 146 90.6% 25.1%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 210 40% 94%;
-  --sidebar-accent-foreground: 221 39% 11%;
-  --sidebar-border: 214 32% 88%;
-  --sidebar-ring: 174 100% 27%;
+  --sidebar-accent: 240 2.9% 93.1%;
+  --sidebar-accent-foreground: 207 18.4% 9.6%;
+  --sidebar-border: 0 0% 89.4%;
+  --sidebar-ring: 146 90.6% 25.1%;
+
+  --chart-1: 146 90.6% 25.1%;
+  --chart-2: 218 12.5% 34.5%;
 }

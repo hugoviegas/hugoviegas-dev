@@ -129,7 +129,9 @@ The portfolio should be:
 
 Visual system:
 - Use neutral surfaces and text.
-- Use one professional green accent colour. The final green tone and the system design will come later from Claude Design; do not redesign the palette before then.
+- Use one professional green accent colour per theme: `#067a38` (light) and `#3ccf7a` (dark), from the Claude Design redesign (October 2026). Tokens live in `src/styles/theme-tokens.css`; the full spec, contrast ratios and phase plan are in `docs/redesign/README.md`.
+- Gold appears only on the small coin markers. Brick colours are decoration only, never text or status.
+- Elevation uses hard offset shadows with zero blur (`shadow-e1`/`e2`/`e3`), never soft glows.
 - Do not use gradients.
 - Use consistent spacing and a limited typography hierarchy.
 - Ensure text meets WCAG AA contrast requirements.
