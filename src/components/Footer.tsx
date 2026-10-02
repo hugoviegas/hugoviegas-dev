@@ -1,4 +1,7 @@
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { ADMIN_PATH } from "@/config/admin";
 import { useLanguage } from "@/hooks/useLanguage";
 
 const socialLinks = [
@@ -7,18 +10,39 @@ const socialLinks = [
   { icon: Mail, url: "mailto:hugoviegas3.1@gmail.com", label: "Email", external: false },
 ];
 
+const TAPS = 4;
+const WINDOW_MS = 2000;
+
 // Minimal footer. Extra bottom space below lg keeps it clear of the
 // floating section pill. Formula D stays archived and unlinked.
 const Footer = () => {
   const { t } = useLanguage();
   const year = new Date().getFullYear();
+  const navigate = useNavigate();
+  const taps = useRef({ n: 0, last: 0 });
+
+  const onNameClick = () => {
+    const now = Date.now();
+    const s = taps.current;
+    s.n = now - s.last > WINDOW_MS ? 1 : s.n + 1;
+    s.last = now;
+    if (s.n >= TAPS) {
+      s.n = 0;
+      navigate(ADMIN_PATH);
+    }
+  };
 
   return (
     <footer className="relative z-10 mt-24 border-t border-border">
       <div className="mx-auto w-full max-w-[1344px] px-5 pb-32 pt-8 sm:px-10 lg:px-12 lg:pb-12 xl:px-[72px] max-[359px]:px-4">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
           <div>
-            <p className="text-base font-bold text-foreground">Hugo Viegas</p>
+            <p
+              onClick={onNameClick}
+              className="select-none text-base font-bold text-foreground [touch-action:manipulation]"
+            >
+              Hugo Viegas
+            </p>
             <p className="text-sm text-ink-3">
               {t("role")} · {t("heroLocation")}
             </p>
