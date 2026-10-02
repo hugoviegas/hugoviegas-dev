@@ -1,16 +1,17 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight, ExternalLink, MessageCircle, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Play, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FlatBrick from "@/components/brand/FlatBrick";
-import ChatBot from "@/components/ChatBot";
+import AssistantPanel from "@/components/assistant/AssistantPanel";
+import IsoBrick from "@/components/brand/IsoBrick";
 import type { ChatProjectId } from "@/lib/chatLanguage";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn } from "@/lib/utils";
 
 // Building blocks for the redesigned project pages: a clear hero, key
-// facts, a load-on-request demo, compact lists, FAQ, the existing project
-// assistant (unchanged inside) and a next-project link.
+// facts, a load-on-request demo, compact lists, FAQ, the project assistant
+// and a next-project link.
 
 export const pageContainer = "relative z-10 mx-auto w-full max-w-[1344px] px-5 sm:px-10 lg:px-12 xl:px-[72px] max-[359px]:px-4";
 
@@ -159,56 +160,99 @@ interface ProjectAssistantProps {
   questionKeys: string[];
 }
 
-// Restyled frame around the existing embedded assistant (its panel is out of scope).
+// Project assistant block: intro, suggested questions and the embedded
+// assistant panel. The panel loads only after an explicit visitor action.
 export const ProjectAssistant = ({ projectId, titleKey, descriptionKey, suggestionsKey, safetyKey, questionKeys }: ProjectAssistantProps) => {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [initialPrompt, setInitialPrompt] = useState<string>();
+  const startRef = useRef<HTMLButtonElement>(null);
+  const hideRef = useRef<HTMLButtonElement>(null);
   const panelId = `${projectId}-context-chat`;
+  const titleId = `${projectId}-chat-title`;
+  const questions = questionKeys.map((key) => t(key));
+
+  const start = (prompt?: string) => {
+    setInitialPrompt(prompt);
+    setOpen(true);
+    // Move focus to the conversation controls once the panel exists.
+    window.requestAnimationFrame(() => hideRef.current?.focus());
+  };
+  const hide = () => {
+    setOpen(false);
+    window.requestAnimationFrame(() => startRef.current?.focus());
+  };
+
   return (
-    <section aria-labelledby={`${projectId}-chat-title`} className="mt-10 rounded-lg border border-dashed border-line-strong p-5 sm:p-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-        <MessageCircle className="h-7 w-7 shrink-0 text-ink-3" aria-hidden="true" />
-        <div className="flex flex-1 flex-col gap-4">
-          <div>
-            <h2 id={`${projectId}-chat-title`} className="text-lg font-bold text-foreground">
-              {t(titleKey)}
-            </h2>
-            <p className="mt-1 text-ink-2">{t(descriptionKey)}</p>
-          </div>
-          {!open && (
-            <div>
-              <Button type="button" variant="neutral" size="touch" onClick={() => setOpen(true)} aria-controls={panelId}>
-                {t(titleKey)}
+    <section
+      aria-labelledby={titleId}
+      className={cn(
+        "mt-10 grid items-start gap-5 rounded-3xl border border-border bg-card p-5 text-foreground shadow-e2 sm:p-8",
+        open && "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-10",
+      )}
+    >
+      <div>
+        <p className="flex items-center gap-2.5">
+          <span aria-hidden="true" className="grid h-8 w-8 place-items-center rounded-[10px] bg-surface-2">
+            <IsoBrick shape="1x1" color="green" className="w-[18px]" />
+          </span>
+          <span className="flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">
+            {t("assistant.projectTitle")} ·
+            <span className="inline-flex h-[18px] items-center rounded border border-line-strong px-1.5 text-[10px] font-bold text-ink-2">
+              {t("assistant.ai")}
+            </span>
+          </span>
+        </p>
+        <h2 id={titleId} className="mt-3 text-2xl font-extrabold tracking-[-0.02em] sm:text-[28px]">
+          {t(titleKey)}
+        </h2>
+        <p className="mt-2 max-w-[52ch] text-base text-ink-2">{t(descriptionKey)}</p>
+        {!open && (
+          <>
+            <ul aria-label={t(suggestionsKey)} className="mt-5 flex flex-col items-start gap-2">
+              {questions.map((question) => (
+                <li key={question} className="max-w-full">
+                  <button
+                    type="button"
+                    onClick={() => start(question)}
+                    className="inline-flex min-h-11 max-w-full items-center gap-2 rounded-[14px] border border-border bg-card px-3.5 py-2.5 text-left text-sm font-medium leading-snug text-foreground shadow-e1 transition-colors duration-fast hover:border-line-strong hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                    {question}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-5">
+              <Button ref={startRef} type="button" variant="primary" size="lg" onClick={() => start()} aria-controls={panelId} aria-expanded={false}>
+                {t("assistant.start")}
               </Button>
             </div>
-          )}
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-semibold text-foreground">{t(suggestionsKey)}</h3>
-            <div className="flex flex-wrap gap-2">
-              {questionKeys.map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => {
-                    setInitialPrompt(t(key));
-                    setOpen(true);
-                  }}
-                  className="min-h-11 rounded-full bg-surface-2 px-3.5 py-2 text-left text-sm text-ink-2 transition-colors hover:bg-surface-3 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {t(key)}
-                </button>
-              ))}
-            </div>
+          </>
+        )}
+        <p className="mt-5 flex max-w-[52ch] gap-2.5 text-[13px] leading-normal text-ink-3">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+          {t(safetyKey)}
+        </p>
+        {open && (
+          <div className="mt-4">
+            <Button ref={hideRef} type="button" variant="ghost" size="sm" onClick={hide} aria-controls={panelId} aria-expanded>
+              {t("assistant.hide")}
+            </Button>
           </div>
-          <p className="text-sm text-ink-3">{t(safetyKey)}</p>
-          {open && (
-            <div id={panelId}>
-              <ChatBot projectId={projectId} initialPrompt={initialPrompt} embedded onClose={() => setOpen(false)} />
-            </div>
-          )}
-        </div>
+        )}
       </div>
+      {open && (
+        <div id={panelId}>
+          <AssistantPanel
+            variant="embedded"
+            projectId={projectId}
+            suggestions={questions}
+            initialPrompt={initialPrompt}
+            titleId={`${projectId}-assistant-panel-title`}
+          />
+        </div>
+      )}
     </section>
   );
 };
