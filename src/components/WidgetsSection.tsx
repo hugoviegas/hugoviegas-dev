@@ -1,130 +1,91 @@
-import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { Suspense, lazy, useState } from "react";
+import { Minus, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import FlatBrick from "@/components/brand/FlatBrick";
+import { sectionContainer } from "@/components/sections/Section";
 import { useLanguage } from "@/hooks/useLanguage";
-import WorldClocks from "@/components/WorldClocks";
-import FastTransparentCube from "@/components/FastTransparentCube";
 
+// Fun Stuff: collapsed by default and kept off the recruiter path. Nothing
+// below loads until the visitor presses "Show experiments".
+const WorldClocks = lazy(() => import("@/components/WorldClocks"));
+const FastTransparentCube = lazy(() => import("@/components/FastTransparentCube"));
 const MicroFalconViewer = lazy(() => import("@/components/MicroFalconViewer"));
 const HeroLightsaber = lazy(() => import("@/components/HeroLightsaber"));
 
-const ViewerSkeleton = ({ height }: { height: number }) => (
+const TileSkeleton = ({ label, tall = false }: { label: string; tall?: boolean }) => (
   <div
-    className="w-full rounded-3xl border border-muted/20 bg-muted/10 flex items-center justify-center animate-pulse"
-    style={{ minHeight: height }}
+    role="status"
+    className={`flex w-full flex-col items-center justify-center gap-3 rounded-xl bg-surface-2 ${tall ? "min-h-[360px]" : "min-h-[220px]"}`}
   >
-    <span className="text-sm text-muted-foreground">
-      Loading 3D experience...
+    <span className="flex flex-col-reverse items-center" aria-hidden="true">
+      <FlatBrick studs={2} pitch={16} color="green" className="animate-brick-stack" />
+      <FlatBrick studs={2} pitch={16} color="lightGray" className="animate-brick-stack [animation-delay:200ms]" />
+      <FlatBrick studs={2} pitch={16} color="white" className="animate-brick-stack [animation-delay:400ms]" />
     </span>
+    <span className="text-sm text-ink-3">{label}</span>
   </div>
 );
 
+const tileClass = "rounded-lg border border-border bg-card p-5 shadow-e2";
+
 const WidgetsSection = () => {
   const { t } = useLanguage();
-
-  // Intersection observer for MicroFalconViewer
-  const falconContainerRef = useRef<HTMLDivElement | null>(null);
-  const [showFalconViewer, setShowFalconViewer] = useState(false);
-
-  // Intersection observer for HeroLightsaber
-  const lightsaberContainerRef = useRef<HTMLDivElement | null>(null);
-  const [showLightsaber, setShowLightsaber] = useState(false);
-
-  useEffect(() => {
-    if (showFalconViewer) return;
-    const node = falconContainerRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShowFalconViewer(true);
-            obs.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: "200px 0px",
-        threshold: 0.2,
-      },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [showFalconViewer]);
-
-  useEffect(() => {
-    if (showLightsaber) return;
-    const node = lightsaberContainerRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShowLightsaber(true);
-            obs.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: "200px 0px",
-        threshold: 0.2,
-      },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [showLightsaber]);
+  const [open, setOpen] = useState(false);
 
   return (
-    <section className="py-20 w-full">
-      <div className="container mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16 fade-in">
-          <h2 className="heading-section mb-6">{t("funStuffTitle")}</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {t("funStuffDescription")}
-          </p>
+    <section id="fun-stuff" aria-labelledby="fun-stuff-title" className="relative z-10 pt-[72px] lg:pt-24">
+      <div className={sectionContainer}>
+        <div className="flex flex-wrap items-end justify-between gap-5">
+          <div>
+            <h2 id="fun-stuff-title" className="text-2xl font-extrabold tracking-[-0.02em] text-foreground sm:text-[28px]">
+              {t("funStuffTitle")}
+            </h2>
+            <p className="mt-1.5 text-ink-2">{t("funStuffDescription")}</p>
+          </div>
+          <Button
+            type="button"
+            variant={open ? "neutral" : "primary"}
+            size="lg"
+            aria-expanded={open}
+            aria-controls="fun-stuff-panel"
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
+            {open ? t("funStuffHide") : t("funStuffShow")}
+          </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-          {/* Card 1: World Clocks */}
-          <div className="glass-strong rounded-2xl p-6">
-            <WorldClocks />
-          </div>
+        {!open && (
+          <p className="mt-6 rounded-lg border border-dashed border-line-strong px-5 py-4 text-[15px] text-ink-3">
+            {t("funStuffCollapsed")}
+          </p>
+        )}
 
-          {/* Card 2: Rubik's Cube */}
-          <div className="glass-strong rounded-2xl p-6 flex justify-center">
-            <FastTransparentCube width={240} height={240} enableExpand />
-          </div>
-
-          {/* Card 3: Millennium Falcon */}
-          <div
-            ref={falconContainerRef}
-            className="glass-strong rounded-2xl p-6"
-          >
-            <Suspense fallback={<ViewerSkeleton height={360} />}>
-              {showFalconViewer ? (
-                <MicroFalconViewer />
-              ) : (
-                <ViewerSkeleton height={360} />
-              )}
-            </Suspense>
-          </div>
-
-          {/* Card 4: Lightsaber */}
-          <div
-            ref={lightsaberContainerRef}
-            className="glass-strong rounded-2xl p-6"
-            style={{ minHeight: 200 }}
-          >
-            <Suspense fallback={<ViewerSkeleton height={200} />}>
-              {showLightsaber ? (
-                <HeroLightsaber />
-              ) : (
-                <ViewerSkeleton height={200} />
-              )}
-            </Suspense>
-          </div>
+        <div id="fun-stuff-panel" hidden={!open}>
+          {open && (
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className={tileClass}>
+                <Suspense fallback={<TileSkeleton label={t("funStuffLoading")} />}>
+                  <WorldClocks />
+                </Suspense>
+              </div>
+              <div className={`${tileClass} flex justify-center`}>
+                <Suspense fallback={<TileSkeleton label={t("funStuffLoading")} />}>
+                  <FastTransparentCube width={240} height={240} enableExpand />
+                </Suspense>
+              </div>
+              <div className={tileClass}>
+                <Suspense fallback={<TileSkeleton label={t("funStuffLoading")} tall />}>
+                  <MicroFalconViewer />
+                </Suspense>
+              </div>
+              <div className={tileClass}>
+                <Suspense fallback={<TileSkeleton label={t("funStuffLoading")} />}>
+                  <HeroLightsaber />
+                </Suspense>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

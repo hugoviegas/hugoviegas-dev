@@ -343,6 +343,18 @@ export const translations: Translations = {
 
   // Contact
   sendMessageTitle: { EN: "Send a Message", PT: "Enviar uma Mensagem" },
+  contactHeading: { EN: "Contact", PT: "Contato" },
+  contactLead: {
+    EN: "Send a message or reach me directly.",
+    PT: "Envie uma mensagem ou fale comigo diretamente.",
+  },
+  aboutHeading: { EN: "About", PT: "Sobre" },
+  storyCta: { EN: "Read my story", PT: "Ler minha história" },
+  storySub: {
+    EN: "A short animated intro. Text version available.",
+    PT: "Uma breve introdução animada. Versão em texto disponível.",
+  },
+  footerFun: { EN: "Fun stuff", PT: "Coisas divertidas" },
   contactPrompt: {
     EN: "Have a project in mind? I'd love to hear about it.",
     PT: "Tem um projeto em mente? Adoraria saber sobre ele.",
@@ -360,15 +372,15 @@ export const translations: Translations = {
   },
   "toast.messageSentTitle": { EN: "Message Sent!", PT: "Mensagem Enviada!" },
   "toast.messageSentDesc": {
-    EN: "Thank you for reaching out. I'll get back to you within 24 hours.",
-    PT: "Obrigado pelo contato. Responderei em até 24 horas.",
+    EN: "Thanks, your message was sent.",
+    PT: "Obrigado, sua mensagem foi enviada.",
   },
   "send.sending": { EN: "Sending...", PT: "Enviando..." },
   "send.sendMessage": { EN: "Send Message", PT: "Enviar Mensagem" },
   "send.successTitle": { EN: "Message Sent!", PT: "Mensagem Enviada!" },
   "send.successMessage": {
-    EN: "Thank you for reaching out. I'll get back to you within 24 hours.",
-    PT: "Obrigado pelo contato. Responderei em até 24 horas.",
+    EN: "Thanks, your message was sent.",
+    PT: "Obrigado, sua mensagem foi enviada.",
   },
   "send.errorTitle": { EN: "Error", PT: "Erro" },
   "send.errorMessage": {
@@ -769,10 +781,17 @@ Paralelamente, um desafio prático do restaurante onde trabalhava levou à const
   english: { EN: "English", PT: "Inglês" },
 
   // Fun Stuff / Widgets section
-  funStuffTitle: { EN: "Fun Stuff", PT: "Fun Stuff" },
+  funStuffTitle: { EN: "Fun Stuff", PT: "Coisas divertidas" },
+  funStuffShow: { EN: "Show experiments", PT: "Mostrar experimentos" },
+  funStuffHide: { EN: "Hide experiments", PT: "Esconder experimentos" },
+  funStuffCollapsed: {
+    EN: "World clocks, a Rubik's cube and two 3D model viewers. Nothing loads until you ask.",
+    PT: "Relógios mundiais, um cubo mágico e dois visualizadores 3D. Nada carrega até você pedir.",
+  },
+  funStuffLoading: { EN: "Loading 3D experience…", PT: "Carregando experiência 3D…" },
   funStuffDescription: {
-    EN: "Some experiments and interactive toys I've built.",
-    PT: "Alguns experimentos e brinquedos interativos que eu criei.",
+    EN: "Optional experiments, off the main path.",
+    PT: "Experimentos opcionais, fora do caminho principal.",
   },
 
   // Programming Skills section

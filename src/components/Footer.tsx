@@ -1,82 +1,51 @@
-import { Github, Linkedin, Mail, Heart } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 
-const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  const { t } = useLanguage();
+const socialLinks = [
+  { icon: Github, url: "https://github.com/hugoviegas/", label: "GitHub", external: true },
+  { icon: Linkedin, url: "https://www.linkedin.com/in/hviegas/", label: "LinkedIn", external: true },
+  { icon: Mail, url: "mailto:hugoviegas3.1@gmail.com", label: "Email", external: false },
+];
 
-  const socialLinks = [
-    {
-      icon: Github,
-      url: "https://github.com/hugoviegas/",
-      label: "GitHub",
-    },
-    {
-      icon: Linkedin,
-      url: "https://www.linkedin.com/in/hviegas/",
-      label: "LinkedIn",
-    },
-    {
-      icon: Mail,
-      url: "mailto:hugoviegas3.1@gmail.com",
-      label: "Email",
-    },
-  ];
+// Minimal footer. Extra bottom space below lg keeps it clear of the
+// floating section pill. Formula D stays archived and unlinked.
+const Footer = () => {
+  const { t } = useLanguage();
+  const year = new Date().getFullYear();
 
   return (
-    <footer
-      className="bg-muted/5 border-t border-white/10 w-full"
-    >
-      <div className="container mx-auto px-6 lg:px-8 py-12 wide-container">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          {/* Brand */}
-          <div className="text-center md:text-left">
-            <h3 className="text-2xl font-bold text-gradient mb-2">
-              Hugo Viegas
-            </h3>
-            <p className="text-muted-foreground">{t("role")}</p>
+    <footer className="relative z-10 mt-24 border-t border-border">
+      <div className="mx-auto w-full max-w-[1344px] px-5 pb-32 pt-8 sm:px-10 lg:px-12 lg:pb-12 xl:px-[72px] max-[359px]:px-4">
+        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <div>
+            <p className="text-base font-bold text-foreground">Hugo Viegas</p>
+            <p className="text-sm text-ink-3">
+              {t("role")} · {t("heroLocation")}
+            </p>
           </div>
-
-          {/* Social Links */}
-          <div className="flex items-center gap-6">
-            {socialLinks.map((social, index) => (
-              <a
-                key={index}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 glass rounded-full hover:glass-strong hover:scale-110 hover:neon-glow transition-all duration-300 group"
-                aria-label={social.label}
-              >
-                <social.icon className="w-5 h-5 text-primary group-hover:text-accent transition-colors" />
-              </a>
+          <ul className="flex gap-2">
+            {socialLinks.map(({ icon: Icon, url, label, external }) => (
+              <li key={label}>
+                <a
+                  href={url}
+                  aria-label={label}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-foreground shadow-e2 transition-colors duration-fast hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <Icon className="h-5 w-5" aria-hidden="true" />
+                </a>
+              </li>
             ))}
-            {/* Formula D is archived: route /formula-d kept, not linked publicly. */}
-          </div>
+          </ul>
         </div>
-
-        {/* Divider */}
-        <div className="my-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
-
-        {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span>© {currentYear} Hugo Viegas. All rights reserved.</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span>Made with</span>
-            <Heart className="w-4 h-4 text-red-500 animate-pulse" />
-            <span>in Dublin, Ireland</span>
-          </div>
-        </div>
-
-        {/* Additional Info */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-muted-foreground">
-            Available for freelance work and full-time opportunities • Fluent in
-            Portuguese & English • Open to remote and hybrid arrangements
-          </p>
+        <div className="mt-4 flex flex-wrap justify-between gap-4 text-[13px] text-ink-3">
+          <span>© {year} Hugo Viegas</span>
+          <a
+            href="/#fun-stuff"
+            className="rounded-sm text-ink-2 underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {t("footerFun")}
+          </a>
         </div>
       </div>
     </footer>

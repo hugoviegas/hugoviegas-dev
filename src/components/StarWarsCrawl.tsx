@@ -101,18 +101,20 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
       return;
     }
 
-    setPhase("intro");
+    // Reduced motion: open straight into the static, scrollable text.
+    const reduced =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setPhase(reduced ? "final" : "intro");
     syncPauseReason("none");
     setManualOffset(0);
     setIsInteracting(false);
     pointerRef.current = { active: false, pointerId: null, lastY: 0 };
 
     const timers = timersRef.current;
-    const introTimer = window.setTimeout(
-      () => setPhase("crawl"),
-      INTRO_DELAY_MS
-    );
-    timers.intro = introTimer;
+    if (!reduced) {
+      timers.intro = window.setTimeout(() => setPhase("crawl"), INTRO_DELAY_MS);
+    }
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -394,7 +396,7 @@ const StarWarsCrawlOverlay: React.FC<StarWarsCrawlOverlayProps> = ({
     .join(" ");
 
   return createPortal(
-    <div className="star-wars-overlay" role="dialog" aria-modal="true">
+    <div className="star-wars-overlay" role="dialog" aria-modal="true" aria-label={title}>
       <div className="star-wars-starfield" aria-hidden="true" />
 
       <button

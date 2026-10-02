@@ -258,19 +258,16 @@ const ChatBot = ({
 
   return (
     <>
+      {/* Small neutral launcher: no ping or pulse. Below lg it sits level with
+          the bottom section pill, which leaves room for it on the right. */}
       <button
+        type="button"
         onClick={toggleChat}
-        className="group fixed bottom-6 right-6 z-50"
+        className="fixed bottom-[calc(20px+env(safe-area-inset-bottom))] right-4 z-50 grid h-14 w-14 place-items-center rounded-full border border-border bg-card text-foreground shadow-e3 transition-colors duration-fast hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:bottom-6 lg:right-6 [@media(max-height:500px)]:bottom-3"
         aria-label={isOpen ? t("chatClose") : t("chatOpen")}
+        aria-expanded={isOpen}
       >
-        <div className="relative flex h-16 w-16 items-center justify-center transition-transform duration-300 hover:scale-110">
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-red-500/20 to-red-600/20 blur-lg transition-all group-hover:blur-xl" />
-          <img src={redFront} alt="" className="relative z-10 h-14 w-14 object-contain drop-shadow-lg" />
-          <div className="absolute inset-0 z-20 flex items-center justify-center">
-            {isOpen ? <X className="h-6 w-6 text-white" /> : <MessageCircle className="h-6 w-6 text-white" />}
-          </div>
-          {!isOpen && <div className="absolute inset-0 animate-ping rounded-xl bg-primary/30" />}
-        </div>
+        {isOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <MessageCircle className="h-6 w-6" aria-hidden="true" />}
       </button>
       {isOpen && panel}
     </>
