@@ -228,7 +228,7 @@ Security model:
 
 Config and secrets:
 - Only the public Firebase web config (`VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID`) may live in `.env.sample`, `.env.local`, Vercel env vars, or the repo. Restrict that API key to Firebase APIs only.
-- Never commit, or place in `VITE_*` or `define`: service-account JSON, Admin SDK keys, Firebase CLI tokens, Vercel tokens, `BLOB_READ_WRITE_TOKEN`, or deploy-hook URLs.
+- Never commit, or place in `VITE_*` or `define`: service-account JSON, Admin SDK keys, Firebase CLI tokens, Vercel tokens, `BLOB_READ_WRITE_TOKEN`, `GEMINI_API_KEY`, or deploy-hook URLs.
 - `BLOB_READ_WRITE_TOKEN` is a server-only Vercel environment variable (Production and Preview), read only by `api/blob-upload.ts`. Hugo manages it in Vercel.
 
 Content split:
@@ -270,13 +270,14 @@ File uploads (Vercel Blob):
 - Cutover (October 2026): `legacy.ts`, `seed.ts`, the content translation keys, the Big Bang Duel story Markdown files, the import tool, and the dual-run test were removed. Do not reintroduce content in code or translations; edit it in the admin. Kept translation keys that are UI chrome or SEO: `darcyTitle`, `bigBangTitle`, `bigBangStoryTitle`, `bigBangStoryError`, `bigBangTechTitle`, `bigBangFaqTitle`, `bigBangFaqIntro`, `fullStoryTitle`.
 
 ## Chatbot
-- Keep the existing chatbot only until its redesign is explicitly scheduled.
-- Do not increase its visual prominence.
-- Do not add attention-seeking ping, pulse, or autoplay behaviour.
-- Do not expose an LLM provider key in the browser.
-- A future chatbot implementation must call an authenticated or rate-limited server-side endpoint.
-- The chatbot must only answer from verified portfolio content.
-- The chatbot must be keyboard accessible, dismissible with Escape, and must not cover focused content.
+Redesign approved by Hugo in October 2026 (UI from the Claude Design "Portfolio assistant" boards, plus a server-side proxy).
+- The assistant is labelled as an AI ("Portfolio assistant", AI badge, "Not Hugo"). It never speaks as Hugo.
+- The browser only calls `POST /api/chat` (`api/chat.ts`). No LLM key, prompt, or model details ship to the client.
+- `GEMINI_API_KEY` is a server-only Vercel environment variable (Production and Preview), read only by `api/chat.ts` and by the Vite dev middleware (`.env.local`). Never prefix it with `VITE_`. `CHAT_MODELS` optionally overrides the model list.
+- The system instruction is built in `src/server/chat/knowledge.ts` from the published content snapshot, the approved project contexts (`src/lib/project-contexts/*.json`), and the contact details above. Update those, not the prompt, to change what it knows.
+- `api/chat.ts` checks the Origin (production host, the current Vercel deployment, localhost outside production), validates the body (`src/server/chat/request.ts`), and rate-limits per IP in memory (`src/server/chat/rateLimit.ts`: 6/minute, 40/day per visitor, 300/hour per instance). The limiter is per warm instance, so it slows abuse but is not global; a shared store would need a separate approval.
+- Do not add attention-seeking ping, pulse, or autoplay behaviour, and do not increase its visual prominence.
+- The chatbot must only answer from verified portfolio content, be keyboard accessible, be dismissible with Escape, and not cover focused content.
 
 ## SEO Requirements
 Before SEO implementation, inspect the current source and deployment configuration.
@@ -353,7 +354,7 @@ Observed during the September 2026 audit. Re-verify before relying on them.
 - Homepage composition: `src/pages/Index.tsx`. Routes: `src/App.tsx`. Global nav: `src/components/DynamicSidebar.tsx` + `src/components/TopControls.tsx`.
 - Stack notes: Zod and `@hookform/resolvers` are installed but not yet used; the contact form (`src/components/ContactSection.tsx`) uses manual validation and Web3Forms. `@vercel/analytics` is installed but not mounted. Framer Motion (mentioned in README) is not installed.
 - Theme tokens: `src/styles/design-tokens.css` and `src/styles/theme-tokens.css`; global styles in `src/index.css`.
-- Known security item from the audit: a Gemini API key is read in the browser (`src/lib/chatbot-service.ts`). Follow the Security and Privacy rules before touching it.
+- The Gemini key moved server-side in October 2026 (`api/chat.ts`). The old `VITE_GEMINI_API_KEY` was public in earlier bundles: it must be deleted from Vercel and the key rotated.
 - `/proposta-etal` and `/presente-x*` were removed from the app in September 2026. Their source is archived at the git tag `archive/private-routes-2026-09`; do not restore them to the deployed app.
 - `dist/` is gitignored. `.env` and `*.local` are gitignored; `.env.sample` documents variables.
 - Firebase files: `firestore.rules`, `firestore.indexes.json`, `firebase.json`, and `.firebaserc` at the repo root. Admin code: `src/pages/admin/`. Admin route constant: `src/config/admin.ts`.
@@ -392,7 +393,6 @@ Do not start these without a separate approved task:
 - Full portfolio redesign.
 - 3D LEGO room/camera experience.
 - New Fun Stuff route.
-- Chatbot redesign or backend proxy.
 - PT-BR indexable route strategy and hreflang.
 - Framework migration.
 - Full private-route authentication implementation.

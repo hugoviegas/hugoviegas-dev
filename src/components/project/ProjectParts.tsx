@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, ExternalLink, MessageCircle, Play } from "lucide
 import { Button } from "@/components/ui/button";
 import FlatBrick from "@/components/brand/FlatBrick";
 import ChatBot from "@/components/ChatBot";
+import type { ChatProjectId } from "@/lib/chatLanguage";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn } from "@/lib/utils";
 
@@ -150,7 +151,7 @@ export const CompactList = ({ items }: { items: string[] }) => (
 );
 
 interface ProjectAssistantProps {
-  projectId: string;
+  projectId: ChatProjectId;
   titleKey: string;
   descriptionKey: string;
   suggestionsKey: string;
