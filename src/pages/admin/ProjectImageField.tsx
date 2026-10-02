@@ -15,7 +15,7 @@ import { PROJECT_ASPECTS, type CropChoice } from "./cropModel";
 import { fill } from "./format";
 import { FieldShell } from "./FieldInputs";
 import { useAdminT, type AdminStringKey } from "./adminStrings";
-import { focusRing, inputClass, Notice } from "./ui";
+import { focusRing, inputClass, Notice, UploadProgress } from "./ui";
 
 type Step = "idle" | "crop" | "compress" | "upload" | "done";
 
@@ -242,12 +242,7 @@ const ProjectImageField = ({ def, path }: { def: FieldDef; path: string }) => {
                 ))}
               </ol>
               {step === "upload" && (
-                <progress
-                  aria-label={t("image.stepUpload")}
-                  max={100}
-                  value={Math.round(progress)}
-                  className="block h-2 w-full appearance-none overflow-hidden rounded bg-surface-2 [&::-moz-progress-bar]:bg-primary [&::-webkit-progress-bar]:bg-surface-2 [&::-webkit-progress-value]:bg-primary"
-                />
+                <UploadProgress value={progress} label={t("image.stepUpload")} />
               )}
               <p role="status" className="mt-2 text-[13px] text-ink-2">
                 {step === "compress" && t("upload.preparing")}

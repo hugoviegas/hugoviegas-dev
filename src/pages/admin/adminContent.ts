@@ -214,6 +214,15 @@ export const saveSiteFiles = async (
   await commit(batch, 2);
 };
 
+// Puts an earlier settings version back (remote switch and files). Only the
+// fields that still parse are restored; the current version goes to history.
+export const restoreSettings = async (data: Record<string, unknown>, settings: ExistingSettings | null) => {
+  const batch = writeBatch(getFirebase().db);
+  if (settings) addHistory(batch, "settings", "site", settings);
+  bumpSettings(batch, settings, data.useRemote !== false, parseSiteFiles(data));
+  await commit(batch, 2);
+};
+
 export interface HistoryEntry {
   entryId: string;
   version: number;
@@ -222,7 +231,7 @@ export interface HistoryEntry {
 }
 
 // Newest first. Two equality filters need no composite index.
-export const listHistory = async (name: ContentCollection, id: string) => {
+export const listHistory = async (name: ContentCollection | "settings", id: string) => {
   const snapshot = await getDocs(
     query(
       collection(getFirebase().db, "contentHistory"),

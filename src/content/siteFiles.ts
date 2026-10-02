@@ -4,6 +4,10 @@
 import type { AvatarFace, CvFile, ProfilePhoto, SiteFiles } from "./types";
 import { isStoredBlobUrl } from "./uploadPolicy";
 
+// Used until a CV is uploaded through the admin (settings/site.cv).
+export const FALLBACK_CV_URL =
+  "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
+
 const record = (value: unknown): Record<string, unknown> | null =>
   value && typeof value === "object" && !Array.isArray(value)
     ? (value as Record<string, unknown>)

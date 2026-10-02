@@ -4,15 +4,12 @@ import { Button } from "@/components/ui/button";
 import IsoBrick from "@/components/brand/IsoBrick";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useContentLang, useSiteFiles } from "@/content/store";
+import { FALLBACK_CV_URL } from "@/content/siteFiles";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hugo-hero.webp";
 import minifigImage from "@/assets/brand/hugo-minifig.webp";
 import sceneImage from "@/assets/brand/desk-scene.webp";
 import sceneImageSmall from "@/assets/brand/desk-scene-800.webp";
-
-// Used until a CV is uploaded through the admin (settings/site.cv).
-const FALLBACK_CV_URL =
-  "https://sb7cb98htp9acpqo.public.blob.vercel-storage.com/Files%20to%20Download/Hugo%20Viegas%20-%20Software%20Engineer%20CV.pdf";
 
 type Face = "photo" | "minifig";
 
