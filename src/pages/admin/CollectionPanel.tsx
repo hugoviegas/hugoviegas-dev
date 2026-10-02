@@ -70,6 +70,8 @@ const CollectionPanel = ({ collection, route }: { collection: ContentCollection;
   const [busyIds, setBusyIds] = useState<Set<string>>(new Set());
   const [pending, setPending] = useState<Pending | null>(null);
   const [blocked, setBlocked] = useState<{ doc: DocMeta; problems: PublishProblem[] } | null>(null);
+  // Set when "Open the editor" follows a blocked publish: the editor opens with its summary.
+  const [summaryFor, setSummaryFor] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoadError(null);
@@ -257,6 +259,8 @@ const CollectionPanel = ({ collection, route }: { collection: ContentCollection;
           existingIds={new Set(Object.keys(data.stored))}
           onSave={save}
           onCancel={() => go(listRoute())}
+          onHistory={existing ? () => go({ section: collection, view: "history", id: existing.id }) : undefined}
+          startWithSummary={summaryFor === existing?.id}
           onDirtyChange={(dirty) => setDirty(dirty, titleOf(initial))}
           registerSave={registerSave}
         />
@@ -271,6 +275,7 @@ const CollectionPanel = ({ collection, route }: { collection: ContentCollection;
         <HistoryPanel
           collection={collection}
           docId={route.id}
+          current={data?.docs.find((doc) => doc.id === route.id) ?? null}
           onRestore={restoreVersion}
           onBack={() =>
             go(collection === "about" || data?.stored[route.id] ? { section: collection, view: "edit", id: route.id } : listRoute())
@@ -317,7 +322,11 @@ const CollectionPanel = ({ collection, route }: { collection: ContentCollection;
                       type="button"
                       variant="primary"
                       size="touch"
-                      onClick={() => go({ section: collection, view: "edit", id: blocked.doc.id })}
+                      onClick={() => {
+                        setSummaryFor(blocked.doc.id);
+                        setBlocked(null);
+                        go({ section: collection, view: "edit", id: blocked.doc.id });
+                      }}
                     >
                       {t("list.openEditor")}
                     </Button>
