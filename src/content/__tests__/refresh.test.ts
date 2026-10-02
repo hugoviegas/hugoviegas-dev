@@ -25,6 +25,8 @@ const site = (updatedAt: string, useRemote = true) => ({
   version: 1,
   cv: null,
   profilePhoto: null,
+  avatarMinifig: null,
+  avatarFirst: "photo" as const,
 });
 const cvUrl = `https://${BLOB_STORE_HOST}/cv/hugo-viegas-cv-Ab12Cd34.pdf`;
 const photo = {
@@ -136,13 +138,20 @@ describe("refreshCore", () => {
   it("takes the uploaded files from settings/site", async () => {
     rest.listPublished.mockResolvedValue([]);
     const current = seedCore();
-    expect(current.files).toEqual({ cv: null, profilePhoto: null });
+    expect(current.files).toEqual({ cv: null, profilePhoto: null, avatarMinifig: null, avatarFirst: "photo" });
     const next = await refreshCore(current, {
       ...site("2026-10-02T00:00:00.000Z"),
       cv: { url: cvUrl, version: 3 },
       profilePhoto: photo,
+      avatarMinifig: { ...photo, url: photo.url.replace("hugo-viegas", "hugo-minifig") },
+      avatarFirst: "minifig",
     });
-    expect(next.files).toEqual({ cv: { url: cvUrl, version: 3 }, profilePhoto: photo });
+    expect(next.files).toEqual({
+      cv: { url: cvUrl, version: 3 },
+      profilePhoto: photo,
+      avatarMinifig: { ...photo, url: photo.url.replace("hugo-viegas", "hugo-minifig") },
+      avatarFirst: "minifig",
+    });
   });
 });
 

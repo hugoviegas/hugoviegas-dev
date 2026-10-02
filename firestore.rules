@@ -192,13 +192,16 @@ service cloud.firestore {
         && file.version is int && file.version >= 1;
     }
 
-    // cv and profilePhoto are optional; when absent the site uses the
-    // bundled photo and the current CV link.
+    // cv, profilePhoto and avatarMinifig are optional; when absent the site
+    // uses the current CV link and the bundled avatar images. avatarFirst
+    // picks the avatar face shown first.
     function validSettings(data) {
       return data.keys().hasAll(['useRemote', 'updatedAt', 'version'])
-        && data.keys().hasOnly(['useRemote', 'updatedAt', 'version', 'cv', 'profilePhoto'])
+        && data.keys().hasOnly(['useRemote', 'updatedAt', 'version', 'cv', 'profilePhoto', 'avatarMinifig', 'avatarFirst'])
         && (!('cv' in data) || validCv(data.cv))
         && (!('profilePhoto' in data) || validPhoto(data.profilePhoto))
+        && (!('avatarMinifig' in data) || validPhoto(data.avatarMinifig))
+        && (!('avatarFirst' in data) || data.avatarFirst in ['photo', 'minifig'])
         && data.useRemote is bool
         && data.updatedAt == request.time
         && data.version is int

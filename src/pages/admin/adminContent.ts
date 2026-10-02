@@ -113,19 +113,27 @@ const writeDoc = (
   });
 };
 
+const siteFilesOf = (settings: ExistingSettings | null): SiteFiles => ({
+  cv: settings?.cv ?? null,
+  profilePhoto: settings?.profilePhoto ?? null,
+  avatarMinifig: settings?.avatarMinifig ?? null,
+  avatarFirst: settings?.avatarFirst ?? "photo",
+});
+
 // Absent file fields mean "use the bundled fallback", so null is not stored.
-const filesToStore = (files: SiteFiles) =>
-  Object.fromEntries(Object.entries(files).filter(([, value]) => value !== null));
+// The photo-first default is not stored either, so a settings write stays
+// valid under rules that predate the avatar fields.
+const filesToStore = ({ avatarFirst, ...files }: SiteFiles) => ({
+  ...Object.fromEntries(Object.entries(files).filter(([, value]) => value !== null)),
+  ...(avatarFirst === "minifig" ? { avatarFirst } : {}),
+});
 
 // Rewrites settings/site, keeping the uploaded files unless `files` replaces them.
 const bumpSettings = (
   batch: WriteBatch,
   settings: ExistingSettings | null,
   useRemote = settings ? settings.useRemote : true,
-  files: SiteFiles = {
-    cv: settings?.cv ?? null,
-    profilePhoto: settings?.profilePhoto ?? null,
-  },
+  files: SiteFiles = siteFilesOf(settings),
 ) => {
   batch.set(doc(getFirebase().db, "settings", "site"), {
     useRemote,
@@ -200,8 +208,7 @@ export const saveSiteFiles = async (
   const batch = writeBatch(getFirebase().db);
   if (settings) addHistory(batch, "settings", "site", settings);
   bumpSettings(batch, settings, settings ? settings.useRemote : true, {
-    cv: settings?.cv ?? null,
-    profilePhoto: settings?.profilePhoto ?? null,
+    ...siteFilesOf(settings),
     ...changes,
   });
   await commit(batch, 2);

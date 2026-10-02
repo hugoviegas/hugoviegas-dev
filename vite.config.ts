@@ -45,7 +45,9 @@ const heroPhotoPreload = (): Plugin => ({
   transformIndexHtml(html) {
     const snapshotPath = path.resolve(__dirname, "src/content/snapshot/core.json");
     const snapshot = JSON.parse(fs.readFileSync(snapshotPath, "utf-8"));
-    const photo = parseProfilePhoto(snapshot.files?.profilePhoto);
+    // Preload the uploaded image of the face the hero shows first.
+    const first = snapshot.files?.avatarFirst === "minifig" ? "avatarMinifig" : "profilePhoto";
+    const photo = parseProfilePhoto(snapshot.files?.[first]);
     if (!photo) return html;
     return html.replace("</head>", `  ${heroPreloadTag(photo.url)}
   </head>`);

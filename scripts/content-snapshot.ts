@@ -11,6 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { mergeCore, publishedSorted } from "../src/content/snapshotBuild";
+import { pickSiteFiles } from "../src/content/siteFiles";
 import { listPublished } from "../src/content/rest";
 import {
   coreSnapshotSchema,
@@ -62,10 +63,7 @@ const fromFirestore = async () => {
     ),
   );
   const details = strictDocs("projectDetails", await listPublished("projectDetails", 15000));
-  const core = mergeCore(readCurrent(), Object.fromEntries(lists), site.updatedAt, {
-    cv: site.cv,
-    profilePhoto: site.profilePhoto,
-  });
+  const core = mergeCore(readCurrent(), Object.fromEntries(lists), site.updatedAt, pickSiteFiles(site));
   const currentDetails = JSON.parse(fs.readFileSync(detailsPath, "utf-8")) as DetailsSnapshot;
   write(core, {
     projectDetails:
