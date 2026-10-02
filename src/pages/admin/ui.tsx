@@ -182,13 +182,13 @@ export const PageHeading = ({
   actions?: ReactNode;
   id?: string;
 }) => (
-  <div className="mb-6 mt-2 flex flex-wrap items-end justify-between gap-4">
+  <div className="mb-6 mt-2 flex flex-wrap items-end justify-between gap-4 max-sm:gap-3">
     <div className="min-w-0">
       <h1 id={id} className="break-words text-[26px] font-extrabold leading-tight tracking-[-0.02em] sm:text-[32px]">
         {title}
       </h1>
       {sub && <p className="mt-1.5 max-w-[68ch] text-[15px] text-ink-2">{sub}</p>}
     </div>
-    {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+    {actions && <div className="flex flex-wrap items-center gap-2 max-sm:w-full">{actions}</div>}
   </div>
 );

@@ -236,11 +236,32 @@ export const listHistory = async (name: ContentCollection, id: string) => {
     .sort((a, b) => (b.savedAt ?? "").localeCompare(a.savedAt ?? "") || b.version - a.version);
 };
 
-// Ids that have history but no current doc: deleted docs that can be restored.
-export const listDeletedIds = async (name: ContentCollection, currentIds: Set<string>) => {
+export interface DeletedDoc {
+  id: string;
+  deletedAt: string | null;
+  // The last stored version, used for the title and preview.
+  data: Record<string, unknown>;
+}
+
+// Docs that have history but no current doc, newest deletion first. The
+// latest history entry of a deleted doc is the copy written when it was deleted.
+export const listDeleted = async (name: ContentCollection, currentIds: Set<string>): Promise<DeletedDoc[]> => {
   const snapshot = await getDocs(
     query(collection(getFirebase().db, "contentHistory"), where("collection", "==", name)),
   );
-  const ids = new Set(snapshot.docs.map((item) => String(item.data().docId)));
-  return [...ids].filter((id) => !currentIds.has(id)).sort();
+  const latest = new Map<string, DeletedDoc & { version: number }>();
+  for (const item of snapshot.docs) {
+    const entry = item.data();
+    const id = String(entry.docId);
+    if (currentIds.has(id)) continue;
+    const savedAt = isoOrNull(entry.savedAt);
+    const version = Number(entry.version ?? 0);
+    const previous = latest.get(id);
+    if (!previous || (savedAt ?? "") > (previous.deletedAt ?? "") || ((savedAt ?? "") === (previous.deletedAt ?? "") && version > previous.version)) {
+      latest.set(id, { id, deletedAt: savedAt, version, data: (entry.data ?? {}) as Record<string, unknown> });
+    }
+  }
+  return [...latest.values()]
+    .map(({ id, deletedAt, data }) => ({ id, deletedAt, data }))
+    .sort((a, b) => (b.deletedAt ?? "").localeCompare(a.deletedAt ?? ""));
 };
